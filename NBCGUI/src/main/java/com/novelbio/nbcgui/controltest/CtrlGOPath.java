@@ -19,6 +19,8 @@ import org.apache.log4j.Logger;
 
 import com.google.common.collect.HashMultimap;
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
+import com.novelbio.analysis.annotation.functiontest.StatisticTestGene2Item;
+import com.novelbio.analysis.annotation.functiontest.StatisticTestItem2Gene;
 import com.novelbio.analysis.annotation.functiontest.StatisticTestResult;
 import com.novelbio.base.dataOperate.ExcelOperate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
@@ -382,6 +384,22 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	}
 	
 	protected abstract void clear();
+	
+	/** 根据指定的字符串，返回xdoc的枚举 */
+	public static EnumTableType getXdocGoPath(String sheetName) {
+		if (sheetName.contains(StatisticTestResult.titleGO)) {
+			return EnumTableType.GO_Result;
+		} else if (sheetName.contains(StatisticTestResult.titlePath)) {
+			return EnumTableType.Pathway_Result;
+		} else if (sheetName.contains(StatisticTestGene2Item.titleGO)) {
+			return EnumTableType.GO_Gene2GO;
+		} else if (sheetName.contains(StatisticTestItem2Gene.titleGO)) {
+			return EnumTableType.GO_GO2Gene;
+		} else if (sheetName.contains(StatisticTestGene2Item.titlePath)) {
+			return EnumTableType.Pathway_Gene2Path;
+		}
+		return null;
+	}
 	
 	/** 获得做GO的线程池，线程池最大容量5000 */
 	public static ThreadPoolExecutor getThreadPoolExecutor() {

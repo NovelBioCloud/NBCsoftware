@@ -3,9 +3,7 @@ package com.novelbio.nbcgui.GUI;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -106,6 +104,7 @@ public class GuiAnnoGene extends JPanel implements GuiNeedOpenFile {
 		
 		cmbSpecies = new JComboBoxData<Species>();
 		cmbSpecies.setBounds(717, 394, 118, 23);
+		cmbSpecies.setEditable(true);
 		add(cmbSpecies);
 		
 

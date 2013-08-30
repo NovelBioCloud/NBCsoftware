@@ -110,14 +110,20 @@ public class CtrlBlastAnno extends SwingWorker<ArrayList<String[]>, ProgressData
 				tmpResult[0] = accID;	//在tmpAnno的最前面加上accID
 				tmpResult[1] = copedID.getAccID_With_DefaultDB().getAccID();//第二列加上默认数据库的ID
 				if (!blast) {
-					tmpResult[tmpResult.length - 1] = copedID.getKeggInfo().getKegID(); //最尾部加上keggID
+					try {
+						tmpResult[tmpResult.length - 1] = copedID.getKeggInfo().getKegID(); //最尾部加上keggID
+					} catch (Exception e) { }
+				
 				}
 				else {
 					tmpResult[4] = copedID.getKeggInfo().getKegID(); //最尾部加上keggID
 					GeneID copedIDblast = copedID.getGeneIDBlast();
 					if (copedIDblast != null ) {
 						tmpResult[6] = copedIDblast.getAccID_With_DefaultDB().getAccID();//加上默认数据库的ID
-						tmpResult[tmpResult.length - 1] = copedIDblast.getKeggInfo().getKegID(); //最尾部加上keggID
+						try {
+							tmpResult[tmpResult.length - 1] = copedIDblast.getKeggInfo().getKegID(); //最尾部加上keggID
+						} catch (Exception e) { }
+					
 					}
 				}
 				///////////////////////////////////////////////////
