@@ -27,6 +27,8 @@ public class XdocTable implements Cloneable,Serializable {
 	private List<String> lsAligns = new ArrayList<String>();
 	private List<List<String>> lsExcelTable = null;
 
+	private String rowHeights = "15,15,15,15,15,15,15,15,15,15,15,15,15,15,15";
+	
 	/**
 	 * 
 	 * @param weight
@@ -88,7 +90,8 @@ public class XdocTable implements Cloneable,Serializable {
 	 * @param rows
 	 * @param align l是居左　c是居中
 	 */
-	public XdocTable(String cols, String rows, String align) {
+	public XdocTable(String cols, String align) {
+		 String rows = rowHeights;
 		if (cols != null) {
 			this.cols = cols;
 		}
@@ -107,6 +110,44 @@ public class XdocTable implements Cloneable,Serializable {
 			}
 		}
 	}
+	
+	/**
+	 * 默认每行全部居中，高度15
+	 * @param cols
+	 */
+	public XdocTable(String cols) {
+		 String rows = rowHeights;
+		 String align = null;
+			int colsLength = cols.split(",").length;
+			for (int i = 0; i < colsLength; i++) {
+				if (align == null) {
+					align = "c";
+				} else {
+					align = align + ",c";
+				}
+		}
+		 
+		if (cols != null) {
+			this.cols = cols;
+		}
+		
+		if (rows != null) {
+			this.rows = rows;
+		}
+		if (align != null) {
+			String[] aligns = align.split(",");
+			for (int i = 0; i < aligns.length; i++) {
+				if (aligns[i].equalsIgnoreCase("l")) {
+					lsAligns.add("left");
+				}else{
+					lsAligns.add("center");
+				}
+			}
+		}
+	}
+	
+	
+	
 	/** 边框宽度 */
 	public String getWeight() {
 		return weight;
