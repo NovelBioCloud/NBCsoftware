@@ -1,0 +1,47 @@
+    <para lineSpacing="4" heading="2">
+      <text fontName="黑体" fontSize="16">3.2.${no} 质量控制（Quality Control）</text>
+    </para>
+    <para lineSpacing="4">
+      <text>\t由于现阶段的技术原因，送样序列在测序前一般会添加上接头，部分测序结果中会包含有接头序列信息。此外一次测序常常产生数亿的结果序列，不可避免的会出现低质量的测序结果，有些序列质量很差，有些会有接头污染，有些甚至会出现其他物种的污染。因此对于序列的过滤以及序列质量的评估就会变得极为重要。</text>
+    </para>
+    <para lineSpacing="4" heading="3">
+      <text fontName="黑体" fontSize="14">3.2.${no}.1 方法</text>
+    </para>
+    <para lineSpacing="4">
+      <text>\t我们运用Fast-QC (</text>
+      <text fontColor="#0000ff" >http://www.bioinformatics.babraham.ac.uk/projects/fastqc/</text>
+      <text>) 软件对测序数据的质量进行整体评估，包括碱基的质量值分布，质量值的位置分布，GC含量，PCR duplication含量，kmer的frequency等。这些图表可以使我们在变异检测之前对测序数据本身有更深入的认识。</text>
+    </para>
+    <para lineSpacing="4" heading="3">
+      <text fontName="黑体" fontSize="14">3.2.${no}.2 结果</text>
+    </para>
+    <para lineSpacing="4">
+      <text>\t质量控制分析具体结果获取路径如下：</text>
+    </para>
+   <#list lsResultFiles as resultFile>
+    	<para lineSpacing="4" >
+    		<text fontName="宋体" fontSize="14">\t${resultFile}</text>
+    	</para>
+    </#list>
+    <para lineSpacing="4">
+      <text>\t我们以L3-25组为例进行截图展示。图3.2.1是L3-25序列质控统计的结果。</text>
+    </para>
+    <#list lsExcels as excel>
+    	${excel}
+    </#list>
+    <para lineSpacing="4"/>
+     <#list lsPictures as picture>
+	    ${picture}
+    </#list>
+    <para lineSpacing="4">
+      <text fontName="宋体" fontSize="12">图3.2.1-2 Per sequence quality scores.上图是L3-25测序结果。左图是左端测序结果，右图是右端测序结果。注：横轴表示碱基数或碱基的范围，纵轴表示质量分数值，其中Quality scores大于20表示mapping准确度大于99%. 从序列质量的分值来看，可用于后续分析。</text>
+    </para>
+    <#list lsPictures1 as picture>
+	    ${picture}
+    </#list>
+
+    <para lineSpacing="4">
+      <text fontName="宋体" fontSize="12">图3.2.1-3 Per sequence GC content。上图是L3-25测序结果。左图是左端测序结果，右图是右端测序结果。注：横轴表示平均Quality scores，纵轴表示reads.蓝线是理论GC含量分布情况，红线是实际GC含量分布情况。</text>
+    </para>
+    <para lineSpacing="4"/>
+

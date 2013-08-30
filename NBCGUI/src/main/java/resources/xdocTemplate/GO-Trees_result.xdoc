@@ -1,0 +1,109 @@
+ <#if no != 1>
+ 	 <para lineSpacing="4" breakPage="true" />
+ </#if>
+    <para lineSpacing="4" name="title">
+      <text fontName="黑体" name="3" fontSize="16">3.2.${no} 功能调控网络构建（GO-Trees）</text>
+    </para>
+     <para lineSpacing="4"/>
+    <para lineSpacing="4" name="title">
+      <text fontName="黑体" name="4" fontSize="16">3.2.${no}.1 方法</text>
+    </para>
+     <para lineSpacing="4"/>
+    <para lineSpacing="4">
+      <text>\t</text>
+      <text fontName="宋体">实验中基因同时参与了很多显著性</text>
+      <text fontName="宋体">GO，NovelBio</text>
+      <text fontName="宋体">基于</text>
+      <text fontName="宋体">GO</text>
+      <text fontName="宋体">的层次结构，将所有</text>
+      <text fontName="宋体">GO</text>
+      <text fontName="宋体">之间的相互调控及从属关系整理成数据库，通过构建功能关系网络，轻松总结实验影响的功能群体，以及显著性功能的内在从属关系。</text>
+    </para>
+     <para lineSpacing="4"/>
+    <para lineSpacing="4" name="title">
+      <text fontName="黑体" name="4" fontSize="16">3.2.${no}.2 结果</text>
+    </para>
+     <para lineSpacing="4" />
+     <para lineSpacing="4" >
+     <text fontName="宋体" fontSize="14">\t功能调控网络构建具体结果获取路径如下：</text>
+    </para>
+    <#list lsResultFiles as resultFile>
+    	<para lineSpacing="4" >
+    	<text fontName="宋体" fontSize="14">\t${resultFile}</text>
+    	</para>
+    </#list>
+    <para lineSpacing="4" />
+ <para lineSpacing="4"/>
+     <#list lsExcels as excel>
+    	${excel}
+		<#if !excel_has_next >
+      <para lineSpacing="4" align="center">
+		      <text fontName="宋体" fontSize="14">功能调控网络列表说明</text>
+      </para>
+          <para lineSpacing="4" />
+    <para lineSpacing="4" align="center">
+      <table cols="166,435"  rows="15,15,15,15,15">
+        <cell col="1" name="x288" fillColor="#1e90ff"  color="#ffffff"  row="1">
+          <para lineSpacing="4">
+            <text fontName="宋体" fontStyle="bold">Files</text>
+          </para>
+        </cell>
+        <cell col="2" name="x291" fillColor="#1e90ff"   color="#ffffff"  row="1">
+          <para lineSpacing="4">
+            <text fontName="宋体" fontStyle="bold">Description</text>
+          </para>
+        </cell>
+        <cell col="1" name="x294"  fillColor="#d3d3d3" color="#ffffff"  row="2">
+          <para lineSpacing="4">
+            <text fontName="宋体">GO ID&amp;GO ID2</text>
+          </para>
+        </cell>
+        <cell col="2" name="x297"  fillColor="#d3d3d3" color="#ffffff"  row="2">
+          <para lineSpacing="4">
+            <text fontName="宋体">基因功能的ID</text>
+          </para>
+        </cell>
+        <cell col="1" name="x300"   fillColor="#d3d3d3" color="#ffffff" row="3">
+          <para lineSpacing="4">
+            <text fontName="宋体">GO Term&amp;GO Term2</text>
+          </para>
+        </cell>
+        <cell col="2" name="x303"  fillColor="#d3d3d3" color="#ffffff" row="3">
+          <para lineSpacing="4">
+            <text fontName="宋体">基因功能的条目</text>
+          </para>
+        </cell>
+        <cell col="1" name="x306"  fillColor="#d3d3d3" color="#ffffff" row="4">
+          <para lineSpacing="4">
+            <text fontName="宋体">Relation</text>
+          </para>
+        </cell>
+        <cell col="2" name="x309"  fillColor="#d3d3d3" color="#ffffff"  row="4">
+          <para lineSpacing="4">
+            <text fontName="宋体">两个GO Term的关系</text>
+          </para>
+        </cell>
+          <cell col="1" name="x306"  fillColor="#d3d3d3" color="#ffffff" row="5">
+          <para lineSpacing="4">
+            <text fontName="宋体">Style</text>
+          </para>
+        </cell>
+        <cell col="2" name="x309"  fillColor="#d3d3d3" color="#ffffff"  row="5">
+          <para lineSpacing="4">
+            <text fontName="宋体">GO Term的属性，up表示上调 down表示下调</text>
+          </para>
+        </cell>
+       
+      </table>
+    </para>
+    	 	</#if>
+    </#list>
+	
+      <para lineSpacing="4" align="center"/>
+    
+       <!-- Go-Tree对应的图 -->
+    <#list lsPictures as picture>
+	    ${picture}
+    </#list>
+
+

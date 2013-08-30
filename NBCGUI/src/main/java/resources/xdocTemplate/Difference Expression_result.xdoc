@@ -1,0 +1,171 @@
+<#if no != 1>
+ 	 <para lineSpacing="4" breakPage="true" />
+ </#if>
+ 	<para lineSpacing="4" name="title" >
+      <text fontName="黑体" name="3" fontSize="16">3.2.${no} 差异基因表达分析（Difference Expression）</text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4" >
+      <text fontName="宋体" fontSize="14">\t${transcript}作为高通量基因表达量检测的重要方法，有着十分广泛的应用。${transcript}分析的前提是差异鉴别，但是常见的芯片实验中生物学重复数量较少。因此，选用一种合理有效的检验方法来筛选差异基因极为关键。  </text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4" name="title" >
+      <text fontName="黑体" name="4" fontSize="16">3.2.${no}.1 方法</text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4" >
+      <text fontName="宋体" fontSize="14">\t我们对已知表达量的基因进行统计，判断样本之间基因表达量是否存在显著差异。具体分析步骤如下：</text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4" name="title" >
+      <text fontName="黑体" name="5" fontSize="16">3.2.${no}.1.1 标准化（Normalization）</text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4" >
+      <text fontName="宋体" fontSize="14">\t首先，我们对原始数据进行CEL文件解析。其次，使用RMA对数据进行标准化。芯片内的数据标准化，主要是去除每张芯片的系统误差，这种误差主要是由荧光染色差异，点样机器，或者杂交试验所产生的，通过标准化，使每个基因的表达都具有独立性。</text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4" name="title">
+      <text fontName="黑体"  name="5" fontSize="16">3.2.${no}.1.2 差异基因筛选（Dif-Gene-Finder）</text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4" >
+      <text fontName="宋体" fontSize="14">\t使用标准化后的结果通过基于贝叶斯的Limma模型对样本间的表达值进行Fold Change、P-value以及FDR的分析。其中logFC&gt;1或LogFC&lt;-1 ，${finderCondition}。</text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4" name="title" >
+      <text fontName="黑体" name="5" fontSize="16">3.2.${no}.1.3 差异基因聚类（Heatmap）</text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4" >
+      <text fontName="宋体" fontSize="14">\t我们对差异基因的表达值进行聚类，并获得可视化图（Heatmap）。</text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4" name="title" >
+      <text fontName="黑体" name="4" fontSize="16">3.2.${no}.2 结果</text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4" >
+      <text fontName="宋体" fontSize="14">\t通过差异基因筛选，${result}</text>
+      <text fontName="宋体" fontSize="14">通过差异基因聚类图分析，两组差异基因均呈现明显“田”字格，可用于后续分析。</text>
+    </para>
+    <para lineSpacing="4" >
+     <text fontName="宋体" fontSize="14">\t差异基因表达分析具体结果获取路径如下：</text>
+    </para>
+    <#list lsResultFiles as resultFile>
+    	<para lineSpacing="4" >
+    	<text fontName="宋体" fontSize="14">\t${resultFile}</text>
+    	</para>
+    </#list>
+    <para lineSpacing="4" />
+    <#list lsExcels as excel>
+    	${excel}
+    	<#if !excel_has_next >
+    		<para lineSpacing="4" align="center">
+		      <text fontName="宋体" fontSize="14">差异基因筛选列表说明</text>
+		    </para>
+		    <para lineSpacing="4" align="center">
+		      <table cols="140,415" height="322" name="x241" left="918" top="143" width="555" rows="28,31,31,31,54,31,54,31,31">
+		        <cell col="1" name="x242" sizeType="autoheight" fillColor="#1e90ff" row="1"  color="#ffffff">
+		          <para lineSpacing="4">
+		            <text fontName="宋体" fontStyle="bold">Name</text>
+		          </para>
+		        </cell>
+		        <cell col="2" name="x245" sizeType="autoheight" fillColor="#1e90ff" row="1"  color="#ffffff">
+		          <para lineSpacing="4">
+		            <text fontName="宋体" fontStyle="bold">Description</text>
+		          </para>
+		        </cell>
+		        <cell col="1" name="x248" sizeType="autoheight" row="2"  fillColor="#d3d3d3" color="#ffffff">
+		          <para lineSpacing="4">
+		            <text fontName="宋体">ProbeName</text>
+		          </para>
+		        </cell>
+		        <cell col="2" name="x251" sizeType="autoheight" row="2"  fillColor="#d3d3d3" color="#ffffff">
+		          <para lineSpacing="4">
+		            <text fontName="宋体">探针名称</text>
+		          </para>
+		        </cell>
+		        <cell col="1" name="x254" sizeType="autoheight" row="3" fillColor="#d3d3d3" color="#ffffff">
+		          <para lineSpacing="4">
+		            <text fontName="宋体">GeneSymbol</text>
+		          </para>
+		        </cell>
+		        <cell col="2" name="x257" sizeType="autoheight" row="3" fillColor="#d3d3d3" color="#ffffff">
+		          <para lineSpacing="4">
+		            <text fontName="宋体">基因名称</text>
+		          </para>
+		        </cell>
+		        <cell col="1" name="x260" sizeType="autoheight" row="4"  fillColor="#d3d3d3" color="#ffffff">
+		          <para lineSpacing="4">
+		            <text fontName="宋体">Description</text>
+		          </para>
+		        </cell>
+		        <cell col="2" name="x263" sizeType="autoheight" row="4"  fillColor="#d3d3d3" color="#ffffff">
+		          <para lineSpacing="4">
+		            <text fontName="宋体">基因的描述</text>
+		          </para>
+		        </cell>
+		        <cell col="1" name="x266" sizeType="autoheight" row="5" fillColor="#d3d3d3" color="#ffffff">
+		          <para lineSpacing="4">
+		            <text fontName="宋体">Log2FC</text>
+		          </para>
+		        </cell>
+		        <cell col="2" name="x271" sizeType="autoheight" row="5" fillColor="#d3d3d3" color="#ffffff">
+		          <para lineSpacing="4">
+		            <text fontName="宋体">以2为底，实验组和对照组信号值差异倍数的对数(信号值均是标准化过的信号值)。</text>
+		          </para>
+		        </cell>
+		        <cell col="1" name="x282" sizeType="autoheight" row="6"  fillColor="#d3d3d3" color="#ffffff">
+		          <para lineSpacing="4">
+		            <text fontName="宋体">Style</text>
+		          </para>
+		        </cell>
+		        <cell col="2" name="x285" sizeType="autoheight" row="6"  fillColor="#d3d3d3" color="#ffffff">
+		          <para lineSpacing="4">
+		            <text fontName="宋体">差异基因的上下调方式，up表示差异上调，down表示差异下调。</text>
+		          </para>
+		        </cell>
+		        <cell col="1" name="x288" sizeType="autoheight" row="7" fillColor="#d3d3d3" color="#ffffff">
+		          <para lineSpacing="4">
+		            <text fontName="宋体">P-Value</text>
+		          </para>
+		        </cell>
+		        <cell col="2" name="x293" sizeType="autoheight" row="7" fillColor="#d3d3d3" color="#ffffff">
+		          <para lineSpacing="4">
+		            <text fontName="宋体">差异显著性水平，表示该基因是不是差异基因的概率。P-Value越小表示基因差异越显著。</text>
+		          </para>
+		        </cell>
+		        <cell col="1" name="x305" sizeType="autoheight" row="8"  fillColor="#d3d3d3" color="#ffffff">
+		          <para lineSpacing="4">
+		            <text fontName="宋体">FDR</text>
+		          </para>
+		        </cell>
+		        <cell col="2" name="x308" sizeType="autoheight" row="8"  fillColor="#d3d3d3" color="#ffffff">
+		          <para lineSpacing="4">
+		            <text fontName="宋体">多重假设检验错误误判率。FDR越小，误判率越低。</text>
+		          </para>
+		        </cell>
+		        <cell col="1" name="x314" sizeType="autoheight" row="9" fillColor="#d3d3d3" color="#ffffff">
+		          <para lineSpacing="4">
+		            <text fontName="宋体">其他</text>
+		          </para>
+		        </cell>
+		        <cell col="2" name="x320" sizeType="autoheight" row="9" fillColor="#d3d3d3" color="#ffffff">
+		          <para lineSpacing="4">
+		            <text fontName="宋体">标准化过的基因表达信号值。</text>
+		          </para>
+		        </cell>
+		      </table>
+		    </para>
+    	</#if>
+    </#list>
+
+     <!-- 差异基因对应的图 -->
+    <#list lsPictures as picture>
+	    ${picture}
+    </#list>	
+   
+   
+  
+

@@ -1,0 +1,18 @@
+library(MEDME)
+testMEDMEset = MEDME.readFiles(files = c(<#list lsRequiredFiles as requiredFile>"${requiredFile}"<#if requiredFile_has_next>,</#if></#list>), "${species}")
+testMEDMEset = smooth(data = testMEDMEset, wsize = 500, wFunction = "linear")
+<#if species == "gff" >
+library(BSgenome.Mmusculus.UCSC.hg18)
+</#if>
+<#if species == "mmu" >
+library(BSgenome.Mmusculus.UCSC.mm8)
+</#if>
+testMEDMEset = CGcount(data = testMEDMEset)
+MEDMEmodel = MEDME(data = testMEDMEset, sample = 1)
+testMEDMEset = predict(data = testMEDMEset, MEDMEfit = MEDMEmodel,MEDMEextremes = c(1, 32), wsize = 500, wFunction = "linear")
+
+#AMS(testMEDMEset)[1:300, ]
+#RMS(testMEDMEset)[1:300, ]
+MEDME.writeFiles(testMEDMEset, "AMS", path = “${outputPath}”, "gff", featureLength = 60)
+MEDME.writeFiles(testMEDMEset, "RMS", path = "${outputPath}", "gff", featureLength = 60)
+
