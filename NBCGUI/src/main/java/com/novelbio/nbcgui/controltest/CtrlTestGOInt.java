@@ -7,6 +7,7 @@ import java.util.Map;
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.database.domain.geneanno.GOtype;
+import com.novelbio.nbcReport.Params.ReportGO;
 
 public interface CtrlTestGOInt {
 	public void setTaxID(int taxID);
@@ -28,7 +29,9 @@ public interface CtrlTestGOInt {
 	public void setIsCluster(boolean isCluster);
 
 	public void saveExcel(String excelPath);
-
+	
+	
+	public ReportGO getReportGO();
 	/**
 	 * <b>GO用到</b><br>
 	 * 必须第一时间设定，这个就会初始化检验模块

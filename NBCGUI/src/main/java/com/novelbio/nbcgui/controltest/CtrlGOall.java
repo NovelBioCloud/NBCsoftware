@@ -22,7 +22,9 @@ import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.plot.ImageUtils;
 import com.novelbio.database.domain.geneanno.GOtype;
+import com.novelbio.nbcReport.EnumTableType;
 import com.novelbio.nbcReport.XdocTmpltPic;
+import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportGO;
 import com.novelbio.nbcReport.Params.ReportGOAll;
 import com.novelbio.nbcgui.FoldeCreate;
@@ -38,7 +40,7 @@ public class CtrlGOall implements CtrlTestGOInt {
 	int taxID = 0;
 	List<Integer> lsBlastTaxID = new ArrayList<Integer>();
 	boolean isCluster = false;
-	ReportGO reportGO;
+	ReportGO reportGO = new ReportGO();
 	String saveParentPath = "";
 	String savePathPrefix = "";
 	

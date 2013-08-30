@@ -100,6 +100,14 @@ public class ReportGO extends ReportBase {
 	}
 
 	public List<String> getLsResultFiles() {
+		List<String> lsResultRealFiles = new ArrayList<>();
+		for (String file : lsResultFiles) {
+			lsResultRealFiles.add(EnumReport.GOAnalysis.getResultFolder() + file.split(EnumReport.GOAnalysis.getResultFolder())[1]);
+		}
+		return lsResultRealFiles;
+	}
+	
+	public List<String> getLsResultRealFiles(){
 		return lsResultFiles;
 	}
 

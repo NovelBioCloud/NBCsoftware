@@ -36,7 +36,7 @@ public class ReportProject extends ReportBase{
 	private String noPlusOne = "<#assign no=no+1 />";
 	private String catalogCode = "<#list lsCatalogs as catalog ><para lineSpacing=\"4\" ><text fontName=\"黑体\" fontSize=\"15\" >${catalog}</text></para></#list>";
 	private List<String> lsCatalogs = new ArrayList<String>();
-	private Set<String > lsMethod = new HashSet<String>();
+	private Set<String> lsMethod = new HashSet<String>();
 	private String content = "";
 	private String projectName = "";
 
@@ -78,6 +78,7 @@ public class ReportProject extends ReportBase{
 			TxtReadandWrite txtReadandWrite = new TxtReadandWrite(xdocFile);
 			lsXdocChildren.add(txtReadandWrite.readAllAsString());
 			txtReadandWrite.close();
+			lsMethod.add(enumReport.getResultFolder());
 		}
 	}
 	
