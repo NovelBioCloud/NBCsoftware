@@ -37,6 +37,8 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	FunctionTest functionTest = null;
 	
 	double up = -1;
+	int upGeneNum = -100, downGeneNum = -100, allGeneNum = -100;
+	
 	double down = -1;
 	
 	/** 是否为clusterGO */
@@ -145,6 +147,15 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		return mapPrefix2FunTest;
 	}
 	
+	
+	/**
+	 * 获得上下调数
+	 * @return 0 上调数 1 下调数 2 总和
+	 */
+	protected int[] getUpAndDownRegulation() {
+		return new int[]{upGeneNum,downGeneNum,allGeneNum};
+	}
+	
 	public void running() {
 		setBG();
 		if (isCluster) {
@@ -185,8 +196,21 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			} catch (Exception e) { }
 		}
 		HashMultimap<String, GeneID> mapPrefix2SetAccID = addBG_And_Convert2GeneID(mapPrefix2AccID);
+		setGeneNum(mapPrefix2AccID);
 		for (String prefix : mapPrefix2SetAccID.keySet()) {
 			getResult(prefix, mapPrefix2SetAccID.get(prefix));
+		}
+	}
+	
+	private<T> void setGeneNum(HashMultimap<String, T> mapPrefix2Gene) {
+		for (String type : mapPrefix2Gene.keySet()) {
+			if (type.equalsIgnoreCase("All")) {
+				allGeneNum = mapPrefix2Gene.get("All").size();
+			} else if (type.equalsIgnoreCase("Up") ) {
+				upGeneNum = mapPrefix2Gene.get("Up").size();
+			} else if (type.equalsIgnoreCase("Down")) {
+				downGeneNum = mapPrefix2Gene.get("Down").size();
+			}
 		}
 	}
 	
@@ -280,6 +304,36 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			}
 			copeFile(prefix, excelPath);
 		}
+	}
+	
+	/**
+	 * 统计结果，返回筛选条件
+	 * 
+	 * @param lsTestResults
+	 * @param knownCondition
+	 *            已知条件，用来比较返回更宽松的条件
+	 * @return
+	 */
+	protected String getFinderCondition() {
+		int fdrSum1 = 0;
+		int fdrSum5 = 0;
+		int pValueSum1 = 0;
+		String[] result = { "FDR&lt;0.01", "FDR&lt;0.05", "P-value&lt;0.01", "P-value&lt;0.05" };
+		for (StatisticTestResult testResult : functionTest.getTestResult()) {
+			if (testResult.getPvalue() < 0.01) {
+				pValueSum1++;
+			}
+			if (testResult.getPvalue() < 0.05) {
+			}
+			if (testResult.getFdr() < 0.01) {
+				fdrSum1++;
+			}
+			if (testResult.getFdr() < 0.05) {
+				fdrSum5++;
+			}
+		}
+		int currentConditionNum = fdrSum1 > 8 ? 0 : (fdrSum5 > 8 ? 1 : (pValueSum1 > 8 ? 2 : 3));
+		return result[currentConditionNum];
 	}
 	
 	protected void saveExcelCluster(String excelPath) {

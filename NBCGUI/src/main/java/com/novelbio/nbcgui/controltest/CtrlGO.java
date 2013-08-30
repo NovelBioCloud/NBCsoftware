@@ -12,6 +12,7 @@ import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.base.PathDetail;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.geneanno.GOtype;
+import com.novelbio.nbcReport.Params.ReportGO;
 
 public class CtrlGO extends CtrlGOPath {
 	private static final Logger logger = Logger.getLogger(CtrlGO.class);
@@ -19,7 +20,6 @@ public class CtrlGO extends CtrlGOPath {
 	GOtype GOClass = GOtype.BP;
 	GoAlgorithm goAlgorithm = GoAlgorithm.novelgo;
 	int goLevel = -1;
-	
 	public GOtype getGOClass() {
 		return GOClass;
 	}
@@ -37,6 +37,16 @@ public class CtrlGO extends CtrlGOPath {
 			functionTest = FunctionTest.getInstance(FunctionTest.FUNCTION_GO_NOVELBIO);
 		}
 	}
+	
+	public String getTestMethod(){
+		if (goAlgorithm != GoAlgorithm.novelgo) {
+			return goAlgorithm.name();
+		} else {
+			return "fisher Test";
+		}
+	}
+	
+	
 	public GoAlgorithm getGoAlgorithm() {
 		return goAlgorithm;
 	}
@@ -79,7 +89,7 @@ public class CtrlGO extends CtrlGOPath {
 		}
 		return FileOperate.changeFileSuffix(fileName, suffix, "txt");
 	}
-
+	
 	@Override
 	protected void clear() {
 		GOClass = GOtype.BP;

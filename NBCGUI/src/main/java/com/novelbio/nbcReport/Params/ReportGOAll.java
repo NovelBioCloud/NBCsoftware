@@ -28,7 +28,7 @@ public class ReportGOAll extends ReportBase {
 		if (lsReportGOs.size()>0) {
 			ReportGO reportGO = lsReportGOs.get(0);
 			mapKey2Params.put("testMethod", reportGO.getTestMethod());
-			mapKey2Params.put("finderCondition", reportGO.getFinderCondition());
+			mapKey2Params.put("finderCondition", getFinderCondition());
 			mapKey2Params.put("no", no);
 		}
 		mapKey2Params.put("lsReportGOs", lsReportGOs);
@@ -39,7 +39,27 @@ public class ReportGOAll extends ReportBase {
 		lsReportGOs.add(reportGO);
 	}
 
-
+	/**
+	 * 统计结果，返回筛选条件
+	 * 
+	 * @param lsTestResults
+	 * @param knownCondition
+	 *            已知条件，用来比较返回更宽松的条件
+	 * @return
+	 */
+	public String getFinderCondition() {
+		String[] result = { "FDR&lt;0.01", "FDR&lt;0.05", "P-value&lt;0.01", "P-value&lt;0.05" };
+		int conditionNum = 0;
+		for (ReportGO reportGO : lsReportGOs) {
+			String condition = reportGO.getFinderCondition();
+			for (int i = 0; i < result.length; i++) {
+				if (condition.equals(result[i]) && i > conditionNum)
+					conditionNum = i;
+			}
+		}
+		return result[conditionNum];
+	}
+	
 	public String getNo() {
 		return no;
 	}

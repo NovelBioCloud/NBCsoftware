@@ -12,14 +12,19 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 
+import org.broadinstitute.sting.jna.lsf.v7_0_6.LibBat.newDebugLog;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
+import com.novelbio.analysis.annotation.functiontest.StatisticTestResult;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.plot.ImageUtils;
 import com.novelbio.database.domain.geneanno.GOtype;
+import com.novelbio.nbcReport.XdocTmpltPic;
+import com.novelbio.nbcReport.Params.ReportGO;
+import com.novelbio.nbcReport.Params.ReportGOAll;
 import com.novelbio.nbcgui.FoldeCreate;
 
 /** 同时把BP、MF、CC三个类型都做了 */
@@ -33,6 +38,7 @@ public class CtrlGOall implements CtrlTestGOInt {
 	int taxID = 0;
 	List<Integer> lsBlastTaxID = new ArrayList<Integer>();
 	boolean isCluster = false;
+	ReportGO reportGO;
 	String saveParentPath = "";
 	String savePathPrefix = "";
 	
@@ -42,6 +48,16 @@ public class CtrlGOall implements CtrlTestGOInt {
 			ctrlGO.setTaxID(taxID);
 		}
 		this.taxID = taxID;
+	}
+	
+	public ReportGO getReportGO() {
+		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
+			reportGO.setFinderCondition(ctrlGO.getFinderCondition());
+			reportGO.setUpRegulation(ctrlGO.getUpAndDownRegulation()[0]);
+			reportGO.setDownRegulation(ctrlGO.getUpAndDownRegulation()[1]);
+			reportGO.setTestMethod(ctrlGO.getTestMethod());
+		}
+		return reportGO;
 	}
 	
 	@Override
@@ -105,9 +121,11 @@ public class CtrlGOall implements CtrlTestGOInt {
 				saveName = FileOperate.changeFilePrefix(saveExcelPrefix, ctrlGO.getResultBaseTitle() + "_", "xls");
 			}
 			ctrlGO.saveExcel(saveName);
+			reportGO.addResultFile(saveName);
 		}
 		savePic();
 	}
+	
 	
 	/** 获得保存到的文件夹路径 */
 	@Override
@@ -188,7 +206,12 @@ public class CtrlGOall implements CtrlTestGOInt {
 			}
 			BufferedImage bfImageCombine = ImageUtils.combineBfImage(true, 30, lsGOimage);
 			String picNameLog2P = excelSavePath +  "GO-Analysis-Log2P_" + prefix + "_" + getSavePrefix() + ".png";
+			
 			ImageUtils.saveBufferedImage(bfImageCombine, picNameLog2P);
+			reportGO.addResultFile(picNameLog2P);
+			XdocTmpltPic xdocTmpltPic = new XdocTmpltPic(picNameLog2P);
+			//图片的宽度和描述都可以在这里设置
+			reportGO.addXdocTempPic(xdocTmpltPic);
 		}
 	}
 	
