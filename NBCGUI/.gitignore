@@ -2,5 +2,10 @@
 /bin
 .settings
 .classpath
+<<<<<<< HEAD
 .project
 /logs
+=======
+.gitignore
+.project
+>>>>>>> branch 'master' of ssh://novelbio@192.168.0.104:22/home/novelbio/NBCGUI
