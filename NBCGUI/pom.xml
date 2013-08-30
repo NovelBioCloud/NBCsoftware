@@ -1,0 +1,35 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.novelbio</groupId>
+  <artifactId>NBCGUI</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  
+  <distributionManagement>
+		<!-- use the following if you're not using a snapshot version. -->
+		<repository>
+			<id>my-nexus-releases</id>
+			<name>Internal Releases</name>
+			<url>http://192.168.0.104:8081/nexus/content/repositories/releases</url>
+		</repository>
+		<!-- use the following if you ARE using a snapshot version. -->
+		<snapshotRepository>
+			<id>my-nexus-releases</id>
+			<name>Internal Releases</name>
+			<url>http://192.168.0.104:8081/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+	
+	<build>
+		<finalName>NBCGUI</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
