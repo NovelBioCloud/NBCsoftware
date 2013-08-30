@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
+import com.novelbio.nbcReport.Params.ReportPathWay;
 
 public interface CtrlTestPathInt {
 	public void setTaxID(int taxID);
@@ -23,9 +24,11 @@ public interface CtrlTestPathInt {
 	 */
 	public void setLsBG(String fileName);
 	
+	public ReportPathWay getReportPathWay();
+	
 	public void setIsCluster(boolean isCluster);
 
-	public void saveExcel(String excelPath);
+	public List<String> saveExcel(String excelPath);
 	
 	public boolean isCluster();
 	

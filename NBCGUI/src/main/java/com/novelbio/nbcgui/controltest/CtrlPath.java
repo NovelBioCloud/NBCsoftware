@@ -3,6 +3,7 @@ package com.novelbio.nbcgui.controltest;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
@@ -10,6 +11,7 @@ import java.util.Map.Entry;
 import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
+import org.broadinstitute.sting.jna.lsf.v7_0_6.LibBat.newDebugLog;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
@@ -17,14 +19,20 @@ import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.plot.ImageUtils;
+import com.novelbio.nbcReport.EnumTableType;
+import com.novelbio.nbcReport.XdocTmpltExcel;
+import com.novelbio.nbcReport.XdocTmpltPic;
+import com.novelbio.nbcReport.Params.EnumReport;
+import com.novelbio.nbcReport.Params.ReportPathWay;
 import com.novelbio.nbcgui.FoldeCreate;
 @Service
 @Scope("prototype")
 public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 	private static final Logger logger = Logger.getLogger(CtrlPath.class);
-	private static final String pathSaveTo = "Path-Analysis_result";
 	String saveParentPath = "";
 	String savePrefix = "";
+	ReportPathWay reportPathWay = new ReportPathWay();
+	
 	
 	/** @param QtaxID */
 	public CtrlPath() {
@@ -51,8 +59,17 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 		return FileOperate.changeFileSuffix(fileName, suffix, "txt");
 	}
 	
-	public void saveExcel(String excelPath) {
-		String excelPrefix = FoldeCreate.createAndInFold(excelPath, pathSaveTo);
+	public ReportPathWay getReportPathWay() {
+		reportPathWay.setDb("KEGG");
+		reportPathWay.setFinderCondition(getFinderCondition());
+		reportPathWay.setDownRegulation(getUpAndDownRegulation()[0]);
+		reportPathWay.setUpRegulation(getUpAndDownRegulation()[1]);
+		return reportPathWay;
+	}
+	
+	public List<String> saveExcel(String excelPath) {
+		List<String> lsExcelFiles = new ArrayList<>();
+		String excelPrefix = FoldeCreate.createAndInFold(excelPath, EnumReport.PathWay.getResultFolder());
 		if (excelPrefix.endsWith("\\") || excelPrefix.endsWith("/")) {
 			saveParentPath = excelPrefix;
 		} else {
@@ -66,11 +83,15 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 			saveExcelPrefix = FileOperate.changeFilePrefix(excelPrefix, getResultBaseTitle() + "_", "xls");
 		}
 		if (isCluster) {
-			saveExcelCluster(saveExcelPrefix);
+			lsExcelFiles =  saveExcelCluster(saveExcelPrefix);
 		} else {
-			saveExcelNorm(saveExcelPrefix);
+			lsExcelFiles =  saveExcelNorm(saveExcelPrefix);
+		}
+		for (String excelFiles : lsExcelFiles) {
+			reportPathWay.addResultFile(excelFiles);
 		}
 		savePic();
+		return lsExcelFiles;
 	}
 	
 	public void savePic() {
@@ -78,11 +99,16 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 			String prix = entry.getKey();
 			BufferedImage bfImageLog2Pic = entry.getValue().getImagePvalue();;
 			if (bfImageLog2Pic == null) continue;
-			ImageUtils.saveBufferedImage(bfImageLog2Pic, getSavePicPvalueName(prix));
-			
+			String picPvalueName = getSavePicPvalueName(prix);
+			ImageUtils.saveBufferedImage(bfImageLog2Pic,picPvalueName );
+			XdocTmpltPic xdocTmpltPic = new XdocTmpltPic(picPvalueName);
+			reportPathWay.addXdocTempPic(xdocTmpltPic);
 			BufferedImage bfImageEnrichment = entry.getValue().getImageEnrichment();
 			if (bfImageEnrichment == null) continue;
-			ImageUtils.saveBufferedImage(bfImageEnrichment, getSavePicEnrichmentName(prix));
+			String picEnrichmentName = getSavePicEnrichmentName(prix);
+			ImageUtils.saveBufferedImage(bfImageEnrichment, picEnrichmentName);
+			XdocTmpltPic xdocTmpltPic1 = new XdocTmpltPic(picEnrichmentName);
+			reportPathWay.addXdocTempPic(xdocTmpltPic1);
 		}
 	}
 	

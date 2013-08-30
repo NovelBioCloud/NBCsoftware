@@ -271,12 +271,12 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		mapPrefix2FunTest.put(prix, functionTest.clone());
 	}
 
-	public void saveExcel(String excelPath) {
+	public List<String> saveExcel(String excelPath) {
 		saveExcelPrefix = excelPath;
 		if (isCluster) {
-			saveExcelCluster(excelPath);
+			return saveExcelCluster(excelPath);
 		} else {
-			saveExcelNorm(excelPath);
+			return saveExcelNorm(excelPath);
 		}
 	}
 	
@@ -285,11 +285,15 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		return saveExcelPrefix;
 	}
 	
-	protected void saveExcelNorm(String excelPath) {
+	protected List<String> saveExcelNorm(String excelPath) {
+		List<String> lsExcelFiles = new ArrayList<>();
 		ExcelOperate excelResult = new ExcelOperate();
 		excelResult.openExcel(excelPath);
+		lsExcelFiles.add(excelPath);
 		ExcelOperate excelResultAll = new ExcelOperate();
-		excelResultAll.openExcel(FileOperate.changeFileSuffix(excelPath, "_All", null));
+		String excelAllPath = FileOperate.changeFileSuffix(excelPath, "_All",null);
+		excelResultAll.openExcel(excelAllPath);
+		lsExcelFiles.add(excelAllPath);
 		for (String prefix : mapPrefix2FunTest.keySet()) {
 			FunctionTest functionTest = mapPrefix2FunTest.get(prefix);
 			Map<String,   List<String[]>> mapSheetName2LsInfo = functionTest.getMapWriteToExcel();
@@ -304,6 +308,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			}
 			copeFile(prefix, excelPath);
 		}
+		return lsExcelFiles;
 	}
 	
 	/**
@@ -336,7 +341,8 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		return result[currentConditionNum];
 	}
 	
-	protected void saveExcelCluster(String excelPath) {
+	protected List<String> saveExcelCluster(String excelPath) {
+		List<String> lsExcelFiles = new ArrayList<>();
 		for (String prefix : mapPrefix2FunTest.keySet()) {
 			ExcelOperate excelResult = new ExcelOperate();
 			String excelPathOut = FileOperate.changeFileSuffix(excelPath, "_" + prefix, null);
@@ -345,8 +351,10 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			for (String sheetName : mapSheetName2LsInfo.keySet()) {
 				excelResult.WriteExcel(sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName));
 			}
+			lsExcelFiles.add(excelPathOut);
 			copeFile(prefix, excelPath);
 		}
+		return lsExcelFiles;
 	}
 	
 	/**

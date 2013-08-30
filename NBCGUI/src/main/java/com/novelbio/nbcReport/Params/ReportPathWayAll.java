@@ -5,40 +5,37 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-/**
- * GOAnalysis参数对象类，记录结果报告所需要的参数
- * 
- * @author novelbio
- * 
- */
-public class ReportGOAll extends ReportBase {
+public class ReportPathWayAll extends ReportBase{
 	private String no = "${no}";
-	private List<ReportGO> lsReportGOs = new ArrayList<ReportGO>();
+	private List<ReportPathWay> lsReportPathWays = new ArrayList<ReportPathWay>();
+	
 	
 	@Override
 	public EnumReport getEnumReport() {
-		return EnumReport.GOAnalysis;
+		return EnumReport.PathWay;
 	}
-
 
 	@Override
 	protected Map<String, Object> addParamMap() {
 		Map<String, Object> mapKey2Params = new HashMap<String, Object>();
-		if (lsReportGOs.size()>0) {
-			ReportGO reportGO = lsReportGOs.get(0);
-			mapKey2Params.put("testMethod", reportGO.getTestMethod());
+		if (lsReportPathWays.size()>0) {
+			ReportPathWay reportPathWay = lsReportPathWays.get(0);
+			mapKey2Params.put("db", reportPathWay.getDb());
 			mapKey2Params.put("finderCondition", getFinderCondition());
 		}
 		mapKey2Params.put("no", no);
-		mapKey2Params.put("lsReportGOs", lsReportGOs);
+		mapKey2Params.put("lsReportPathWays", lsReportPathWays);
 		return mapKey2Params;
 	}
 	
-	public void addReportGO(ReportGO reportGO) {
-		lsReportGOs.add(reportGO);
+	public String getNo() {
+		return no;
 	}
-
+	
+	public void addReportPathWay(ReportPathWay reportPathWay) {
+		lsReportPathWays.add(reportPathWay);
+	}
+	
 	/**
 	 * 统计结果，返回筛选条件
 	 * 
@@ -50,8 +47,8 @@ public class ReportGOAll extends ReportBase {
 	public String getFinderCondition() {
 		String[] result = { "FDR&lt;0.01", "FDR&lt;0.05", "P-value&lt;0.01", "P-value&lt;0.05" };
 		int conditionNum = 0;
-		for (ReportGO reportGO : lsReportGOs) {
-			String condition = reportGO.getFinderCondition();
+		for (ReportPathWay reportPathWay : lsReportPathWays) {
+			String condition = reportPathWay.getFinderCondition();
 			for (int i = 0; i < result.length; i++) {
 				if (condition.equals(result[i]) && i > conditionNum)
 					conditionNum = i;
@@ -59,10 +56,5 @@ public class ReportGOAll extends ReportBase {
 		}
 		return result[conditionNum];
 	}
-	
-	public String getNo() {
-		return no;
-	}
-	
 	
 }

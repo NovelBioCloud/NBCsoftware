@@ -33,7 +33,6 @@ import com.novelbio.nbcgui.FoldeCreate;
 @Component
 @Scope("prototype")
 public class CtrlGOall implements CtrlTestGOInt {
-	private static final String pathSaveTo = "GO-Analysis_result";
 	
 	Map<GOtype, CtrlGO> mapGOtype2CtrlGO = new LinkedHashMap<GOtype, CtrlGO>();
 	GoAlgorithm goAlgorithm;
@@ -107,7 +106,7 @@ public class CtrlGOall implements CtrlTestGOInt {
 	
 	@Override
 	public void saveExcel(String excelPath) {
-		String saveExcelPrefix = FoldeCreate.createAndInFold(excelPath, pathSaveTo);
+		String saveExcelPrefix = FoldeCreate.createAndInFold(excelPath, EnumReport.GOAnalysis.getResultFolder());
 		if (saveExcelPrefix.endsWith("\\") || saveExcelPrefix.endsWith("/")) {
 			saveParentPath = saveExcelPrefix;
 		} else {
@@ -122,8 +121,9 @@ public class CtrlGOall implements CtrlTestGOInt {
 			} else {
 				saveName = FileOperate.changeFilePrefix(saveExcelPrefix, ctrlGO.getResultBaseTitle() + "_", "xls");
 			}
-			ctrlGO.saveExcel(saveName);
-			reportGO.addResultFile(saveName);
+			for(String excelFile : ctrlGO.saveExcel(saveName)){
+				reportGO.addResultFile(excelFile);
+			}
 		}
 		savePic();
 	}

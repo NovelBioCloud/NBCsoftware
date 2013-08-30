@@ -82,7 +82,12 @@ public class XdocTable implements Cloneable,Serializable {
 			this.note = note;
 		}
 	}
-	
+	/**
+	 * 
+	 * @param cols
+	 * @param rows
+	 * @param align l是居左　c是居中
+	 */
 	public XdocTable(String cols, String rows, String align) {
 		if (cols != null) {
 			this.cols = cols;

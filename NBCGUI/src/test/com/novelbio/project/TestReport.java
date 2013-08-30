@@ -1,5 +1,6 @@
 package com.novelbio.project;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,11 +17,13 @@ import com.novelbio.nbcReport.Params.ReportProject;
 
 public class TestReport {
 	ReportProject reportProject;
+	
+	
 	@Before
 	public void init(){
-		List<String> lsFolders = new ArrayList<>();
-		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.GOAnalysis.getResultFolder()));
-		reportProject = new ReportProject(lsFolders);
+//		List<String> lsFolders = new ArrayList<>();
+//		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.GOAnalysis.getResultFolder()));
+		reportProject = new ReportProject(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档"));
 	}
 	
 	@Test

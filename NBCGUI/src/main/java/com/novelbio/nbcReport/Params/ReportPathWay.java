@@ -9,7 +9,6 @@ import com.novelbio.nbcReport.XdocTmpltExcel;
 import com.novelbio.nbcReport.XdocTmpltPic;
 
 public class ReportPathWay extends ReportBase{
-	private String no = "${no}";
 	/** 所使用的数据库 */
 	private String db;
 	/** 筛选条件 */
@@ -55,7 +54,7 @@ public class ReportPathWay extends ReportBase{
 	}
 	
 	/**
-	 * 取得所有的图片集合
+	 * 取得所有的表格集合
 	 * @return
 	 */
 	public List<String> getExcels(){
@@ -75,7 +74,6 @@ public class ReportPathWay extends ReportBase{
 	@Override
 	protected Map<String, Object> addParamMap() {
 		Map<String, Object> mapKey2Params = new HashMap<String, Object>();
-		mapKey2Params.put("no", no);
 		mapKey2Params.put("db", db);
 		mapKey2Params.put("finderCondition", finderCondition);
 		mapKey2Params.put("upRegulation", upRegulation);
@@ -100,9 +98,6 @@ public class ReportPathWay extends ReportBase{
 	public void setFinderCondition(String finderCondition) {
 		this.finderCondition = finderCondition;
 	}
-	public String getNo() {
-		return no;
-	}
 	public int getUpRegulation() {
 		return upRegulation;
 	}
@@ -120,8 +115,17 @@ public class ReportPathWay extends ReportBase{
 	}
 	
 	public List<String> getLsResultFiles() {
+		List<String> lsResultRealFiles = new ArrayList<>();
+		for (String file : lsResultFiles) {
+			lsResultRealFiles.add(EnumReport.PathWay.getResultFolder() + file.split(EnumReport.PathWay.getResultFolder())[1]);
+		}
+		return lsResultRealFiles;
+	}
+	
+	public List<String> getLsResultRealFiles(){
 		return lsResultFiles;
 	}
+
 
 	public void addResultFile(String resultFile) {
 		if (lsResultFiles == null) {

@@ -20,30 +20,28 @@
       <text fontName="黑体" name="4" fontSize="16">3.2.${no}.2 结果</text>
     </para>
         <para lineSpacing="4" />
+    <#list lsReportPathWays as reportPathWay>
     <para lineSpacing="4">
       <text>\t</text>
       <text fontName="宋体">我们以这组数据为例进行结果解析。通过信号通路分析，共得到</text>
-      <text fontName="宋体" fontStyle="bold">${upRegulation}</text>
+      <text fontName="宋体" fontStyle="bold">${reportPathWay.upRegulation}</text>
       <text fontName="宋体">个显著上调的Path-Term,</text>
-      <text fontName="宋体" fontStyle="bold">${downRegulation}</text>
+      <text fontName="宋体" fontStyle="bold">${reportPathWay.downRegulation}</text>
       <text fontName="宋体">个显著下调的Path-Term,</text>
     </para>
      <para lineSpacing="4" >
      <text fontName="宋体" fontSize="14">\t信号通路分析具体结果获取路径如下：</text>
     </para>
-    <#list lsResultFiles as resultFile>
+    <#list reportPathWay.lsResultFiles as resultFile>
     	<para lineSpacing="4" >
     	<text fontName="宋体" fontSize="14">\t${resultFile}</text>
     	</para>
     </#list>
     <para lineSpacing="4" />
-  
-  <#list excels as excel>
-	${excel}
-  </#list>
-     <#list pictures as picture>
+     <#list reportPathWay.pictures as picture>
 	    ${picture}
     </#list>
+   </#list>
     <para lineSpacing="4" align="center">
       <text fontName="宋体">下表是Pathway-Analysis列表说明</text>
     </para>

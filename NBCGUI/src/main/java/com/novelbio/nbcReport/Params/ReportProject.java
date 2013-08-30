@@ -45,7 +45,9 @@ public class ReportProject extends ReportBase{
 	 * @param folderPath 一个目录
 	 */
 	public ReportProject(String folderPath) {
-		for (String fileName : FileOperate.getFoldFileNameLs(folderPath, "*","*")) {
+		List<String> lsChildren = FileOperate.getFoldFileNameLs(folderPath, "*","*");
+		System.out.println(lsChildren.size());
+		for (String fileName : lsChildren) {
 			if (!FileOperate.isFileDirectory(fileName)) 
 				continue;
 			EnumReport enumReport = EnumReport.findByFolderName(FileOperate.getFileName(fileName));
