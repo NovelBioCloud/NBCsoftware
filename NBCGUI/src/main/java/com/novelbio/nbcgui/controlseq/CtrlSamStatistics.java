@@ -3,6 +3,7 @@ package com.novelbio.nbcgui.controlseq;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.novelbio.GuiAnnoInfo;
 import com.novelbio.analysis.seq.sam.AlignSamReading;
 import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.analysis.seq.sam.SamFileStatistics;
@@ -10,7 +11,6 @@ import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.base.multithread.RunProcess;
-import com.novelbio.nbcgui.GuiAnnoInfo;
 import com.novelbio.nbcgui.GUI.GuiLinesStatistics;
 
 /** 各种统计，主要是统计Sam文件的 */

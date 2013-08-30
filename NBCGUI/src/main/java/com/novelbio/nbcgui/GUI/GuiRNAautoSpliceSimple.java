@@ -17,17 +17,17 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 
+import com.novelbio.GuiAnnoInfo;
 import com.novelbio.analysis.seq.fasta.SeqHash;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.genome.gffOperate.GffType;
-import com.novelbio.analysis.seq.rnaseq.CtrlSplicing;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.nbcgui.GUIinfo;
-import com.novelbio.nbcgui.GuiAnnoInfo;
+import com.novelbio.nbcgui.controlseq.CtrlSplicing;
 
 public class GuiRNAautoSpliceSimple extends JPanel implements GUIinfo {
 	static final int progressLength = 10000;
