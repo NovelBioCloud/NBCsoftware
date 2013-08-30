@@ -1,12 +1,16 @@
 package com.novelbio.nbcgui.controltest;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.imageio.ImageIO;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -16,7 +20,6 @@ import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.plot.ImageUtils;
 import com.novelbio.database.domain.geneanno.GOtype;
-import com.novelbio.nbcReport.Params.ReportGO;
 import com.novelbio.nbcgui.FoldeCreate;
 
 /** 同时把BP、MF、CC三个类型都做了 */
@@ -32,7 +35,6 @@ public class CtrlGOall implements CtrlTestGOInt {
 	boolean isCluster = false;
 	String saveParentPath = "";
 	String savePathPrefix = "";
-	ReportGO reportGO = new ReportGO();
 	
 	@Override
 	public void setTaxID(int taxID) {

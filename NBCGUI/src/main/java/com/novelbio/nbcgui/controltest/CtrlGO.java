@@ -9,9 +9,9 @@ import com.novelbio.analysis.annotation.functiontest.ElimGOFunTest;
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.analysis.annotation.functiontest.NovelGOFunTest;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
+import com.novelbio.base.PathDetail;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.geneanno.GOtype;
-import com.novelbio.generalConf.PathNBCDetail;
 
 public class CtrlGO extends CtrlGOPath {
 	private static final Logger logger = Logger.getLogger(CtrlGO.class);
@@ -56,7 +56,7 @@ public class CtrlGO extends CtrlGOPath {
 	@Override
 	protected void copeFile(String prix, String excelPath) {
 		if (goAlgorithm != GoAlgorithm.novelgo) {
-			String goMapFileSource = FileOperate.changeFileSuffix(PathNBCDetail.getRworkspace() + "topGO/tGOall_elim_10_def.pdf", "_"+prix, null);
+			String goMapFileSource = FileOperate.changeFileSuffix(PathDetail.getRworkspace() + "topGO/tGOall_elim_10_def.pdf", "_"+prix, null);
 			String goMapFileTargetName = FileOperate.getFileNameSep(excelPath)[0] + prix + "GoMap.pdf";
 			FileOperate.moveFile(goMapFileSource, FileOperate.getParentPathName(excelPath), goMapFileTargetName, true);
 		}
