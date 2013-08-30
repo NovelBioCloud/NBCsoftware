@@ -36,7 +36,6 @@ public class CtrlDNAMapping {
 	
 	private Map<String, List<String[]>> mapCondition2CombFastQLRFiltered = new LinkedHashMap<>();
 	MapLibrary libraryType = MapLibrary.SingleEnd;
-
 	int gapLen = 5;
 	double mismatch = 2;
 	int thread = 4;
