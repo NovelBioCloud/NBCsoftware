@@ -3,6 +3,7 @@ package com.novelbio.nbcgui.controlseq;
 import java.util.List;
 import java.util.Map;
 
+import com.novelbio.GuiAnnoInfo;
 import com.novelbio.analysis.seq.FormatSeq;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGeneAbs;
@@ -10,7 +11,6 @@ import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.sam.SamFileStatistics;
 import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.database.model.species.Species;
-import com.novelbio.nbcgui.GuiAnnoInfo;
 import com.novelbio.nbcgui.GUI.GuiSamStatistics;
 
 public interface CtrlSamPPKMint extends RunGetInfo<GuiAnnoInfo>, Runnable {

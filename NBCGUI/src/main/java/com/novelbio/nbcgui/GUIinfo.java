@@ -2,6 +2,7 @@ package com.novelbio.nbcgui;
 
 import java.util.List;
 
+import com.novelbio.GuiAnnoInfo;
 import com.novelbio.base.multithread.RunProcess;
 
 public interface GUIinfo {
