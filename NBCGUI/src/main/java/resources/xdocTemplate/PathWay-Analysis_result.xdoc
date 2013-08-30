@@ -37,10 +37,14 @@
     	<text fontName="宋体" fontSize="14">\t${resultFile}</text>
     	</para>
     </#list>
+     <#list reportPathWay.excels as excel>
+	${excel}
+  </#list>
     <para lineSpacing="4" />
      <#list reportPathWay.pictures as picture>
 	    ${picture}
     </#list>
+    
    </#list>
     <para lineSpacing="4" align="center">
       <text fontName="宋体">下表是Pathway-Analysis列表说明</text>

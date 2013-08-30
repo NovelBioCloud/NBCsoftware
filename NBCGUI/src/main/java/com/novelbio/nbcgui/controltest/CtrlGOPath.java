@@ -25,6 +25,8 @@ import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.database.model.modgeneid.GeneID;
+import com.novelbio.nbcReport.EnumTableType;
+import com.novelbio.nbcReport.XdocTmpltExcel;
 /**
  * 考虑添加进度条
  * @author zong0jie
@@ -271,7 +273,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		mapPrefix2FunTest.put(prix, functionTest.clone());
 	}
 
-	public List<String> saveExcel(String excelPath) {
+	public List<XdocTmpltExcel> saveExcel(String excelPath) {
 		saveExcelPrefix = excelPath;
 		if (isCluster) {
 			return saveExcelCluster(excelPath);
@@ -285,30 +287,32 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		return saveExcelPrefix;
 	}
 	
-	protected List<String> saveExcelNorm(String excelPath) {
-		List<String> lsExcelFiles = new ArrayList<>();
+	protected List<XdocTmpltExcel> saveExcelNorm(String excelPath) {
+		List<XdocTmpltExcel> lsXdocTmpltExcels = new ArrayList<>();
 		ExcelOperate excelResult = new ExcelOperate();
 		excelResult.openExcel(excelPath);
-		lsExcelFiles.add(excelPath);
 		ExcelOperate excelResultAll = new ExcelOperate();
 		String excelAllPath = FileOperate.changeFileSuffix(excelPath, "_All",null);
 		excelResultAll.openExcel(excelAllPath);
-		lsExcelFiles.add(excelAllPath);
 		for (String prefix : mapPrefix2FunTest.keySet()) {
 			FunctionTest functionTest = mapPrefix2FunTest.get(prefix);
 			Map<String,   List<String[]>> mapSheetName2LsInfo = functionTest.getMapWriteToExcel();
 			if (mapPrefix2FunTest.size() > 1 && prefix.equals("All")) {
 				for (String sheetName : mapSheetName2LsInfo.keySet()) {
 					excelResultAll.WriteExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName));
+					XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(excelAllPath, prefix + sheetName, EnumTableType.valueOf(prefix));
+					lsXdocTmpltExcels.add(xdocTmpltExcel);
 				}
 			} else {
 				for (String sheetName : mapSheetName2LsInfo.keySet()) {
 					excelResult.WriteExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName));
+					XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(excelPath, prefix + sheetName, EnumTableType.valueOf(prefix));
+					lsXdocTmpltExcels.add(xdocTmpltExcel);
 				}
 			}
 			copeFile(prefix, excelPath);
 		}
-		return lsExcelFiles;
+		return lsXdocTmpltExcels;
 	}
 	
 	/**
@@ -341,8 +345,8 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		return result[currentConditionNum];
 	}
 	
-	protected List<String> saveExcelCluster(String excelPath) {
-		List<String> lsExcelFiles = new ArrayList<>();
+	protected List<XdocTmpltExcel> saveExcelCluster(String excelPath) {
+		List<XdocTmpltExcel> lsXdocTmpltExcels = new ArrayList<>();
 		for (String prefix : mapPrefix2FunTest.keySet()) {
 			ExcelOperate excelResult = new ExcelOperate();
 			String excelPathOut = FileOperate.changeFileSuffix(excelPath, "_" + prefix, null);
@@ -350,11 +354,13 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			Map<String, List<String[]>> mapSheetName2LsInfo = mapPrefix2FunTest.get(prefix).getMapWriteToExcel();
 			for (String sheetName : mapSheetName2LsInfo.keySet()) {
 				excelResult.WriteExcel(sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName));
+				XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(excelPathOut, sheetName, EnumTableType.valueOf(prefix));
+				lsXdocTmpltExcels.add(xdocTmpltExcel);
 			}
-			lsExcelFiles.add(excelPathOut);
 			copeFile(prefix, excelPath);
 		}
-		return lsExcelFiles;
+		
+		return lsXdocTmpltExcels;
 	}
 	
 	/**

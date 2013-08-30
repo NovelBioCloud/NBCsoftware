@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import com.google.common.collect.HashMultimap;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.nbcReport.Params.EnumReport;
 
@@ -31,15 +32,19 @@ public class XdocTmpltExcel{
 	/** 同类表格的对比说明在这类表格的下方 */
 	private String downCompare = "";
 	private List<XdocTable> lsXdocTable = new ArrayList<XdocTable>();
-	private Map<String, String> mapExcel2SheetName = new LinkedHashMap<String, String>();
+	private HashMultimap<String, String> mapExcel2SheetNames = HashMultimap.create();
 	private EnumTableType enumTableType;
 	
 	/** 根据excel路径完成本类的构造
 	 * @param filePath
 	 * @param excelName
 	 */
-	public XdocTmpltExcel(Map<String,String> mapExcel2SheetName,EnumTableType enumTableType) {
-		this.mapExcel2SheetName = mapExcel2SheetName;
+	public XdocTmpltExcel(HashMultimap<String,String> mapExcel2SheetNames,EnumTableType enumTableType) {
+		this.mapExcel2SheetNames = mapExcel2SheetNames;
+		this.enumTableType = enumTableType;
+	}
+	
+	public XdocTmpltExcel(EnumTableType enumTableType){
 		this.enumTableType = enumTableType;
 	}
 	
@@ -48,8 +53,14 @@ public class XdocTmpltExcel{
 	 * @param sheetName
 	 */
 	public XdocTmpltExcel(String excelName, String sheetName,EnumTableType enumTableType) {
-		mapExcel2SheetName.put(excelName, sheetName);
+		mapExcel2SheetNames.put(excelName, sheetName);
 		this.enumTableType = enumTableType;
+	}
+	
+	public List<String> getAllExcelFileName(){
+		List<String> lsExcelNames = new ArrayList<>();
+		lsExcelNames.addAll(mapExcel2SheetNames.keySet());
+		return lsExcelNames;
 	}
 	
 	/**
@@ -58,7 +69,7 @@ public class XdocTmpltExcel{
 	 * @param sheetName
 	 */
 	public void addExcel(String excelName, String sheetName){
-		mapExcel2SheetName.put(excelName, sheetName);
+		mapExcel2SheetNames.put(excelName, sheetName);
 	}
 	
 	/** 读取excel的说明文件中的参数（允许不存在）*/
@@ -68,10 +79,12 @@ public class XdocTmpltExcel{
 		mapKey2Param.put("note",note);
 		mapKey2Param.put("upCompare",upCompare);
 		mapKey2Param.put("downCompare",downCompare);
-		for(String key : mapExcel2SheetName.keySet()){
-			XdocTable xdocTable = enumTableType.getXdocTable();
-			xdocTable.setLsExcelTable(formatDataList(ExcelTxtRead.readLsExcelTxtls(key, mapExcel2SheetName.get(key), 1, 200)));
-			lsXdocTable.add(xdocTable);
+		for(String key : mapExcel2SheetNames.keySet()){
+			for(String sheetName : mapExcel2SheetNames.get(key)){
+				XdocTable xdocTable = enumTableType.getXdocTable();
+				xdocTable.setLsExcelTable(formatDataList(ExcelTxtRead.readLsExcelTxtls(key, sheetName, 1, 200)));
+				lsXdocTable.add(xdocTable);
+			}
 		}
 		//使用枚举格式化Excel中的数据
 		mapKey2Param.put("lsXdocTable",lsXdocTable);

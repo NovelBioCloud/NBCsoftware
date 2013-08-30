@@ -23,6 +23,7 @@ import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.plot.ImageUtils;
 import com.novelbio.database.domain.geneanno.GOtype;
 import com.novelbio.nbcReport.EnumTableType;
+import com.novelbio.nbcReport.XdocTmpltExcel;
 import com.novelbio.nbcReport.XdocTmpltPic;
 import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportGO;
@@ -121,8 +122,10 @@ public class CtrlGOall implements CtrlTestGOInt {
 			} else {
 				saveName = FileOperate.changeFilePrefix(saveExcelPrefix, ctrlGO.getResultBaseTitle() + "_", "xls");
 			}
-			for(String excelFile : ctrlGO.saveExcel(saveName)){
-				reportGO.addResultFile(excelFile);
+			for(XdocTmpltExcel xdocTmpltExcel : ctrlGO.saveExcel(saveName)){
+				for (String excelFile : xdocTmpltExcel.getAllExcelFileName()) {
+					reportGO.addResultFile(excelFile);
+				}
 			}
 		}
 		savePic();
