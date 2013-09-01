@@ -260,7 +260,7 @@ public class GuiRNAautoSpliceSimple extends JPanel implements GUIinfo {
 			
 		ctrlSplicing.setGffHashGene(getGffhashGene());
 		try {
-			SeqHash seqHash = new SeqHash(txtChromFaPath.getText());
+			SeqHash seqHash = new SeqHash(txtChromFaPath.getText(), "");
 			ctrlSplicing.setSeqHash(seqHash);
 		} catch (Exception e) { }
 
