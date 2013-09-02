@@ -115,16 +115,20 @@ public class CtrlFastQfilter {
 		HashMultimap<String, String> mapParam = HashMultimap.create();
 		try {
 			if (fastQCbefore.length <= 1 || fastQCbefore[1] == null) {
-				fastQCbefore[0].saveToPath(savePathAndPrefix + "_BeforeFilter");
+				fastQCbefore[0].saveToPathPic(savePathAndPrefix + "_BeforeFilter");
+				fastQCbefore[0].saveToPathTable(savePathAndPrefix + "_BeforeFilter");
 			} else {
-				fastQCbefore[0].saveToPath(30, fastQCbefore[1], fileName + "_BeforeFilter");
+				fastQCbefore[0].saveToPathPic(30, fastQCbefore[1], fileName + "_BeforeFilter");
+				fastQCbefore[0].saveToPathTable(30, fastQCbefore[1], fileName + "_BeforeFilter");
 			}
 			mapParam.putAll(fastQCbefore[0].getMapParam(fileName + "_BeforeFilter"));
 
 			if (fastQCafter.length <= 1 || fastQCafter[1] == null) {
-				fastQCafter[0].saveToPath(savePathAndPrefix + "_AfterFilter");
+				fastQCafter[0].saveToPathPic(savePathAndPrefix + "_AfterFilter");
+				fastQCafter[0].saveToPathTable(savePathAndPrefix + "_AfterFilter");
 			} else {
-				fastQCafter[0].saveToPath(30, fastQCafter[1], fileName + "_AfterFilter");
+				fastQCafter[0].saveToPathPic(30, fastQCafter[1], fileName + "_AfterFilter");
+				fastQCafter[0].saveToPathTable(30, fastQCafter[1], fileName + "_AfterFilter");
 			}
 			mapParam.putAll(fastQCafter[0].getMapParam(fileName + "_AfterFilter"));
 		} catch (Exception e) {

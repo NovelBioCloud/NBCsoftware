@@ -124,7 +124,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			List<AlignSeqReading> lsAlignSeqReadings = mapPrefix2AlignSeqReadings.get(prefix);
 			List<AlignmentRecorder> lsAlignmentRecorders = new ArrayList<AlignmentRecorder>();
 			SamFileStatistics samFileStatistics = null;
-			if (isCountExpression && gffChrAbs.getTaxID() != 0) {
+			if (isCountExpression && gffChrAbs.getGffHashGene() != null) {
 				rpkMcomput.setCurrentCondition(prefix);
 				rpkMcomput.setConsiderStrand(strandSpecific);
 				rpkMcomput.setCalculateFPKM(isCalculateFPKM);
@@ -222,7 +222,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		mapPrefix2LocStatistics = new HashMap<String, GffChrStatistics>();
 		mapPrefix2Statistics = new HashMap<String, SamFileStatistics>();
 		
-		if (gffChrAbs.getTaxID() != 0) {
+		if (gffChrAbs.getGffHashGene() != null) {
 			rpkMcomput.setGffChrAbs(gffChrAbs);
 		}
 		

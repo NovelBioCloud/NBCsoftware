@@ -3,10 +3,8 @@ package com.novelbio.nbcgui.controlseq;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.novelbio.analysis.seq.fastq.FastQ;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.rnaseq.Trinity;
-
 
 public class CtrlTrinity {
 	CopeFastq copeFastq;
