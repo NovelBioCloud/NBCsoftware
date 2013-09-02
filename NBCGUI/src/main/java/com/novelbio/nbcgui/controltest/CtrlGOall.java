@@ -251,4 +251,8 @@ public class CtrlGOall implements CtrlTestGOInt {
 	public String getResultBaseTitle() {
 		return "GO-Analysis";
 	}
+	
+	public void setTeamName(String teamName){
+		reportGO.setTeamName(teamName);
+	}
 }

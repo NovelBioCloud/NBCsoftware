@@ -12,14 +12,14 @@
 <#list lsXdocTable as excel>
 <para lineSpacing="4" align="center">
 <!-- 行高和列宽必须同时设置 -->
-	<table weight="0.0"  cols="${excel.cols}" rows="${excel.rows}" color="#000000">
+	<table weight="0.0" height="${excel.height}" strokeWidth="${excel.strokeWidth}" cols="${excel.cols}" rows="${excel.rows}" color="#000000">
 		<!-- 遍历sheet中一个的table的所有行-->	
 		<#list excel.lsExcelTable as allRows>
 				<#if allRows_index == 0>
 					<!-- 标题列 -->
 					<#list allRows as title>
 					 	<#if title_index < excel.maxRow >
-							<cell col="${title_index+1}" fillColor="${excel.backfillColor}" row="1" color="#ffffff">
+							<cell col="${title_index+1}" strokeWidth="${excel.strokeWidth}" fillColor="${excel.backfillColor}" row="1" color="#ffffff">
 								<para align="center" >
 									<text fontName="&amp;quot" fontSize="10" fontStyle="bold" backColor="${excel.backfillColor}">${title}</text>
 								</para>
@@ -32,7 +32,7 @@
 						<!-- 奇数列 -->
 						<#list allRows as rowInfo>
 							<#if rowInfo_index < excel.maxCol >
-								<cell col="${rowInfo_index+1}" fillColor="${excel.singlefillColor}" row="${allRows_index+1}" color="#ffffff">
+								<cell col="${rowInfo_index+1}" strokeWidth="${excel.strokeWidth}" fillColor="${excel.singlefillColor}" row="${allRows_index+1}" color="#ffffff">
 									<para align="${excel.lsAligns[rowInfo_index]}">
 									 	<text fontName="&amp;quot" fontSize="10" fontStyle="bold" backColor="${excel.singlefillColor}">${rowInfo}</text>
 									</para>
@@ -44,7 +44,7 @@
 						<!-- 偶数列 -->
 						<#list allRows as rowInfo>
 							<#if rowInfo_index < excel.maxCol >
-								<cell col="${rowInfo_index+1}" fillColor="${excel.doublefillColor}"  row="${allRows_index+1}" color="#ffffff">
+								<cell col="${rowInfo_index+1}" strokeWidth="${excel.strokeWidth}" fillColor="${excel.doublefillColor}"  row="${allRows_index+1}" color="#ffffff">
 									<para align="${excel.lsAligns[rowInfo_index]}">
 									 	<text fontName="&amp;quot" fontSize="10" fillColor="${excel.doublefillColor}" fontStyle="bold" >${rowInfo}</text>
 									</para>

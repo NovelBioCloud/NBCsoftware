@@ -22,8 +22,7 @@
         <para lineSpacing="4" />
     <#list lsReportPathWays as reportPathWay>
     <para lineSpacing="4">
-      <text>\t</text>
-      <text fontName="宋体">我们以这组数据为例进行结果解析。通过信号通路分析，共得到</text>
+      <text fontName="宋体">/t${reportPathWay_index+1}、通过对${reportPathWay.teamName}组进行信号通路分析，共得到</text>
       <text fontName="宋体" fontStyle="bold">${reportPathWay.upRegulation}</text>
       <text fontName="宋体">个显著上调的Path-Term,</text>
       <text fontName="宋体" fontStyle="bold">${reportPathWay.downRegulation}</text>

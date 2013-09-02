@@ -302,13 +302,13 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			if (mapPrefix2FunTest.size() > 1 && prefix.equals("All")) {
 				for (String sheetName : mapSheetName2LsInfo.keySet()) {
 					excelResultAll.WriteExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName));
-					XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(excelAllPath, prefix + sheetName, EnumTableType.valueOf(prefix));
+					XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(excelAllPath, prefix + sheetName,CtrlGOPath.getXdocGoPath(prefix + sheetName));
 					lsXdocTmpltExcels.add(xdocTmpltExcel);
 				}
 			} else {
 				for (String sheetName : mapSheetName2LsInfo.keySet()) {
 					excelResult.WriteExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName));
-					XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(excelPath, prefix + sheetName, EnumTableType.valueOf(prefix));
+					XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(excelPath, prefix + sheetName, CtrlGOPath.getXdocGoPath(prefix + sheetName));
 					lsXdocTmpltExcels.add(xdocTmpltExcel);
 				}
 			}
@@ -356,7 +356,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			Map<String, List<String[]>> mapSheetName2LsInfo = mapPrefix2FunTest.get(prefix).getMapWriteToExcel();
 			for (String sheetName : mapSheetName2LsInfo.keySet()) {
 				excelResult.WriteExcel(sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName));
-				XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(excelPathOut, sheetName, EnumTableType.valueOf(prefix));
+				XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(excelPathOut, sheetName, CtrlGOPath.getXdocGoPath(sheetName));
 				lsXdocTmpltExcels.add(xdocTmpltExcel);
 			}
 			copeFile(prefix, excelPath);

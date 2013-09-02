@@ -14,6 +14,7 @@ public class ReportPathWay extends ReportBase{
 	/** 筛选条件 */
 	private String finderCondition;
 	private int upRegulation;
+	private String teamName;
 	private int downRegulation;
 	private List<String> lsResultFiles;
 	private List<XdocTmpltPic> lsXdocTmpltPics;
@@ -53,15 +54,24 @@ public class ReportPathWay extends ReportBase{
 		lsXdocTmpltExcels.add(xdocTmpltExcel);
 	}
 	
+	/** 实验组名 */
+	public String getTeamName() {
+		return teamName;
+	}
+	/** 实验组名 */
+	public void setTeamName(String teamName) {
+		this.teamName = teamName;
+	}
+	
 	/**
 	 * 取得所有的表格集合
 	 * @return
 	 */
 	public List<String> getExcels(){
 		List<String> lsExcels = new ArrayList<String>();
-		for (XdocTmpltExcel xdocTmpltExcel : lsXdocTmpltExcels) {
-			lsExcels.add(xdocTmpltExcel.toString());
-		}
+//		for (XdocTmpltExcel xdocTmpltExcel : lsXdocTmpltExcels) {
+//			lsExcels.add(xdocTmpltExcel.toString());
+//		}
 		return lsExcels;
 	}
 	

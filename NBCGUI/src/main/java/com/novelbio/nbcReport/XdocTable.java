@@ -16,6 +16,7 @@ public class XdocTable implements Cloneable,Serializable {
 	
 	private String weight = "0.0";
 	private String cols = "";
+	private String strokeWidth = "1.0";
 	private String rows = "";
 	private String backfillColor = "#00CCCC";
 	private String singlefillColor = "#CCFFFF";
@@ -24,10 +25,11 @@ public class XdocTable implements Cloneable,Serializable {
 	private String downCompare = "";
 	private String title = "";
 	private String note = "";
+	private String height = "200";
 	private List<String> lsAligns = new ArrayList<String>();
 	private List<List<String>> lsExcelTable = null;
 
-	private String rowHeights = "15,15,15,15,15,15,15,15,15,15,15,15,15,15,15";
+	private String rowHeights = "20,20,20,20,20,20,20,20,20,20,20,20,20,20,20";
 	
 	/**
 	 * 
@@ -175,6 +177,27 @@ public class XdocTable implements Cloneable,Serializable {
 	}
 	
 	
+	public String getStrokeWidth() {
+		return strokeWidth;
+	}
+	
+	public void setStrokeWidth(String strokeWidth) {
+		this.strokeWidth = strokeWidth;
+	}
+	/**
+	 * 整个table的高度
+	 * @param height
+	 */
+	public void setHeight(String height) {
+		this.height = height;
+	}
+	/**
+	 * 整个table的高度
+	 * @param height
+	 */
+	public String getHeight() {
+		return height;
+	}
 	
 	/** 边框宽度 */
 	public String getWeight() {

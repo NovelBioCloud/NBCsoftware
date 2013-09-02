@@ -94,6 +94,7 @@ public class TestGo {
 			}
 			ctrlGO.setLsBG(mapParams.get("background")[0]);
 			ctrlGO.setLsAccID2Value(lsAccID);
+			ctrlGO.setTeamName(excelPrefixs[i]);
 			ctrlGO.run();
 			ctrlGO.saveExcel(FileOperate.addSep(mapParams.get("savePath")[0])+excelPrefixs[i]);
 			for (String file : ctrlGO.getReportGO().getLsResultRealFiles()) {
