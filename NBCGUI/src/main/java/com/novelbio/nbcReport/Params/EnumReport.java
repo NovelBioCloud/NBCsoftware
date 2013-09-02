@@ -11,6 +11,7 @@ package com.novelbio.nbcReport.Params;
 public enum EnumReport {
 	GOAnalysis("GOAnalysis","GO-Analysis_result"),
 	PathWay("PathWay","PathWay-Analysis_result"),
+	SamAndRPKM("SamAndRPKM","SamAndRPKM_result"),
 	FastQC("FastQC","Quality-Control_result"),
 	Mapping("Mapping","Mapping_result"),
 	DiffExp("DiffExp","Difference Expression_result"),

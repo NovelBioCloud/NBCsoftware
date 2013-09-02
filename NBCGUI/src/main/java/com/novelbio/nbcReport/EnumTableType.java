@@ -26,9 +26,9 @@ public enum EnumTableType {
 //	Pathway_All("Pathway-Analysis_AllPathway_Result", new XdocTable("100,100,60,60,60,60,60,60,80,80")), 
 //	Pathways_All2Gene("Pathway-Analysis_AllPathway2Gene", new XdocTable("80,80,120,120,150,50,50")), 
 	DifGene("Dif-Gene", new XdocTable("120,80,220,40,40,60,60,50" )),
-	MappingResult("MappingResult",new XdocTable("200,200")),
-	MappingChrFile("MappingChrFile",new XdocTable("100,150,150,150,150")),
-	MappingStatistics("MappingStatistics",new XdocTable("200,200,200"));
+	MappingResult("MappingResult",new XdocTable("200,200" , "c,c","15,15,15,15,15,15,15,15,15")),
+	MappingChrFile("MappingChrFile",new XdocTable("100,150,150,150,150","c,c,c,c,c","15,15,15,15,15,15,15,15,15,15,15,15")),
+	MappingStatistics("MappingStatistics",new XdocTable("200,200,200","c,c,c","15,15,15,15,15,15,15,15"));
 	
 	private String tempName;
 	private XdocTable xdocTable;

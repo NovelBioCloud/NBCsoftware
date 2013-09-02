@@ -87,7 +87,6 @@ public class XdocTable implements Cloneable,Serializable {
 	/**
 	 * 
 	 * @param cols
-	 * @param rows
 	 * @param align l是居左　c是居中
 	 */
 	public XdocTable(String cols, String align) {
@@ -111,8 +110,37 @@ public class XdocTable implements Cloneable,Serializable {
 		}
 	}
 	
+
 	/**
-	 * 默认每行全部居中，高度15
+	 * 
+	 * @param cols
+	 * @param align l是居左　c是居中
+	 * @param rows
+	 */
+	public XdocTable(String cols, String align,String rowHeights) {
+		 String rows = rowHeights;
+		if (cols != null) {
+			this.cols = cols;
+		}
+		
+		if (rows != null) {
+			this.rows = rows;
+		}
+		if (align != null) {
+			String[] aligns = align.split(",");
+			for (int i = 0; i < aligns.length; i++) {
+				if (aligns[i].equalsIgnoreCase("l")) {
+					lsAligns.add("left");
+				}else{
+					lsAligns.add("center");
+				}
+			}
+		}
+	}
+	
+	
+	/**
+	 * 默认每行全部居中，共15行，高度15,
 	 * @param cols
 	 */
 	public XdocTable(String cols) {

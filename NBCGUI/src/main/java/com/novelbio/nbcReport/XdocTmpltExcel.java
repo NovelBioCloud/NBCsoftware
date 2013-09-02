@@ -33,6 +33,7 @@ public class XdocTmpltExcel{
 	private String downCompare = "";
 	private List<XdocTable> lsXdocTable = new ArrayList<XdocTable>();
 	private HashMultimap<String, String> mapExcel2SheetNames = HashMultimap.create();
+	private HashMultimap<String, Integer> mapExcel2SheetNamesInt = HashMultimap.create();
 	private EnumTableType enumTableType;
 	
 	/** 根据excel路径完成本类的构造
@@ -44,6 +45,7 @@ public class XdocTmpltExcel{
 		this.enumTableType = enumTableType;
 	}
 	
+	/**请使用addExcel添加数据*/
 	public XdocTmpltExcel(EnumTableType enumTableType){
 		this.enumTableType = enumTableType;
 	}
@@ -72,6 +74,10 @@ public class XdocTmpltExcel{
 		mapExcel2SheetNames.put(excelName, sheetName);
 	}
 	
+	public void addExcel(String excelName, int sheetNum){
+		mapExcel2SheetNamesInt.put(excelName, sheetNum);
+	}
+	
 	/** 读取excel的说明文件中的参数（允许不存在）*/
 	private Map<String, Object> addParams(){
 		Map<String, Object> mapKey2Param = new HashMap<String, Object>();
@@ -83,6 +89,13 @@ public class XdocTmpltExcel{
 			for(String sheetName : mapExcel2SheetNames.get(key)){
 				XdocTable xdocTable = enumTableType.getXdocTable();
 				xdocTable.setLsExcelTable(formatDataList(ExcelTxtRead.readLsExcelTxtls(key, sheetName, 1, 200)));
+				lsXdocTable.add(xdocTable);
+			}
+		}
+		for(String key : mapExcel2SheetNamesInt.keySet()){
+			for(int sheetNum : mapExcel2SheetNamesInt.get(key)){
+				XdocTable xdocTable = enumTableType.getXdocTable();
+				xdocTable.setLsExcelTable(formatDataList(ExcelTxtRead.readLsExcelTxtls(key, sheetNum, 1, 200)));
 				lsXdocTable.add(xdocTable);
 			}
 		}

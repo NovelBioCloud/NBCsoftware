@@ -23,17 +23,13 @@ public abstract class ReportBase {
 	/**
 	 * 添加报告参数
 	 */
-	protected Map<String, Object> addParamMap() {
-		return new HashMap<String, Object>();
-	}
+	protected abstract Map<String, Object> addParamMap();
 	
 	/**
 	 * 得到报告类型
 	 * @return
 	 */
-	public EnumReport getEnumReport(){
-		return null;
-	}
+	public abstract EnumReport getEnumReport();
 	
 	
 	/**
