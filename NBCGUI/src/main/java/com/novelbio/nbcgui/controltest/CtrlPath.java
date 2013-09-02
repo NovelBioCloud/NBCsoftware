@@ -88,6 +88,7 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 			lsXdocTmpltExcels =  saveExcelNorm(saveExcelPrefix);
 		}
 		for (XdocTmpltExcel xdocTmpltExcel : lsXdocTmpltExcels) {
+			reportPathWay.addXdocTempExcel(xdocTmpltExcel);
 			for (String excelFiles : xdocTmpltExcel.getAllExcelFileName()) {
 				reportPathWay.addResultFile(excelFiles);
 			}
@@ -136,5 +137,9 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 	/** 返回文件的名字，用于excel和画图 */
 	public String getResultBaseTitle() {
 		return "Pathway-Analysis";
+	}
+	@Override
+	public void setTeamName(String teamName) {
+		reportPathWay.setTeamName(teamName);
 	}
 }

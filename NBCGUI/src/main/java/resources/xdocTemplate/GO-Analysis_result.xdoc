@@ -23,7 +23,7 @@
     <#list lsReportGOs as reportGO>
 	     <para lineSpacing="4">
 	      <text>\t</text>
-	      <text fontName="宋体">通过基因功能分析，共得到</text>
+	      <text fontName="宋体">${reportGO_index+1}、通过对${reportGO.teamName}组进行基因功能分析，共得到</text>
 	      <text fontName="宋体" fontStyle="bold">${reportGO.upRegulation}</text>
 	      <text fontName="宋体">个显著上调的GO-Term和 </text>
 	      <text fontName="宋体" fontStyle="bold"> ${reportGO.downRegulation}</text>

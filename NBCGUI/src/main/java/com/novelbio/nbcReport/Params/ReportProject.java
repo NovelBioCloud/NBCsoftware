@@ -29,7 +29,7 @@ import com.novelbio.base.fileOperate.ZipOperate;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 
-public class ReportProject extends ReportBase{
+public class ReportProject extends ReportBase {
 	public static final Logger logger = Logger.getLogger(ReportProject.class);
 	private List<String> lsXdocChildren = new ArrayList<String>();
 	private String noAssign = "<#assign no=1 />";
@@ -42,18 +42,20 @@ public class ReportProject extends ReportBase{
 
 	/**
 	 * 根据一个目录下的所有子文件　初始化项目报告对象
-	 * @param folderPath 一个目录
+	 * 
+	 * @param folderPath
+	 *            一个目录
 	 */
 	public ReportProject(String folderPath) {
-		List<String> lsChildren = FileOperate.getFoldFileNameLs(folderPath, "*","*");
+		List<String> lsChildren = FileOperate.getFoldFileNameLs(folderPath, "*", "*");
 		System.out.println(lsChildren.size());
 		for (String fileName : lsChildren) {
-			if (!FileOperate.isFileDirectory(fileName)) 
+			if (!FileOperate.isFileDirectory(fileName))
 				continue;
 			EnumReport enumReport = EnumReport.findByFolderName(FileOperate.getFileName(fileName));
 			if (enumReport == null)
 				continue;
-			String xdocFile = FileOperate.addSep(fileName)+enumReport.getReportXdocFileName();
+			String xdocFile = FileOperate.addSep(fileName) + enumReport.getReportXdocFileName();
 			if (!FileOperate.isFileExist(xdocFile))
 				continue;
 			TxtReadandWrite txtReadandWrite = new TxtReadandWrite(xdocFile);
@@ -62,19 +64,20 @@ public class ReportProject extends ReportBase{
 			lsMethod.add(enumReport.getResultFolder());
 		}
 	}
-	
+
 	/**
 	 * 指定若干个子文件夹　初始化项目报告对象
+	 * 
 	 * @param folderChildren
 	 */
-	public ReportProject(List<String> folderChildren){
+	public ReportProject(List<String> folderChildren) {
 		for (String fileName : folderChildren) {
-			if (!FileOperate.isFileDirectory(fileName)) 
+			if (!FileOperate.isFileDirectory(fileName))
 				continue;
 			EnumReport enumReport = EnumReport.findByFolderName(FileOperate.getFileName(fileName));
 			if (enumReport == null)
 				continue;
-			String xdocFile = FileOperate.addSep(fileName)+enumReport.getReportXdocFileName();
+			String xdocFile = FileOperate.addSep(fileName) + enumReport.getReportXdocFileName();
 			if (!FileOperate.isFileExist(xdocFile))
 				continue;
 			TxtReadandWrite txtReadandWrite = new TxtReadandWrite(xdocFile);
@@ -83,7 +86,7 @@ public class ReportProject extends ReportBase{
 			lsMethod.add(enumReport.getResultFolder());
 		}
 	}
-	
+
 	@Override
 	public EnumReport getEnumReport() {
 		return EnumReport.Project;
@@ -101,49 +104,47 @@ public class ReportProject extends ReportBase{
 		mapKey2Param.put("lsMethod", lsMethod);
 		return mapKey2Param;
 	}
-	
-	
+
 	/**
-	 * 根据渲染的String结果查找标题来创建目录 
+	 * 根据渲染的String结果查找标题来创建目录
 	 */
-	private void createCatalog(String content){
+	private void createCatalog(String content) {
 		Document doc = null;
-	    try {
-	    	 // 读取并解析XML文档
-	           // 下面的是通过解析xml字符串的
-	    	String domContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><xdoc version=\"9.1.9\">"+
-	    			content + "</xdoc>";
-	    	doc = DocumentHelper.parseText(domContent); // 将字符串转为XML
-	    	Element rootElt = doc.getRootElement(); // 获取根节点
-	    	@SuppressWarnings("unchecked")
-	    	//找出name属性为title的所有para标签下的text标签，在设计模板的时候这类para标签下只允许设置一个text标签
-			List<Element> elements = (List<Element>)rootElt.selectNodes("//para[@name='title']/text");
-	    	for(Element element : elements){
-	    		//根据<text> 标签中的name属性的值来确定标题级别，这个name的属性值必须为数字
-	    		int titleLv = Integer.parseInt(element.attributeValue("name"));
-	    		String title = element.getTextTrim();
-	    		//在不同级别标签前加不同数量的缩进符
-	    		for (int i = 0; i < titleLv ; i++) {
+		try {
+			// 读取并解析XML文档
+			// 下面的是通过解析xml字符串的
+			String domContent = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><xdoc version=\"9.1.9\">" + content + "</xdoc>";
+			doc = DocumentHelper.parseText(domContent); // 将字符串转为XML
+			Element rootElt = doc.getRootElement(); // 获取根节点
+			@SuppressWarnings("unchecked")
+			// 找出name属性为title的所有para标签下的text标签，在设计模板的时候这类para标签下只允许设置一个text标签
+			List<Element> elements = (List<Element>) rootElt.selectNodes("//para[@name='title']/text");
+			for (Element element : elements) {
+				// 根据<text> 标签中的name属性的值来确定标题级别，这个name的属性值必须为数字
+				int titleLv = Integer.parseInt(element.attributeValue("name"));
+				String title = element.getTextTrim();
+				// 在不同级别标签前加不同数量的缩进符
+				for (int i = 0; i < titleLv; i++) {
 					title = "\t" + title;
 				}
-	    		//最后放到目录集合里
-	    		lsCatalogs.add(title);
-	    	}
-	    } catch (DocumentException e) {
-        	e.printStackTrace();
-        } catch (Exception e) {
-        	logger.error("模板书写不规范");
-            e.printStackTrace();
+				// 最后放到目录集合里
+				lsCatalogs.add(title);
+			}
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			logger.error("模板书写不规范");
+			e.printStackTrace();
 
-        }
+		}
 	}
-	
+
 	/**
 	 * 给定保存路径outPath、文件名fileName后缀名suffix，输出带有页面页脚的最终结果报告
 	 */
-	public boolean outputReport(String outPathFile){
+	public boolean outputReport(String outPathFile) {
 		try {
-			//设置目录
+			// 设置目录
 			String tempPath = PathDetail.getTmpPathRandom();
 			outputReportXdoc(tempPath);
 			content = addTitleNo(tempPath);
@@ -153,8 +154,8 @@ public class ReportProject extends ReportBase{
 			// 用字符串构建XDoc
 			XDoc xdoc = new XDoc(tmpResult);
 			String fileName = FileOperate.getFileName(outPathFile);
-			String resultTempFile = FileOperate.addSep(tempPath)+fileName;
-			//加上一个封面模板，因为封面模板是没有页眉页脚的
+			String resultTempFile = FileOperate.addSep(tempPath) + fileName;
+			// 加上一个封面模板，因为封面模板是没有页眉页脚的
 			// 生成的文件保存目录
 			XDocIO.write(xdoc, new File(resultTempFile));
 			if (FileOperate.getFileNameSep(outPathFile)[1].equalsIgnoreCase("docx")) {
@@ -163,7 +164,7 @@ public class ReportProject extends ReportBase{
 			boolean copyResult = FileOperate.copyFile(resultTempFile, outPathFile, true);
 			if (copyResult) {
 				FileOperate.delFile(resultTempFile);
-			}else {
+			} else {
 				logger.error("报告拷贝出错！");
 			}
 		} catch (Exception e) {
@@ -173,168 +174,198 @@ public class ReportProject extends ReportBase{
 		}
 		return true;
 	}
-	
 
 	/**
-	 * 根据一个xml字符串读取里面的<img src="aaa">标签的src属性
-	 * 返回一个图片全路径序列集合
+	 * 根据一个xml字符串读取里面的<img src="aaa">标签的src属性 返回一个图片全路径序列集合
 	 */
 	public List<String> findAllImageSrc(String result) {
-		List<String> lsImageSrcs = new ArrayList<String>(); 
+		List<String> lsImageSrcs = new ArrayList<String>();
 		Document doc = null;
 		String picTempPath = FileOperate.addSep(EnumReport.Picture.getTempPath()) + "picTemp.PNG";
 		try {
-            // 读取并解析XML文档
-           // 下面的是通过解析xml字符串的
-	    	doc = DocumentHelper.parseText(result); // 将字符串转为XML
-	    	Element rootElt = doc.getRootElement(); // 获取根节点
-	    	@SuppressWarnings("unchecked")
-	    	//找出所有img标签
-			List<Element> elements = (ArrayList<Element>)rootElt.selectNodes("//img");
-	    	//循环标签，取得它的src属性值放到集合中
-            for (Element element : elements ){
-            	lsImageSrcs.add(element.attribute("src").getValue());
-            	if(!element.attribute("src").getValue().startsWith("data:im")){
-            		element.attribute("src").setValue(picTempPath);
-            	}
-            }
-            //背景层里的一条线，虽然不是img标签，但是最终会保存为一张图片，所以要把它算到集合里
-            lsImageSrcs.add(1, "data:im");
-        } catch (DocumentException e) {
-        	e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+			// 读取并解析XML文档
+			// 下面的是通过解析xml字符串的
+			doc = DocumentHelper.parseText(result); // 将字符串转为XML
+			Element rootElt = doc.getRootElement(); // 获取根节点
+			@SuppressWarnings("unchecked")
+			// 找出所有img标签
+			List<Element> elements = (ArrayList<Element>) rootElt.selectNodes("//img");
+			// 循环标签，取得它的src属性值放到集合中
+			for (Element element : elements) {
+				lsImageSrcs.add(element.attribute("src").getValue());
+				if (!element.attribute("src").getValue().startsWith("data:im")) {
+					element.attribute("src").setValue(picTempPath);
+				}
+			}
+			// 背景层里的一条线，虽然不是img标签，但是最终会保存为一张图片，所以要把它算到集合里
+			lsImageSrcs.add(1, "data:im");
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 
-        }
-			return lsImageSrcs;
-     }
-	
+		}
+		return lsImageSrcs;
+	}
+
 	/**
-	 *  将最后生成的word中的小图换成原始大图
-	 *  同时将封面的页眉页脚去掉
-	 *  同时还要把所有的表格边框线改成白色
-	 * @param lsImageSrcs 图片位置序列
-	 * @param reportPath 生成的word报告文件，包含全路径
+	 * 将最后生成的word中的小图换成原始大图 同时将封面的页眉页脚去掉 同时还要把所有的表格边框线改成白色
+	 * 
+	 * @param lsImageSrcs
+	 *            图片位置序列
+	 * @param reportPath
+	 *            生成的word报告文件，包含全路径
 	 */
-	public void motifyReport(List<String> lsImageSrcs , String reportPath ) {
-		//word转成的压缩包名
+	public void motifyReport(List<String> lsImageSrcs, String reportPath) {
+		// word转成的压缩包名
 		String zipFileName = FileOperate.changeFileSuffixReal(reportPath, null, "zip");
-		//解压后的文件夹全名
-		String folderName = reportPath.substring(0, reportPath.lastIndexOf(FileOperate.getSepPath())+1)+ FileOperate.getFileNameSep(reportPath)[0];
-		//图片所在路径
-		String imagePath = folderName+FileOperate.getSepPath()+"word"+FileOperate.getSepPath()+"media"+FileOperate.getSepPath();
-		//页眉页脚需要修改的document.xml文件全路径
-		String documtXMLPath = folderName+FileOperate.getSepPath()+"word" + FileOperate.getSepPath() + "document.xml";
-//		final PatternOperate pat = new PatternOperate("rId(\\d+).png", false);
+		// 解压后的文件夹全名
+		String folderName = reportPath.substring(0, reportPath.lastIndexOf(FileOperate.getSepPath()) + 1) + FileOperate.getFileNameSep(reportPath)[0];
+		// 图片所在路径
+		String imagePath = folderName + FileOperate.getSepPath() + "word" + FileOperate.getSepPath() + "media" + FileOperate.getSepPath();
+		// 页眉页脚需要修改的document.xml文件全路径
+		String documtXMLPath = folderName + FileOperate.getSepPath() + "word" + FileOperate.getSepPath() + "document.xml";
+		// final PatternOperate pat = new PatternOperate("rId(\\d+).png",
+		// false);
 		try {
 			ZipOperate.unZipFiles(zipFileName, folderName);
 			String result = null;
-			for(int i = 0; i<lsImageSrcs.size(); i++){
+			for (int i = 0; i < lsImageSrcs.size(); i++) {
 				result = lsImageSrcs.get(i);
-		  	if(result.startsWith("data:im")){
+				if (result.startsWith("data:im")) {
 					continue;
 				}
-				FileOperate.delFile(imagePath+"rId"+(i+11)+".png");
-				FileOperate.copyFile(result, imagePath + FileOperate.getFileName(result),true);
-				FileOperate.changeFileName(imagePath + FileOperate.getFileName(result), "rId"+(i+11)+".png", true);
+				FileOperate.delFile(imagePath + "rId" + (i + 11) + ".png");
+				FileOperate.copyFile(result, imagePath + FileOperate.getFileName(result), true);
+				FileOperate.changeFileName(imagePath + FileOperate.getFileName(result), "rId" + (i + 11) + ".png", true);
 			}
 			FileOperate.delFile(zipFileName);
-			//去掉首页的页眉页脚,和修改表格边框
+			// 去掉首页的页眉页脚,和修改表格边框
 			modifyWord(documtXMLPath);
 			ZipOperate.zip(folderName, zipFileName);
-			FileOperate.changeFileName(zipFileName,FileOperate.getFileName(reportPath),true);
+			FileOperate.changeFileName(zipFileName, FileOperate.getFileName(reportPath), true);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		FileOperate.delFolder( folderName);
-}
-	
+		FileOperate.delFolder(folderName);
+	}
+
 	/** 去页眉页脚改表格边框线，同时设置行间距1.5倍 */
 	@SuppressWarnings("unchecked")
 	private void modifyWord(String documtXMLPath) {
-		//去掉首页的页眉页脚
-		SAXReader saxReader = new SAXReader();  
-        Document document = null;
+		// 去掉首页的页眉页脚
+		SAXReader saxReader = new SAXReader();
+		Document document = null;
 		try {
 			document = saxReader.read(new File(documtXMLPath));
 		} catch (DocumentException e) {
 			logger.error("修改报告失败");
 			e.printStackTrace();
 		}
-        Element rootElement = document.getRootElement();
-        
-        //在<w:sectPr>标签中加入<w:titlePg />这样一个标签，在word中意思为首页页眉页脚不同，要另外设定
-        for(Element element : (ArrayList<Element>)rootElement.selectNodes("//w:sectPr")){
-        	element.addElement("w:titlePg");
-        }
-        //以下的两个循环用来移除<w:headerReference w:type="first"  /> 首页 页眉内容标签 首页 页脚标签同理
-        //可用可不用，用了防止有意外，我们生成的没有以下这两种标签
-        for(Element element : (ArrayList<Element>)rootElement.selectNodes("//w:headerReference")){
-       		if(element.attributeValue("type").equals("first")){
-       			element.getParent().remove(element);
-       		}
-        }
-        for(Element element : (ArrayList<Element>)rootElement.selectNodes("//w:footerReference")){
-        	if(element.attributeValue("type").equals("first")){
-        		element.getParent().remove(element);
-    		}
-        }
-        
-        //在<w:tblPr >标签下添加<w:tblBorders >标签来设置table的边框属性
-        for(Element element : (ArrayList<Element>)rootElement.selectNodes("//w:tblPr")){
-        	Element tblBorders = element.addElement("w:tblBorders");
-            //创建一个需要插入的xml标签w:tblBorders
-            Element top = tblBorders.addElement("w:top"); 
-            top.addAttribute("w:val", "single"); top.addAttribute("w:sz", "4"); top.addAttribute("w:space", "0"); top.addAttribute("w:color", "FFFFFF"); top.addAttribute("w:themeColor", "background1");
-            Element left = tblBorders.addElement("w:left"); 
-            left.addAttribute("w:val", "single"); left.addAttribute("w:sz", "4"); left.addAttribute("w:space", "0"); left.addAttribute("w:color", "FFFFFF"); left.addAttribute("w:themeColor", "background1");
-            Element bottom = tblBorders.addElement("w:bottom"); 
-            bottom.addAttribute("w:val", "single"); bottom.addAttribute("w:sz", "4"); bottom.addAttribute("w:space", "0"); bottom.addAttribute("w:color", "FFFFFF"); bottom.addAttribute("w:themeColor", "background1");
-            Element right = tblBorders.addElement("w:right"); 
-            right.addAttribute("w:val", "single"); right.addAttribute("w:sz", "4"); right.addAttribute("w:space", "0"); right.addAttribute("w:color", "FFFFFF"); right.addAttribute("w:themeColor", "background1");
-            Element insideH = tblBorders.addElement("w:insideH"); 
-            insideH.addAttribute("w:val", "single"); insideH.addAttribute("w:sz", "4"); insideH.addAttribute("w:space", "0"); insideH.addAttribute("w:color", "FFFFFF"); insideH.addAttribute("w:themeColor", "background1");
-            Element insideV = tblBorders.addElement("w:insideV"); 
-            insideV.addAttribute("w:val", "single"); insideV.addAttribute("w:sz", "4"); insideV.addAttribute("w:space", "0"); insideV.addAttribute("w:color", "FFFFFF"); insideV.addAttribute("w:themeColor", "background1");
-        }
-        //移除所有表格的每个cell的边框属性，让表格继承table的边框属性，上一个循环就是设置table的边框属性
-        for(Element element : (ArrayList<Element>)rootElement.selectNodes("//w:tcBorders")){
-        	element.getParent().remove(element);
-        }
-        
-        //设值1.5倍行间距<w:pPr><w:spacing w:line="360" w:lineRule="auto"/></w:pPr> 不要添加在表格和目录上
-        for(Element element : (ArrayList<Element>)rootElement.selectNodes("//w:pPr")){
-        	if(!(element.getParent().getParent().getName().equals("tc"))){
-        		Element spacing = element.addElement("w:spacing");
-            	spacing.addAttribute("w:line", "360");
-            	spacing.addAttribute("w:lineRule", "auto");
-        	}
-        }
-        //移除目录的行间距
-        for(Element element : (ArrayList<Element>)rootElement.selectNodes("//w:rPr/w:rFonts[@w:ascii='黑体']")){
-        	if(element.getParent().element("sz").attributeValue("val").equals("22.5")){
-        		Element p = element.getParent().getParent().getParent();
-        		p.element("pPr").clearContent();
-        	}
-        }
-        
-       FileOperate.delFile(documtXMLPath);
-        try {  
-            /** 将document中的内容写入文件中 */  
-            XMLWriter writer = new XMLWriter(new FileWriter(new File( documtXMLPath)));  
-            writer.write(document);  
-            writer.close();  
-        } catch (Exception ex) {  
-            ex.printStackTrace();  
-        }  
+		Element rootElement = document.getRootElement();
+
+		// 在<w:sectPr>标签中加入<w:titlePg />这样一个标签，在word中意思为首页页眉页脚不同，要另外设定
+		for (Element element : (ArrayList<Element>) rootElement.selectNodes("//w:sectPr")) {
+			element.addElement("w:titlePg");
+		}
+		// 以下的两个循环用来移除<w:headerReference w:type="first" /> 首页 页眉内容标签 首页 页脚标签同理
+		// 可用可不用，用了防止有意外，我们生成的没有以下这两种标签
+		for (Element element : (ArrayList<Element>) rootElement.selectNodes("//w:headerReference")) {
+			if (element.attributeValue("type").equals("first")) {
+				element.getParent().remove(element);
+			}
+		}
+		for (Element element : (ArrayList<Element>) rootElement.selectNodes("//w:footerReference")) {
+			if (element.attributeValue("type").equals("first")) {
+				element.getParent().remove(element);
+			}
+		}
+
+		for (Element element : (ArrayList<Element>) rootElement.selectNodes("//w:trHeight")) {
+			element.addAttribute("w:hRule", "exact");
+		}
+
+		// 在<w:tblPr >标签下添加<w:tblBorders >标签来设置table的边框属性
+		for (Element element : (ArrayList<Element>) rootElement.selectNodes("//w:tblPr")) {
+			Element tblBorders = element.addElement("w:tblBorders");
+			// 创建一个需要插入的xml标签w:tblBorders
+			Element top = tblBorders.addElement("w:top");
+			top.addAttribute("w:val", "single");
+			top.addAttribute("w:sz", "4");
+			top.addAttribute("w:space", "0");
+			top.addAttribute("w:color", "FFFFFF");
+			top.addAttribute("w:themeColor", "background1");
+			Element left = tblBorders.addElement("w:left");
+			left.addAttribute("w:val", "single");
+			left.addAttribute("w:sz", "4");
+			left.addAttribute("w:space", "0");
+			left.addAttribute("w:color", "FFFFFF");
+			left.addAttribute("w:themeColor", "background1");
+			Element bottom = tblBorders.addElement("w:bottom");
+			bottom.addAttribute("w:val", "single");
+			bottom.addAttribute("w:sz", "4");
+			bottom.addAttribute("w:space", "0");
+			bottom.addAttribute("w:color", "FFFFFF");
+			bottom.addAttribute("w:themeColor", "background1");
+			Element right = tblBorders.addElement("w:right");
+			right.addAttribute("w:val", "single");
+			right.addAttribute("w:sz", "4");
+			right.addAttribute("w:space", "0");
+			right.addAttribute("w:color", "FFFFFF");
+			right.addAttribute("w:themeColor", "background1");
+			Element insideH = tblBorders.addElement("w:insideH");
+			insideH.addAttribute("w:val", "single");
+			insideH.addAttribute("w:sz", "4");
+			insideH.addAttribute("w:space", "0");
+			insideH.addAttribute("w:color", "FFFFFF");
+			insideH.addAttribute("w:themeColor", "background1");
+			Element insideV = tblBorders.addElement("w:insideV");
+			insideV.addAttribute("w:val", "single");
+			insideV.addAttribute("w:sz", "4");
+			insideV.addAttribute("w:space", "0");
+			insideV.addAttribute("w:color", "FFFFFF");
+			insideV.addAttribute("w:themeColor", "background1");
+		}
+		// 移除所有表格的每个cell的边框属性，让表格继承table的边框属性，上一个循环就是设置table的边框属性
+		for (Element element : (ArrayList<Element>) rootElement.selectNodes("//w:tcBorders")) {
+			element.getParent().remove(element);
+		}
+
+		// 设值1.5倍行间距<w:pPr><w:spacing w:line="360" w:lineRule="auto"/></w:pPr>
+		// 不要添加在表格和目录上
+		for (Element element : (ArrayList<Element>) rootElement.selectNodes("//w:pPr")) {
+			if (!(element.getParent().getParent().getName().equals("tc"))) {
+				Element spacing = element.addElement("w:spacing");
+				spacing.addAttribute("w:line", "360");
+				spacing.addAttribute("w:lineRule", "auto");
+			}
+		}
+		// 移除目录的行间距
+		for (Element element : (ArrayList<Element>) rootElement.selectNodes("//w:rPr/w:rFonts[@w:ascii='黑体']")) {
+			if (element.getParent().element("sz").attributeValue("val").equals("22.5")) {
+				Element p = element.getParent().getParent().getParent();
+				p.element("pPr").clearContent();
+			}
+		}
+
+		FileOperate.delFile(documtXMLPath);
+		try {
+			/** 将document中的内容写入文件中 */
+			XMLWriter writer = new XMLWriter(new FileWriter(new File(documtXMLPath)));
+			writer.write(document);
+			writer.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
-	
-	
+
 	/**
 	 * 添加序号并渲染
-	 * @param path 生成好的模板位置
-	 * @throws Exception 
+	 * 
+	 * @param path
+	 *            生成好的模板位置
+	 * @throws Exception
 	 */
 	private String addTitleNo(String path) throws Exception {
 		Map<String, Object> mapKey2Params = addParamMap();
@@ -353,7 +384,7 @@ public class ReportProject extends ReportBase{
 		// 返回渲染好的xdoc字符串
 		return sw.toString();
 	}
-	
+
 	private String addCatalogAndBG() throws Exception {
 		Map<String, Object> mapKey2Params = addParamMap();
 		// TODO 异常待处理
@@ -371,6 +402,7 @@ public class ReportProject extends ReportBase{
 		// 返回渲染好的xdoc字符串
 		return sw.toString();
 	}
+
 	/** 为项目报告添加名称 */
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;

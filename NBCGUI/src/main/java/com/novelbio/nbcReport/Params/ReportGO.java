@@ -16,6 +16,7 @@ import com.novelbio.nbcReport.XdocTmpltPic;
 public class ReportGO extends ReportBase {
 	private String testMethod;
 	private String finderCondition;
+	private String teamName;
 	private int upRegulation;
 	private int downRegulation;
 	private List<String> lsResultFiles;
@@ -82,6 +83,14 @@ public class ReportGO extends ReportBase {
 	public void setFinderCondition(String finderCondition) {
 		this.finderCondition = finderCondition;
 	}
+	/** 实验组名 */
+	public String getTeamName() {
+		return teamName;
+	}
+	/** 实验组名 */
+	public void setTeamName(String teamName) {
+		this.teamName = teamName;
+	}
 
 	public int getUpRegulation() {
 		return upRegulation;
@@ -94,7 +103,7 @@ public class ReportGO extends ReportBase {
 	public int getDownRegulation() {
 		return downRegulation;
 	}
-
+	
 	public void setDownRegulation(int downRegulation) {
 		this.downRegulation = downRegulation;
 	}
