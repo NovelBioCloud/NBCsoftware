@@ -87,6 +87,7 @@ public class GuiRNAAssembly extends JPanel {
 
 		spnThreadNum = new JSpinner();
 		spnThreadNum.setBounds(268, 363, 78, 22);
+		spnThreadNum.setValue(15);
 		add(spnThreadNum);
 		
 		JLabel lblThreadnum = new JLabel("ThreadNum");
@@ -95,6 +96,7 @@ public class GuiRNAAssembly extends JPanel {
 		
 		spnMemNum = new JSpinner();
 		spnMemNum.setBounds(364, 363, 78, 22);
+		spnMemNum.setValue(50);
 		add(spnMemNum);
 		
 		JLabel lblMemory = new JLabel("Memory");
@@ -104,6 +106,7 @@ public class GuiRNAAssembly extends JPanel {
 		spnInsertSize = new JSpinner();
 		spnInsertSize.setToolTipText("");
 		spnInsertSize.setBounds(460, 363, 70, 22);
+		spnInsertSize.setValue(500);
 		add(spnInsertSize);
 		
 		JLabel lblInsertSize = new JLabel("Insert Size");
@@ -173,6 +176,7 @@ public class GuiRNAAssembly extends JPanel {
 		ctrlTrinity.setInsertSize((int) spnInsertSize.getValue());
 		ctrlTrinity.setStrandSpecific(cmbStrandInfo.getSelectedValue());
 		ctrlTrinity.setThreadNum((int) spnThreadNum.getValue());
+		ctrlTrinity.runTrinity();
 	}
 	
 }

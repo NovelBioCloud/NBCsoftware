@@ -226,7 +226,7 @@ public class GuiCuffdiff extends JPanel {
 		cuffcompare.setExePath(softWareInfo.getExePath());
 		cuffcompare.setRefGtfFile(gtfFile);
 		cuffcompare.setOutPath(outFile);
-		cuffcompare.setSeqFasta(species.getChromFaPath());
+		cuffcompare.setSeqFasta(species.getChromSeq());
 		cuffcompare.setClearFile(true);
 		gtfFile = cuffcompare.runCompareGtf();
 		
@@ -248,7 +248,7 @@ public class GuiCuffdiff extends JPanel {
 		if (species.getTaxID() != 0) {
 			String gtfSpecies = getSpeciesGtf(outFile);
 			cuffcompare.setRefGtfFile(gtfSpecies);
-			cuffcompare.setSeqFasta(species.getChromFaPath());
+			cuffcompare.setSeqFasta(species.getChromSeq());
 		}
 		String refGTF = txtGtfCuffdiff.getText();
 		if (FileOperate.isFileExist(refGTF)) {
@@ -271,6 +271,7 @@ public class GuiCuffdiff extends JPanel {
 			GffChrAbs gffChrAbs = new GffChrAbs(species);
 			String outGtf = FileOperate.changeFileSuffix(outFile, "_NovelGtf_Tmp", "gtf");
 			gffChrAbs.getGffHashGene().writeToGTF(FileOperate.changeFileSuffix(outFile, "_NovelGtf_Tmp", "gtf"));
+			gffChrAbs.close();
 			return outGtf;
 		}
 		return "";

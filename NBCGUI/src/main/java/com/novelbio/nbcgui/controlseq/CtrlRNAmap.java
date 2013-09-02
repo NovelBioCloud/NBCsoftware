@@ -46,7 +46,7 @@ public class CtrlRNAmap {
 	 * 之后每一行为基因表达情况
 	 *  */
 	List<List<String>> lsExpResultRsemCounts = new ArrayList<>();
-	
+	int sensitive = MapTophat.Sensitive_Sensitive;
 	public CtrlRNAmap(int mapType) {
 		if (mapType == TOP_HAT) {
 			this.mapType = TOP_HAT;
@@ -85,6 +85,9 @@ public class CtrlRNAmap {
 	public void setIsUseGTF(boolean useGTF) {
 		this.useGTF= useGTF;
 	}
+	public void setSensitive(int sensitive) {
+		this.sensitive= sensitive;
+	}
 	/**
 	 * 如果referece在数据库中找不到，就输入该文件
 	 * @param indexFile
@@ -117,6 +120,7 @@ public class CtrlRNAmap {
 			
 			if (mapType == TOP_HAT && !useGTF) {
 				mapRNA.setGtf_Gene2Iso(null);
+				((MapTophat)mapRNA).setSensitiveLevel(sensitive);
 			} else {
 				mapRNA.setGtf_Gene2Iso(gtfAndGene2Iso);
 			}

@@ -63,6 +63,7 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 	private GuilncLocation guilncLocation;
 	private GuiGoMultiJPanel guiGoMultiJPanel;
 	private GuiMotif guiMotif;
+	private GuiRNAAssembly guiRNAAssembly;
 	/**
 	* Auto-generated main method to display this JFrame
 	*/
@@ -153,6 +154,9 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 				
 				guiRNASeqMapping = new GuiRNASeqMapping();
 				jTabbedPane1.addTab("RNAseqMap", guiRNASeqMapping);
+				
+				guiRNAAssembly = new GuiRNAAssembly();
+				jTabbedPane1.addTab("RNAassembly", guiRNAAssembly);
 				
 				guiTranscriptomeCufflinks = new GuiTranscriptomeCufflinks();
 				jTabbedPane1.addTab("cufflinks", guiTranscriptomeCufflinks);

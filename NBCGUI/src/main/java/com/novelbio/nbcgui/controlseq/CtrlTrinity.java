@@ -74,6 +74,7 @@ public class CtrlTrinity {
 			
 			Trinity trinity = new Trinity();
 			trinity.setBflyHeapSpaceMax(heapSpaceMax);
+			trinity.setJellyfishMemory(heapSpaceMax);
 			trinity.setThreadNum(threadNum);
 			trinity.setSS_lib_type(strandSpecific);
 			trinity.setIsJaccard_clip(jaccard_clip);

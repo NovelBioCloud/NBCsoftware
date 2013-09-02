@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 import com.novelbio.analysis.seq.fastq.FastQ;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.mapping.MapLibrary;
+import com.novelbio.analysis.seq.mapping.MapTophat;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
@@ -28,6 +29,7 @@ import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.nbcgui.controlseq.CopeFastq;
 import com.novelbio.nbcgui.controlseq.CtrlRNAmap;
+import javax.swing.JComboBox;
 
 public class GuiRNASeqMapping extends JPanel {
 	/**
@@ -53,6 +55,7 @@ public class GuiRNASeqMapping extends JPanel {
 	JButton btnDeleteFastQRight;
 	JLabel lblStrandType;
 	JCheckBox chckbxUseGtf;
+	JComboBoxData<Integer> cmbSensitive;
 	
 	JComboBoxData<StrandSpecific> cmbStrandType;
 	JComboBoxData<MapLibrary> cmbLibraryType;
@@ -111,8 +114,13 @@ public class GuiRNASeqMapping extends JPanel {
 		cmbSpecies.setBounds(9, 261, 147, 23);
 		//初始化cmbSpeciesVersion
 		try { cmbSpeciesVersion.setMapItem(cmbSpecies.getSelectedValue().getMapVersion()); 	} catch (Exception e) { }
-		
 		add(cmbSpecies);
+		
+		cmbSensitive = new JComboBoxData<>();
+		cmbSensitive.setBounds(500, 328, 225, 27);
+		cmbSensitive.setMapItem(MapTophat.getMapSensitive());
+		add(cmbSensitive);
+
 		
 		JLabel lblSpecies = new JLabel("Species");
 		lblSpecies.setBounds(11, 235, 56, 14);
@@ -165,7 +173,7 @@ public class GuiRNASeqMapping extends JPanel {
 		add(lblMappingToFile);
 		
 		chckbxUseGtf = new JCheckBox("Use GTF");
-		chckbxUseGtf.setBounds(393, 330, 131, 22);
+		chckbxUseGtf.setBounds(393, 330, 102, 22);
 		add(chckbxUseGtf);
 		
 		btnMappingindex = new JButton("MappingIndex");
@@ -212,6 +220,7 @@ public class GuiRNASeqMapping extends JPanel {
 				ctrlRNAmap.setStrandSpecifictype(cmbStrandType.getSelectedValue());
 				ctrlRNAmap.setThreadNum(threadNum);
 				ctrlRNAmap.setIsUseGTF(chckbxUseGtf.isSelected());
+				ctrlRNAmap.setSensitive(cmbSensitive.getSelectedValue());
 				ctrlRNAmap.setOutPathPrefix(out);
 				ctrlRNAmap.mapping();
 				if (rdbtnRsem.isSelected()) {
@@ -219,6 +228,8 @@ public class GuiRNASeqMapping extends JPanel {
 					TxtReadandWrite txtWriteCounts = new TxtReadandWrite(out + "ResultCounts.xls", true);
 					txtWriteRpkm.ExcelWrite(ctrlRNAmap.getLsExpRsemRPKM());
 					txtWriteCounts.ExcelWrite(ctrlRNAmap.getLsExpRsemCounts());
+					txtWriteRpkm.close();
+					txtWriteCounts.close();
 				}
 			}
 		});
@@ -262,6 +273,7 @@ public class GuiRNASeqMapping extends JPanel {
 				cmbLibraryType.setVisible(false);
 				cmbStrandType.setVisible(false);
 				chckbxUseGtf.setVisible(false);
+				cmbSensitive.setVisible(false);
 				lblGtfGene2Iso.setText("Gene2IsoFile");
 			}
 		});
@@ -276,6 +288,7 @@ public class GuiRNASeqMapping extends JPanel {
 				cmbLibraryType.setVisible(true);
 				cmbStrandType.setVisible(true);
 				chckbxUseGtf.setVisible(true);
+				cmbSensitive.setVisible(true);
 				lblGtfGene2Iso.setText("GTFfile");
 			}
 		});

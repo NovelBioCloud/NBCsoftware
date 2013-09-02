@@ -57,8 +57,8 @@ public class CtrlBatchAnnoGene implements RunGetInfo<AnnoQuery.AnnoQueryDisplayI
 		for (String[] fileIn2Out : lsIn2Out) {
 			annoQuery.setFirstLineFrom1(2);
 			annoQuery.setGeneIDFile(fileIn2Out[0]);
+			annoQuery.setSavePath(fileIn2Out[1]);
 			annoQuery.run();
-			annoQuery.writeTo(fileIn2Out[1]);
 		}
 	}
 	public ArrayList<String[]> getResult() {
