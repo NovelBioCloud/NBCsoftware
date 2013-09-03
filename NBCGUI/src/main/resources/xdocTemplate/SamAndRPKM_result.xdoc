@@ -1,73 +1,30 @@
 <para lineSpacing="4" name="title">
-      <text fontName="黑体" fontSize="16" name="3" >3.2.${no} mapping 统计分析（Mapping Statistics）</text>
+      <text fontName="黑体" fontSize="16" name="3" >3.2.${no} mapping 结果统计分析（Mapping Statistics）</text>
     </para>  
+    <para lineSpacing="4" name="title">
+      <text fontName="Times New Roman"   fontSize="16" name="4">3.2.${no}.1 方法</text>
+    </para>
      <para lineSpacing="4">
       <text fontName="Times New Roman">我们将过滤后的Clean Reads进行Mapping，统计测序数据的mapping率、基因在染色体上的分布和基因组结构的分析。</text>
     </para>
-    
-<#list lsReportQCs as reportQC>
+     <para lineSpacing="4" name="title">
+      <text fontName="Times New Roman"   fontSize="16" name="4">3.2.${no}.2 结果展示</text>
+     </para>
+	<#list lsSamAndRPKMs as reportSam>
     <para lineSpacing="4">
       <text fontName="Times New Roman">mapping统计分析的具体结果获取路径如下：</text>
     </para>
-    <para lineSpacing="4">
-      <text>\t</text>
-      <text fontName="Times New Roman">novelbio（ZLP）\MappingStatistics\${excelName1}</text>
-    </para>
-    <para lineSpacing="4">
-      <text>\t</text>
-      <text fontName="Times New Roman">novelbio（ZLP）\MappingStatistics\${excelName2}</text>
-    </para>
-    <para lineSpacing="4">
-      <text fontName="Times New Roman">以其中一个为例，对结果进行展示。</text>
-    </para>
-    <#list lsExcels as excle>
-    	${excle}
-    </#list>
-    <para lineSpacing="4" name="title">
-      <text fontName="黑体" fontSize="16" name="4">3.2.${no}.1 （Gene Structure）</text>
-    </para>
-    <para lineSpacing="4" name="title" >
-      <text fontName="黑体" fontSize="14"  name="5" >3.2.${no}.1.1 方法</text>
-    </para>
-   
-    <para lineSpacing="4" name="title">
-      <text fontName="黑体" fontSize="14"  name="5">3.2.${no}.1.2 结果</text>
-    </para>
-    <para lineSpacing="4">
-      <text fontName="Times New Roman">\t基因结构分析的具体获取路径如下：</text>
-    </para>
-    <para indent="28" lineSpacing="4">
-      <text fontName="Times New Roman">novelbio（ZLP）\\ 3.GeneStructure\\${excelName3}</text>
-    </para>
-    <para indent="28" lineSpacing="4">
-      <text fontName="Times New Roman">novelbio（ZLP）\\ 3.GeneStructure\\${excelName4}</text>
-    </para>
-    <para lineSpacing="4">
-      <text>\t</text>
-      <text fontName="Times New Roman">以某例对结果进行展示。</text>
-    </para>
-    <para lineSpacing="4" align="center"/>
-    <para lineSpacing="4">
-    	<#list lsExcels2 as excle2>
-    		${excle2}
-    	</#list>
-    </para>
-    <para lineSpacing="4"/>
-    <para lineSpacing="4"/>
- 
-    <para lineSpacing="4">
-      <text>\t</text>
-      <text fontName="黑体" fontSize="16">\t</text>
-      <text fontName="Times New Roman">基因表达量分析的具体结果获取路径如下：</text>
-    </para>
-    <#list setResultFile as resultFile>
+     <#list reportSam.setResultFile as resultFile>
     <para indent="28" lineSpacing="4">
       <text fontName="Times New Roman">${resultFile}</text>
     </para>
     </#list>
+    <#list reportSam.lsExcels as excle>
+    	${excle}
+    </#list>
     <para lineSpacing="4">
       <text>\t</text>
-      <#list lsPictures as picture>
+      <#list reportSam.lsTmpltPics as picture>
 			${picture}
 		 </#list>
     </para>
