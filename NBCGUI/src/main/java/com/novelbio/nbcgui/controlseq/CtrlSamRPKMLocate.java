@@ -146,7 +146,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			}
 
 			if (isLocStatistics) {
-				if (gffChrAbs.getTaxID() != 0) {
+				if (gffChrAbs.getGffHashGene() != null) {
 					GffChrStatistics gffChrStatistics = new GffChrStatistics();
 					gffChrStatistics.setGffChrAbs(gffChrAbs);
 					gffChrStatistics.setTesRegion(tes);
