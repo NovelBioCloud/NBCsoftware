@@ -98,7 +98,7 @@ public class TestGo {
 			ctrlGO.setTeamName(excelPrefixs[i]);
 			ctrlGO.run();
 			ctrlGO.saveExcel(FileOperate.addSep(mapParams.get("savePath")[0])+excelPrefixs[i]);
-			for (String file : ctrlGO.getReportGO().getLsResultRealFiles()) {
+			for (String file : ctrlGO.getReportGO().getSetResultRealFiles()) {
 				Assert.assertTrue(FileOperate.isFileExist(file));
 			}
 			reportGOAll.addReportGO(ctrlGO.getReportGO());

@@ -89,7 +89,7 @@ public class TestPathway {
 			ctrlPath.setTeamName(excelPrefixs[i]);
 			ctrlPath.run();
 			ctrlPath.saveExcel(FileOperate.addSep(mapParams.get("savePath")[0])+excelPrefixs[i]);
-			for (String file : ctrlPath.getReportPathWay().getLsResultRealFiles()) {
+			for (String file : ctrlPath.getReportPathWay().getSetResultRealFiles()) {
 				Assert.assertTrue(FileOperate.isFileExist(file));
 			}
 			reportPathWayAll.addReportPathWay(ctrlPath.getReportPathWay());
