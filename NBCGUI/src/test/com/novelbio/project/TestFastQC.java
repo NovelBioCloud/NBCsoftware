@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.dataStructure.ArrayOperate;
 import com.novelbio.base.fileOperate.FileHadoop;
 import com.novelbio.base.fileOperate.FileOperate;
@@ -67,7 +68,7 @@ public class TestFastQC {
 		Assert.assertTrue(FileOperate.isFileExist(reportPath + FileOperate.getSepPath() + EnumReport.FastQC.getReportXdocFileName()));
 	}
 	
-	//@Test
+	@Test
 	public void runReport() {
 		List<String> lsFolders = new ArrayList<>();
 		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.FastQC.getResultFolder()));

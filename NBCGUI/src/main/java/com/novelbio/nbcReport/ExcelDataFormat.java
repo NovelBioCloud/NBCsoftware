@@ -12,10 +12,9 @@ import java.util.Map;
  *
  */
 public enum ExcelDataFormat{
-	ProbeName("String","10"),GeneSymbol("String","10" ),Description("String","30"),PValue("BigDecimal","3")
-	,LogFC("Double","#0.00"),FDR("Double","#0.00"),Allo("Double","#0.00"),GOID("String","11"),GOTerm("String","10")
-	,Enrichment("Double","#0.00"),logP("Double","#0.00"),PathID("String","13"),PathTerm("String","15")
-	,Source("String","15"),Target("String","30"),Relation("String","30");
+	PValue("BigDecimal","3")
+	,LogFC("Double","#0.00"),FDR("Double","#0.00"),Allo("Double","#0.00")
+	,Enrichment("Double","#0.00"),logP("Double","#0.00");
 	
 	static HashMap<String, ExcelDataFormat> mapDataLength;
 	
@@ -76,22 +75,12 @@ public enum ExcelDataFormat{
 			return mapDataLength;
 		}
 		mapDataLength = new HashMap<String,ExcelDataFormat>();
-		mapDataLength.put(ProbeName.toString().toLowerCase(),ProbeName);
-		mapDataLength.put(GeneSymbol.toString().toLowerCase(), GeneSymbol);
-		mapDataLength.put(Description.toString().toLowerCase(), Description);
 		mapDataLength.put(PValue.toString().toLowerCase(), PValue);
 		mapDataLength.put(LogFC.toString().toLowerCase(), LogFC);
 		mapDataLength.put(FDR.toString().toLowerCase(), FDR);
 		mapDataLength.put(Allo.toString().toLowerCase(), Allo);
-		mapDataLength.put(GOID.toString().toLowerCase(), GOID);
-		mapDataLength.put(GOTerm.toString().toLowerCase(), GOTerm);
 		mapDataLength.put(Enrichment.toString().toLowerCase(), Enrichment);
 		mapDataLength.put(logP.toString().toLowerCase(), logP);
-		mapDataLength.put(PathID.toString().toLowerCase(), PathID);
-		mapDataLength.put(PathTerm.toString().toLowerCase(), PathTerm);
-		mapDataLength.put(Source.toString().toLowerCase(), Source);
-		mapDataLength.put(Target.toString().toLowerCase(), Target);
-		mapDataLength.put(Relation.toString().toLowerCase(), Relation);
 		return mapDataLength;
 	}
 	

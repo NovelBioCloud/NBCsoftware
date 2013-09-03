@@ -15,7 +15,7 @@ public enum EnumTableType {
 	MappingChrFile(new XdocTable("100,150,150,150,150",20)),
 	MappingStatistics(new XdocTable("200,200,200",25)),
 	
-	QC_BasicStatAll(new XdocTable("100,150,150,150,150",20));
+	QC_BasicStatAll(new XdocTable("100,150,150,150,40",20));
 	
 	
 	private XdocTable xdocTable;

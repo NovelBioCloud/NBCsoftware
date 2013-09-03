@@ -18,7 +18,7 @@
 				<#if allRows_index == 0>
 					<!-- 标题列 -->
 					<#list allRows as title>
-					 	<#if title_index < excel.maxRow >
+					 	<#if title_index < excel.maxCol >
 							<cell col="${title_index+1}" strokeWidth="${excel.strokeWidth}" fillColor="${excel.backfillColor}" row="1" color="#ffffff">
 								<para align="center" >
 									<text fontName="&amp;quot" fontSize="10" fontStyle="bold" backColor="${excel.backfillColor}">${title}</text>

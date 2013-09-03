@@ -175,7 +175,12 @@ public class XdocTable implements Cloneable, Serializable {
 	public List<String> getLsAligns() {
 		if (lsAligns == null) {
 			lsAligns = new ArrayList<>();
-			int excelLength = lsExcelTable.size();
+			int excelLength = 30;
+			try {
+				excelLength = lsExcelTable.get(0).size();
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
 			for (int i = 0; i < excelLength; i++) {
 				lsAligns.add("center");
 			}
@@ -220,7 +225,16 @@ public class XdocTable implements Cloneable, Serializable {
 
 	/** 最大行数 */
 	public int getMaxRow() {
+		if (rows.equalsIgnoreCase(ROW_AUTO)) {
+			int excelLength = lsExcelTable.size();
+			int rowNum = excelLength < autoRowMax ? excelLength : autoRowMax;
+			if (autoRowMax == 0) {
+				rowNum = excelLength;
+			}
+			return rowNum;
+		}
 		return rows.split(",").length;
+		
 	}
 
 	/** 最大列数 */
