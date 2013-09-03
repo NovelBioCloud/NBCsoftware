@@ -25,11 +25,11 @@ public class TestSamAndRPKM {
 	public void init() {
 		reportSamAndRPKM = new ReportSamAndRPKM();
 		List<XdocTmpltExcel> lsExcels = new ArrayList<>();
-		XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(EnumTableType.MappingResult);
+		XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(EnumTableType.MappingResult.getXdocTable());
 		xdocTmpltExcel.setExcelTitle("Mapping率分析统计结果");
 		xdocTmpltExcel.addExcel(FileHadoop.getHdfsHeadSymbol("/nbCloud/public/test/samAndRPKM/100S_MappingStatistic.xls"), 1);
 		
-		XdocTmpltExcel xdocTmpltExcel2 = new XdocTmpltExcel(EnumTableType.MappingChrFile);
+		XdocTmpltExcel xdocTmpltExcel2 = new XdocTmpltExcel(EnumTableType.MappingChrFile.getXdocTable());
 		xdocTmpltExcel2.setExcelTitle("Reads在染色体上的分布统计");
 		xdocTmpltExcel2.addExcel(FileHadoop.getHdfsHeadSymbol("/nbCloud/public/test/samAndRPKM/100S_MappingStatistic.xls"), 2);	
 		
@@ -38,7 +38,7 @@ public class TestSamAndRPKM {
 		reportSamAndRPKM.setLsExcels(lsExcels);
 		
 		List<XdocTmpltExcel> lsExcels2 = new ArrayList<>();
-		XdocTmpltExcel xdocTmpltExcel3 = new XdocTmpltExcel(EnumTableType.MappingStatistics);
+		XdocTmpltExcel xdocTmpltExcel3 = new XdocTmpltExcel(EnumTableType.MappingStatistics.getXdocTable());
 		xdocTmpltExcel3.setExcelTitle("Reads在基因上的分布统计图表");
 		xdocTmpltExcel3.addExcel(FileHadoop.getHdfsHeadSymbol("/nbCloud/public/test/samAndRPKM/100S_GeneStructure.txt"), 1);
 		lsExcels2.add(xdocTmpltExcel3);

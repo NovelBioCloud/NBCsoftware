@@ -3,7 +3,6 @@
   <groupId>com.novelbio</groupId>
   <artifactId>NBCGUI</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  
   <distributionManagement>
 		<!-- use the following if you're not using a snapshot version. -->
 		<repository>
@@ -31,6 +30,7 @@
 			</plugin>
 		</plugins>
 	</build>
+	
 	<dependencies>
 		<dependency>
 			<groupId>com.novelBio</groupId>

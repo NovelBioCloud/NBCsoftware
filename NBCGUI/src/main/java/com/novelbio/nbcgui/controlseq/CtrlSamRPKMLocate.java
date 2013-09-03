@@ -46,6 +46,10 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	
 	StrandSpecific strandSpecific = StrandSpecific.NONE;
 	
+	String picPathAndName;
+	
+	String excelPathAndName;
+	
 	boolean isLocStatistics = true;
 	
 	Set<String> setPrefix;
@@ -178,7 +182,9 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 				readByte = alignSeqReading.getReadByte();
 			}
 			if (samFileStatistics != null) {
-				SamFileStatistics.saveInfo(resultPrefix+ prefix, samFileStatistics);
+				List<String> lsStrings =  SamFileStatistics.saveInfo(resultPrefix+ prefix, samFileStatistics);
+				picPathAndName = lsStrings.get(0);
+				excelPathAndName = lsStrings.get(1); 
 			}
 			logger.info("finish reading " + prefix);
 			try {

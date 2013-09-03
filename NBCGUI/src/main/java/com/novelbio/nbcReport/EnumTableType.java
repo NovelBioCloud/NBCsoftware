@@ -11,9 +11,9 @@ public enum EnumTableType {
 
 	DifGene(new XdocTable("120,80,220,40,40,60,60,50" )),
 	
-	MappingResult(new XdocTable("200,200",20)),
+	MappingResult(new XdocTable("200,200",10)),
 	MappingChrFile(new XdocTable("100,150,150,150,150",20)),
-	MappingStatistics(new XdocTable("200,200,200",20)),
+	MappingStatistics(new XdocTable("200,200,200",25)),
 	
 	QC_BasicStatAll(new XdocTable("100,150,150,150,150",20));
 	

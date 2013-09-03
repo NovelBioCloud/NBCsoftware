@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.novelbio.nbcReport.XdocTmpltExcel;
 import com.novelbio.nbcReport.XdocTmpltPic;
 
-public class ReportSamAndRPKM  extends ReportBase{
-	List<String> lsResultFile;
+public class ReportSamAndRPKM{
+	Set<String> setResultFile;
 	List<XdocTmpltExcel> lsExcels;
 	List<XdocTmpltExcel> lsExcels2;
 	List<XdocTmpltPic> lsTmpltPics;
@@ -19,12 +20,12 @@ public class ReportSamAndRPKM  extends ReportBase{
 	String excelName4;
 	
 
-	public List<String> getLsResultFile() {
-		return lsResultFile;
+	public Set<String> getLsResultFile() {
+		return setResultFile;
 	}
 
-	public void setLsResultFile(List<String> lsResultFile) {
-		this.lsResultFile = lsResultFile;
+	public void setLsResultFile(Set<String> setResultFile) {
+		this.setResultFile = setResultFile;
 	}
 
 	public List<String> getLsExcels() {
@@ -96,23 +97,6 @@ public class ReportSamAndRPKM  extends ReportBase{
 		this.lsTmpltPics = lsTmpltPics;
 	}
 
-	@Override
-	protected Map<String, Object> addParamMap() {
-		HashMap<String, Object> mapParmerHashMap = new HashMap<>();
-		mapParmerHashMap.put("lsResultFile", lsResultFile);
-		mapParmerHashMap.put("lsExcels", lsExcels);
-		mapParmerHashMap.put("lsExcels2", lsExcels2);
-		mapParmerHashMap.put("lsPictures", lsTmpltPics);
-		mapParmerHashMap.put("excelName1", excelName1);
-		mapParmerHashMap.put("excelName2", excelName2);
-		mapParmerHashMap.put("excelName3", excelName3);
-		mapParmerHashMap.put("excelName4", excelName4);
-		return mapParmerHashMap;
-	}
 
-	@Override
-	public EnumReport getEnumReport() {
-		return EnumReport.SamAndRPKM;
-	}
 	
 }

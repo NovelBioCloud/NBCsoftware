@@ -87,14 +87,14 @@ public class XdocTmpltExcel{
 		for(String key : mapExcel2SheetNames.keySet()){
 			for(String sheetName : mapExcel2SheetNames.get(key)){
 				XdocTable xdocTableClone = xdocTable.getClone();
-				xdocTableClone.setLsExcelTable(formatDataList(ExcelTxtRead.readLsExcelTxtls(key, sheetName, 1, 200)));
+				xdocTableClone.setLsExcelTable(formatDataList(ExcelTxtRead.readLsExcelTxtls(key, sheetName, 1)));
 				lsXdocTable.add(xdocTableClone);
 			}
 		}
 		for(String key : mapExcel2SheetNamesInt.keySet()){
 			for(int sheetNum : mapExcel2SheetNamesInt.get(key)){
 				XdocTable xdocTableClone = xdocTable.getClone();
-				xdocTableClone.setLsExcelTable(formatDataList(ExcelTxtRead.readLsExcelTxtls(key, sheetNum, 1, 200)));
+				xdocTableClone.setLsExcelTable(formatDataList(ExcelTxtRead.readLsExcelTxtls(key, sheetNum, 1)));
 				lsXdocTable.add(xdocTableClone);
 			}
 		}
