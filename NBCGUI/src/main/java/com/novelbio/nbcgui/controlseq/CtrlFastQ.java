@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.broadinstitute.sting.jna.lsf.v7_0_6.LibBat.newDebugLog;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,9 @@ import com.novelbio.aoplog.ReportBuilder;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.service.SpringFactory;
+import com.novelbio.nbcReport.EnumTableType;
+import com.novelbio.nbcReport.XdocTmpltExcel;
+import com.novelbio.nbcReport.Params.ReportQCAll;
 import com.novelbio.nbcgui.FoldeCreate;
 
 @Component
@@ -41,7 +45,7 @@ public class CtrlFastQ {
 	Map<String, FastQC[]> mapCond2FastQCAfter;
 	/** 过滤后是否要QC，不要就只计数 */
 	boolean qcAfter = true;
-
+	ReportQCAll reportQCAll = new ReportQCAll();
 	
 	public void setAdaptorLeft(String adaptorLeft) {
 		fastQfilterRecord.setFilterParamAdaptorLeft(adaptorLeft.trim());
@@ -172,6 +176,7 @@ public class CtrlFastQ {
 			mapParam2FastqcLR.put(prefix, fastqcAfter);
 		}
 		List<String[]> lsSummary = FastQC.combineFastQCbaseStatistics(mapParam2FastqcLR);
+		XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(EnumTableType.QC_BasicStatAll.getXdocTable());
 		TxtReadandWrite txtWrite = new TxtReadandWrite(outFilePrefix + "basicStatsAll.xls", true);
 		txtWrite.ExcelWrite(lsSummary);
 		txtWrite.close();

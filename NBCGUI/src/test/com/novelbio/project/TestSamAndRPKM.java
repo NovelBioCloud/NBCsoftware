@@ -14,6 +14,7 @@ import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.nbcReport.EnumTableType;
 import com.novelbio.nbcReport.XdocTmpltExcel;
 import com.novelbio.nbcReport.XdocTmpltPic;
+import com.novelbio.nbcReport.Params.ReportProject;
 import com.novelbio.nbcReport.Params.ReportSamAndRPKM;
 
 
@@ -70,6 +71,10 @@ public class TestSamAndRPKM {
 		String savePath = FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/SamAndRPKM_result");
 		reportSamAndRPKM.outputReportXdoc(savePath);
 		Assert.assertTrue(FileOperate.isFileExist(FileOperate.addSep(savePath)+reportSamAndRPKM.getEnumReport().getReportXdocFileName()));
+		List<String> lsList = new ArrayList<>();
+		lsList.add(savePath);
+		ReportProject reportProject = new ReportProject(lsList);
+		reportProject.outputReport("/home/novelbio/桌面/bbc.docx");
 	}
 
 }

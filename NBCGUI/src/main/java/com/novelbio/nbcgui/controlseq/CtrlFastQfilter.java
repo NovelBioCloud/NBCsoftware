@@ -19,7 +19,7 @@ import com.novelbio.base.fileOperate.FileOperate;
 @Scope("prototype")
 public class CtrlFastQfilter {
 	private static final Logger logger = Logger.getLogger(CtrlFastQ.class);
-	public static String FOLDER_NAME = "QCImages" + FileOperate.getSepPath();
+	public static String FOLDER_NAME = "QCResults" + FileOperate.getSepPath();
 	
 	FastQRecordFilter fastQfilterRecord;
 
@@ -110,7 +110,7 @@ public class CtrlFastQfilter {
 	 * @return 返回需要保存的参数文件
 	 */
 	public HashMultimap<String, String> saveFastQC(String savePathAndPrefix) {
-		String fileName = FileOperate.getParentPathName(savePathAndPrefix) + "QCimage/" + FileOperate.getFileName(savePathAndPrefix);
+		String fileName = FileOperate.getParentPathName(savePathAndPrefix) + FOLDER_NAME + FileOperate.getFileName(savePathAndPrefix);
 		FileOperate.createFolders(FileOperate.getParentPathName(fileName) );
 		HashMultimap<String, String> mapParam = HashMultimap.create();
 		try {

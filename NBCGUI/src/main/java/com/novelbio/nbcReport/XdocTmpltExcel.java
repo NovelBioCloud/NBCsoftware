@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -34,29 +33,29 @@ public class XdocTmpltExcel{
 	private List<XdocTable> lsXdocTable = new ArrayList<XdocTable>();
 	private HashMultimap<String, String> mapExcel2SheetNames = HashMultimap.create();
 	private HashMultimap<String, Integer> mapExcel2SheetNamesInt = HashMultimap.create();
-	private EnumTableType enumTableType;
+	private XdocTable xdocTable;
 	
 	/** 根据excel路径完成本类的构造
 	 * @param filePath
 	 * @param excelName
 	 */
-	public XdocTmpltExcel(HashMultimap<String,String> mapExcel2SheetNames,EnumTableType enumTableType) {
+	public XdocTmpltExcel(HashMultimap<String,String> mapExcel2SheetNames,XdocTable xdocTable) {
 		this.mapExcel2SheetNames = mapExcel2SheetNames;
-		this.enumTableType = enumTableType;
+		this.xdocTable = xdocTable;
 	}
 	
 	/**请使用addExcel添加数据*/
-	public XdocTmpltExcel(EnumTableType enumTableType){
-		this.enumTableType = enumTableType;
+	public XdocTmpltExcel(XdocTable xdocTable){
+		this.xdocTable = xdocTable;
 	}
 	
 	/** 根据excel路径完成本类的构造
 	 * @param excelName 全路径
 	 * @param sheetName
 	 */
-	public XdocTmpltExcel(String excelName, String sheetName,EnumTableType enumTableType) {
+	public XdocTmpltExcel(String excelName, String sheetName,XdocTable xdocTable) {
 		mapExcel2SheetNames.put(excelName, sheetName);
-		this.enumTableType = enumTableType;
+		this.xdocTable = xdocTable;
 	}
 	
 	public List<String> getAllExcelFileName(){
@@ -87,16 +86,16 @@ public class XdocTmpltExcel{
 		mapKey2Param.put("downCompare",downCompare);
 		for(String key : mapExcel2SheetNames.keySet()){
 			for(String sheetName : mapExcel2SheetNames.get(key)){
-				XdocTable xdocTable = enumTableType.getXdocTable();
-				xdocTable.setLsExcelTable(formatDataList(ExcelTxtRead.readLsExcelTxtls(key, sheetName, 1, 200)));
-				lsXdocTable.add(xdocTable);
+				XdocTable xdocTableClone = xdocTable.getClone();
+				xdocTableClone.setLsExcelTable(formatDataList(ExcelTxtRead.readLsExcelTxtls(key, sheetName, 1, 200)));
+				lsXdocTable.add(xdocTableClone);
 			}
 		}
 		for(String key : mapExcel2SheetNamesInt.keySet()){
 			for(int sheetNum : mapExcel2SheetNamesInt.get(key)){
-				XdocTable xdocTable = enumTableType.getXdocTable();
-				xdocTable.setLsExcelTable(formatDataList(ExcelTxtRead.readLsExcelTxtls(key, sheetNum, 1, 200)));
-				lsXdocTable.add(xdocTable);
+				XdocTable xdocTableClone = xdocTable.getClone();
+				xdocTableClone.setLsExcelTable(formatDataList(ExcelTxtRead.readLsExcelTxtls(key, sheetNum, 1, 200)));
+				lsXdocTable.add(xdocTableClone);
 			}
 		}
 		//使用枚举格式化Excel中的数据

@@ -1,14 +1,12 @@
 package com.novelbio.nbcReport.Params;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.novelbio.nbcReport.XdocTmpltExcel;
 import com.novelbio.nbcReport.XdocTmpltPic;
 
-public class ReportPathWay extends ReportBase{
+public class ReportPathWay{
 	/** 所使用的数据库 */
 	private String db;
 	/** 筛选条件 */
@@ -75,25 +73,7 @@ public class ReportPathWay extends ReportBase{
 		return lsExcels;
 	}
 	
-	@Override
-	public EnumReport getEnumReport() {
-		return EnumReport.PathWay;
-	}
 
-
-	@Override
-	protected Map<String, Object> addParamMap() {
-		Map<String, Object> mapKey2Params = new HashMap<String, Object>();
-		mapKey2Params.put("db", db);
-		mapKey2Params.put("finderCondition", finderCondition);
-		mapKey2Params.put("upRegulation", upRegulation);
-		mapKey2Params.put("downRegulation", downRegulation);
-		mapKey2Params.put("lsResultFiles", lsResultFiles);
-		mapKey2Params.put("pictures", getPictures());
-		mapKey2Params.put("excels", getExcels());
-		return mapKey2Params;
-	}
-	
 	public String getDb() {
 		return db;
 	}

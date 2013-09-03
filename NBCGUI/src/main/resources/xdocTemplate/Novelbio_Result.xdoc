@@ -118,7 +118,7 @@
     </para>
     <para lineSpacing="4">
       <table weight="2.0"
-       cols="120,159,170,120"  rows="15,52,30,30,52,52,28,28,52,48,48,48" color="#ffffff">
+       cols="120,159,170,120"  rows="22,62,30,30,52,52,28,28,52,48,48,48" color="#ffffff">
         <cell col="1" name="x463" fillColor="#1e90ff"  color="#ffffff"  row="1">
           <para lineSpacing="4" align="center">
             <text fontName="宋体" fontStyle="bold">Data Folder</text>

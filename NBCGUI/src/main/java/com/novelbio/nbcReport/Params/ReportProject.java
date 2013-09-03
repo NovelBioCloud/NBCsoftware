@@ -48,7 +48,6 @@ public class ReportProject extends ReportBase {
 	 */
 	public ReportProject(String folderPath) {
 		List<String> lsChildren = FileOperate.getFoldFileNameLs(folderPath, "*", "*");
-		System.out.println(lsChildren.size());
 		for (String fileName : lsChildren) {
 			if (!FileOperate.isFileDirectory(fileName))
 				continue;
