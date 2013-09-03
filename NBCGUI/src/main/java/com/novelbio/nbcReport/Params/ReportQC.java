@@ -3,6 +3,7 @@ package com.novelbio.nbcReport.Params;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.novelbio.nbcReport.XdocTmpltExcel;
 import com.novelbio.nbcReport.XdocTmpltPic;
 
 /**
@@ -11,14 +12,12 @@ import com.novelbio.nbcReport.XdocTmpltPic;
  * @author novelbio
  * 
  */
-public class ReportGO{
-	private String testMethod;
-	private String finderCondition;
+public class ReportQC{
 	private String teamName;
-	private int upRegulation;
-	private int downRegulation;
 	private List<String> lsResultFiles;
 	private List<XdocTmpltPic> lsXdocTmpltPics;
+	private List<XdocTmpltPic> lsXdocTmpltPics1;
+	
 	
 	/**
 	 * 添加图片模板
@@ -31,9 +30,18 @@ public class ReportGO{
 		lsXdocTmpltPics.add(xdocTmpltPic);
 	}
 	
-	public String getTestMethod() {
-		return testMethod;
+	/**
+	 * 添加图片模板
+	 * @param xdocTmpltPic
+	 */
+	public void addXdocTempPic1(XdocTmpltPic xdocTmpltPic) {
+		if (lsXdocTmpltPics1 == null) {
+			lsXdocTmpltPics1 = new ArrayList<XdocTmpltPic>();
+		}
+		lsXdocTmpltPics1.add(xdocTmpltPic);
 	}
+	
+
 	
 	/**
 	 * 取得所有的图片集合
@@ -47,17 +55,20 @@ public class ReportGO{
 		return lsPictures;
 	}
 	
-	public void setTestMethod(String testMethod) {
-		this.testMethod = testMethod;
+	/**
+	 * 取得所有的图片集合
+	 * @return
+	 */
+	public List<String> getPictures1(){
+		List<String> lsPictures1 = new ArrayList<String>();
+		for (XdocTmpltPic xdocTmpltPic : lsXdocTmpltPics1) {
+			lsPictures1.add(xdocTmpltPic.toString());
+		}
+		return lsPictures1;
 	}
+	
 
-	public String getFinderCondition() {
-		return finderCondition;
-	}
 
-	public void setFinderCondition(String finderCondition) {
-		this.finderCondition = finderCondition;
-	}
 	/** 实验组名 */
 	public String getTeamName() {
 		return teamName;
@@ -66,27 +77,11 @@ public class ReportGO{
 	public void setTeamName(String teamName) {
 		this.teamName = teamName;
 	}
-
-	public int getUpRegulation() {
-		return upRegulation;
-	}
-
-	public void setUpRegulation(int upRegulation) {
-		this.upRegulation = upRegulation;
-	}
-
-	public int getDownRegulation() {
-		return downRegulation;
-	}
 	
-	public void setDownRegulation(int downRegulation) {
-		this.downRegulation = downRegulation;
-	}
-
 	public List<String> getLsResultFiles() {
 		List<String> lsResultRealFiles = new ArrayList<>();
 		for (String file : lsResultFiles) {
-			lsResultRealFiles.add(EnumReport.GOAnalysis.getResultFolder() + file.split(EnumReport.GOAnalysis.getResultFolder())[1]);
+			lsResultRealFiles.add(EnumReport.FastQC.getResultFolder() + file.split(EnumReport.FastQC.getResultFolder())[1]);
 		}
 		return lsResultRealFiles;
 	}
@@ -101,4 +96,6 @@ public class ReportGO{
 		}
 		lsResultFiles.add(resultFile);
 	}
+
+
 }

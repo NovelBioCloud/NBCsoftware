@@ -110,21 +110,35 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	public void setResultPrefix(String resultPrefix) {
 		this.resultPrefix = resultPrefix;
 	}
+	
 	public void run() {
 		rpkMcomput = new RPKMcomput();
 		int fileSize = getFileSize();		
 		guiSamStatistics.getProcessBar().setMaximum(fileSize);
 		
-		ArrayListMultimap<String, AlignSeqReading> mapPrefix2AlignSeqReadings = getMapPrefix2LsAlignSeqReadings();
 		if (!isCountExpression && !isLocStatistics) {
 			return;
 		}
+		try {
+			calculate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	
+		done(null);
+		guiSamStatistics.getProcessBar().setValue(guiSamStatistics.getProcessBar().getMaximum());
+		guiSamStatistics.getBtnSave().setEnabled(true);
+		guiSamStatistics.getBtnRun().setEnabled(true);
+	}
+	
+	private void calculate() {
+		ArrayListMultimap<String, AlignSeqReading> mapPrefix2AlignSeqReadings = getMapPrefix2LsAlignSeqReadings();
 		double readByte = 0;
 		for (String prefix : mapPrefix2AlignSeqReadings.keySet()) {
 			List<AlignSeqReading> lsAlignSeqReadings = mapPrefix2AlignSeqReadings.get(prefix);
 			List<AlignmentRecorder> lsAlignmentRecorders = new ArrayList<AlignmentRecorder>();
 			SamFileStatistics samFileStatistics = null;
-			if (isCountExpression && gffChrAbs.getTaxID() != 0) {
+			if (isCountExpression && gffChrAbs.getGffHashGene() != null) {
 				rpkMcomput.setCurrentCondition(prefix);
 				rpkMcomput.setConsiderStrand(strandSpecific);
 				rpkMcomput.setCalculateFPKM(isCalculateFPKM);
@@ -179,11 +193,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		done(null);
-		guiSamStatistics.getProcessBar().setValue(guiSamStatistics.getProcessBar().getMaximum());
-		guiSamStatistics.getBtnSave().setEnabled(true);
-		guiSamStatistics.getBtnRun().setEnabled(true);
+
 	}
 	
 	/** 给AOP用的 */
@@ -222,7 +232,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		mapPrefix2LocStatistics = new HashMap<String, GffChrStatistics>();
 		mapPrefix2Statistics = new HashMap<String, SamFileStatistics>();
 		
-		if (gffChrAbs.getTaxID() != 0) {
+		if (gffChrAbs.getGffHashGene() != null) {
 			rpkMcomput.setGffChrAbs(gffChrAbs);
 		}
 		
@@ -253,7 +263,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	}
 	
 	private void writeToFile() {
-		if (isCountExpression && gffChrAbs.getTaxID() != 0) {
+		if (isCountExpression && gffChrAbs.getGffHashGene() != null) {
 			String suffixRPKM = "All_RPKM", suffixUQRPKM = "All_UQRPKM", suffixCounts = "All_Counts", tpm = "All_TPM";
 			if (rpkMcomput.isCalculateFPKM()) {
 				suffixRPKM = "All_FPKM";
@@ -293,7 +303,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	}
 	
 	private void writeToFileCurrent(String prefix) {
-		if (isCountExpression && gffChrAbs.getTaxID() != 0) {
+		if (isCountExpression && gffChrAbs.getGffHashGene() != null) {
 			String suffixRPKM = "_RPKM", suffixUQRPKM = "_UQRPKM", suffixCounts = "_Counts", tpm = "_TPM";
 			if (rpkMcomput.isCalculateFPKM()) {
 				suffixRPKM = "_FPKM";
