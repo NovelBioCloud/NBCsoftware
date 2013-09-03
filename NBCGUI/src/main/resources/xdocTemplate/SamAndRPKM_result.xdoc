@@ -1,5 +1,5 @@
-<para lineSpacing="4">
-      <text fontName="黑体" fontSize="16">{no} .1mapping 统计分析（Mapping Statistics）</text>
+<para lineSpacing="4" name="title">
+      <text fontName="黑体" fontSize="16" name="3" >3.2.${no} mapping 统计分析（Mapping Statistics）</text>
     </para>  
     <para lineSpacing="4">
       <text fontName="Times New Roman">mapping统计分析的具体结果获取路径如下：</text>
@@ -18,19 +18,18 @@
     <#list lsExcels as excle>
     	${excle}
     </#list>
-    <para lineSpacing="4">
-      <text fontName="黑体" fontSize="16">{no} .2 基因结构 （Gene Structure）</text>
+    <para lineSpacing="4" name="title">
+      <text fontName="黑体" fontSize="16" name="4">3.2.${no}.1 （Gene Structure）</text>
     </para>
-    <para lineSpacing="4">
-      <text fontName="黑体" fontSize="16">{no} .2 .1</text>
+    <para lineSpacing="4" name="title" >
+      <text fontName="黑体" fontSize="16"  name="5" >3.2.${no}.1.1</text>
       <text fontName="Times New Roman" fontSize="16">方法</text>
     </para>
     <para lineSpacing="4">
-      <text>\t</text>
       <text fontName="Times New Roman">我们将过滤后的Clean Reads进行Mapping，统计测序数据的mapping率、基因在染色体上的分布和基因组结构的分析。</text>
     </para>
-    <para lineSpacing="4">
-      <text fontName="黑体" fontSize="16">{no} .2 .2</text>
+    <para lineSpacing="4" name="title">
+      <text fontName="黑体" fontSize="16"  name="5">3.2.${no}.1.2</text>
       <text fontName="Times New Roman" fontSize="16">结果</text>
     </para>
     <para lineSpacing="4">
@@ -54,18 +53,18 @@
     </para>
     <para lineSpacing="4"/>
     <para lineSpacing="4"/>
-    <para lineSpacing="4">
-      <text fontName="黑体" fontSize="16">${no} .3 Reads在染色体上的分布统计（Reads Distribution On Chromoses）</text>
+    <para lineSpacing="4"  name="title">
+      <text fontName="黑体" fontSize="16"  name="4">3.2.${no}.2 Reads在染色体上的分布统计（Reads Distribution On Chromoses）</text>
     </para>
-    <para indent="32" lineSpacing="4">
-      <text fontName="黑体" fontSize="16">${no} .3 .1方法</text>
+    <para indent="32" lineSpacing="4"  name="title" >
+      <text fontName="黑体" fontSize="16" name="5">3.2.${no}.2.1方法</text>
     </para>
     <para lineSpacing="4">
       <text>\t</text>
       <text fontName="Times New Roman">根据测序得到的Reads数进行Reads在染色体上的分布统计。</text>
     </para>
-    <para indent="32" lineSpacing="4">
-      <text fontName="黑体" fontSize="16">${no} .3 .2结果</text>
+    <para indent="32" lineSpacing="4" name="title" >
+      <text fontName="黑体" fontSize="16" name="5" >3.2.${no}.2.2 结果</text>
     </para>
     <para lineSpacing="4">
       <text>\t</text>
