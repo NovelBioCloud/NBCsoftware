@@ -31,7 +31,7 @@
      <para lineSpacing="4" >
      <text fontName="宋体" fontSize="14">\t信号通路分析具体结果获取路径如下：</text>
     </para>
-    <#list reportPathWay.lsResultFiles as resultFile>
+    <#list reportPathWay.setResultFiles as resultFile>
     	<para lineSpacing="4" >
     	<text fontName="宋体" fontSize="14">\t${resultFile}</text>
     	</para>

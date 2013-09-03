@@ -1,7 +1,10 @@
 package com.novelbio.nbcReport.Params;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.novelbio.nbcReport.XdocTmpltExcel;
 import com.novelbio.nbcReport.XdocTmpltPic;
@@ -14,7 +17,7 @@ import com.novelbio.nbcReport.XdocTmpltPic;
  */
 public class ReportQC{
 	private String teamName;
-	private List<String> lsResultFiles;
+	private Set<String> setResultFiles;
 	private List<XdocTmpltPic> lsXdocTmpltPics;
 	private List<XdocTmpltPic> lsXdocTmpltPics1;
 	
@@ -78,23 +81,23 @@ public class ReportQC{
 		this.teamName = teamName;
 	}
 	
-	public List<String> getLsResultFiles() {
-		List<String> lsResultRealFiles = new ArrayList<>();
-		for (String file : lsResultFiles) {
-			lsResultRealFiles.add(EnumReport.FastQC.getResultFolder() + file.split(EnumReport.FastQC.getResultFolder())[1]);
+	public Set<String> getLsResultFiles() {
+		Set<String> setResultFiles1 = new LinkedHashSet<>();
+		for (String file : setResultFiles) {
+			setResultFiles1.add(EnumReport.FastQC.getResultFolder() + file.split(EnumReport.FastQC.getResultFolder())[1]);
 		}
-		return lsResultRealFiles;
+		return setResultFiles1;
 	}
 	
-	public List<String> getLsResultRealFiles(){
-		return lsResultFiles;
+	public Set<String> getSetResultRealFiles(){
+		return setResultFiles;
 	}
 
 	public void addResultFile(String resultFile) {
-		if (lsResultFiles == null) {
-			lsResultFiles = new ArrayList<String>();
+		if (setResultFiles == null) {
+			setResultFiles = new LinkedHashSet<>();
 		}
-		lsResultFiles.add(resultFile);
+		setResultFiles.add(resultFile);
 	}
 
 
