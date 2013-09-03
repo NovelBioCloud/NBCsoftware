@@ -1,9 +1,7 @@
 package com.novelbio.nbcReport.Params;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.novelbio.nbcReport.XdocTmpltPic;
 
@@ -13,7 +11,7 @@ import com.novelbio.nbcReport.XdocTmpltPic;
  * @author novelbio
  * 
  */
-public class ReportGO extends ReportBase {
+public class ReportGO{
 	private String testMethod;
 	private String finderCondition;
 	private String teamName;
@@ -33,29 +31,6 @@ public class ReportGO extends ReportBase {
 		lsXdocTmpltPics.add(xdocTmpltPic);
 	}
 	
-	
-	
-	@Override
-	protected Map<String, Object> addParamMap() {
-		Map<String,Object> mapKey2Params = new HashMap<String, Object>();
-		mapKey2Params.put("testMethod", testMethod);
-		mapKey2Params.put("finderCondition", finderCondition);
-		mapKey2Params.put("upRegulation", upRegulation);
-		mapKey2Params.put("downRegulation", downRegulation);
-		mapKey2Params.put("lsResultFiles", lsResultFiles);
-		mapKey2Params.put("lsPictures", getPictures());
-		return mapKey2Params;
-	}
-
-
-
-	@Override
-	public EnumReport getEnumReport() {
-		return EnumReport.GOAnalysis;
-	}
-
-
-
 	public String getTestMethod() {
 		return testMethod;
 	}
