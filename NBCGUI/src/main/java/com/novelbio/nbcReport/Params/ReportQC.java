@@ -17,7 +17,7 @@ public class ReportQC{
 	private List<String> lsResultFiles;
 	private List<XdocTmpltPic> lsXdocTmpltPics;
 	private List<XdocTmpltPic> lsXdocTmpltPics1;
-	private List<XdocTmpltExcel> lsXdocTmpltExcels;
+	
 	
 	/**
 	 * 添加图片模板
@@ -68,17 +68,7 @@ public class ReportQC{
 	}
 	
 
-	/**
-	 * 添加表格模板
-	 * @param xdocTmpltExcel
-	 */
-	public void addXdocTempExcel(XdocTmpltExcel xdocTmpltExcel) {
-		if (lsXdocTmpltExcels == null) {
-			lsXdocTmpltExcels = new ArrayList<XdocTmpltExcel>();
-		}
-		lsXdocTmpltExcels.add(xdocTmpltExcel);
-	}
-	
+
 	/** 实验组名 */
 	public String getTeamName() {
 		return teamName;
@@ -88,18 +78,6 @@ public class ReportQC{
 		this.teamName = teamName;
 	}
 	
-	/**
-	 * 取得所有的表格集合
-	 * @return
-	 */
-	public List<String> getExcels(){
-		List<String> lsExcels = new ArrayList<String>();
-		for (XdocTmpltExcel xdocTmpltExcel : lsXdocTmpltExcels) {
-			lsExcels.add(xdocTmpltExcel.toString());
-		}
-		return lsExcels;
-	}
-
 	public List<String> getLsResultFiles() {
 		List<String> lsResultRealFiles = new ArrayList<>();
 		for (String file : lsResultFiles) {
