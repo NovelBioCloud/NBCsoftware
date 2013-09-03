@@ -15,7 +15,12 @@ public class ReportSamAndRPKM{
 	List<XdocTmpltExcel> lsExcels;
 	List<XdocTmpltPic> lsTmpltPics;
 	
-	public Set<String> getLsResultFile() {
+	
+	public void setSetResultFile(Set<String> setResultFile) {
+		this.setResultFile = setResultFile;
+	}
+
+	public Set<String> getSetResultFile() {
 		Set<String> lsSet = new LinkedHashSet<>();
 		for (String string : setResultFile) {
 			lsSet.add(EnumReport.SamAndRPKM + string.split(EnumReport.SamAndRPKM.getResultFolder())[1]);
@@ -23,10 +28,6 @@ public class ReportSamAndRPKM{
 		return lsSet;
 	}
 
-	public void setLsResultFile(Set<String> setResultFile) {
-		this.setResultFile = setResultFile;
-		
-	}
 
 	public List<String> getLsExcels() {
 		List<String> lsList = new ArrayList<>();

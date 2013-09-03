@@ -27,9 +27,14 @@ import com.novelbio.analysis.seq.sam.AlignmentRecorder;
 import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.analysis.seq.sam.SamFileStatistics;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
+import com.novelbio.base.fileOperate.FileHadoop;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.database.model.species.Species;
+import com.novelbio.nbcReport.EnumTableType;
+import com.novelbio.nbcReport.XdocTmpltExcel;
+import com.novelbio.nbcReport.XdocTmpltPic;
+import com.novelbio.nbcReport.Params.ReportSamAndRPKM;
 import com.novelbio.nbcgui.GUI.GuiSamStatistics;
 
 @Component
@@ -40,6 +45,8 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	GuiSamStatistics guiSamStatistics;
 	GffChrAbs gffChrAbs = new GffChrAbs();
 	
+	ReportSamAndRPKM reportSamAndRPKM;
+	
 	List<String[]> lsReadFile;
 	boolean isCountExpression = true;
 	boolean isCalculateFPKM = true;
@@ -49,6 +56,8 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	String picPathAndName;
 	
 	String excelPathAndName;
+	
+	String  geneStructureResultFile;
 	
 	boolean isLocStatistics = true;
 	
@@ -184,7 +193,6 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			if (samFileStatistics != null) {
 				List<String> lsStrings =  SamFileStatistics.saveInfo(resultPrefix+ prefix, samFileStatistics);
 				picPathAndName = lsStrings.get(0);
-				excelPathAndName = lsStrings.get(1); 
 			}
 			logger.info("finish reading " + prefix);
 			try {
@@ -347,6 +355,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 				GffChrStatistics gffChrStatistics = mapPrefix2LocStatistics.get(prefix);
 
 				String outStatistics = FileOperate.changeFileSuffix(resultPrefix, prefixWrite + "_GeneStructure", "txt");
+				geneStructureResultFile = outStatistics;
 				TxtReadandWrite txtWrite = new TxtReadandWrite(outStatistics, true);
 				txtWrite.ExcelWrite(gffChrStatistics.getStatisticsResult());
 				txtWrite.close();
@@ -354,11 +363,49 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			
 			SamFileStatistics samFileStatistics = mapPrefix2Statistics.get(prefix);
 			String outSamStatistics = FileOperate.changeFileSuffix(resultPrefix, prefixWrite + "_MappingStatistics", "txt");
+			excelPathAndName = outSamStatistics;
 			TxtReadandWrite txtWriteStatistics = new TxtReadandWrite(outSamStatistics, true);
 			txtWriteStatistics.ExcelWrite(samFileStatistics.getMappingInfo());
 			txtWriteStatistics.close();
 		}
 	}
+	
+	public ReportSamAndRPKM getReportSamAndRPKM() {
+		reportSamAndRPKM = new ReportSamAndRPKM();
+		
+		List<XdocTmpltExcel> lsExcels = new ArrayList<>();
+		XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(EnumTableType.MappingResult.getXdocTable());
+		xdocTmpltExcel.setExcelTitle("Mapping率分析统计结果");
+		xdocTmpltExcel.addExcel(FileHadoop.getHdfsHeadSymbol(excelPathAndName), 1);
+		
+		XdocTmpltExcel xdocTmpltExcel2 = new XdocTmpltExcel(EnumTableType.MappingChrFile.getXdocTable());
+		xdocTmpltExcel2.setExcelTitle("Reads在染色体上的分布统计");
+		xdocTmpltExcel2.addExcel(FileHadoop.getHdfsHeadSymbol(excelPathAndName), 2);	
+		
+		lsExcels.add(xdocTmpltExcel);
+		lsExcels.add(xdocTmpltExcel2);
+
+		
+		XdocTmpltExcel xdocTmpltExcel3 = new XdocTmpltExcel(EnumTableType.MappingStatistics.getXdocTable());
+		xdocTmpltExcel3.setExcelTitle("Reads在基因上的分布统计图表");
+		xdocTmpltExcel3.addExcel(FileHadoop.getHdfsHeadSymbol(geneStructureResultFile), 1);
+		lsExcels.add(xdocTmpltExcel3);
+		reportSamAndRPKM.setLsExcels(lsExcels);
+		List<XdocTmpltPic> lsPics = new ArrayList<>();
+		XdocTmpltPic xdocTmpltPic = new XdocTmpltPic(FileHadoop.getHdfsHeadSymbol(picPathAndName));
+		xdocTmpltPic.setTitle("Reads在染色体上的分布柱状图");
+		lsPics.add(xdocTmpltPic);
+		reportSamAndRPKM.setLsTmpltPics(lsPics);
+		
+		Set<String> lsResultFile = new LinkedHashSet<>();
+		lsResultFile.add(excelPathAndName);
+		lsResultFile.add(geneStructureResultFile);
+		lsResultFile.add(picPathAndName);
+		reportSamAndRPKM.setSetResultFile(lsResultFile);
+		
+		return reportSamAndRPKM;
+	}
+	
 	
 	@Override
 	public void setRunningInfo(GuiAnnoInfo info) {

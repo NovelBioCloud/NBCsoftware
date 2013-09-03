@@ -58,7 +58,7 @@ public class XdocTable implements Cloneable, Serializable {
 	/**
 	 * 
 	 * @param cols
-	 * @param align
+	 * @paramaxColm align
 	 *            l是居左　c是居中
 	 * @param rows
 	 */

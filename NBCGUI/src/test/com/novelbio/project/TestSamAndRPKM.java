@@ -2,7 +2,9 @@ package com.novelbio.project;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import junit.framework.Assert;
 
@@ -50,11 +52,12 @@ public class TestSamAndRPKM {
 		lsPics.add(xdocTmpltPic);
 		reportSamAndRPKM.setLsTmpltPics(lsPics);
 		
-		List<String> lsResultFile = new ArrayList<>();
+		Set<String> lsResultFile = new LinkedHashSet<>();
 		lsResultFile.add("/media/hdfs/nbCloud/staff/gaozhu/我的文档/SamAndRPKM_result/100S_GeneStructure.txt");
 		lsResultFile.add("/media/hdfs/nbCloud/staff/gaozhu/我的文档/SamAndRPKM_result/100S_GeneStructure.txt");
 		lsResultFile.add("/media/hdfs/nbCloud/staff/gaozhu/我的文档/SamAndRPKM_result/100S_GeneStructure.txt");
 		lsResultFile.add("/media/hdfs/nbCloud/staff/gaozhu/我的文档/SamAndRPKM_result/100S_GeneStructure.txt");
+		reportSamAndRPKM.setSetResultFile(lsResultFile);
 		List<ReportSamAndRPKM> lsReportSamAndRPKMs = new ArrayList<>();
 		lsReportSamAndRPKMs.add(reportSamAndRPKM);
 		reportSamAndRPKMAll.setLsSamAndRPKMs(lsReportSamAndRPKMs);
