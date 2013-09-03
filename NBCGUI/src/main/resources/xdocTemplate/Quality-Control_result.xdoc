@@ -15,32 +15,32 @@
     <para lineSpacing="4" name="title">
       <text fontName="黑体" name="4" fontSize="16">3.2.${no}.2 结果</text>
     </para>
-    <#list lsFastQCs as fastQC>
+    <#list lsReportQCs as reportQC>
       <para lineSpacing="4">
       <text>\t下表是所有序列质控统计的结果。</text>
     </para>
-    <#list fastQC.lsExcels as excel>
+    <#list excels as excel>
     	${excel}
     </#list>
     <para lineSpacing="4">
-      <text>\t我们以${fastQC.teamName}组为例进行截图展示。</text>
+      <text>\t我们以${reportQC.teamName}组为例进行截图展示。</text>
     </para>
     <para lineSpacing="4">
       <text>\t此组质量控制分析具体结果获取路径如下：</text>
     </para>
-   <#list fastQC.lsResultFiles as resultFile>
+   <#list reportQC.lsResultFiles as resultFile>
     	<para lineSpacing="4" >
     		<text fontName="宋体" fontSize="14">\t${resultFile}</text>
     	</para>
     </#list>
     <para lineSpacing="4"/>
-     <#list fastQC.lsPictures as picture>
+     <#list reportQC.pictures as picture>
 	    ${picture}
     </#list>
     <para lineSpacing="4">
       <text fontName="宋体" fontSize="12">上图是Per sequence quality scores的测序结果。左图是左端测序结果，右图是右端测序结果。注：横轴表示碱基数或碱基的范围，纵轴表示质量分数值，其中Quality scores大于20表示mapping准确度大于99%. 从序列质量的分值来看，可用于后续分析。</text>
     </para>
-    <#list fastQC.lsPictures1 as picture1>
+    <#list reportQC.pictures1 as picture1>
 	    ${picture1}
     </#list>
 

@@ -19,6 +19,7 @@ import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportGOAll;
 import com.novelbio.nbcReport.Params.ReportPathWay;
 import com.novelbio.nbcReport.Params.ReportPathWayAll;
+import com.novelbio.nbcReport.Params.ReportProject;
 import com.novelbio.nbcgui.controltest.CtrlTestPathInt;
 
 public class TestPathway {
@@ -96,6 +97,16 @@ public class TestPathway {
 		reportPathWayAll.outputReportXdoc(FileOperate.addSep(mapParams.get("savePath")[0]) + EnumReport.PathWay.getResultFolder());
 		Assert.assertTrue(FileOperate.isFileExist(FileOperate.addSep(mapParams.get("savePath")[0]) + 
 				EnumReport.PathWay.getResultFolder() + FileOperate.getSepPath() + EnumReport.PathWay.getReportXdocFileName()));
+	}
+	
+	//@Test
+	public void runReport() {
+		List<String> lsFolders = new ArrayList<>();
+		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.PathWay.getResultFolder()));
+		ReportProject reportProject = new ReportProject(lsFolders);
+		String reportTest = "/home/novelbio/桌面/testReportPathWay.docx";
+		reportProject.outputReport(reportTest);
+		Assert.assertNotNull(FileOperate.isFileExist(reportTest));
 	}
 	
 	@After

@@ -13,6 +13,8 @@ import com.novelbio.analysis.seq.fastq.FastQC;
 import com.novelbio.analysis.seq.fastq.FastQReadingChannel;
 import com.novelbio.analysis.seq.fastq.FastQRecordFilter;
 import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.nbcReport.XdocTmpltPic;
+import com.novelbio.nbcReport.Params.ReportQC;
 
 /** 单独的fq过滤模块 */
 @Component
@@ -25,6 +27,8 @@ public class CtrlFastQfilter {
 
 	String outFilePrefix = "";
 	String prefix = "";
+	
+	ReportQC reportQC = new ReportQC();
 	/**
 	 * 前缀和该前缀所对应的一系列fastq文件。
 	 * 如果是单端，则Fastq[]长度为1，如果是双端，则Fastq[]长度为2
@@ -47,7 +51,12 @@ public class CtrlFastQfilter {
 		this.outFilePrefix = outFilePrefix;
 	}
 	public void setPrefix(String prefix) {
+		reportQC.setTeamName(prefix);
 		this.prefix = prefix;
+	}
+	
+	public ReportQC getReportQC() {
+		return reportQC;
 	}
 	
 	/**
@@ -122,13 +131,28 @@ public class CtrlFastQfilter {
 				fastQCbefore[0].saveToPathTable(30, fastQCbefore[1], fileName + "_BeforeFilter");
 			}
 			mapParam.putAll(fastQCbefore[0].getMapParam(fileName + "_BeforeFilter"));
-
+			List<String> lsPicPathAndNames = new ArrayList<>();
+			List<String> lsEecelPathAndNames = new ArrayList<>();
 			if (fastQCafter.length <= 1 || fastQCafter[1] == null) {
-				fastQCafter[0].saveToPathPic(savePathAndPrefix + "_AfterFilter");
-				fastQCafter[0].saveToPathTable(savePathAndPrefix + "_AfterFilter");
+				lsPicPathAndNames = fastQCafter[0].saveToPathPic(savePathAndPrefix + "_AfterFilter");
+				lsEecelPathAndNames = fastQCafter[0].saveToPathTable(savePathAndPrefix + "_AfterFilter");
 			} else {
-				fastQCafter[0].saveToPathPic(30, fastQCafter[1], fileName + "_AfterFilter");
-				fastQCafter[0].saveToPathTable(30, fastQCafter[1], fileName + "_AfterFilter");
+				lsPicPathAndNames = fastQCafter[0].saveToPathPic(30, fastQCafter[1], fileName + "_AfterFilter");
+				lsEecelPathAndNames = fastQCafter[0].saveToPathTable(30, fastQCafter[1], fileName + "_AfterFilter");
+			}
+			for (String excelPath : lsEecelPathAndNames) {
+				reportQC.addResultFile(excelPath);
+			}
+			for (String picPath : lsPicPathAndNames) {
+				if (picPath.contains("QualityScore")) {
+					XdocTmpltPic xdocTmpltPic = new XdocTmpltPic(picPath);
+					reportQC.addXdocTempPic(xdocTmpltPic);
+				}
+				if (picPath.contains("SequenceGCContent")) {
+					XdocTmpltPic xdocTmpltPic1 = new XdocTmpltPic(picPath);
+					reportQC.addXdocTempPic1(xdocTmpltPic1);
+				}
+				reportQC.addResultFile(picPath);
 			}
 			mapParam.putAll(fastQCafter[0].getMapParam(fileName + "_AfterFilter"));
 		} catch (Exception e) {

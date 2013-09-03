@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.broadinstitute.sting.jna.lsf.v7_0_6.LibBat.newDebugLog;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -14,12 +13,12 @@ import com.google.common.collect.HashMultimap;
 import com.novelbio.analysis.seq.fastq.FastQ;
 import com.novelbio.analysis.seq.fastq.FastQC;
 import com.novelbio.analysis.seq.fastq.FastQRecordFilter;
-import com.novelbio.aoplog.ReportBuilder;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.service.SpringFactory;
 import com.novelbio.nbcReport.EnumTableType;
 import com.novelbio.nbcReport.XdocTmpltExcel;
+import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportQCAll;
 import com.novelbio.nbcgui.FoldeCreate;
 
@@ -27,7 +26,6 @@ import com.novelbio.nbcgui.FoldeCreate;
 @Scope("prototype")
 public class CtrlFastQ {
 	private static Logger logger = Logger.getLogger(CtrlFastQ.class);
-	private static final String pathSaveTo = "Quality-Control_result";
 	FastQRecordFilter fastQfilterRecord = new FastQRecordFilter();
 	
 	CopeFastq copeFastq = new CopeFastq();
@@ -46,6 +44,11 @@ public class CtrlFastQ {
 	/** 过滤后是否要QC，不要就只计数 */
 	boolean qcAfter = true;
 	ReportQCAll reportQCAll = new ReportQCAll();
+	
+	
+	public ReportQCAll getReportQCAll() {
+		return reportQCAll;
+	}
 	
 	public void setAdaptorLeft(String adaptorLeft) {
 		fastQfilterRecord.setFilterParamAdaptorLeft(adaptorLeft.trim());
@@ -72,7 +75,7 @@ public class CtrlFastQ {
 	}
 	
 	public void setOutFilePrefix(String outFilePrefix) {
-		this.outFilePrefix = FoldeCreate.createAndInFold(outFilePrefix, pathSaveTo);
+		this.outFilePrefix = FoldeCreate.createAndInFold(outFilePrefix, EnumReport.FastQC.getResultFolder());
 	}
 	
 	public boolean isFiltered() {
@@ -167,6 +170,7 @@ public class CtrlFastQ {
 			
 			HashMultimap<String, String> mapParam = ctrlFastQfilter.saveFastQC(outFilePrefix + prefix);
 			saveFastQCfilterParamSingle(mapParam);
+			reportQCAll.addReportQC(ctrlFastQfilter.getReportQC());
 		}
 		Map<String, FastQC[]> mapParam2FastqcLR = new LinkedHashMap<>();
 		for (String prefix : mapCond2FastQCBefore.keySet()) {
@@ -176,10 +180,12 @@ public class CtrlFastQ {
 			mapParam2FastqcLR.put(prefix, fastqcAfter);
 		}
 		List<String[]> lsSummary = FastQC.combineFastQCbaseStatistics(mapParam2FastqcLR);
-		XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(EnumTableType.QC_BasicStatAll.getXdocTable());
 		TxtReadandWrite txtWrite = new TxtReadandWrite(outFilePrefix + "basicStatsAll.xls", true);
 		txtWrite.ExcelWrite(lsSummary);
 		txtWrite.close();
+		XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(EnumTableType.QC_BasicStatAll.getXdocTable());
+		xdocTmpltExcel.addExcel(outFilePrefix + "basicStatsAll.xls", 1);
+		reportQCAll.addXdocTempExcel(xdocTmpltExcel);
 		
 	}
 	

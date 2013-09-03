@@ -17,6 +17,7 @@ import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.service.SpringFactory;
 import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportGOAll;
+import com.novelbio.nbcReport.Params.ReportProject;
 import com.novelbio.nbcgui.controltest.CtrlTestGOInt;
 
 public class TestGo {
@@ -105,6 +106,16 @@ public class TestGo {
 		reportGOAll.outputReportXdoc(FileOperate.addSep(mapParams.get("savePath")[0]) + EnumReport.GOAnalysis.getResultFolder());
 		Assert.assertTrue(FileOperate.isFileExist(FileOperate.addSep(mapParams.get("savePath")[0]) + 
 				EnumReport.GOAnalysis.getResultFolder() + FileOperate.getSepPath() + EnumReport.GOAnalysis.getReportXdocFileName()));
+	}
+	
+	//@Test
+	public void runReport() {
+		List<String> lsFolders = new ArrayList<>();
+		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.GOAnalysis.getResultFolder()));
+		ReportProject reportProject = new ReportProject(lsFolders);
+		String reportTest = "/home/novelbio/桌面/testReportGO.docx";
+		reportProject.outputReport(reportTest);
+		Assert.assertNotNull(FileOperate.isFileExist(reportTest));
 	}
 	
 	@After
