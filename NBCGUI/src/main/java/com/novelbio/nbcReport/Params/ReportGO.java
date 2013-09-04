@@ -13,7 +13,7 @@ import com.novelbio.nbcReport.XdocTmpltPic;
  * @author novelbio
  * 
  */
-public class ReportGO{
+public class ReportGO extends ReportBase{
 	private String testMethod;
 	private String finderCondition;
 	private String teamName;
@@ -22,6 +22,10 @@ public class ReportGO{
 	private HashSet<String> setResultFiles;
 	private List<XdocTmpltPic> lsXdocTmpltPics;
 	
+	
+	public ReportGO() {
+		// TODO Auto-generated constructor stub
+	}
 	/**
 	 * 添加图片模板
 	 * @param xdocTmpltPic
@@ -102,5 +106,15 @@ public class ReportGO{
 			setResultFiles = new LinkedHashSet<>();
 		}
 		setResultFiles.add(resultFile);
+	}
+
+	@Override
+	public EnumReport getEnumReport() {
+		return EnumReport.GOAnalysis;
+	}
+
+	@Override
+	public boolean readReportFromFile(String savePath) {
+		return false;
 	}
 }

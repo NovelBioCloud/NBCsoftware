@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -32,8 +34,8 @@ public class XdocTmpltExcel implements Serializable{
 	/** 同类表格的对比说明在这类表格的下方 */
 	private String downCompare = "";
 	private List<XdocTable> lsXdocTable = new ArrayList<XdocTable>();
-	private HashMultimap<String, String> mapExcel2SheetNames = HashMultimap.create();
-	private HashMultimap<String, Integer> mapExcel2SheetNamesInt = HashMultimap.create();
+	private Map<String, LinkedHashSet<String>> mapExcel2SheetNames = new LinkedHashMap<>();
+	private Map<String, LinkedHashSet<Integer>> mapExcel2SheetNamesInt = new LinkedHashMap<>();
 	private XdocTable xdocTable;
 	
 	public XdocTmpltExcel() {
@@ -44,7 +46,7 @@ public class XdocTmpltExcel implements Serializable{
 	 * @param filePath
 	 * @param excelName
 	 */
-	public XdocTmpltExcel(HashMultimap<String,String> mapExcel2SheetNames,XdocTable xdocTable) {
+	public XdocTmpltExcel(Map<String,LinkedHashSet<String>> mapExcel2SheetNames,XdocTable xdocTable) {
 		this.mapExcel2SheetNames = mapExcel2SheetNames;
 		this.xdocTable = xdocTable;
 	}
@@ -59,7 +61,14 @@ public class XdocTmpltExcel implements Serializable{
 	 * @param sheetName
 	 */
 	public XdocTmpltExcel(String excelName, String sheetName,XdocTable xdocTable) {
-		mapExcel2SheetNames.put(excelName, sheetName);
+		LinkedHashSet<String> setSheetNames = mapExcel2SheetNames.get(excelName);
+		if (setSheetNames == null) {
+			setSheetNames = new LinkedHashSet<>();
+			setSheetNames.add(sheetName);
+			mapExcel2SheetNames.put(excelName, setSheetNames);
+		}else {
+			setSheetNames.add(sheetName);
+		}
 		this.xdocTable = xdocTable;
 	}
 	
@@ -75,11 +84,25 @@ public class XdocTmpltExcel implements Serializable{
 	 * @param sheetName
 	 */
 	public void addExcel(String excelName, String sheetName){
-		mapExcel2SheetNames.put(excelName, sheetName);
+		LinkedHashSet<String> setSheetNames = mapExcel2SheetNames.get(excelName);
+		if (setSheetNames == null) {
+			setSheetNames = new LinkedHashSet<>();
+			setSheetNames.add(sheetName);
+			mapExcel2SheetNames.put(excelName, setSheetNames);
+		}else {
+			setSheetNames.add(sheetName);
+		}
 	}
 	
 	public void addExcel(String excelName, int sheetNum){
-		mapExcel2SheetNamesInt.put(excelName, sheetNum);
+		LinkedHashSet<Integer> setSheetNames = mapExcel2SheetNamesInt.get(excelName);
+		if (setSheetNames == null) {
+			setSheetNames = new LinkedHashSet<>();
+			setSheetNames.add(sheetNum);
+			mapExcel2SheetNamesInt.put(excelName, setSheetNames);
+		}else {
+			setSheetNames.add(sheetNum);
+		}
 	}
 	
 	/** 读取excel的说明文件中的参数（允许不存在）*/

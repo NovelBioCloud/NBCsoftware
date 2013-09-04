@@ -93,4 +93,9 @@ public abstract class ReportBase  implements Cloneable, Serializable {
 		return null;
 	}
 	
+	public static void main(String[] args) {
+		ReportSamAndRPKM object  = (ReportSamAndRPKM)FileOperate.readFileAsObject("/media/hdfs/nbCloud/staff/gaozhu/我的文档/SamAndRPKM_result/.report/report_SamAndRPKM2013-09-040118-27077");
+		System.out.println(object.getLsExcels().get(0).toString());
+	}
+	
 }

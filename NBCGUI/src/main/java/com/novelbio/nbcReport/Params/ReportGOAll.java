@@ -63,6 +63,13 @@ public class ReportGOAll extends ReportBase {
 	public String getNo() {
 		return no;
 	}
+
+
+	@Override
+	public boolean readReportFromFile(String savePath) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 	
 }
