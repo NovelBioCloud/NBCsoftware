@@ -26,6 +26,7 @@ import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.fileOperate.ZipOperate;
 
+import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 
@@ -54,12 +55,14 @@ public class ReportProject extends ReportBase {
 			EnumReport enumReport = EnumReport.findByFolderName(FileOperate.getFileName(fileName));
 			if (enumReport == null)
 				continue;
-			String xdocFile = FileOperate.addSep(fileName) + enumReport.getReportXdocFileName();
-			if (!FileOperate.isFileExist(xdocFile))
-				continue;
-			TxtReadandWrite txtReadandWrite = new TxtReadandWrite(xdocFile);
-			lsXdocChildren.add(txtReadandWrite.readAllAsString());
-			txtReadandWrite.close();
+			ReportBase reportBase =  enumReport.getReportAll();
+			boolean readResult = reportBase.readReportFromFile(fileName);
+			if (readResult) {
+				String xdocString =  reportBase.outputReportXdoc();
+				if (xdocString != null) {
+					lsXdocChildren.add(xdocString);
+				}
+			}
 			lsMethod.add(enumReport.getResultFolder());
 		}
 	}
@@ -76,12 +79,14 @@ public class ReportProject extends ReportBase {
 			EnumReport enumReport = EnumReport.findByFolderName(FileOperate.getFileName(fileName));
 			if (enumReport == null)
 				continue;
-			String xdocFile = FileOperate.addSep(fileName) + enumReport.getReportXdocFileName();
-			if (!FileOperate.isFileExist(xdocFile))
-				continue;
-			TxtReadandWrite txtReadandWrite = new TxtReadandWrite(xdocFile);
-			lsXdocChildren.add(txtReadandWrite.readAllAsString());
-			txtReadandWrite.close();
+			ReportBase reportBase =  enumReport.getReportAll();
+			boolean readResult = reportBase.readReportFromFile(fileName);
+			if (readResult) {
+				String xdocString =  reportBase.outputReportXdoc();
+				if (xdocString != null) {
+					lsXdocChildren.add(xdocString);
+				}
+			}
 			lsMethod.add(enumReport.getResultFolder());
 		}
 	}
@@ -145,8 +150,7 @@ public class ReportProject extends ReportBase {
 		try {
 			// 设置目录
 			String tempPath = PathDetail.getTmpPathRandom();
-			outputReportXdoc(tempPath);
-			content = addTitleNo(tempPath);
+			content = addTitleNo(outputReportXdoc());
 			createCatalog(content);
 			String tmpResult = addCatalogAndBG();
 			List<String> lsImageSrcs = findAllImageSrc(tmpResult);
@@ -366,17 +370,15 @@ public class ReportProject extends ReportBase {
 	 *            生成好的模板位置
 	 * @throws Exception
 	 */
-	private String addTitleNo(String path) throws Exception {
+	private String addTitleNo(String tempString) throws Exception {
 		Map<String, Object> mapKey2Params = addParamMap();
 		// TODO 异常待处理
 		// 加载模板
-		Configuration cf = new Configuration();
-		cf.setClassicCompatible(true);
-		// 模板存放路径
-		cf.setDirectoryForTemplateLoading(new File(path));
-		cf.setEncoding(Locale.getDefault(), "UTF-8");
-		// 模板名称
-		Template template = cf.getTemplate(getEnumReport().getReportXdocFileName());
+		Configuration cfg = new Configuration();
+        StringTemplateLoader stringLoader = new StringTemplateLoader();
+        stringLoader.putTemplate("myTemplate", tempString);
+        cfg.setTemplateLoader(stringLoader);
+        Template template = cfg.getTemplate("myTemplate","utf-8");
 		StringWriter sw = new StringWriter();
 		// 处理并把结果输出到字符串中
 		template.process(mapKey2Params, sw);
@@ -405,5 +407,10 @@ public class ReportProject extends ReportBase {
 	/** 为项目报告添加名称 */
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
+	}
+
+	@Override
+	public boolean readReportFromFile(String savePath) {
+		return false;
 	}
 }

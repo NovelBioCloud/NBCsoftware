@@ -1,6 +1,8 @@
 package com.novelbio.nbcReport;
 
-public enum EnumTableType {
+import java.io.Serializable;
+
+public enum EnumTableType implements Serializable{
 
 	GO_Result(new XdocTable( "100,100,60,60,60,60,60,60,80,80"  )),
 	GO_Gene2GO( new XdocTable( "120,120,150,80,80,50,50")), 

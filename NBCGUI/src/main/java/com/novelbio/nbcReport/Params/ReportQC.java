@@ -1,12 +1,10 @@
 package com.novelbio.nbcReport.Params;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.novelbio.nbcReport.XdocTmpltExcel;
 import com.novelbio.nbcReport.XdocTmpltPic;
 
 /**
@@ -15,12 +13,15 @@ import com.novelbio.nbcReport.XdocTmpltPic;
  * @author novelbio
  * 
  */
-public class ReportQC{
+public class ReportQC extends ReportBase{
 	private String teamName;
+	private String basicStatExcelPath;
 	private Set<String> setResultFiles;
 	private List<XdocTmpltPic> lsXdocTmpltPics;
 	private List<XdocTmpltPic> lsXdocTmpltPics1;
 	
+	public ReportQC() {
+	}
 	
 	/**
 	 * 添加图片模板
@@ -99,6 +100,31 @@ public class ReportQC{
 		}
 		setResultFiles.add(resultFile);
 	}
+	
+	/**
+	 * 总的统计文件路径
+	 * @param basicStatExcelPath
+	 */
+	public void setBasicStatExcelPath(String basicStatExcelPath) {
+		this.basicStatExcelPath = basicStatExcelPath;
+	}
+	
+	/**
+	 * 总的统计文件路径
+	 */
+	public String getBasicStatExcelPath() {
+		return basicStatExcelPath;
+	}
+	
+	@Override
+	public EnumReport getEnumReport() {
+		return EnumReport.FastQC;
+	}
 
+	@Override
+	public boolean readReportFromFile(String savePath) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }

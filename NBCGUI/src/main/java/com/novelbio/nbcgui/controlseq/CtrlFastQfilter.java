@@ -56,6 +56,7 @@ public class CtrlFastQfilter {
 	}
 	
 	public ReportQC getReportQC() {
+		reportQC.setBasicStatExcelPath(FileOperate.addSep(outFilePrefix) + "basicStatsAll.xls");
 		return reportQC;
 	}
 	

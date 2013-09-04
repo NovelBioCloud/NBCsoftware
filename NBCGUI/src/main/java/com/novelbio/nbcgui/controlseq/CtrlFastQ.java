@@ -19,6 +19,7 @@ import com.novelbio.database.service.SpringFactory;
 import com.novelbio.nbcReport.EnumTableType;
 import com.novelbio.nbcReport.XdocTmpltExcel;
 import com.novelbio.nbcReport.Params.EnumReport;
+import com.novelbio.nbcReport.Params.ReportQC;
 import com.novelbio.nbcReport.Params.ReportQCAll;
 import com.novelbio.nbcgui.FoldeCreate;
 
@@ -43,11 +44,14 @@ public class CtrlFastQ {
 	Map<String, FastQC[]> mapCond2FastQCAfter;
 	/** 过滤后是否要QC，不要就只计数 */
 	boolean qcAfter = true;
-	ReportQCAll reportQCAll = new ReportQCAll();
 	
-	
-	public ReportQCAll getReportQCAll() {
-		return reportQCAll;
+	List<ReportQC> lsReportQCs = new ArrayList<>();
+	/**
+	 * 得到所有的报告
+	 * @return
+	 */
+	public List<ReportQC> getLsReportQCs() {
+		return lsReportQCs;
 	}
 	
 	public void setAdaptorLeft(String adaptorLeft) {
@@ -170,7 +174,7 @@ public class CtrlFastQ {
 			
 			HashMultimap<String, String> mapParam = ctrlFastQfilter.saveFastQC(outFilePrefix + prefix);
 			saveFastQCfilterParamSingle(mapParam);
-			reportQCAll.addReportQC(ctrlFastQfilter.getReportQC());
+			lsReportQCs.add(ctrlFastQfilter.getReportQC());
 		}
 		Map<String, FastQC[]> mapParam2FastqcLR = new LinkedHashMap<>();
 		for (String prefix : mapCond2FastQCBefore.keySet()) {
@@ -180,13 +184,18 @@ public class CtrlFastQ {
 			mapParam2FastqcLR.put(prefix, fastqcAfter);
 		}
 		List<String[]> lsSummary = FastQC.combineFastQCbaseStatistics(mapParam2FastqcLR);
-		TxtReadandWrite txtWrite = new TxtReadandWrite(outFilePrefix + "basicStatsAll.xls", true);
-		txtWrite.ExcelWrite(lsSummary);
+		String totalExcelPath = outFilePrefix + "basicStatsAll.xls";
+		TxtReadandWrite txtWrite = null;
+		if (FileOperate.isFileExist(totalExcelPath)) {
+			lsSummary.remove(0);
+			txtWrite = new TxtReadandWrite(outFilePrefix + "basicStatsAll.xls", true, true);
+			txtWrite.ExcelWrite(lsSummary);
+		}else{
+			FileOperate.createFile(totalExcelPath, null);
+			txtWrite = new TxtReadandWrite(outFilePrefix + "basicStatsAll.xls", true, true);
+			txtWrite.ExcelWrite(lsSummary);
+		}
 		txtWrite.close();
-		XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(EnumTableType.QC_BasicStatAll.getXdocTable());
-		xdocTmpltExcel.addExcel(outFilePrefix + "basicStatsAll.xls", 1);
-		reportQCAll.addXdocTempExcel(xdocTmpltExcel);
-		
 	}
 	
 	private FastQC[] getFastQC(List<String[]> lsFastQLR, String prefix, boolean qc) {

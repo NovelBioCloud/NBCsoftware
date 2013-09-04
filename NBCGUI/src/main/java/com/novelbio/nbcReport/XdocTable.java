@@ -30,7 +30,9 @@ public class XdocTable implements Cloneable, Serializable {
 	private int autoRowMax = 15;
 	private String rowHeights = "20,20,20,20,20,20,20,20,20,20,20,20,20,20,20";
 
-
+	
+	public XdocTable() {
+	}
 	/**
 	 * 
 	 * @param cols

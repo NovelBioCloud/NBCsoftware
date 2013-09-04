@@ -1,6 +1,7 @@
 package com.novelbio.nbcReport;
 
 import java.io.File;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,8 +21,9 @@ import freemarker.template.Template;
  * @author gaozhu
  *
  */
-public class XdocTmpltPic{
+public class XdocTmpltPic implements Serializable{
 
+	private static final long serialVersionUID = 1L;
 	private int height = 300;
 	private int width = 600;
 	/** 图片的标题 */
@@ -36,6 +38,10 @@ public class XdocTmpltPic{
 	private String expTeamName = "";
 	/** 用于并排显示的图片名 */
 	List<String> lsPicPaths;
+	
+	public XdocTmpltPic() {
+		// TODO Auto-generated constructor stub
+	}
 	
 	/** 一张图片的构造方法 */
 	public XdocTmpltPic(String picPath) {

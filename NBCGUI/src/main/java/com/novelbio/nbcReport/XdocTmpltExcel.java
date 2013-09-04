@@ -1,6 +1,7 @@
 package com.novelbio.nbcReport;
 
 import java.io.File;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,8 +21,8 @@ import freemarker.template.Template;
  * @author gaozhu
  *
  */
-public class XdocTmpltExcel{
-	
+public class XdocTmpltExcel implements Serializable{
+	private static final long serialVersionUID = 1L;
 	/** 表格的标题 */
 	private String excelTitle = "";
 	/** 表格的注： */
@@ -34,6 +35,10 @@ public class XdocTmpltExcel{
 	private HashMultimap<String, String> mapExcel2SheetNames = HashMultimap.create();
 	private HashMultimap<String, Integer> mapExcel2SheetNamesInt = HashMultimap.create();
 	private XdocTable xdocTable;
+	
+	public XdocTmpltExcel() {
+		// TODO Auto-generated constructor stub
+	}
 	
 	/** 根据excel路径完成本类的构造
 	 * @param filePath

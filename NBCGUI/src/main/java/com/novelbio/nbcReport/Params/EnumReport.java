@@ -1,5 +1,9 @@
 package com.novelbio.nbcReport.Params;
 
+import org.broadinstitute.sting.jna.lsf.v7_0_6.LibBat.newDebugLog;
+
+import com.novelbio.base.dataOperate.DateUtil;
+
 
 
 /**
@@ -9,26 +13,29 @@ package com.novelbio.nbcReport.Params;
  * 
  */
 public enum EnumReport {
-	GOAnalysis("GOAnalysis","GO-Analysis_result"),
-	PathWay("PathWay","PathWay-Analysis_result"),
-	SamAndRPKM("SamAndRPKM","SamAndRPKM_result"),
-	FastQC("FastQC","Quality-Control_result"),
-	Mapping("Mapping","Mapping_result"),
-	DiffExp("DiffExp","Difference Expression_result"),
-	GOTree("GOTree","GO-Trees_result"),
-	GeneAct("GeneAct","Gene-Act-Network_result"),
-	MiRNA("MiRNA","miRNA-Target-Network_result"),
-	PathwayAct("PathwayAct","Pathway-Act-network_result"),
-	LncRNA("LncRNA","Co-Exp-Net_LncRNA_result"),
-	Project("project","Novelbio_Result"),
-	Picture("picture","Picture"),
-	Excel("excel","Excel");
+	GOAnalysis("GOAnalysis","GO-Analysis_result",new ReportGOAll()),
+	PathWay("PathWay","PathWay-Analysis_result",new ReportPathWayAll()),
+	SamAndRPKM("SamAndRPKM","SamAndRPKM_result",new ReportSamAndRPKMAll()),
+	FastQC("FastQC","Quality-Control_result",new ReportQCAll()),
+	DNASeqMap("DNASeqMap","DNASeqMap_result",null),
+	RNASeqMap("RNASeqMap","RNASeqMap_result",null),
+	DiffExp("DiffExp","Difference Expression_result",null),
+	GOTree("GOTree","GO-Trees_result",null),
+	GeneAct("GeneAct","Gene-Act-Network_result",null),
+	MiRNA("MiRNA","miRNA-Target-Network_result",null),
+	PathwayAct("PathwayAct","Pathway-Act-network_result",null),
+	LncRNA("LncRNA","Co-Exp-Net_LncRNA_result",null),
+	Project("project","Novelbio_Result",null),
+	Picture("picture","Picture",null),
+	Excel("excel","Excel",null);
 	
 	String type;
 	String tempName;
-	EnumReport(String type,String tempName) {
+	ReportBase reportBase;
+	EnumReport(String type,String tempName,ReportBase reportBase) {
 		this.type = type;
 		this.tempName = tempName;
+		this.reportBase = reportBase;
 	}
 
 	/**
@@ -41,6 +48,13 @@ public enum EnumReport {
 	}
 	
 	/**
+	 * 获得序列化随机文件名
+	 * @return
+	 */
+	public String getReportRandomFileName(){
+		return "report_" + type + DateUtil.getDateAndRandom();
+	}
+	/**
 	 * 得到xdoc模板路径
 	 * 
 	 * @return
@@ -48,6 +62,10 @@ public enum EnumReport {
 	public String getTempPath() {
 		String path = EnumReport.class.getClassLoader().getResource("xdocTemplate").getFile();
 		return path;
+	}
+	
+	public ReportBase getReportAll(){
+		return reportBase.getClone();
 	}
 	
 	/**

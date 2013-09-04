@@ -19,6 +19,7 @@ import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.information.SoftWareInfo;
 import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
 import com.novelbio.database.model.species.Species;
+import com.novelbio.nbcReport.Params.ReportDNASeqMap;
 import com.novelbio.nbcgui.FoldeCreate;
 
 @Component
@@ -47,6 +48,7 @@ public class CtrlDNAMapping {
 	SoftWare softMapping = SoftWare.bwa;
 	
 	SoftWareInfo softWareInfo = new SoftWareInfo();
+	ReportDNASeqMap reportDNASeqMap = new ReportDNASeqMap();
 	
 	SamFileStatistics samFileStatistics;
 	/** 
@@ -56,6 +58,10 @@ public class CtrlDNAMapping {
 	public void setSpecies(Species species, int map2Index) {
 		this.species = species;
 		this.map2Index = map2Index;
+	}
+	
+	public ReportDNASeqMap getReportDNASeqMap() {
+		return reportDNASeqMap;
 	}
 	
 	/** 设定输入文件 */

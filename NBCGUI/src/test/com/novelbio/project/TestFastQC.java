@@ -17,6 +17,7 @@ import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.service.SpringFactory;
 import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportProject;
+import com.novelbio.nbcReport.Params.ReportQC;
 import com.novelbio.nbcgui.controlseq.CtrlFastQ;
 
 public class TestFastQC {
@@ -25,13 +26,9 @@ public class TestFastQC {
 	@Before
 	public void init(){
 		mapParams = new HashMap<String, String[]>();
-		mapParams.put("leftFqs", new String[]{
-				FileHadoop.getHdfsHeadSymbol("/nbCloud/public/test/fastq/testFastQLeft.fq"),
-				FileHadoop.getHdfsHeadSymbol("/nbCloud/public/test/fastq/test1FastQLeft.fq")});
-		mapParams.put("prefixs", new String[]{"test","test1"});
-		mapParams.put("rightFq", new String[]{
-				FileHadoop.getHdfsHeadSymbol("/nbCloud/public/test/fastq/testFastQRight.fq"),
-				FileHadoop.getHdfsHeadSymbol("/nbCloud/public/test/fastq/test1FastQRight.fq")});
+		mapParams.put("leftFqs", new String[]{"/hdfs:/nbCloud/public/test/fastq/testFastQLeft.fq,/hdfs:/nbCloud/public/test/fastq/test1FastQLeft.fq"});
+		mapParams.put("prefixs", new String[]{"test,test1"});
+		mapParams.put("rightFq", new String[]{"/hdfs:/nbCloud/public/test/fastq/testFastQRight.fq,/hdfs:/nbCloud/public/test/fastq/test1FastQRight.fq"});
 		mapParams.put("leftAdaptor", new String[]{""});
 		mapParams.put("rightAdaptor", new String[]{""});
 //		mapParams.put("lowCaseAdaptor", new String[]{"1"});
@@ -44,7 +41,7 @@ public class TestFastQC {
 		
 	}
 	
-	@Test
+	//@Test
 	public void pathWayRun(){
 		CtrlFastQ ctrlFastQ = (CtrlFastQ)SpringFactory.getFactory().getBean("ctrlFastQ");
 		ArrayList<String> lsLeftFq = ArrayOperate.converArray2List(mapParams.get("leftFqs")[0].split(","));
@@ -63,9 +60,10 @@ public class TestFastQC {
 		ctrlFastQ.setFastQC(mapParams.get("qcBeforeFilter") != null, mapParams.get("qcAfterFilter") != null);
 		ctrlFastQ.setReadsLenMin(Integer.parseInt(mapParams.get("retainBp")[0]));
 		ctrlFastQ.running();
-		String reportPath = FileOperate.addSep(mapParams.get("savePath")[0]) + EnumReport.FastQC.getResultFolder();
-		ctrlFastQ.getReportQCAll().outputReportXdoc(reportPath);
-		Assert.assertTrue(FileOperate.isFileExist(reportPath + FileOperate.getSepPath() + EnumReport.FastQC.getReportXdocFileName()));
+		for (ReportQC reportQC : ctrlFastQ.getLsReportQCs()) {
+			reportQC.writeAsFile(FileOperate.addSep(mapParams.get("savePath")[0])+EnumReport.FastQC.getResultFolder());
+		}
+		//Assert.assertTrue(FileOperate.isFileExist(reportPath + FileOperate.getSepPath() + EnumReport.FastQC.getReportXdocFileName()));
 	}
 	
 	@Test
