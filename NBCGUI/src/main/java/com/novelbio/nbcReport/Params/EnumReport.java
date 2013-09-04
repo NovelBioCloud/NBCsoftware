@@ -13,6 +13,7 @@ import com.novelbio.base.dataOperate.DateUtil;
  * 
  */
 public enum EnumReport {
+	GeneExp("GeneExp","GeneExpression_result",new ReportGeneExpressionAll()),
 	GOAnalysis("GOAnalysis","GO-Analysis_result",new ReportGOAll()),
 	PathWay("PathWay","PathWay-Analysis_result",new ReportPathWayAll()),
 	SamAndRPKM("SamAndRPKM","SamAndRPKM_result",new ReportSamAndRPKMAll()),

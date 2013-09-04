@@ -1,75 +1,31 @@
 <para lineSpacing="4" name="title">
-      <text fontName="黑体" fontSize="16" name="3" >3.2.${no} 基因表达值计算（Gene expression）</text>
+      <text fontName="黑体" fontSize="16" name="3" >3.2.${no} mapping 结果统计分析（Mapping Statistics）</text>
     </para>  
     <para lineSpacing="4" name="title">
       <text fontName="Times New Roman"   fontSize="16" name="4">3.2.${no}.1 方法</text>
     </para>
      <para lineSpacing="4">
-      <text fontName="Times New Roman">测序得到的某个基因的reads数量和若干因素有关，其中最重要的有两点：</text>
-	  <text fontName="Times New Roman">1、mapping回reference序列的reads数量，也就是有效测序量；</text>
-	  <text fontName="Times New Roman">2、该基因所有exon的长度之和，显然一个基因的转录本越长，其获得的测序结果片段会越多。我们采用FPKM进行基因表达定量。</text>
+      <text fontName="Times New Roman">我们将过滤后的Clean Reads进行Mapping，统计测序数据的mapping率、基因在染色体上的分布和基因组结构的分析。</text>
     </para>
      <para lineSpacing="4" name="title">
       <text fontName="Times New Roman"   fontSize="16" name="4">3.2.${no}.2 结果展示</text>
      </para>
-	<#list lsGeneExpression as geneExpression>
+	<#list lsSamAndRPKMs as reportSam>
     <para lineSpacing="4">
-      <text fontName="Times New Roman">基因表达量分析的具体结果获取路径如下：：</text>
+      <text fontName="Times New Roman">mapping统计分析的具体结果获取路径如下：</text>
     </para>
-     <#list geneExpression.setResultFile as resultFile>
+     <#list reportSam.setResultFile as resultFile>
     <para indent="28" lineSpacing="4">
       <text fontName="Times New Roman">${resultFile}</text>
     </para>
     </#list>
-    <text> 以下是基因表达值计算结果 </text>
-    <#list geneExpression.lsExcels1 as excle>
+    <#list reportSam.lsExcels as excle>
     	${excle}
     </#list>
     <para lineSpacing="4">
-      <text fontName="Times New Roman">下表 Fragment值和FPKM值列表说明\t</text>
-      <table weight="2.0" cols="151,321" height="88" name="x342" left="116" top="1343" width="472" color="#ffffff" rows="28,28,32">
-        <cell col="1" name="x343" fillColor="#1e90ff"  color="#ffffff"  row="1">
-          <para lineSpacing="4">
-            <text fontName="宋体" fontStyle="bold">Name</text>
-          </para>
-        </cell>
-        <cell col="2" name="x346" fillColor="#1e90ff"  color="#ffffff"  row="1">
-          <para lineSpacing="4">
-            <text fontName="宋体" fontColor="#313131" fontStyle="bold">Description</text>
-          </para>
-        </cell>
-        <cell col="1" name="x349" fillColor="#d3d3d3" color="#ffffff"   row="2">
-          <para lineSpacing="4">
-            <text fontName="宋体">GeneName</text>
-          </para>
-        </cell>
-        <cell col="2" name="x352" fillColor="#d3d3d3" color="#ffffff"  row="2">
-          <para lineSpacing="4">
-            <text fontName="宋体" fontColor="#313131"></text>
-          </para>
-        </cell>
-        <cell col="1" name="x355" fillColor="#d3d3d3" color="#ffffff"   row="3">
-          <para lineSpacing="4">
-            <text fontName="宋体">GeneType</text>
-          </para>
-        </cell>
-        <cell col="2" name="x358" fillColor="#d3d3d3" color="#ffffff"   row="3">
-          <para lineSpacing="4">
-            <text fontName="宋体" fontSize="16"></text>
-          </para>
-        </cell>
-        <cell col="1" name="x355" fillColor="#d3d3d3" color="#ffffff"   row="3">
-          <para lineSpacing="4">
-            <text fontName="宋体">其他列</text>
-          </para>
-        </cell>
-        <cell col="2" name="x358" fillColor="#d3d3d3" color="#ffffff"   row="3">
-          <para lineSpacing="4">
-            <text fontName="宋体" fontSize="16">标准化的Fragment值</text>
-          </para>
-        </cell>
-      </table>
+      <text>\t</text>
+      <#list reportSam.lsTmpltPics as picture>
+			${picture}
+		 </#list>
     </para>
     </#list>
-
-    

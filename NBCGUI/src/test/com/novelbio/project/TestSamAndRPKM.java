@@ -58,10 +58,7 @@ public class TestSamAndRPKM {
 		lsResultFile.add("/media/hdfs/nbCloud/staff/gaozhu/我的文档/SamAndRPKM_result/100S_GeneStructure.txt");
 		lsResultFile.add("/media/hdfs/nbCloud/staff/gaozhu/我的文档/SamAndRPKM_result/100S_GeneStructure.txt");
 		reportSamAndRPKM.setSetResultFile(lsResultFile);
-		List<ReportSamAndRPKM> lsReportSamAndRPKMs = new ArrayList<>();
-		lsReportSamAndRPKMs.add(reportSamAndRPKM);
-		reportSamAndRPKMAll.setLsSamAndRPKMs(lsReportSamAndRPKMs);
-		
+		reportSamAndRPKM.writeAsFile("/hdfs:/nbCloud/staff/gaozhu/我的文档/SamAndRPKM_result");
 		
 	}
 	
@@ -69,7 +66,6 @@ public class TestSamAndRPKM {
 	@Test
 	public void runTest() {
 		String savePath = FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/SamAndRPKM_result");
-		reportSamAndRPKMAll.outputReportXdoc(savePath);
 		Assert.assertTrue(FileOperate.isFileExist(FileOperate.addSep(savePath)+reportSamAndRPKMAll.getEnumReport().getReportXdocFileName()));
 		List<String> lsList = new ArrayList<>();
 		lsList.add(savePath);

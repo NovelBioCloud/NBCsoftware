@@ -10,7 +10,7 @@ import java.util.Set;
 import com.novelbio.nbcReport.XdocTmpltExcel;
 import com.novelbio.nbcReport.XdocTmpltPic;
 
-public class ReportSamAndRPKM{
+public class ReportSamAndRPKM extends ReportBase{
 	Set<String> setResultFile;
 	List<XdocTmpltExcel> lsExcels;
 	List<XdocTmpltPic> lsTmpltPics;
@@ -55,6 +55,17 @@ public class ReportSamAndRPKM{
 
 	public void setLsTmpltPics(List<XdocTmpltPic> lsTmpltPics) {
 		this.lsTmpltPics = lsTmpltPics;
+	}
+
+	@Override
+	public EnumReport getEnumReport() {
+		return EnumReport.SamAndRPKM;
+	}
+
+	@Override
+	public boolean readReportFromFile(String savePath) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 
