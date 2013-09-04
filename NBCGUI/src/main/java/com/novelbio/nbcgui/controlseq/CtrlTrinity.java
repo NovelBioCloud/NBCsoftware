@@ -3,8 +3,12 @@ package com.novelbio.nbcgui.controlseq;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.novelbio.analysis.seq.denovo.N50AndSeqLen;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.rnaseq.Trinity;
+import com.novelbio.analysis.seq.rnaseq.TrinityCopeIso;
+import com.novelbio.base.dataStructure.listOperate.HistList;
+import com.novelbio.base.fileOperate.FileOperate;
 
 public class CtrlTrinity {
 	CopeFastq copeFastq;
@@ -83,7 +87,26 @@ public class CtrlTrinity {
 				trinity.setLsRightFq(lsFqRight);
 			}
 			trinity.runTrinity();
+			String outFile = trinity.getResultPath();
+			copeAfterAssembly(outFile);
 		}
+	}
+	
+	private void copeAfterAssembly(String trinityFile) {
+		if (!FileOperate.isFileExistAndBigThanSize(trinityFile, 0)) {
+			return;
+		}
+		N50AndSeqLen n50AndSeqLen = new N50AndSeqLen(trinityFile);
+		//TODＯ 这里需要自动化生成图表
+		HistList histList = n50AndSeqLen.gethListLength();
+		n50AndSeqLen.getLsNinfo();
+		
+		TrinityCopeIso trinityCopeIso = new TrinityCopeIso();
+		trinityCopeIso.setInFileName(trinityFile);
+		trinityCopeIso.setOutTrinityGeneFile(FileOperate.changeFileSuffix(trinityFile, "_Gene", "fa"));
+		trinityCopeIso.setOutTrinityIsoFile(FileOperate.changeFileSuffix(trinityFile, "_Iso", "fa"));
+		trinityCopeIso.removeTmpFile();
+		trinityCopeIso.cope();
 	}
 	
 }

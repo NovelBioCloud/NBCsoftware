@@ -23,6 +23,7 @@ import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.base.gui.JTextFieldData;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.database.updatedb.database.BlastUp2DB;
+import com.novelbio.nbcgui.controlquery.CtrlBlast;
 
 public class GuiBlast extends JPanel implements GuiNeedOpenFile{
 	private JTextField textQueryFasta;
@@ -31,7 +32,7 @@ public class GuiBlast extends JPanel implements GuiNeedOpenFile{
 	private JTextFieldData textResultNum;
 	private JTextField textResultFile;
 	
-	private BlastNBC blastNBC = new BlastNBC();
+	private CtrlBlast ctrlBlast = new CtrlBlast();
 	
 	GUIFileOpen fileOpen = new GUIFileOpen();
 	JCheckBox chbRefStyle = null;
@@ -147,18 +148,18 @@ public class GuiBlast extends JPanel implements GuiNeedOpenFile{
 		btnRunblast.setBounds(279, 439, 98, 24);
 		btnRunblast.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				blastNBC.setBlastType(combBlastType.getSelectedValue());
+				ctrlBlast.setBlastType(combBlastType.getSelectedValue());
 				try {
-					blastNBC.setCpuNum(Integer.parseInt(txtThreadNum.getText()));
+					ctrlBlast.setCpuNum(Integer.parseInt(txtThreadNum.getText()));
 				} catch (Exception e2) { }
-				blastNBC.setDatabaseSeq(textSubjectFasta.getText());
-				blastNBC.setQueryFastaFile(textQueryFasta.getText());
-				blastNBC.setEvalue(Double.parseDouble(textEvalue.getText()));
-				blastNBC.setResultAlignNum(Integer.parseInt(textResultNum.getText()));
-				blastNBC.setResultSeqNum(Integer.parseInt(textResultNum.getText()));
-				blastNBC.setResultFile(textResultFile.getText());
-				blastNBC.setResultType((Integer)combResultType.getSelectedValue());
-				blastNBC.blast();
+				ctrlBlast.setDatabaseSeq(textSubjectFasta.getText());
+				ctrlBlast.setQueryFastaFile(textQueryFasta.getText());
+				ctrlBlast.setEvalue(Double.parseDouble(textEvalue.getText()));
+				ctrlBlast.setResultAlignNum(Integer.parseInt(textResultNum.getText()));
+				ctrlBlast.setResultSeqNum(Integer.parseInt(textResultNum.getText()));
+				ctrlBlast.setResultFile(textResultFile.getText());
+				ctrlBlast.setResultType((Integer)combResultType.getSelectedValue());
+				ctrlBlast.blast();
 			}
 		});
 		add(btnRunblast);

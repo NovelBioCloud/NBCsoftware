@@ -7,7 +7,7 @@ import com.novelbio.base.dataOperate.ExcelTxtRead;
 
 public class TestBase {
 	public static void main(String[] args) {
-		List<List<String>> lsls =  ExcelTxtRead.readLsExcelTxtls("/home/novelbio/桌面/100S_MappingStatistic.xls", "statisticsTerm", 1);
+		List<String[]> lsls =  ExcelTxtRead.readLsExcelTxt("/home/novelbio/桌面/100S_MappingStatistic.xls", 2, 1);
 		System.out.println(lsls.size());
 	}
 }
