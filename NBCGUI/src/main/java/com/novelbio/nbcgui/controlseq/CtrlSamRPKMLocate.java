@@ -34,7 +34,10 @@ import com.novelbio.database.model.species.Species;
 import com.novelbio.nbcReport.EnumTableType;
 import com.novelbio.nbcReport.XdocTmpltExcel;
 import com.novelbio.nbcReport.XdocTmpltPic;
+import com.novelbio.nbcReport.Params.EnumReport;
+import com.novelbio.nbcReport.Params.ReportGeneExpression;
 import com.novelbio.nbcReport.Params.ReportSamAndRPKM;
+import com.novelbio.nbcgui.FoldeCreate;
 import com.novelbio.nbcgui.GUI.GuiSamStatistics;
 
 @Component
@@ -51,11 +54,16 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	boolean isCountExpression = true;
 	boolean isCalculateFPKM = true;
 	
+	
 	StrandSpecific strandSpecific = StrandSpecific.NONE;
 	
 	String picPathAndName;
 	
 	String excelPathAndName;
+	
+	String RPKMFileName;
+	
+	String fragmentsFileName;
 	
 	String  geneStructureResultFile;
 	
@@ -121,7 +129,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	}
 	/** 设定输出文件路径前缀 */
 	public void setResultPrefix(String resultPrefix) {
-		this.resultPrefix = resultPrefix;
+		this.resultPrefix = FoldeCreate.createAndInFold(resultPrefix, EnumReport.FastQC.getResultFolder());
 	}
 	
 	public void run() {
@@ -293,7 +301,10 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			
 			String outTPM = FileOperate.changeFileSuffix(resultPrefix, tpm, "txt");
 			String outRPKM = FileOperate.changeFileSuffix(resultPrefix, suffixRPKM, "txt");
+			
+			RPKMFileName = outRPKM;
 			String outCounts = FileOperate.changeFileSuffix(resultPrefix, suffixCounts, "txt");
+			fragmentsFileName = outCounts;
 			String outUQRPKM = FileOperate.changeFileSuffix(resultPrefix, suffixUQRPKM, "txt");
 			
 			List<String[]> lsTpm = rpkMcomput.getLsTPMs();
@@ -402,8 +413,37 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		lsResultFile.add(geneStructureResultFile);
 		lsResultFile.add(picPathAndName);
 		reportSamAndRPKM.setSetResultFile(lsResultFile);
-		
+		reportSamAndRPKM.writeAsFile(resultPrefix);
 		return reportSamAndRPKM;
+	}
+	
+	public ReportGeneExpression getReportGeneExp() {
+		ReportGeneExpression reportGeneExpression = new ReportGeneExpression();
+		if (isCalculateFPKM) {
+			reportGeneExpression.setGeneExpType("FPKM");
+		}else {
+			reportGeneExpression.setGeneExpType("RPKM");
+		}
+		
+		List<XdocTmpltExcel> lsXdocTmpltExcels = new ArrayList<>();	
+		XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(EnumTableType.GeneExp.getXdocTable());
+		xdocTmpltExcel.addExcel(FileHadoop.getHdfsHeadSymbol(fragmentsFileName), 1);
+		xdocTmpltExcel.setExcelTitle("标准化Fragment值列表");
+		
+		XdocTmpltExcel xdocTmpltExcel2 = new XdocTmpltExcel(EnumTableType.GeneExp.getXdocTable());
+		xdocTmpltExcel2.addExcel(FileHadoop.getHdfsHeadSymbol(RPKMFileName), 1);
+		xdocTmpltExcel2.setExcelTitle("标准化FPKM值列表");
+		lsXdocTmpltExcels.add(xdocTmpltExcel);
+		lsXdocTmpltExcels.add(xdocTmpltExcel2);
+		
+		
+		reportGeneExpression.setLsExcels(lsXdocTmpltExcels);
+		Set<String> lsResult = new LinkedHashSet<>();
+		lsResult.add(fragmentsFileName);
+		lsResult.add(RPKMFileName);
+		reportGeneExpression.setSetResultFile(lsResult);
+		reportGeneExpression.writeAsFile(resultPrefix);
+		return reportGeneExpression;
 	}
 	
 	

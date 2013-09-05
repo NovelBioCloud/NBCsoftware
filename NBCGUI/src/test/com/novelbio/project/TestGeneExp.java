@@ -24,7 +24,6 @@ public class TestGeneExp {
 	@Before
 	public void init() {
 		reportGeneExpressionAll = new ReportGeneExpressionAll();
-		List<ReportGeneExpression> lsExpressions = new ArrayList<>();
 		ReportGeneExpression reportGeneExpression = new ReportGeneExpression();
 		reportGeneExpression.setGeneExpType("FPKM");
 		List<XdocTmpltExcel> lsXdocTmpltExcels = new ArrayList<>();	
@@ -35,6 +34,7 @@ public class TestGeneExp {
 		XdocTmpltExcel xdocTmpltExcel2 = new XdocTmpltExcel(EnumTableType.GeneExp.getXdocTable());
 		xdocTmpltExcel2.addExcel(FileHadoop.getHdfsHeadSymbol("/nbCloud/public/test/GeneExp/All_FPKM.txt"), 1);
 		xdocTmpltExcel2.setExcelTitle("标准化FPKM值列表");
+		lsXdocTmpltExcels.add(xdocTmpltExcel);
 		lsXdocTmpltExcels.add(xdocTmpltExcel2);
 		
 		
@@ -43,8 +43,8 @@ public class TestGeneExp {
 		lsResult.add("/media/hdfs/nbCloud/staff/gaozhu/我的文档/GeneExpression_result/All_FPKM.txt");
 		lsResult.add("/media/hdfs/nbCloud/staff/gaozhu/我的文档/GeneExpression_result/All_Fragments.txt");
 		reportGeneExpression.setSetResultFile(lsResult);
-		lsExpressions.add(reportGeneExpression);
-		reportGeneExpressionAll.setLsExpressions(lsExpressions);
+		reportGeneExpression.writeAsFile("/hdfs:/nbCloud/staff/gaozhu/我的文档/GeneExpression_result");
+
 		
 	}
 	

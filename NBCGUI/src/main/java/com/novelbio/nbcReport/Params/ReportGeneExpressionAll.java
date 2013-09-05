@@ -5,12 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.nbcReport.XdocTmpltExcel;
 
 public class ReportGeneExpressionAll  extends ReportBase{
 
 	String no= "${no}";
-	List<ReportGeneExpression> lsExpressions;
+	List<ReportGeneExpression> lsExpressions = new ArrayList<>();
 	
 	@Override
 	protected Map<String, Object> addParamMap() {
@@ -23,6 +24,7 @@ public class ReportGeneExpressionAll  extends ReportBase{
 	
 	
 	public String getNo() {
+		System.out.println(no);
 		return no;
 	}
 
@@ -31,6 +33,9 @@ public class ReportGeneExpressionAll  extends ReportBase{
 	public void setNo(String no) {
 		this.no = no;
 	}
+
+
+
 
 
 
@@ -45,6 +50,10 @@ public class ReportGeneExpressionAll  extends ReportBase{
 	}
 
 
+	private void addGeneExp(ReportGeneExpression reportGeneExpression) {
+		lsExpressions.add(reportGeneExpression);
+	}
+	
 
 	@Override
 	public EnumReport getEnumReport() {
@@ -55,8 +64,16 @@ public class ReportGeneExpressionAll  extends ReportBase{
 
 	@Override
 	public boolean readReportFromFile(String savePath) {
-		
-		return false;
+		List<String> lsReportFiles = FileOperate.getFoldFileNameLs(FileOperate.addSep(savePath)+".report", "report_*", "*");
+		for (String reportFile : lsReportFiles) {
+			try {
+				ReportGeneExpression reportGeneExpression = (ReportGeneExpression)FileOperate.readFileAsObject(reportFile);
+				addGeneExp(reportGeneExpression);
+			} catch (Exception e) {
+				continue;
+			}
+		}
+		return true;
 	}
 
 

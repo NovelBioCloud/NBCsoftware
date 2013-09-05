@@ -11,7 +11,7 @@ public enum EnumTableType implements Serializable{
 	Pathway_Result(new XdocTable("100,100,60,60,60,60,60,60,80,80", "c,l,c,c,c,c,c,c,c,c")), 
 	Pathway_Gene2Path(new XdocTable("80,80,120,120,150,50,50")), 
 
-	DifGene(new XdocTable("120,80,220,40,40,60,60,50" )),
+	DifGene(new XdocTable("120,80,220,40,40,60,60,50",20)),
 	
 	MappingResult(new XdocTable("200,200",10)),
 	MappingChrFile(new XdocTable("100,150,150,150,150",25)),

@@ -7,7 +7,7 @@ import java.util.Set;
 
 import com.novelbio.nbcReport.XdocTmpltExcel;
 
-public class ReportGeneExpression {
+public class ReportGeneExpression  extends ReportBase{
 	
 	Set<String> setResultFile;
 	String geneExpType;
@@ -29,6 +29,9 @@ public class ReportGeneExpression {
 	public void setSetResultFile(Set<String> setResultFile) {
 		this.setResultFile = setResultFile;
 	}
+	public String getGeneExpType() {
+		return geneExpType;
+	}
 
 	public void setGeneExpType(String geneExpType) {
 		this.geneExpType = geneExpType;
@@ -42,6 +45,17 @@ public class ReportGeneExpression {
 	}
 	public void setLsExcels(List<XdocTmpltExcel> lsExcels) {
 		this.lsExcels = lsExcels;
+	}
+
+	@Override
+	public EnumReport getEnumReport() {
+		return EnumReport.GeneExp;
+	}
+
+	@Override
+	public boolean readReportFromFile(String savePath) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 	

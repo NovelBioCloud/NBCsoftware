@@ -5,20 +5,9 @@
       <text fontName="黑体" name="3" fontSize="16">3.2.${no} 差异基因表达分析（Difference Expression）</text>
     </para>
     <para lineSpacing="4" />
-    <para lineSpacing="4" >
-      <text fontName="宋体" fontSize="14">\t${transcript}作为高通量基因表达量检测的重要方法，有着十分广泛的应用。${transcript}分析的前提是差异鉴别，但是常见的芯片实验中生物学重复数量较少。因此，选用一种合理有效的检验方法来筛选差异基因极为关键。  </text>
-    </para>
     <para lineSpacing="4" />
     <para lineSpacing="4" name="title" >
-      <text fontName="黑体" name="4" fontSize="16">3.2.${no}.1 方法</text>
-    </para>
-    <para lineSpacing="4" />
-    <para lineSpacing="4" >
-      <text fontName="宋体" fontSize="14">\t我们对已知表达量的基因进行统计，判断样本之间基因表达量是否存在显著差异。具体分析步骤如下：</text>
-    </para>
-    <para lineSpacing="4" />
-    <para lineSpacing="4" name="title" >
-      <text fontName="黑体" name="5" fontSize="16">3.2.${no}.1.1 标准化（Normalization）</text>
+      <text fontName="黑体" name="5" fontSize="16">3.2.${no}.1 标准化（Normalization）</text>
     </para>
     <para lineSpacing="4" />
     <para lineSpacing="4" >
@@ -26,45 +15,37 @@
     </para>
     <para lineSpacing="4" />
     <para lineSpacing="4" name="title">
-      <text fontName="黑体"  name="5" fontSize="16">3.2.${no}.1.2 差异基因筛选（Dif-Gene-Finder）</text>
+      <text fontName="黑体"  name="5" fontSize="16">3.2.${no}.2 差异基因筛选（Dif-Gene-Finder）</text>
     </para>
     <para lineSpacing="4" />
     <para lineSpacing="4" >
-      <text fontName="宋体" fontSize="14">\t使用标准化后的结果通过基于贝叶斯的Limma模型对样本间的表达值进行Fold Change、P-value以及FDR的分析。其中logFC&gt;1或LogFC&lt;-1 ，${finderCondition}。</text>
+      <text fontName="宋体" fontSize="14">\t对于差异基因的筛选，我们采用Upper-quartile的算法来进行校正，然后结合国际公认算法${difGeneType}进行差异筛选。差异基因筛选时，log2FC大于${log2FC}或log2FC小于${log2FC}，Pvalue小于${pvalue}，FDR小于${FDR}。</text>
     </para>
     <para lineSpacing="4" />
     <para lineSpacing="4" name="title" >
-      <text fontName="黑体" name="5" fontSize="16">3.2.${no}.1.3 差异基因聚类（Heatmap）</text>
+      <text fontName="黑体" name="4" fontSize="16">3.2.${no}.3结果</text>
     </para>
+    
+    <#list lsDifGenes as difGene>
     <para lineSpacing="4" />
     <para lineSpacing="4" >
-      <text fontName="宋体" fontSize="14">\t我们对差异基因的表达值进行聚类，并获得可视化图（Heatmap）。</text>
-    </para>
-    <para lineSpacing="4" />
-    <para lineSpacing="4" name="title" >
-      <text fontName="黑体" name="4" fontSize="16">3.2.${no}.2 结果</text>
-    </para>
-    <para lineSpacing="4" />
-    <para lineSpacing="4" >
-      <text fontName="宋体" fontSize="14">\t通过差异基因筛选，${result}</text>
+      <text fontName="宋体" fontSize="14">\t通过差异基因筛选</text>
       <text fontName="宋体" fontSize="14">通过差异基因聚类图分析，两组差异基因均呈现明显“田”字格，可用于后续分析。</text>
     </para>
     <para lineSpacing="4" >
      <text fontName="宋体" fontSize="14">\t差异基因表达分析具体结果获取路径如下：</text>
     </para>
-    <#list lsResultFiles as resultFile>
+    <#list difGene.lsResults as resultFile>
     	<para lineSpacing="4" >
     	<text fontName="宋体" fontSize="14">\t${resultFile}</text>
     	</para>
     </#list>
     <para lineSpacing="4" />
-    <#list lsExcels as excel>
+    <#list difGene.lsTmpltExcels as excel>
     	${excel}
-    	<#if !excel_has_next >
-    		<para lineSpacing="4" align="center">
-		      <text fontName="宋体" fontSize="14">差异基因筛选列表说明</text>
-		    </para>
-		    <para lineSpacing="4" align="center">
+    </#list>
+    </#list>
+    <para lineSpacing="4" align="center">
 		      <table cols="140,415" height="322" name="x241" left="918" top="143" width="555" rows="28,31,31,31,54,31,54,31,31">
 		        <cell col="1" name="x242" sizeType="autoheight" fillColor="#1e90ff" row="1"  color="#ffffff">
 		          <para lineSpacing="4">
@@ -153,18 +134,12 @@
 		        </cell>
 		        <cell col="2" name="x320" sizeType="autoheight" row="9" fillColor="#d3d3d3" color="#ffffff">
 		          <para lineSpacing="4">
-		            <text fontName="宋体">标准化过的基因表达信号值。</text>
+		            <text fontName="宋体">标准化过的${difGeneType}值。</text>
 		          </para>
 		        </cell>
 		      </table>
 		    </para>
-    	</#if>
-    </#list>
-
-     <!-- 差异基因对应的图 -->
-    <#list lsPictures as picture>
-	    ${picture}
-    </#list>	
+	
    
    
   
