@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.novelbio.analysis.diffexpress.DiffExpAbs;
 import com.novelbio.analysis.diffexpress.DiffExpInt;
+import com.novelbio.nbcReport.Params.ReportDifGene;
 
 public class CtrlDifGene {
 	DiffExpInt diffExpAbs;
@@ -42,5 +43,13 @@ public class CtrlDifGene {
 	public void clean() {
 		diffExpAbs.clean();
 	}
+	
+	public ReportDifGene getDiffReport() {
+
+		
+		
+		return null;
+	}
+	
 	
 }
