@@ -18,9 +18,8 @@ import com.novelbio.generalConf.TitleFormatNBC;
  * @author zong0jie
  */
  public class DiffGeneVocalno {
-	 
 	 /**给出图中的比例*/
-		public static final double  PRE = 0.999;
+	 public static final double  PRE = 0.999;
 		
 	// 满足条件的差异基因数量,默认是1000，在构造方法里面设定，数量的10/1
 	public static  int QUANUM = 1000;
