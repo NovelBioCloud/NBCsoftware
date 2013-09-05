@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.nbcReport.EnumTableType;
+import com.novelbio.nbcReport.XdocTmpltExcel;
+
 
 /**
  * GOAnalysis参数对象类，记录结果报告所需要的参数
@@ -67,8 +71,16 @@ public class ReportGOAll extends ReportBase {
 
 	@Override
 	public boolean readReportFromFile(String savePath) {
-		// TODO Auto-generated method stub
-		return false;
+		List<String> lsReportFiles = FileOperate.getFoldFileNameLs(FileOperate.addSep(savePath)+".report", "report_*", "*");
+		for (String reportFile : lsReportFiles) {
+			try {
+				ReportGO reportGO = (ReportGO)FileOperate.readFileAsObject(reportFile);
+				addReportGO(reportGO);
+			} catch (Exception e) {
+				continue;
+			}
+		}
+		return true;
 	}
 	
 	

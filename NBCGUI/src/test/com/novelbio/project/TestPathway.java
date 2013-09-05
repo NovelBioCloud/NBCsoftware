@@ -49,7 +49,6 @@ public class TestPathway {
 	public void pathWayRun(){
 		String[] excelFiles = mapParams.get("inputData");
 		String[] excelPrefixs = mapParams.get("inputDataPrefix");
-		ReportPathWayAll reportPathWayAll = new ReportPathWayAll();
 		for (int i = 0; i < excelFiles.length; i++) {
 			int colAccID = Integer.parseInt(mapParams.get("acclDColNum")[0]);
 			int colFC = Integer.parseInt(mapParams.get("valueColNum")[0]);
@@ -92,14 +91,12 @@ public class TestPathway {
 			for (String file : ctrlPath.getReportPathWay().getSetResultRealFiles()) {
 				Assert.assertTrue(FileOperate.isFileExist(file));
 			}
-			reportPathWayAll.addReportPathWay(ctrlPath.getReportPathWay());
+			ctrlPath.getReportPathWay().writeAsFile(FileOperate.addSep(mapParams.get("savePath")[0]) + EnumReport.PathWay.getResultFolder());
 		}
-		reportPathWayAll.outputReportXdoc(FileOperate.addSep(mapParams.get("savePath")[0]) + EnumReport.PathWay.getResultFolder());
-		Assert.assertTrue(FileOperate.isFileExist(FileOperate.addSep(mapParams.get("savePath")[0]) + 
-				EnumReport.PathWay.getResultFolder() + FileOperate.getSepPath() + EnumReport.PathWay.getReportXdocFileName()));
+		
 	}
 	
-	//@Test
+	@Test
 	public void runReport() {
 		List<String> lsFolders = new ArrayList<>();
 		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.PathWay.getResultFolder()));

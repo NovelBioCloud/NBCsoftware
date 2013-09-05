@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.novelbio.base.fileOperate.FileOperate;
+
 public class ReportPathWayAll extends ReportBase{
 	private String no = "${no}";
 	private List<ReportPathWay> lsReportPathWays = new ArrayList<ReportPathWay>();
@@ -55,6 +57,20 @@ public class ReportPathWayAll extends ReportBase{
 			}
 		}
 		return result[conditionNum];
+	}
+
+	@Override
+	public boolean readReportFromFile(String savePath) {
+		List<String> lsReportFiles = FileOperate.getFoldFileNameLs(FileOperate.addSep(savePath)+".report", "report_*", "*");
+		for (String reportFile : lsReportFiles) {
+			try {
+				ReportPathWay reportPathWay = (ReportPathWay)FileOperate.readFileAsObject(reportFile);
+				addReportPathWay(reportPathWay);
+			} catch (Exception e) {
+				continue;
+			}
+		}
+		return true;
 	}
 	
 }

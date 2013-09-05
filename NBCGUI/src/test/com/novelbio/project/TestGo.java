@@ -16,7 +16,6 @@ import com.novelbio.base.fileOperate.FileHadoop;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.service.SpringFactory;
 import com.novelbio.nbcReport.Params.EnumReport;
-import com.novelbio.nbcReport.Params.ReportGOAll;
 import com.novelbio.nbcReport.Params.ReportProject;
 import com.novelbio.nbcgui.controltest.CtrlTestGOInt;
 
@@ -47,7 +46,6 @@ public class TestGo {
 	public void goRun(){
 		String[] excelFiles = mapParams.get("inputData");
 		String[] excelPrefixs = mapParams.get("inputDataPrefix");
-		ReportGOAll reportGOAll = new ReportGOAll();
 		for (int i = 0; i < excelFiles.length; i++) {
 			CtrlTestGOInt ctrlGO = (CtrlTestGOInt)SpringFactory.getFactory().getBean("ctrlGOall");
 			Assert.assertNotNull(ctrlGO);
@@ -98,17 +96,11 @@ public class TestGo {
 			ctrlGO.setTeamName(excelPrefixs[i]);
 			ctrlGO.run();
 			ctrlGO.saveExcel(FileOperate.addSep(mapParams.get("savePath")[0])+excelPrefixs[i]);
-			for (String file : ctrlGO.getReportGO().getSetResultRealFiles()) {
-				Assert.assertTrue(FileOperate.isFileExist(file));
-			}
-			reportGOAll.addReportGO(ctrlGO.getReportGO());
+			ctrlGO.getReportGO().writeAsFile(FileOperate.addSep(mapParams.get("savePath")[0]) + EnumReport.GOAnalysis.getResultFolder());
 		}
-		reportGOAll.outputReportXdoc(FileOperate.addSep(mapParams.get("savePath")[0]) + EnumReport.GOAnalysis.getResultFolder());
-		Assert.assertTrue(FileOperate.isFileExist(FileOperate.addSep(mapParams.get("savePath")[0]) + 
-				EnumReport.GOAnalysis.getResultFolder() + FileOperate.getSepPath() + EnumReport.GOAnalysis.getReportXdocFileName()));
 	}
 	
-	//@Test
+	@Test
 	public void runReport() {
 		List<String> lsFolders = new ArrayList<>();
 		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.GOAnalysis.getResultFolder()));
