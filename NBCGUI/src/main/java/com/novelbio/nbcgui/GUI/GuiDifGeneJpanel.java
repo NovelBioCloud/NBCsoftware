@@ -22,6 +22,7 @@ import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
+import com.novelbio.nbcgui.controltest.CtrlDifGene;
 
 public class GuiDifGeneJpanel extends JPanel {
 	JScrollPaneData scrollPaneNormData;
@@ -29,7 +30,7 @@ public class GuiDifGeneJpanel extends JPanel {
 	JScrollPaneData scrollPaneDesign;
 	GUIFileOpen guiFileOpen = new GUIFileOpen();
 	ArrayList<String[]> lsGeneInfo;
-	DiffExpInt diffExpAbs;
+	CtrlDifGene diffExpAbs;
 	JComboBoxData<Integer> cmbMethod;
 	
 	JComboBoxData<String> cmbGroup = new JComboBoxData<String>();
@@ -125,7 +126,7 @@ public class GuiDifGeneJpanel extends JPanel {
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<String[]> lsCol2Sample = scrollPaneSample.getLsDataInfo();
-				diffExpAbs = DiffExpAbs.createDiffExp(cmbMethod.getSelectedValue());
+				diffExpAbs = new CtrlDifGene(cmbMethod.getSelectedValue());
 				if (!txtColAccID.getText().trim().equals("")) {
 					diffExpAbs.setColID(Integer.parseInt(txtColAccID.getText()));
 				}
