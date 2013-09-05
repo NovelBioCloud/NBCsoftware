@@ -20,6 +20,7 @@ import com.novelbio.nbcReport.Params.ReportDifGene;
 import com.novelbio.nbcReport.Params.ReportDifGeneAll;
 import com.novelbio.nbcReport.Params.ReportGeneExpressionAll;
 import com.novelbio.nbcReport.Params.ReportProject;
+import com.novelbio.nbcgui.controltest.DiffExpAbs;
 
 public class TestDifGene {
 	
@@ -27,21 +28,8 @@ public class TestDifGene {
 	
 	@Before
 	public void init() {
-
-		ReportDifGene reportDifGene = new ReportDifGene();
-		reportDifGene.setDiffGeneType("DEGSeq");
-		reportDifGene.setLog2FC(0.585);
-		reportDifGene.setpValue(0.05);
-		Set<String> lsList = new HashSet<>();
-		lsList.add("/media/hdfs/nbCloud/staff/gaozhu/我的文档/Difference-Expression_result/Dif-mRNA.xls");
-		reportDifGene.setLsResults(lsList);
-		List<XdocTmpltExcel> lsTmpltExcels = new ArrayList<>();
-		XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(EnumTableType.DifGene.getXdocTable());
-		xdocTmpltExcel.setExcelTitle("是差异基因表达分析结果的截图展示");
-		xdocTmpltExcel.addExcel(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/Difference-Expression_result/Dif-mRNA.xls"), 1);
-		lsTmpltExcels.add(xdocTmpltExcel);
-		reportDifGene.setLsTmpltExcels(lsTmpltExcels);
-		reportDifGene.writeAsFile("/hdfs:/nbCloud/staff/gaozhu/我的文档/Difference-Expression_result");
+		
+		
 		
 		
 
@@ -49,13 +37,10 @@ public class TestDifGene {
 	
 	@Test
 	public void runTest() {
-		reportDifGeneAll = new ReportDifGeneAll();
-		String savePath = FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/Difference-Expression_result");
-		List<String> lsList = new ArrayList<>();
-		lsList.add(savePath);
-		ReportProject reportProject = new ReportProject(lsList);
-		reportProject.outputReport("/home/novelbio/桌面/abd.docx");
-
+		
+		DiffExpAbs diffExpAbs = (DiffExpAbs) DiffExpAbs.createDiffExp(50);
+		diffExpAbs.setColID();
+		
 	}
 
 }

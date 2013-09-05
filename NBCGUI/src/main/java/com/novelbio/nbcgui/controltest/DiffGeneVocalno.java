@@ -11,6 +11,8 @@ import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.plot.PlotScatter;
 import com.novelbio.base.plot.Volcano;
 import com.novelbio.generalConf.TitleFormatNBC;
+import com.novelbio.nbcReport.Params.EnumReport;
+import com.novelbio.nbcgui.FoldeCreate;
 
 
 /**
@@ -207,7 +209,9 @@ import com.novelbio.generalConf.TitleFormatNBC;
 	 * @return
 	 */
 	public void writeDifGene() {
-		TxtReadandWrite txtWriteDifGene = new TxtReadandWrite(getDifGeneFileName(), true);
+		String outFile = getDifGeneFileName();
+		outFile = FoldeCreate.createAndInFold(outFile, EnumReport.FastQC.getResultFolder());
+		TxtReadandWrite txtWriteDifGene = new TxtReadandWrite(outFile, true);
 		txtWriteDifGene.writefilelnls(getLsDifGene());
 		txtWriteDifGene.close();
 	}

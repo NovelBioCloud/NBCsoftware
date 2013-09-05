@@ -7,7 +7,7 @@
     <para lineSpacing="4" />
     <para lineSpacing="4" />
     <para lineSpacing="4" name="title" >
-      <text fontName="黑体" name="5" fontSize="16">3.2.${no}.1 标准化（Normalization）</text>
+      <text fontName="黑体" name="4" fontSize="16">3.2.${no}.1 标准化（Normalization）</text>
     </para>
     <para lineSpacing="4" />
     <para lineSpacing="4" >
@@ -15,11 +15,11 @@
     </para>
     <para lineSpacing="4" />
     <para lineSpacing="4" name="title">
-      <text fontName="黑体"  name="5" fontSize="16">3.2.${no}.2 差异基因筛选（Dif-Gene-Finder）</text>
+      <text fontName="黑体"  name="4" fontSize="16">3.2.${no}.2 差异基因筛选（Dif-Gene-Finder）</text>
     </para>
     <para lineSpacing="4" />
     <para lineSpacing="4" >
-      <text fontName="宋体" fontSize="14">\t对于差异基因的筛选，我们采用Upper-quartile的算法来进行校正，然后结合国际公认算法${difGeneType}进行差异筛选。差异基因筛选时，log2FC大于${log2FC}或log2FC小于${log2FC}，Pvalue小于${pvalue}，FDR小于${FDR}。</text>
+      <text fontName="宋体" fontSize="14">\t对于差异基因的筛选，我们采用Upper-quartile的算法来进行校正，然后结合国际公认算法${difGeneType}进行差异筛选。差异基因筛选时，log2FC大于${log2FC}或log2FC小于${log2FC}，${titleFormatNBC}的阈值为${pValueOrFDR}</text>
     </para>
     <para lineSpacing="4" />
     <para lineSpacing="4" name="title" >

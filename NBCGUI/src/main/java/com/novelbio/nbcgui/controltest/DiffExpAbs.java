@@ -17,6 +17,7 @@ import com.novelbio.base.dataStructure.ArrayOperate;
 import com.novelbio.base.dataStructure.MathComput;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.service.SpringFactory;
+import com.novelbio.generalConf.TitleFormatNBC;
 
 import freemarker.template.Configuration;
 
@@ -43,6 +44,12 @@ public abstract class DiffExpAbs implements DiffExpInt {
 	String workSpace;
 	String fileNameRawdata = "";
 	String outScript = "";
+	
+	TitleFormatNBC titleFormatNBC;
+	
+	double logFC;
+	
+	double pValueOrFDR;
 	
 	ArrayList<String[]> lsGeneInfo = new ArrayList<String[]>();
 	/**
@@ -355,6 +362,9 @@ public abstract class DiffExpAbs implements DiffExpInt {
 		for (String excelFileName : mapExcelName2DifResultInfo.keySet()) {
 			DiffGeneVocalno difResultInfo = mapExcelName2DifResultInfo.get(excelFileName);
 			difResultInfo.writeDifGene();
+			titleFormatNBC= difResultInfo.getTitlePvalueFDR();
+			logFC =  difResultInfo.getUpfc();
+			pValueOrFDR = difResultInfo.getPvalueFDRthreshold();
 			difResultInfo.plotVolcanAndWriteParam(PLOT_WIDTH, PLOT_HEIGTH);
 		}
 		
@@ -405,6 +415,18 @@ public abstract class DiffExpAbs implements DiffExpInt {
 		txtReadandWrite.close();
 	}
 
+	public double getLogFC() {
+		return logFC;
+	}
+	
+	public double getpValueOrFDR() {
+		return pValueOrFDR;
+	}
+	
+	public TitleFormatNBC getTitleFormatNBC() {
+		return titleFormatNBC;
+	}
+	
 	/**
 	 * 返回method的文字与其ID对照表
 	 * ID就是本类的常量

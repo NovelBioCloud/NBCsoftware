@@ -1,19 +1,25 @@
 package com.novelbio.nbcgui.controltest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import com.novelbio.analysis.diffexpress.DiffExpAbs;
-import com.novelbio.analysis.diffexpress.DiffExpInt;
+import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.generalConf.TitleFormatNBC;
+import com.novelbio.nbcReport.EnumTableType;
+import com.novelbio.nbcReport.XdocTmpltExcel;
 import com.novelbio.nbcReport.Params.ReportDifGene;
 
 public class CtrlDifGene {
-	DiffExpInt diffExpAbs;
+	DiffExpAbs diffExpAbs;
 	
 	/**
 	 * @param diffGeneID {@link DiffExpAbs#DEGSEQ} 等
 	 */
 	public CtrlDifGene(int diffGeneID) {
-		diffExpAbs = DiffExpAbs.createDiffExp(diffGeneID);
+		diffExpAbs = (DiffExpAbs) DiffExpAbs.createDiffExp(diffGeneID);
 	}
 
 	public void setCol2Sample(ArrayList<String[]> lsSampleColumn2GroupName) {
@@ -45,10 +51,29 @@ public class CtrlDifGene {
 	}
 	
 	public ReportDifGene getDiffReport() {
-
+		double logFC =  diffExpAbs.getLogFC();
+		double pValueOrFDR = diffExpAbs.getpValueOrFDR();
+		TitleFormatNBC titleFormatNBC = diffExpAbs.getTitleFormatNBC();
+		List<String> lsResult =  diffExpAbs.getResultFileName();
+		Set<String> lsStrings = new HashSet<>();
+		lsStrings.addAll(lsResult);
+		ReportDifGene reportDifGene = new ReportDifGene();
+		reportDifGene.setLog2FC(logFC);
+		reportDifGene.setpValueOrFDR(pValueOrFDR);
+		reportDifGene.setTitleFormatNBC(titleFormatNBC);
+		reportDifGene.setLsResults(lsStrings);
+		List<XdocTmpltExcel> lsTmpltExcels = new ArrayList<>(); 
 		
-		
-		return null;
+		for (String string : lsStrings) {
+			XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(EnumTableType.DifGene.getXdocTable());
+			xdocTmpltExcel.setExcelTitle("差异基因表达分析结果的截图展示");
+			xdocTmpltExcel.addExcel(string, 1);
+			lsTmpltExcels.add(xdocTmpltExcel);
+		}
+		String outFolder = FileOperate.getParentPathName(lsResult.get(0));
+		reportDifGene.setLsTmpltExcels(lsTmpltExcels);
+		reportDifGene.writeAsFile(outFolder);
+		return reportDifGene;
 	}
 	
 	

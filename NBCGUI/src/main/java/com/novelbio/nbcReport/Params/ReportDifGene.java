@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.novelbio.generalConf.TitleFormatNBC;
 import com.novelbio.nbcReport.XdocTmpltExcel;
 
 public class ReportDifGene  extends ReportBase{
@@ -14,9 +15,9 @@ public class ReportDifGene  extends ReportBase{
 	
 	double log2FC;
 	
-	double pValue;
+	double pValueOrFDR;
 	
-	double FDR;
+	TitleFormatNBC titleFormatNBC;
 	
 	Set<String> lsResults ;
 	
@@ -44,13 +45,6 @@ public class ReportDifGene  extends ReportBase{
 		log2FC = log2fc;
 	}
 
-	public double getpValue() {
-		return pValue;
-	}
-
-	public void setpValue(double pValue) {
-		this.pValue = pValue;
-	}
 
 	public Set<String> getLsResults() {
 		Set<String> lsSet = new LinkedHashSet<>();
@@ -66,12 +60,21 @@ public class ReportDifGene  extends ReportBase{
 	
 	
 
-	public double getFDR() {
-		return FDR;
+
+	public double getpValueOrFDR() {
+		return pValueOrFDR;
 	}
 
-	public void setFDR(double fDR) {
-		FDR = fDR;
+	public void setpValueOrFDR(double pValueOrFDR) {
+		this.pValueOrFDR = pValueOrFDR;
+	}
+
+	public TitleFormatNBC getTitleFormatNBC() {
+		return titleFormatNBC;
+	}
+
+	public void setTitleFormatNBC(TitleFormatNBC titleFormatNBC) {
+		this.titleFormatNBC = titleFormatNBC;
 	}
 
 	public List<String> getLsTmpltExcels() {
