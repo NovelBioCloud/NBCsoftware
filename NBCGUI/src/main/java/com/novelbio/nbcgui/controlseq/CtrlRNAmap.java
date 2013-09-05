@@ -15,6 +15,7 @@ import com.novelbio.analysis.seq.mapping.MapTophat;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.base.dataStructure.MathComput;
 import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.nbcReport.Params.EnumReport;
 
 public class CtrlRNAmap {
 	public static final int TOP_HAT = 2;
@@ -70,7 +71,13 @@ public class CtrlRNAmap {
 	}
 	
 	public void setOutPathPrefix(String outPathPrefix) {
-		this.outPrefix = outPathPrefix;
+		String outPath = FileOperate.addSep(outPathPrefix) + EnumReport.RNASeqMap.getResultFolder() + FileOperate.getSepPath();
+		FileOperate.createFolders(outPath);
+		this.outPrefix = outPath;
+	}
+	
+	public String getOutPrefix() {
+		return outPrefix;
 	}
 	/** MapTop里面的参数 */
 	public void setStrandSpecifictype(StrandSpecific strandSpecifictype) {

@@ -27,7 +27,7 @@ public class TestFastQC {
 	public void init(){
 		mapParams = new HashMap<String, String[]>();
 		mapParams.put("leftFqs", new String[]{"/hdfs:/nbCloud/public/test/fastq/testFastQLeft.fq,/hdfs:/nbCloud/public/test/fastq/test1FastQLeft.fq"});
-		mapParams.put("prefixs", new String[]{"test,test1"});
+		mapParams.put("prefixs", new String[]{"AvsB,CvsD"});
 		mapParams.put("rightFq", new String[]{"/hdfs:/nbCloud/public/test/fastq/testFastQRight.fq,/hdfs:/nbCloud/public/test/fastq/test1FastQRight.fq"});
 		mapParams.put("leftAdaptor", new String[]{""});
 		mapParams.put("rightAdaptor", new String[]{""});
@@ -41,7 +41,7 @@ public class TestFastQC {
 		
 	}
 	
-	//@Test
+	@Test
 	public void pathWayRun(){
 		CtrlFastQ ctrlFastQ = (CtrlFastQ)SpringFactory.getFactory().getBean("ctrlFastQ");
 		ArrayList<String> lsLeftFq = ArrayOperate.converArray2List(mapParams.get("leftFqs")[0].split(","));
@@ -70,6 +70,7 @@ public class TestFastQC {
 	public void runReport() {
 		List<String> lsFolders = new ArrayList<>();
 		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.FastQC.getResultFolder()));
+		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的图片/"+EnumReport.FastQC.getResultFolder()));
 		ReportProject reportProject = new ReportProject(lsFolders);
 		String reportTest = "/home/novelbio/桌面/testReportFastQC.docx";
 		reportProject.outputReport(reportTest);

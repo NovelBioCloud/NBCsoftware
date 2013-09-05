@@ -9,7 +9,7 @@ import java.util.Set;
 import com.novelbio.nbcReport.XdocTmpltExcel;
 import com.novelbio.nbcReport.XdocTmpltPic;
 
-public class ReportPathWay{
+public class ReportPathWay extends ReportBase{
 	/** 所使用的数据库 */
 	private String db;
 	/** 筛选条件 */
@@ -21,6 +21,10 @@ public class ReportPathWay{
 	private List<XdocTmpltPic> lsXdocTmpltPics;
 	private List<XdocTmpltExcel> lsXdocTmpltExcels;
 	
+	
+	public ReportPathWay() {
+		// TODO Auto-generated constructor stub
+	}
 	/**
 	 * 添加图片模板
 	 * @param xdocTmpltPic
@@ -125,5 +129,15 @@ public class ReportPathWay{
 			setResultFiles = new LinkedHashSet<>();
 		}
 		setResultFiles.add(resultFile);
+	}
+
+	@Override
+	public EnumReport getEnumReport() {
+		return EnumReport.PathWay;
+	}
+
+	@Override
+	public boolean readReportFromFile(String savePath) {
+		return false;
 	}
 }
