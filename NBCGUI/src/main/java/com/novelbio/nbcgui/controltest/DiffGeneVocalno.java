@@ -68,6 +68,20 @@ import com.novelbio.generalConf.TitleFormatNBC;
 	 * @param excelName 含有结果的excle的名字
 	 * @param compare 谁跟谁比，譬如 string[]{treat, control}
 	 */
+	
+	public double getPvalueFDRthreshold() {
+		return pvalueFDRthreshold;
+	}
+	
+	public TitleFormatNBC getTitlePvalueFDR() {
+		return titlePvalueFDR;
+	}
+	
+	public static double getUpfc() {
+		return upfc;
+	}
+	
+	
 	public DiffGeneVocalno(String excelName, String[] compare) {
 		this.excelFileName = excelName;
 		
