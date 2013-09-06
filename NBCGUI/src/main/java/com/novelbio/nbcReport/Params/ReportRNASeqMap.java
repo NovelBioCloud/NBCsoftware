@@ -27,7 +27,7 @@ public class ReportRNASeqMap extends ReportBase{
 
 	@Override
 	public boolean readReportFromFile(String savePath) {
-		return false;
+		return true;
 	}
 	
 }
