@@ -26,12 +26,14 @@ import com.novelbio.analysis.seq.sam.AlignSeqReading;
 import com.novelbio.analysis.seq.sam.AlignmentRecorder;
 import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.analysis.seq.sam.SamFileStatistics;
+import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileHadoop;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.nbcReport.EnumTableType;
+import com.novelbio.nbcReport.XdocTable;
 import com.novelbio.nbcReport.XdocTmpltExcel;
 import com.novelbio.nbcReport.XdocTmpltPic;
 import com.novelbio.nbcReport.Params.EnumReport;
@@ -44,6 +46,7 @@ import com.novelbio.nbcgui.GUI.GuiSamStatistics;
 @Scope("prototype")
 public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	private static final Logger logger = Logger.getLogger(CtrlSamRPKMLocate.class);
+	
 	
 	GuiSamStatistics guiSamStatistics;
 	GffChrAbs gffChrAbs = new GffChrAbs();
@@ -78,6 +81,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	int[] tes;
 	
 	String resultPrefix;
+	List<String[]> lsCounts = null;
 
 	@Override
 	public void setGUI(GuiSamStatistics guiPeakStatistics) {
@@ -110,6 +114,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		tss = null;
 		tes = null;
 		
+		
 		resultPrefix = null;
 	}
 	
@@ -129,7 +134,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	}
 	/** 设定输出文件路径前缀 */
 	public void setResultPrefix(String resultPrefix) {
-		this.resultPrefix = FoldeCreate.createAndInFold(resultPrefix, EnumReport.FastQC.getResultFolder());
+		this.resultPrefix = FoldeCreate.createAndInFold(resultPrefix, EnumReport.SamAndRPKM.getResultFolder());
 	}
 	
 	public void run() {
@@ -145,7 +150,10 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	
+		
+		writeReportGeneExp();
+		WriteReportSamAndRPKM();
+		
 		done(null);
 		guiSamStatistics.getProcessBar().setValue(guiSamStatistics.getProcessBar().getMaximum());
 		guiSamStatistics.getBtnSave().setEnabled(true);
@@ -201,6 +209,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			if (samFileStatistics != null) {
 				List<String> lsStrings =  SamFileStatistics.saveInfo(resultPrefix+ prefix, samFileStatistics);
 				picPathAndName = lsStrings.get(0);
+				excelPathAndName = lsStrings.get(1);
 			}
 			logger.info("finish reading " + prefix);
 			try {
@@ -310,7 +319,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			List<String[]> lsTpm = rpkMcomput.getLsTPMs();
 			List<String[]> lsRpkm = rpkMcomput.getLsRPKMs();
 			List<String[]> lsUQRpkm = rpkMcomput.getLsUQRPKMs();
-			List<String[]> lsCounts = rpkMcomput.getLsCounts();
+			List<String[]> lsCounts2 = rpkMcomput.getLsCounts();
 			
 			TxtReadandWrite txtWriteRpm = new TxtReadandWrite(outTPM, true);
 			txtWriteRpm.ExcelWrite(lsTpm);
@@ -319,7 +328,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			TxtReadandWrite txtWriteUQRpkm = new TxtReadandWrite(outUQRPKM, true);
 			txtWriteUQRpkm.ExcelWrite(lsUQRpkm);
 			TxtReadandWrite txtWriteCounts = new TxtReadandWrite(outCounts, true);
-			txtWriteCounts.ExcelWrite(lsCounts);
+			txtWriteCounts.ExcelWrite(lsCounts2);
 			txtWriteCounts.close();
 			txtWriteRpkm.close();
 			txtWriteUQRpkm.close();
@@ -343,7 +352,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			List<String[]> lsTpm = rpkMcomput.getLsTPMsCurrent();
 			List<String[]> lsRpkm = rpkMcomput.getLsRPKMsCurrent();
 			List<String[]> lsUQRpkm = rpkMcomput.getLsUQRPKMsCurrent();
-			List<String[]> lsCounts = rpkMcomput.getLsCountsCurrent();
+			lsCounts = rpkMcomput.getLsCountsCurrent();
 			TxtReadandWrite txtWriteRpm = new TxtReadandWrite(outTPM, true);
 			txtWriteRpm.ExcelWrite(lsTpm);
 			TxtReadandWrite txtWriteRpkm = new TxtReadandWrite(outRPKM, true);
@@ -374,24 +383,23 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			
 			SamFileStatistics samFileStatistics = mapPrefix2Statistics.get(prefix);
 			String outSamStatistics = FileOperate.changeFileSuffix(resultPrefix, prefixWrite + "_MappingStatistics", "txt");
-			excelPathAndName = outSamStatistics;
 			TxtReadandWrite txtWriteStatistics = new TxtReadandWrite(outSamStatistics, true);
 			txtWriteStatistics.ExcelWrite(samFileStatistics.getMappingInfo());
 			txtWriteStatistics.close();
 		}
 	}
 	
-	public ReportSamAndRPKM getReportSamAndRPKM() {
+	public ReportSamAndRPKM WriteReportSamAndRPKM() {
 		reportSamAndRPKM = new ReportSamAndRPKM();
 		
 		List<XdocTmpltExcel> lsExcels = new ArrayList<>();
 		XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(EnumTableType.MappingResult.getXdocTable());
 		xdocTmpltExcel.setExcelTitle("Mapping率分析统计结果");
-		xdocTmpltExcel.addExcel(FileHadoop.getHdfsHeadSymbol(excelPathAndName), 1);
+		xdocTmpltExcel.addExcel(excelPathAndName, 1);
 		
 		XdocTmpltExcel xdocTmpltExcel2 = new XdocTmpltExcel(EnumTableType.MappingChrFile.getXdocTable());
 		xdocTmpltExcel2.setExcelTitle("Reads在染色体上的分布统计");
-		xdocTmpltExcel2.addExcel(FileHadoop.getHdfsHeadSymbol(excelPathAndName), 2);	
+		xdocTmpltExcel2.addExcel(excelPathAndName, 2);	
 		
 		lsExcels.add(xdocTmpltExcel);
 		lsExcels.add(xdocTmpltExcel2);
@@ -399,11 +407,11 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		
 		XdocTmpltExcel xdocTmpltExcel3 = new XdocTmpltExcel(EnumTableType.MappingStatistics.getXdocTable());
 		xdocTmpltExcel3.setExcelTitle("Reads在基因上的分布统计图表");
-		xdocTmpltExcel3.addExcel(FileHadoop.getHdfsHeadSymbol(geneStructureResultFile), 1);
+		xdocTmpltExcel3.addExcel(geneStructureResultFile, 1);
 		lsExcels.add(xdocTmpltExcel3);
 		reportSamAndRPKM.setLsExcels(lsExcels);
 		List<XdocTmpltPic> lsPics = new ArrayList<>();
-		XdocTmpltPic xdocTmpltPic = new XdocTmpltPic(FileHadoop.getHdfsHeadSymbol(picPathAndName));
+		XdocTmpltPic xdocTmpltPic = new XdocTmpltPic(picPathAndName);
 		xdocTmpltPic.setTitle("Reads在染色体上的分布柱状图");
 		lsPics.add(xdocTmpltPic);
 		reportSamAndRPKM.setLsTmpltPics(lsPics);
@@ -413,11 +421,12 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		lsResultFile.add(geneStructureResultFile);
 		lsResultFile.add(picPathAndName);
 		reportSamAndRPKM.setSetResultFile(lsResultFile);
+		
 		reportSamAndRPKM.writeAsFile(resultPrefix);
 		return reportSamAndRPKM;
 	}
 	
-	public ReportGeneExpression getReportGeneExp() {
+	public ReportGeneExpression writeReportGeneExp() {
 		ReportGeneExpression reportGeneExpression = new ReportGeneExpression();
 		if (isCalculateFPKM) {
 			reportGeneExpression.setGeneExpType("FPKM");
@@ -426,12 +435,14 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		}
 		
 		List<XdocTmpltExcel> lsXdocTmpltExcels = new ArrayList<>();	
-		XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(EnumTableType.GeneExp.getXdocTable());
-		xdocTmpltExcel.addExcel(FileHadoop.getHdfsHeadSymbol(fragmentsFileName), 1);
+		int colNum = lsCounts.get(0).length;
+		
+		XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(new XdocTable(colNum, 20));
+		xdocTmpltExcel.addExcel(fragmentsFileName, 1);
 		xdocTmpltExcel.setExcelTitle("标准化Fragment值列表");
 		
-		XdocTmpltExcel xdocTmpltExcel2 = new XdocTmpltExcel(EnumTableType.GeneExp.getXdocTable());
-		xdocTmpltExcel2.addExcel(FileHadoop.getHdfsHeadSymbol(RPKMFileName), 1);
+		XdocTmpltExcel xdocTmpltExcel2 = new XdocTmpltExcel(new XdocTable(colNum, 20));
+		xdocTmpltExcel2.addExcel(RPKMFileName, 1);
 		xdocTmpltExcel2.setExcelTitle("标准化FPKM值列表");
 		lsXdocTmpltExcels.add(xdocTmpltExcel);
 		lsXdocTmpltExcels.add(xdocTmpltExcel2);
@@ -442,7 +453,10 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		lsResult.add(fragmentsFileName);
 		lsResult.add(RPKMFileName);
 		reportGeneExpression.setSetResultFile(lsResult);
-		reportGeneExpression.writeAsFile(resultPrefix);
+		String geneExpResult = FileOperate.getParentPathName(resultPrefix);
+		geneExpResult = geneExpResult + EnumReport.GeneExp.getResultFolder();
+		System.out.println(geneExpResult);
+		reportGeneExpression.writeAsFile(geneExpResult);
 		return reportGeneExpression;
 	}
 	

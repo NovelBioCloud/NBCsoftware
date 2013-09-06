@@ -122,6 +122,26 @@ public class XdocTable implements Cloneable, Serializable {
 		}
 	}
 
+	/**
+	 * 
+	 * @param colNum 列数，每列宽度为100
+	 * @param maxRow
+	 */
+	public XdocTable(int colNum, int maxRow) {
+		String cols = null;
+		for (int i = 0; i < colNum; i++) {
+			if (cols == null) {
+				cols = "100";
+			}else {
+				cols = cols + ",100";
+			}
+		}
+		setRowAuto(maxRow);
+		if (cols != null) {
+			this.cols = cols;
+		}
+	}
+	
 	public String getStrokeWidth() {
 		return strokeWidth;
 	}

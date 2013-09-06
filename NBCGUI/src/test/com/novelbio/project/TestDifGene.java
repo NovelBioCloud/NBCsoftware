@@ -39,7 +39,7 @@ public class TestDifGene {
 	public void runTest() {
 		
 		DiffExpAbs diffExpAbs = (DiffExpAbs) DiffExpAbs.createDiffExp(50);
-		diffExpAbs.setColID();
+
 		
 	}
 

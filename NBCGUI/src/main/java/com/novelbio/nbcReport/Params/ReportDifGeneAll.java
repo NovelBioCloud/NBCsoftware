@@ -24,8 +24,7 @@ public class ReportDifGeneAll  extends ReportBase{
 		if (lsDifGenes.size() > 0) {
 			map.put("difGeneType", lsDifGenes.get(0).diffGeneType);
 			map.put("log2FC", lsDifGenes.get(0).log2FC);
-			map.put("pvalue", lsDifGenes.get(0).pValue);
-			map.put("FDR", lsDifGenes.get(0).FDR);
+			map.put("pvalue", lsDifGenes.get(0).pValueOrFDR);
 		}
 		return map;
 	}

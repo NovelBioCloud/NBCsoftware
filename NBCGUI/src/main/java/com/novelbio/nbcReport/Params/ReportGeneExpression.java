@@ -21,7 +21,7 @@ public class ReportGeneExpression  extends ReportBase{
 	public Set<String> getSetResultFile() {
 		Set<String> setFile = new LinkedHashSet<>();
 		for (String outFile : setResultFile) {
-			String outFile2 = EnumReport.GeneExp.getResultFolder() + outFile.split(EnumReport.GeneExp.getResultFolder())[1];
+			String outFile2 = EnumReport.SamAndRPKM.getResultFolder() + outFile.split(EnumReport.SamAndRPKM.getResultFolder())[1];
 			setFile.add(outFile2);
 		}
 		return setFile;
