@@ -47,6 +47,10 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable{
 	@Override
 	public void setRunningInfo(GuiAnnoInfo info) {
 		guiRNAautoSplice.setRunningInfo(info);
+		if (info.getLsNumInfo() != null && info.getLsNumInfo().size() > 0) {
+			setProcessBarStartEndBarNum(info.getLsNumInfo().get(0).intValue(), 
+					info.getLsNumInfo().get(1).longValue(), info.getLsNumInfo().get(2).longValue());
+		}
 	}
 
 	@Override
@@ -112,6 +116,17 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable{
 		if (isReconstruceIso) {
 			exonJunction.setgenerateNewIso();
 		}
+		
+		
+		ArrayList<Double> lsLevels = new ArrayList<Double>();
+		lsLevels.add(0.3);
+		lsLevels.add(0.4);
+		lsLevels.add(0.7);
+		lsLevels.add(1.0);
+		long fileLength = exonJunction.getFileLength();
+		setProgressBarLevelLs(lsLevels);
+		setProcessBarStartEndBarNum(0, 0, fileLength);
+
 		Thread thread = new Thread(exonJunction);
 		thread.start();
 		
@@ -143,23 +158,11 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable{
 	 * @param startBarNum 本步骤起点，一般为0
 	 * @param endBarNum 本步骤终点
 	 */
-	public void setProcessBarStartEndBarNum(String string, int level, long startBarNum, long endBarNum) {
+	public void setProcessBarStartEndBarNum(int level, long startBarNum, long endBarNum) {
 		if (guiRNAautoSplice == null) {
 			return;
 		}
-		guiRNAautoSplice.setProcessBarStartEndBarNum(string, level, startBarNum, endBarNum);
-	}
-	public void setInfo(String string) {
-		if (guiRNAautoSplice == null) {
-			return;
-		}
-		guiRNAautoSplice.setInfo(string);
-	}
-	public void setDetailInfo(String string) {
-		if (guiRNAautoSplice == null) {
-			return;
-		}
-		guiRNAautoSplice.setDetailInfo(string);
+		guiRNAautoSplice.setProcessBarStartEndBarNum(level, startBarNum, endBarNum);
 	}
 
 }

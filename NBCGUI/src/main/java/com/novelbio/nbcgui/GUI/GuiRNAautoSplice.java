@@ -278,11 +278,10 @@ public class GuiRNAautoSplice extends JPanel implements GUIinfo {
 	 * @param startBarNum 本步骤起点，一般为0
 	 * @param endBarNum 本步骤终点
 	 */
-	public void setProcessBarStartEndBarNum(String information, int level, long startBarNum, long endBarNum) {
+	public void setProcessBarStartEndBarNum(int level, long startBarNum, long endBarNum) {
 		this.level = level;
 		this.startBarNum = startBarNum;
 		this.endBarNum = endBarNum;
-		this.lblInformation.setText(information);
 	}
 	private void setProcessBarValue(long number) {
 		long progressNum = number - startBarNum;
@@ -305,14 +304,18 @@ public class GuiRNAautoSplice extends JPanel implements GUIinfo {
 		this.lblInformation.setText(info);
 	}
 	
-	public void setDetailInfo(String info) {
-		this.lblDetailInfo.setText(info);
+	public void setRunningInfo(GuiAnnoInfo info) {
+		if (info.getNumDouble() > 0) {
+			setProcessBarValue((long) info.getNumDouble());
+		}
+		if (info.getInfo2() != null) {
+			setInfo(info.getInfo2());
+		}
+		if(info.getInfo() != null) {
+			this.lblDetailInfo.setText(info.getInfo());
+		}
 	}
 	
-	public void setRunningInfo(GuiAnnoInfo info) {
-		setProcessBarValue((long) info.getNumDouble());
-		setDetailInfo(info.getInfo());
-	}
 	public void done(RunProcess<GuiAnnoInfo> runProcess) {
 		btnRun.setEnabled(true);
 		progressBar.setValue(progressBar.getMaximum());

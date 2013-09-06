@@ -15,10 +15,6 @@ public interface GUIinfo {
 
 	void setProgressBarLevelLs(List<Double> lsLevels);
 
-	void setProcessBarStartEndBarNum(String string, int level, long startBarNum, long endBarNum);
-
-	void setDetailInfo(String string);
-
-	void setInfo(String string);
+	void setProcessBarStartEndBarNum(int level, long startBarNum, long endBarNum);
 
 }
