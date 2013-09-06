@@ -35,7 +35,7 @@ public class TestDNASeqMap {
 		mapParams.put("thread", new String[]{"2"});
 		mapParams.put("mappingToFile", new String[]{""});
 		mapParams.put("library", new String[]{"PairEnd"});
-		mapParams.put("savePath", new String[]{"/media/hdfs/nbCloud/staff/gaozhu/我的文档"});
+		mapParams.put("savePath", new String[]{"/media/hdfs/nbCloud/staff/gaozhu/我的图片"});
 		mapParams.put("software", new String[]{"bwa"});
 		mapParams.put("taxId", new String[]{"10090"});
 		mapParams.put("speciesVersion", new String[]{"mm10_NCBI"});

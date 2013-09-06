@@ -1,5 +1,5 @@
     <para lineSpacing="4" name="title">
-      <text fontName="黑体" name="3" fontSize="16">3.2.${no} mapping 结果</text>
+      <text fontName="黑体" name="3" fontSize="16">3.2.${no} mapping 结果 (Mapping Result)</text>
     </para>
     <para lineSpacing="4">
       <text fontName="宋体" fontSize="12">\t除去De Novo测序，其他所有测序分析的前提都是mapping，其重要性可见一斑。目前国际上存在很多mapping软件，良莠不齐。为了获得更好的mapping结果，NovelBio始终追逐国际最新算法，同时结合具体项目，选择适当参数进行分析，并给出统计结果。</text>

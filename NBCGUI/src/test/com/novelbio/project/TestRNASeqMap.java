@@ -46,7 +46,7 @@ public class TestRNASeqMap {
 		mapParams.put("speciesVersion", new String[]{"mm10_NCBI"});
 	}
 	
-	@Test
+	//@Test
 	public void rnaMapingRun(){
 		CtrlRNAmap ctrlRNAmap = null;
 		if (mapParams.get("algorithm")[0].equalsIgnoreCase("rsem")) {
