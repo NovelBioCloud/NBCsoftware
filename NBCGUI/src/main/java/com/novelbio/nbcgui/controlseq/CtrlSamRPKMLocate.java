@@ -150,9 +150,10 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		writeReportGeneExp();
-		WriteReportSamAndRPKM();
+		if (isCountExpression) {
+			writeReportGeneExp();
+			WriteReportSamAndRPKM();
+		}
 		
 		done(null);
 		guiSamStatistics.getProcessBar().setValue(guiSamStatistics.getProcessBar().getMaximum());
