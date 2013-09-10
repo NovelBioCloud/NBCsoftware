@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
@@ -12,7 +13,6 @@ import com.novelbio.base.plot.PlotScatter;
 import com.novelbio.base.plot.Volcano;
 import com.novelbio.generalConf.TitleFormatNBC;
 import com.novelbio.nbcReport.Params.EnumReport;
-import com.novelbio.nbcgui.FoldeCreate;
 
 
 /**

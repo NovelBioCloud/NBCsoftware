@@ -26,9 +26,8 @@ import com.novelbio.analysis.seq.sam.AlignSeqReading;
 import com.novelbio.analysis.seq.sam.AlignmentRecorder;
 import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.analysis.seq.sam.SamFileStatistics;
-import com.novelbio.base.dataOperate.ExcelTxtRead;
+import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
-import com.novelbio.base.fileOperate.FileHadoop;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.database.model.species.Species;
@@ -39,7 +38,6 @@ import com.novelbio.nbcReport.XdocTmpltPic;
 import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportGeneExpression;
 import com.novelbio.nbcReport.Params.ReportSamAndRPKM;
-import com.novelbio.nbcgui.FoldeCreate;
 import com.novelbio.nbcgui.GUI.GuiSamStatistics;
 
 @Component

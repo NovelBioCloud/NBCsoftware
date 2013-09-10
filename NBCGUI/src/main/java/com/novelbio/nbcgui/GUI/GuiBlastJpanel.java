@@ -315,7 +315,10 @@ public class GuiBlastJpanel extends JPanel {
 								jTabFAnno.setModel(jTabAnno);
 							}
 						}
-						ctrlAnno = new CtrlBlastAnno(blast, jCobTaxSelect.getSelectedValue().getTaxID(), jCmbSpeciesBlast.getSelectedValue().getTaxID(), 1e-10,jBlastJpanel );
+						int queryTaxID = getTaxID(jCobTaxSelect);
+						int blastTaxID = getTaxID(jCmbSpeciesBlast);
+						
+						ctrlAnno = new CtrlBlastAnno(blast, queryTaxID, blastTaxID, 1e-10,jBlastJpanel );
 						ctrlAnno.prepare(lsGenID2);
 						ctrlAnno.execute();
 						
@@ -326,7 +329,20 @@ public class GuiBlastJpanel extends JPanel {
 		}
 		return jBtnAnno;
 	}
-
+	
+	public static int getTaxID(JComboBoxData<Species> jCobTaxSelect) {
+		int queryTaxID = 0;
+		if (jCobTaxSelect.getSelectedValue() == null) {
+			try {
+				queryTaxID = Integer.parseInt(jCobTaxSelect.getEditor().getItem().toString()); 
+			} catch (Exception e) { }
+		} else {
+			queryTaxID = jCobTaxSelect.getSelectedValue().getTaxID();
+		}
+		return queryTaxID;
+	}
+	
+	
 	CtrlBlastGo ctrlGo;
 	CtrlBlastPath ctrlPath;
 	public JButton getJBtnGoPath() {
@@ -376,9 +392,9 @@ public class GuiBlastJpanel extends JPanel {
 						}
 						jScrlGOTable.setTitle(titleGoandPath);
 						ctrlGo = new CtrlBlastGo(jBlastJpanel);
-						ctrlGo.setTaxID(jCobTaxSelect.getSelectedValue().getTaxID());
+						ctrlGo.setTaxID(getTaxID(jCobTaxSelect));
 						if (jChBlast.isSelected()) {
-							ctrlGo.setBlastInfo(jCmbSpeciesBlast.getSelectedValue().getTaxID(), 1e-10);
+							ctrlGo.setBlastInfo(getTaxID(jCmbSpeciesBlast), 1e-10);
 						}
 						ctrlGo.setGoClass(jComGOClassSelect.getSelectedValue());
 						ctrlGo.prepare(lsGenID2);
@@ -397,7 +413,7 @@ public class GuiBlastJpanel extends JPanel {
 							titleGoandPath[4] = "evalue"; titleGoandPath[5] = "BlastSymbol/AccID"; titleGoandPath[6] ="BlastPathID"; titleGoandPath[7] = "BlastPathTitle";						
 						}
 						jScrlGOTable.setTitle(titleGoandPath);
-						ctrlPath = new CtrlBlastPath(blast, jCobTaxSelect.getSelectedValue().getTaxID(), jCmbSpeciesBlast.getSelectedValue().getTaxID(), 1e-10, jBlastJpanel);
+						ctrlPath = new CtrlBlastPath(blast, getTaxID(jCobTaxSelect), getTaxID(jCmbSpeciesBlast), 1e-10, jBlastJpanel);
 						ctrlPath.prepare(lsGenID2);
 						ctrlPath.execute();
 					}

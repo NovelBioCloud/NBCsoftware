@@ -1,30 +1,24 @@
 package com.novelbio.nbcgui.controltest;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
-import javax.imageio.ImageIO;
-
 import org.apache.log4j.Logger;
-import org.broadinstitute.sting.jna.lsf.v7_0_6.LibBat.newDebugLog;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
+import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.plot.ImageUtils;
-import com.novelbio.nbcReport.EnumTableType;
 import com.novelbio.nbcReport.XdocTmpltExcel;
 import com.novelbio.nbcReport.XdocTmpltPic;
 import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportPathWay;
-import com.novelbio.nbcgui.FoldeCreate;
 @Service
 @Scope("prototype")
 public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {

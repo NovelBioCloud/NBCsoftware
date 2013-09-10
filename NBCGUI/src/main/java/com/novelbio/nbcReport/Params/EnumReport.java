@@ -1,7 +1,5 @@
 package com.novelbio.nbcReport.Params;
 
-import org.broadinstitute.sting.jna.lsf.v7_0_6.LibBat.newDebugLog;
-
 import com.novelbio.base.dataOperate.DateUtil;
 
 

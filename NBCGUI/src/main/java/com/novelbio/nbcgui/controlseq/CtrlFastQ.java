@@ -13,15 +13,12 @@ import com.google.common.collect.HashMultimap;
 import com.novelbio.analysis.seq.fastq.FastQ;
 import com.novelbio.analysis.seq.fastq.FastQC;
 import com.novelbio.analysis.seq.fastq.FastQRecordFilter;
+import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.service.SpringFactory;
-import com.novelbio.nbcReport.EnumTableType;
-import com.novelbio.nbcReport.XdocTmpltExcel;
 import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportQC;
-import com.novelbio.nbcReport.Params.ReportQCAll;
-import com.novelbio.nbcgui.FoldeCreate;
 
 @Component
 @Scope("prototype")
