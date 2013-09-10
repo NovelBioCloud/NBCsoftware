@@ -10,10 +10,12 @@ import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.generalConf.TitleFormatNBC;
 import com.novelbio.nbcReport.EnumTableType;
 import com.novelbio.nbcReport.XdocTmpltExcel;
+import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportDifGene;
 
 public class CtrlDifGene {
 	DiffExpAbs diffExpAbs;
+	
 	
 	/**
 	 * @param diffGeneID {@link DiffExpAbs#DEGSEQ} 等
@@ -43,7 +45,8 @@ public class CtrlDifGene {
 	}
 
 	public void calculateResult() {
-		diffExpAbs.calculateResult();
+		String difFold = EnumReport.DiffExp.getResultFolder();
+		diffExpAbs.calculateResult(difFold);
 	}
 
 	public void clean() {

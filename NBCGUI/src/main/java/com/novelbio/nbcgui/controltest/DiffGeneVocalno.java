@@ -208,9 +208,9 @@ import com.novelbio.nbcReport.Params.EnumReport;
 	 * @param excelFileName
 	 * @return
 	 */
-	public void writeDifGene() {
+	public void writeDifGene(String fold) {
 		String outFile = getDifGeneFileName();
-		outFile = FoldeCreate.createAndInFold(outFile, EnumReport.FastQC.getResultFolder());
+		outFile = FoldeCreate.createAndInFold(outFile, fold);
 		TxtReadandWrite txtWriteDifGene = new TxtReadandWrite(outFile, true);
 		txtWriteDifGene.writefilelnls(getLsDifGene());
 		txtWriteDifGene.close();
