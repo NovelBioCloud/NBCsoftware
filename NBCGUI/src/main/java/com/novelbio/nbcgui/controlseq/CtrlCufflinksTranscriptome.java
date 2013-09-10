@@ -3,8 +3,6 @@ package com.novelbio.nbcgui.controlseq;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.avalon.framework.logger.Loggable;
-
 import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.genome.gffOperate.GffType;
@@ -72,7 +70,7 @@ public class CtrlCufflinksTranscriptome {
 			cuffMerge.setLsGtfTobeMerged(lsResultGTF);
 			cuffMerge.setRefGtf(cufflinksGTF.getGtfReffile());
 			cuffMerge.setOutputPrefix(outCufflinksGTF);
-			try { cuffMerge.setRefChrFa(gffChrAbs.getSpecies().getRefseqFile()); } catch (Exception e) { }
+			try { cuffMerge.setRefChrFa(gffChrAbs.getSpecies().getChromSeq()); } catch (Exception e) { }
 			cuffMerge.setThreadNum(thread);
 			outCufflinksGTF = cuffMerge.runCuffmerge();
 		} else if (lsResultGTF.size() == 1) {

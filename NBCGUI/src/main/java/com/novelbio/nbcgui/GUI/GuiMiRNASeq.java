@@ -38,6 +38,8 @@ public class GuiMiRNASeq extends JPanel{
 
 	JButton btnRunning;
 	JCheckBox chkMapping;
+	JCheckBox chckbxMappingToSpecies;
+	
 	JButton btnOutpath;
 	JScrollPaneData sclpanFastq;
 	JCheckBox chkPredictMiRNA;
@@ -195,7 +197,7 @@ public class GuiMiRNASeq extends JPanel{
 		chkMapAllToRfam.setBounds(16, 307, 178, 22);
 		add(chkMapAllToRfam);
 		
-		JCheckBox chckbxMappingToSpecies = new JCheckBox("Mapping To Species Specific Rfam");
+		chckbxMappingToSpecies = new JCheckBox("Mapping To Species Specific Rfam");
 		chckbxMappingToSpecies.setBounds(454, 305, 312, 22);
 		add(chckbxMappingToSpecies);
 		initialize();
@@ -297,6 +299,7 @@ public class GuiMiRNASeq extends JPanel{
 	
 	private void runMapping(GffChrAbs gffChrAbs, Species species, ArrayList<String[]> lsfastqFile2Prefix) {
 		ctrlMiRNAfastq.setMappingAll2Genome(chkMapAllBedFileToGenome.isSelected());
+		ctrlMiRNAfastq.setRfamSpeciesSpecific(chckbxMappingToSpecies.isSelected());
 		ctrlMiRNAfastq.setSpecies(species);
 		ctrlMiRNAfastq.setOutPath(txtOutPathPrefix.getText());
 		ctrlMiRNAfastq.setGffChrAbs(gffChrAbs);

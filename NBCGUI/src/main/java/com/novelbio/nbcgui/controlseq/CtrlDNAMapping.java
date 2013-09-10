@@ -159,9 +159,9 @@ public class CtrlDNAMapping {
 			if (map2Index == MAP_TO_CHROM) {
 				mapSoftware.setChrFile(species.getIndexChr(softMapping));
 			} else if (map2Index == MAP_TO_REFSEQ) {
-				mapSoftware.setChrFile(species.getIndexRef(softMapping));
+				mapSoftware.setChrFile(species.getIndexRef(softMapping, true));
 			} else if (map2Index == MAP_TO_REFSEQ_LONGEST_ISO) {
-				mapSoftware.setChrFile(species.getRefseqLongestIsoNrFile());
+				mapSoftware.setChrFile(species.getIndexRef(softMapping, false));
 			}
 		}
 		if (fastQs.length == 1) {

@@ -160,7 +160,7 @@ public class CtrlRNAmap {
 		if (mapType == TOP_HAT) {
 			mapRNA.setFileRef(gffChrAbs.getSpecies().getIndexChr(mapRNA.getBowtieVersion()));
 		} else {
-			mapRNA.setFileRef(gffChrAbs.getSpecies().getRefseqFile());
+			mapRNA.setFileRef(gffChrAbs.getSpecies().getRefseqFile(true));
 		}
 	}
 	private void setMapLibrary(MapLibrary mapLibrary) {

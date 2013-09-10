@@ -474,7 +474,7 @@ public class GuiSamToBed extends JPanel {
 			if (radGenome.isSelected()) {
 				refFile = species.getChromSeq();
 			} else if (radRefRNA.isSelected()) {
-				refFile = species.getRefseqFile();
+				refFile = species.getRefseqFile(true);
 			}
 		}
 		
