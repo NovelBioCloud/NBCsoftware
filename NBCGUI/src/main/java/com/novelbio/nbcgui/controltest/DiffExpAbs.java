@@ -74,6 +74,7 @@ public abstract class DiffExpAbs implements DiffExpInt {
 	 */
 	HashMap<String, String[]> mapOutFileName2Compare = new LinkedHashMap<String, String[]>();
 	
+	ArrayList<String> lsOutFile = new ArrayList<>();
 	boolean calculate = false;
 	
 	boolean isLog2Value = false;
@@ -179,7 +180,7 @@ public abstract class DiffExpAbs implements DiffExpInt {
 	 * 调用{@link #calculateResult()} 后才能调用
 	 */
 	public ArrayList<String> getResultFileName() {
-		return ArrayOperate.getArrayListKey(mapOutFileName2Compare);
+		return lsOutFile;
 	}
 	/** 计算差异 */
 	public void calculateResult(String fold) {
@@ -197,7 +198,7 @@ public abstract class DiffExpAbs implements DiffExpInt {
 		run();
 		modifyResult();
 //		clean();
-		plotDifParams(fold);
+		lsOutFile = plotDifParams(fold);
 	}
 	/**
 	 * 将输入的文件重整理成所需要的txt格式写入文本
@@ -342,7 +343,8 @@ public abstract class DiffExpAbs implements DiffExpInt {
 		FileOperate.DeleteFileFolder(fileNameRawdata);
 	}
 	
-	public void plotDifParams(String fold) {
+	public ArrayList<String> plotDifParams(String fold) {
+		ArrayList<String> lsOutFile = new ArrayList<>(); 
 		Map<String, String[]> mapExcelName2Compare = getMapOutFileName2Compare();
 		Map<String, DiffGeneVocalno> mapExcelName2DifResultInfo= new LinkedHashMap<String, DiffGeneVocalno>();
 		
@@ -353,12 +355,13 @@ public abstract class DiffExpAbs implements DiffExpInt {
 		//画图，出差异基因的表格
 		for (String excelFileName : mapExcelName2DifResultInfo.keySet()) {
 			DiffGeneVocalno difResultInfo = mapExcelName2DifResultInfo.get(excelFileName);
-			difResultInfo.writeDifGene(fold);
+			String outFile = difResultInfo.writeDifGene(fold);
+			lsOutFile.add(outFile);
 			titleFormatNBC= difResultInfo.getTitlePvalueFDR();
 			logFCcutoff =  difResultInfo.getUpfc();
 			pValueOrFDRcutoff = difResultInfo.getPvalueFDRthreshold();
-			difResultInfo.plotVolcanAndWriteParam(PLOT_WIDTH, PLOT_HEIGTH);
 		}
+		return lsOutFile;
 	}
 
 	public double getLogFC() {

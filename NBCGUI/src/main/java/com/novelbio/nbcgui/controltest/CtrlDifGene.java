@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.novelbio.analysis.diffexpress.DiffExpAbs;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.generalConf.TitleFormatNBC;
 import com.novelbio.nbcReport.EnumTableType;
@@ -40,13 +39,14 @@ public class CtrlDifGene {
 		diffExpAbs.setColID(colID);
 	}
 
-	public ArrayList<String> getResultFileName() {
+	public List<String> getResultFileName() {
 		return diffExpAbs.getResultFileName();
 	}
 
 	public void calculateResult() {
 		String difFold = EnumReport.DiffExp.getResultFolder();
 		diffExpAbs.calculateResult(difFold);
+		getDiffReport();
 	}
 	
 	public void setIsLog2Value(boolean isLog2Value) {

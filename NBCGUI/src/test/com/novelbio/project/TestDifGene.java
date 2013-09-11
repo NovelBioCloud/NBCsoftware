@@ -1,26 +1,13 @@
 package com.novelbio.project;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import com.novelbio.base.fileOperate.FileHadoop;
-import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.nbcReport.EnumTableType;
-import com.novelbio.nbcReport.XdocTable;
-import com.novelbio.nbcReport.XdocTmpltExcel;
-import com.novelbio.nbcReport.Params.ReportDifGene;
 import com.novelbio.nbcReport.Params.ReportDifGeneAll;
-import com.novelbio.nbcReport.Params.ReportGeneExpressionAll;
 import com.novelbio.nbcReport.Params.ReportProject;
-import com.novelbio.nbcgui.controltest.DiffExpAbs;
 
 public class TestDifGene {
 	
@@ -38,7 +25,11 @@ public class TestDifGene {
 	@Test
 	public void runTest() {
 		
-		DiffExpAbs diffExpAbs = (DiffExpAbs) DiffExpAbs.createDiffExp(50);
+		String savePath = FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/Difference-Expression_result");
+		List<String> lsList = new ArrayList<>();
+		lsList.add(savePath);
+		ReportProject reportProject = new ReportProject(lsList);
+		reportProject.outputReport("/home/novelbio/桌面/Dif.docx");
 
 		
 	}
