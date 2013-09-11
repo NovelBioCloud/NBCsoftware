@@ -1,11 +1,11 @@
 package com.novelbio.nbcgui.controltest;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.novelbio.analysis.diffexpress.DiffExpAbs;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.generalConf.TitleFormatNBC;
 import com.novelbio.nbcReport.EnumTableType;
@@ -48,7 +48,11 @@ public class CtrlDifGene {
 		String difFold = EnumReport.DiffExp.getResultFolder();
 		diffExpAbs.calculateResult(difFold);
 	}
-
+	
+	public void setIsLog2Value(boolean isLog2Value) {
+		diffExpAbs.setLog2Value(isLog2Value);
+	}
+	
 	public void clean() {
 		diffExpAbs.clean();
 	}

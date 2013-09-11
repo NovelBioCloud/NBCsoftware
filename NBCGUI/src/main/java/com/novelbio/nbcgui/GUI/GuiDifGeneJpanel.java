@@ -22,6 +22,7 @@ import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.nbcgui.controltest.CtrlDifGene;
+import javax.swing.JCheckBox;
 
 public class GuiDifGeneJpanel extends JPanel {
 	JScrollPaneData scrollPaneNormData;
@@ -116,6 +117,10 @@ public class GuiDifGeneJpanel extends JPanel {
 		cmbMethod.setBounds(635, 463, 239, 23);
 		add(cmbMethod);
 		
+		final JCheckBox chckbxIslogvalueOnlyforlimma = new JCheckBox("isLog2Value OnlyForLimma");
+		chckbxIslogvalueOnlyforlimma.setBounds(217, 526, 239, 26);
+		add(chckbxIslogvalueOnlyforlimma);
+		
 		txtSave = new JTextField();
 		txtSave.setBounds(635, 498, 252, 18);
 		add(txtSave);
@@ -134,7 +139,7 @@ public class GuiDifGeneJpanel extends JPanel {
 				}
 				diffExpAbs.setGeneInfo(lsGeneInfo);
 				diffExpAbs.setCol2Sample(lsCol2Sample);
-
+				diffExpAbs.setIsLog2Value(chckbxIslogvalueOnlyforlimma.isSelected());
 				String pathPrefix = getPathPrefix();
 				if (pathPrefix == null) {
 					return;
