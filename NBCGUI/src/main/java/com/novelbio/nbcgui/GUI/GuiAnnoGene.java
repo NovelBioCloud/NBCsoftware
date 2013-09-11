@@ -142,7 +142,7 @@ public class GuiAnnoGene extends JPanel implements GuiNeedOpenFile {
 				try {
 					ctrlBatchAnno.setBlastTo(chckbxBlastto.isSelected(), GuiBlastJpanel.getTaxID(cmbBlastSpecies));
 				} catch (Exception e2) { }
-				ctrlBatchAnno.setSpecies(cmbSpecies.getSelectedValue().getTaxID());
+				ctrlBatchAnno.setSpecies(GuiBlastJpanel.getTaxID(cmbSpecies));
 				
 				ctrlBatchAnno.execute();
 				JOptionPane.showMessageDialog(null, "finish", "finish", JOptionPane.CLOSED_OPTION);

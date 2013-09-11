@@ -150,9 +150,9 @@ public class CtrlBlastPath extends SwingWorker<ArrayList<String[]>, ProgressData
 		String[] tmpAccIDInfo = new String[] { accID, ""};
 		ArrayList<String[]> lsResult = new ArrayList<String[]>();
 		GeneID copedID = new GeneID(accID, taxID);
-		if (copedID.getIDtype() == GeneID.IDTYPE_ACCID) {
-			return null;
-		}
+//		if (copedID.getIDtype() == GeneID.IDTYPE_ACCID) {
+//			return null;
+//		}
 		tmpAccIDInfo[1] = copedID.getSymbol();
 		copedID.setBlastInfo(evalue, subTaxID);
 		// 本基因的Path信息

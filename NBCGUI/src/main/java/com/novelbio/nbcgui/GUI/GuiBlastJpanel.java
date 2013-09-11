@@ -81,7 +81,7 @@ public class GuiBlastJpanel extends JPanel {
 	/**
 	 * 一次最多查询的个数
 	 */
-	static int numLimit = 100000;
+	static int numLimit = -1;
 	
 	GuiBlastJpanel jBlastJpanel = null;
 	public GuiBlastJpanel() {
@@ -272,7 +272,7 @@ public class GuiBlastJpanel extends JPanel {
 					}
 					List<String> lsGenID2 = null;
 					//////////////////一次只能读取3000个
-					if (lsAccID.size()>numLimit) {
+					if (numLimit > 0 && lsAccID.size()>numLimit) {
 						JOptionPane.showMessageDialog(null, "To ensure the stability of the database, the gene number of each query is limited in."+numLimit, "alert", JOptionPane.INFORMATION_MESSAGE); 
 						lsGenID2 = lsAccID.subList(0, numLimit);
 					}
@@ -367,7 +367,7 @@ public class GuiBlastJpanel extends JPanel {
 					
 					
 					//////////////////一次只能读取3000个
-					if (lsGenID.size() > numLimit) {
+					if (numLimit > 0 && lsGenID.size() > numLimit) {
 						JOptionPane.showMessageDialog(null, "To ensure the stability of the database, the gene number of each query is limited in 3000.", "alert", JOptionPane.INFORMATION_MESSAGE); 
 						lsGenID2 = lsGenID2.subList(0, numLimit);
 					}
