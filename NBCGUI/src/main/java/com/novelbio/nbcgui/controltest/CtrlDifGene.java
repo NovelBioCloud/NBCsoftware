@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.novelbio.analysis.diffexpress.DiffExpAbs;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.generalConf.TitleFormatNBC;
 import com.novelbio.nbcReport.EnumTableType;

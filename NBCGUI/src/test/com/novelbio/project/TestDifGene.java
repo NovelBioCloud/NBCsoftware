@@ -25,7 +25,7 @@ public class TestDifGene {
 	@Test
 	public void runTest() {
 		
-		String savePath = FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/Difference-Expression_result");
+		String savePath = "/media/hdfs/nbCloud/staff/gaozhu/我的文档/Difference-Expression_result";
 		List<String> lsList = new ArrayList<>();
 		lsList.add(savePath);
 		ReportProject reportProject = new ReportProject(lsList);

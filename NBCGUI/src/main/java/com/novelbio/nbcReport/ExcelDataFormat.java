@@ -47,7 +47,12 @@ public enum ExcelDataFormat{
 				e.printStackTrace();
 			}
 			
-			BigDecimal bDecimal = BigDecimal.valueOf(newData);
+			BigDecimal bDecimal = null;
+			try {
+				bDecimal = BigDecimal.valueOf(newData);
+			} catch (Exception e) {
+				return newData + "";
+			}
 			MathContext mcContext = new MathContext(Integer.parseInt(excelDataFormat.getFormatType()));
 			return bDecimal.divide(BigDecimal.ONE, mcContext).toString();
 		}

@@ -122,7 +122,8 @@ public class XdocTmpltExcel implements Serializable{
 		for(String key : mapExcel2SheetNamesInt.keySet()){
 			for(int sheetNum : mapExcel2SheetNamesInt.get(key)){
 				XdocTable xdocTableClone = xdocTable.getClone();
-				xdocTableClone.setLsExcelTable(formatDataList(ExcelTxtRead.readLsExcelTxtls(key, sheetNum, 1)));
+				List<List<String>> lsls = ExcelTxtRead.readLsExcelTxtls(key, sheetNum, 1);
+				xdocTableClone.setLsExcelTable(formatDataList(lsls));
 				lsXdocTable.add(xdocTableClone);
 			}
 		}
@@ -139,7 +140,15 @@ public class XdocTmpltExcel implements Serializable{
 		for (int i = 1; i < lsAllDatas.size(); i++) {
 			List<String> lsData = new ArrayList<String>();
 			for (int j = 0; j < lsTitles.size(); j++) {
-				lsData.add(ExcelDataFormat.format(lsTitles.get(j), lsAllDatas.get(i).get(j)));
+				try {
+					
+					lsData.add(ExcelDataFormat.format(lsTitles.get(j), lsAllDatas.get(i).get(j)));
+				} catch (Exception e) {
+					String aString  = lsTitles.get(j);
+					String bString = lsAllDatas.get(i).get(j);
+					lsData.add(ExcelDataFormat.format(lsTitles.get(j), lsAllDatas.get(i).get(j)));
+					e.printStackTrace();
+				}
 			}
 			lsNewDatas.add(lsData);
 		}
