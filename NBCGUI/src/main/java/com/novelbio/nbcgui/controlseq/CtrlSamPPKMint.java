@@ -27,6 +27,7 @@ public interface CtrlSamPPKMint extends RunGetInfo<GuiAnnoInfo>, Runnable {
 	public void setQueryFile(List<String[]> lsReadFile);
 	public void setIsCountRPKM(boolean isCountExpression, StrandSpecific strandSpecific, boolean isCountFPKM);
 	public void setTssRange(int[] tss);
+	public void setChrReadsCorrect(boolean chrReadsCorrect);
 	public void setTesRange(int[] tes);
 	public Map<String, SamFileStatistics> getMapPrefix2Statistics();
 	/** 设定输出文件路径前缀 */

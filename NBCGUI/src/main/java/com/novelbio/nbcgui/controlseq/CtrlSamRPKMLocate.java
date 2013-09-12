@@ -80,7 +80,37 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	
 	String resultPrefix;
 	List<String[]> lsCounts = null;
-
+	
+	/**
+	 * 由于非unique mapped reads的存在，为了精确统计reads在染色体上的分布，每个染色体上的reads数量用double来记数<br>
+	 * 这样如果一个reads在bam文本中出现多次--也就是mapping至多个位置，就会将每个记录(reads)除以其mapping number,<br>
+	 * 从而变成一个小数，然后加到染色体上。
+	 * 
+	 *  因为用double来统计reads数量，所以最后所有染色体上的reads之和与总reads数相比会有一点点的差距<br>
+	 * 选择correct就会将这个误差消除。意思就是将所有染色体上的reads凑出总reads的数量。<br>
+	 * 算法是  每条染色体reads(结果) = 每条染色体reads数量(原始)  + (总mapped reads数 - 染色体总reads数)/染色体数量<p>
+	 * 
+	 *  Because change double to long will lose some accuracy, for example double 1.2 convert to int will be 1,<br> 
+	 *   so the result "All Chr Reads Number" will not equal to "All Map Reads Number",
+		so we make a correction here.
+	 */
+	boolean chrReadsCorrect = false;
+	/**
+	 * 由于非unique mapped reads的存在，为了精确统计reads在染色体上的分布，每个染色体上的reads数量用double来记数<br>
+	 * 这样如果一个reads在bam文本中出现多次--也就是mapping至多个位置，就会将每个记录(reads)除以其mapping number,<br>
+	 * 从而变成一个小数，然后加到染色体上。
+	 * 
+	 *  因为用double来统计reads数量，所以最后所有染色体上的reads之和与总reads数相比会有一点点的差距<br>
+	 * 选择correct就会将这个误差消除。意思就是将所有染色体上的reads凑出总reads的数量。<br>
+	 * 算法是  每条染色体reads(结果) = 每条染色体reads数量(原始)  + (总mapped reads数 - 染色体总reads数)/染色体数量<p>
+	 * 
+	 *  Because change double to long will lose some accuracy, for example double 1.2 convert to int will be 1,<br> 
+	 *   so the result "All Chr Reads Number" will not equal to "All Map Reads Number",
+		so we make a correction here.
+	 */
+	public void setChrReadsCorrect(boolean chrReadsCorrect) {
+		this.chrReadsCorrect = chrReadsCorrect;
+	}
 	@Override
 	public void setGUI(GuiSamStatistics guiPeakStatistics) {
 		this.guiSamStatistics = guiPeakStatistics;
@@ -182,7 +212,9 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 					lsAlignmentRecorders.add(gffChrStatistics);
 					mapPrefix2LocStatistics.put(prefix, gffChrStatistics);
 				}
+				
 				samFileStatistics = new SamFileStatistics(prefix);
+				samFileStatistics.setCorrectChrReadsNum(chrReadsCorrect);
 				lsAlignmentRecorders.add(samFileStatistics);
 				try {
 					Map<String, Long> mapChrID2Len = ((SamFile)lsAlignSeqReadings.get(0).getSamFile()).getMapChrIDLowcase2Length();

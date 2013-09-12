@@ -256,6 +256,7 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 		
 		spinColChrID = new JSpinner();
 		spinColChrID.setBounds(185, 301, 43, 24);
+		spinColChrID.setValue(1);
 		add(spinColChrID);
 		
 		JLabel lblColSnpStart = new JLabel("Col Snp Start Site");
@@ -264,6 +265,7 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 		
 		spinColSnpStartSite = new JSpinner();
 		spinColSnpStartSite.setBounds(389, 302, 50, 23);
+		spinColSnpStartSite.setValue(2);
 		add(spinColSnpStartSite);
 		
 		rdbtnSnpAnnotation = new JRadioButton("Snp annotation");
@@ -281,6 +283,7 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 		
 		spinColRefNr = new JSpinner();
 		spinColRefNr.setBounds(528, 304, 47, 21);
+		spinColRefNr.setValue(3);
 		add(spinColRefNr);
 		
 		JLabel lblColThisnr = new JLabel("Col ThisNr");
@@ -289,6 +292,7 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 		
 		spinColThisNr = new JSpinner();
 		spinColThisNr.setBounds(680, 304, 51, 21);
+		spinColThisNr.setValue(4);
 		add(spinColThisNr);
 		
 		guiLayeredPaneSpeciesVersionGff = new GuiLayeredPaneSpeciesVersionGff();

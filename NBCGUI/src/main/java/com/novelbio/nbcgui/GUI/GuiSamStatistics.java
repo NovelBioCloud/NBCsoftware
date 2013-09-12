@@ -46,6 +46,7 @@ public class GuiSamStatistics extends JPanel {
 	JButton btnOpenGtf;
 	
 	String readFile = "";
+	JCheckBox chckbxCorrectChrReads;
 	
 	GuiLayeredPaneSpeciesVersionGff layeredPane;
 	
@@ -100,6 +101,12 @@ public class GuiSamStatistics extends JPanel {
 		progressBar.setBounds(12, 553, 957, 14);
 		add(progressBar);
 		
+		
+		chckbxCorrectChrReads = new JCheckBox("Correct Chr Reads Number");
+		chckbxCorrectChrReads.setSelected(true);
+		chckbxCorrectChrReads.setBounds(849, 414, 192, 26);
+		add(chckbxCorrectChrReads);
+		
 		btnRun = new JButton("Run");
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -110,6 +117,7 @@ public class GuiSamStatistics extends JPanel {
 				ctrlSamRPKMLocate.clear();
 				ctrlSamRPKMLocate.setQueryFile(scrollPaneData.getLsDataInfo());
 				ctrlSamRPKMLocate.setIsCountRPKM(chkRpkmcount.isSelected(), cmbStrandSpecific.getSelectedValue(), chckCalculateFPKM.isSelected());
+				ctrlSamRPKMLocate.setChrReadsCorrect(chckbxCorrectChrReads.isSelected());
  				int[] tss = new int[]{0,0};
 				int[] tes = new int[]{0,0};
 				try { tss[0] = Integer.parseInt(txtTssUp.getText()); } catch (Exception e2) { }
