@@ -108,7 +108,12 @@ public class TestSamAndRPKM {
 		ctrlSamRPKMLocate.setTssRange(tss);
 		ctrlSamRPKMLocate.setTesRange(tes);
 		ctrlSamRPKMLocate.setResultPrefix(outFolder);
-		ctrlSamRPKMLocate.run();
+		try {
+			ctrlSamRPKMLocate.run();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	
 	}
 

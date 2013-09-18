@@ -27,9 +27,9 @@ public class TestDNASeqMap {
 	@Before
 	public void init(){
 		mapParams = new HashMap<String, String[]>();
-		mapParams.put("leftInputData", new String[]{"/hdfs:/nbCloud/public/test/DNASeqMap/test_filtered_1.fq.gz,/hdfs:/nbCloud/public/test/DNASeqMap/test1_filtered_1.fq.gz"});
+		mapParams.put("leftInputData", new String[]{"/hdfs:/nbCloud/public/test/DNASeqMap/test_filtered_1.fq.gz", "/hdfs:/nbCloud/public/test/DNASeqMap/test1_filtered_1.fq.gz"});
 		mapParams.put("leftInputDataPrefix", new String[]{"test,test1"});
-		mapParams.put("rightInputData", new String[]{"/hdfs:/nbCloud/public/test/DNASeqMap/test_filtered_2.fq.gz,/hdfs:/nbCloud/public/test/DNASeqMap/test1_filtered_2.fq.gz"});
+		mapParams.put("rightInputData", new String[]{"/hdfs:/nbCloud/public/test/DNASeqMap/test_filtered_2.fq.gz", "/hdfs:/nbCloud/public/test/DNASeqMap/test1_filtered_2.fq.gz"});
 		mapParams.put("gapLength", new String[]{"30"});
 		mapParams.put("mismatch", new String[]{"5"});
 		mapParams.put("thread", new String[]{"2"});
