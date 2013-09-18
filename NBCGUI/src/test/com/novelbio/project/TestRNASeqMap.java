@@ -30,16 +30,16 @@ public class TestRNASeqMap {
 	@Before
 	public void init(){
 		mapParams = new HashMap<String, String[]>();
-		mapParams.put("leftInputData", new String[]{"/media/hdfs/nbCloud/public/test/DNASeqMap/test_filtered_1.fq.gz,/media/hdfs/nbCloud/public/test/DNASeqMap/test1_filtered_1.fq.gz"});
+		mapParams.put("leftInputData", new String[]{"/hdfs:/nbCloud/public/test/DNASeqMap/test_filtered_1.fq.gz,/hdfs:/nbCloud/nbCloud/public/test/DNASeqMap/test1_filtered_1.fq.gz"});
 		mapParams.put("leftInputDataPrefix", new String[]{"test,test1"});
-		mapParams.put("rightInputData", new String[]{"/media/hdfs/nbCloud/public/test/DNASeqMap/test_filtered_2.fq.gz,/media/hdfs/nbCloud/public/test/DNASeqMap/test1_filtered_2.fq.gz"});
+		mapParams.put("rightInputData", new String[]{"/hdfs:/nbCloud/public/test/DNASeqMap/test_filtered_2.fq.gz,/hdfs:/nbCloud/nbCloud/public/test/DNASeqMap/test1_filtered_2.fq.gz"});
 		mapParams.put("useGTF", new String[]{"1"});
 		mapParams.put("library", new String[]{"PairEnd"});
 		mapParams.put("thread", new String[]{"2"});
 		mapParams.put("mappingToFile", new String[]{""});
 		mapParams.put("GTFfile", new String[]{""});
 		mapParams.put("strandType", new String[]{"NONE"});
-		mapParams.put("savePath", new String[]{"/media/hdfs/nbCloud/staff/gaozhu/我的文档"});
+		mapParams.put("savePath", new String[]{"/hdfs:/nbCloud/staff/gaozhu/我的文档"});
 		mapParams.put("algorithm", new String[]{"tophat"});
 		mapParams.put("sensitive", new String[]{"Sensitive"});
 		mapParams.put("taxId", new String[]{"10090"});

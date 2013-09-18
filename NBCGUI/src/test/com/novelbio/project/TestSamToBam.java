@@ -25,9 +25,9 @@ public class TestSamToBam {
 	@Before
 	public void init(){
 		mapParams = new HashMap<String, String[]>();
-		mapParams.put("samInputData", new String[]{"/hdfs:/nbCloud/public/test/miRNA/test_miRNA.fq,/hdfs:/nbCloud/public/test/miRNA/test1_miRNA.fq"});
-		mapParams.put("samInputDataPrefix", new String[]{"test,test1"});
-		mapParams.put("vcfInputData", new String[]{"test,test1"});
+		mapParams.put("samInputData", new String[]{"/hdfs:/nbCloud/public/test/samToBam/abc1.sam"});
+		mapParams.put("samInputDataPrefix", new String[]{"test"});
+		mapParams.put("vcfInputData", new String[]{"test1"});
 		mapParams.put("taxId", new String[]{"3694"});
 		mapParams.put("mergeByPrefix", new String[]{"1"});
 		mapParams.put("addGroupInfo", new String[]{"1"});
@@ -35,7 +35,7 @@ public class TestSamToBam {
 		mapParams.put("index", new String[]{"1"});
 		mapParams.put("removeDuplicate", new String[]{"1"});
 		mapParams.put("realign", new String[]{"1"});
-		mapParams.put("recalibrate", new String[]{"1"});
+		//mapParams.put("recalibrate", new String[]{"1"});
 		mapParams.put("generatePileUpFile", new String[]{"1"});
 		mapParams.put("toBed", new String[]{"1"});
 		mapParams.put("mappingTo", new String[]{"8"});
@@ -89,7 +89,7 @@ public class TestSamToBam {
 			if (CtrlDNAMapping.MAP_TO_CHROM == Integer.parseInt(mapParams.get("mappingTo")[0])) {
 				refFile = species.getChromSeq();
 			}else if (CtrlDNAMapping.MAP_TO_REFSEQ == Integer.parseInt(mapParams.get("mappingTo")[0])) {
-				refFile = species.getRefseqFile();
+				refFile = species.getRefseqFile(true);
 			}
 			species.setVersion(mapParams.get("speciesVersion")[0]);
 		}

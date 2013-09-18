@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.mirna.CtrlMiRNAfastq;
+import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.generalConf.PathDetailNBC;
@@ -51,7 +52,8 @@ public class TestMiRNASeqAnalysis {
 		ctrlMiRNAfastq.setMappingAll2Genome(mapParams.get("mappingAllToGenome") != null);
 		ctrlMiRNAfastq.setRfamSpeciesSpecific(mapParams.get("mappingToSpecies") != null);
 		ctrlMiRNAfastq.setSpecies(species);
-		ctrlMiRNAfastq.setOutPath(FileOperate.addSep(mapParams.get("savePath")[0]));
+		String savePath = FoldeCreate.createAndInFold(FileOperate.addSep(mapParams.get("savePath")[0]), "miRNASeqAnalysis_result");
+		ctrlMiRNAfastq.setOutPath(FileOperate.addSep(savePath));
 		ctrlMiRNAfastq.setGffChrAbs(gffChrAbs);
 		ctrlMiRNAfastq.setLsFastqFile(lsfastqFile2Prefix);
 		ctrlMiRNAfastq.setMiRNAinfo(PathDetailNBC.getMiRNADat());
