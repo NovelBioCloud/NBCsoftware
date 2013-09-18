@@ -27,15 +27,15 @@ public class TestDNASeqMap {
 	@Before
 	public void init(){
 		mapParams = new HashMap<String, String[]>();
-		mapParams.put("leftInputData", new String[]{"/media/hdfs/nbCloud/public/test/DNASeqMap/test_filtered_1.fq.gz,/media/hdfs/nbCloud/public/test/DNASeqMap/test1_filtered_1.fq.gz"});
+		mapParams.put("leftInputData", new String[]{"/hdfs:/nbCloud/public/test/DNASeqMap/test_filtered_1.fq.gz,/hdfs:/nbCloud/public/test/DNASeqMap/test1_filtered_1.fq.gz"});
 		mapParams.put("leftInputDataPrefix", new String[]{"test,test1"});
-		mapParams.put("rightInputData", new String[]{"/media/hdfs/nbCloud/public/test/DNASeqMap/test_filtered_2.fq.gz,/media/hdfs/nbCloud/public/test/DNASeqMap/test1_filtered_2.fq.gz"});
+		mapParams.put("rightInputData", new String[]{"/hdfs:/nbCloud/public/test/DNASeqMap/test_filtered_2.fq.gz,/hdfs:/nbCloud/public/test/DNASeqMap/test1_filtered_2.fq.gz"});
 		mapParams.put("gapLength", new String[]{"30"});
 		mapParams.put("mismatch", new String[]{"5"});
 		mapParams.put("thread", new String[]{"2"});
 		mapParams.put("mappingToFile", new String[]{""});
 		mapParams.put("library", new String[]{"PairEnd"});
-		mapParams.put("savePath", new String[]{"/media/hdfs/nbCloud/staff/gaozhu/我的图片"});
+		mapParams.put("savePath", new String[]{"/hdfs:/nbCloud/staff/gaozhu/我的图片"});
 		mapParams.put("software", new String[]{"bwa"});
 		mapParams.put("taxId", new String[]{"10090"});
 		mapParams.put("speciesVersion", new String[]{"mm10_NCBI"});
@@ -65,7 +65,7 @@ public class TestDNASeqMap {
 		ctrlDNAMapping.running();
 	}
 	
-	@Test
+	//@Test
 	public void runReport() {
 		List<String> lsFolders = new ArrayList<>();
 		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.DNASeqMap.getResultFolder()));

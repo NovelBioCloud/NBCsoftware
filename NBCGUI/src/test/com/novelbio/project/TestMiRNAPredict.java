@@ -45,7 +45,6 @@ public class TestMiRNAPredict {
 			fastqFile2Prefix[1] = inputFilePrefixs[i];
 			lsBedFile2Prefix.add(fastqFile2Prefix);
 		}
-		
 		CtrlMiRNApredict ctrlMiRNApredict = new CtrlMiRNApredict();
 		Species species = new Species(Integer.parseInt(mapParams.get("taxId")[0]), mapParams.get("speciesVersion")[0]);
 		species.setGffDB(mapParams.get("dbType")[0]);
@@ -59,7 +58,6 @@ public class TestMiRNAPredict {
 			} else if (FormatSeq.getFileType(strings[0]) == FormatSeq.BAM || FormatSeq.getFileType(strings[0]) == FormatSeq.SAM) {
 				alignSeq = new SamFile(strings[0]);
 			}
-			
 			if (alignSeq != null) {
 				mapBedFile2Prefix.put(alignSeq, strings[1]);
 			}
