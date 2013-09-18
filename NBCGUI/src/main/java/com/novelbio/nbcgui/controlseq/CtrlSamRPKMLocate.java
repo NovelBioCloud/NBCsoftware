@@ -167,8 +167,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	
 	public void run() {
 		rpkMcomput = new RPKMcomput();
-		int fileSize = getFileSize();		
-		guiSamStatistics.getProcessBar().setMaximum(fileSize);
+		
 		
 		if (!isCountExpression && !isLocStatistics) {
 			return;
@@ -184,9 +183,15 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		}
 		
 		done(null);
-		guiSamStatistics.getProcessBar().setValue(guiSamStatistics.getProcessBar().getMaximum());
-		guiSamStatistics.getBtnSave().setEnabled(true);
-		guiSamStatistics.getBtnRun().setEnabled(true);
+		
+		if (guiSamStatistics != null) {
+			int fileSize = getFileSize();		
+			guiSamStatistics.getProcessBar().setMaximum(fileSize);
+			guiSamStatistics.getProcessBar().setValue(guiSamStatistics.getProcessBar().getMaximum());
+			guiSamStatistics.getBtnSave().setEnabled(true);
+			guiSamStatistics.getBtnRun().setEnabled(true);
+		}
+	
 	}
 	
 	private void calculate() {

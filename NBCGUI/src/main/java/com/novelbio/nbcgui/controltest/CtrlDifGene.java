@@ -54,6 +54,7 @@ public class CtrlDifGene {
 		diffExpAbs.setLog2Value(isLog2Value);
 	}
 	
+	
 	public void clean() {
 		diffExpAbs.clean();
 	}
