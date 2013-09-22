@@ -36,7 +36,7 @@ public class TestSamAndRPKM {
 		mapParams.put("taskState", new String[]{"-1500"});
 		mapParams.put("tssUp", new String[]{"1"});
 		mapParams.put("standardize", new String[]{"FPKM"});
-		mapParams.put("inFileArray", new String[]{"/hdfs:/nbCloud/staff/gaozhu/我的文档/RNASeqMap_result/test1_junctions.bed"});
+		mapParams.put("inFileArray", new String[]{"/hdfs:/nbCloud/staff/gaozhu/我的文档/RNASeqMap_result/test1_accepted_hits.bam"});
 		mapParams.put("dbType", new String[]{"NCBI"});
 		mapParams.put("outFileName", new String[]{"/hdfs:/nbCloud/staff/gaozhu/我的图片/"});
 		mapParams.put("gtfFile", new String[]{""});
