@@ -88,8 +88,8 @@ public class CtrlGetSeq implements RunGetInfo<GffChrSeq.GffChrSeqProcessInfo>{
 	}
 
 	public void execute() {
-		gffChrSeq.setTssRange(upAndDownStream);
-		gffChrSeq.setTesRange(upAndDownStream);
+		gffChrSeq.setTssAtgRange(upAndDownStream);
+		gffChrSeq.setTesUagRange(upAndDownStream);
 		guiGetSeq.getProgressBar().setMinimum(0);
 		guiGetSeq.getProgressBar().setMaximum(gffChrSeq.getNumOfQuerySeq());
 		guiGetSeq.getBtnOpen().setEnabled(false);

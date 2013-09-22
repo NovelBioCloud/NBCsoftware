@@ -343,12 +343,17 @@ public class GuiGetSeq extends JPanel {
 			return;
 		}
 		
-		if (cmbGeneStructure.getSelectedValue().equals(GeneStructure.TSS) || cmbGeneStructure.getSelectedValue().equals(GeneStructure.TES)) {
+		if (cmbGeneStructure.getSelectedValue().equals(GeneStructure.TSS) || cmbGeneStructure.getSelectedValue().equals(GeneStructure.TES)
+			||cmbGeneStructure.getSelectedValue().equals(GeneStructure.ATG) || cmbGeneStructure.getSelectedValue().equals(GeneStructure.UAG)	
+				) {
 			if (cmbGeneStructure.getSelectedValue().equals(GeneStructure.TSS)) {
 				lblTssTes.setText("Tss");
-			}
-			else if (cmbGeneStructure.getSelectedValue().equals(GeneStructure.TES)) {
+			} else if (cmbGeneStructure.getSelectedValue().equals(GeneStructure.TES)) {
 				lblTssTes.setText("Tes");
+			} else if (cmbGeneStructure.getSelectedValue().equals(GeneStructure.ATG)) {
+				lblTssTes.setText("Atg");
+			} else if (cmbGeneStructure.getSelectedValue().equals(GeneStructure.UAG)) {
+				lblTssTes.setText("Uag");
 			}
 			txtTssUp.setEnabled(true);
 			txtTssDown.setEnabled(true);
