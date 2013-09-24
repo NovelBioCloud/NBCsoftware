@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.novelbio.analysis.seq.genome.GffChrAbs;
+import com.novelbio.analysis.seq.mapping.MapBowtie;
 import com.novelbio.analysis.seq.mapping.MapLibrary;
 import com.novelbio.analysis.seq.mapping.MapTophat;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
@@ -80,7 +81,7 @@ public class TestRNASeqMap {
 		ctrlRNAmap.setStrandSpecifictype(StrandSpecific.valueOf(mapParams.get("strandType")[0]));
 		ctrlRNAmap.setThreadNum(threadNum);
 		ctrlRNAmap.setIsUseGTF(mapParams.get("useGTF") != null);
-		ctrlRNAmap.setSensitive(MapTophat.getMapSensitive().get(mapParams.get("sensitive")[0]));
+		ctrlRNAmap.setSensitive(MapBowtie.getMapSensitive().get(mapParams.get("sensitive")[0]));
 		ctrlRNAmap.setOutPathPrefix(mapParams.get("savePath")[0]);
 		ctrlRNAmap.mapping();
 		if (mapParams.get("algorithm")[0].equalsIgnoreCase("rsem")) {

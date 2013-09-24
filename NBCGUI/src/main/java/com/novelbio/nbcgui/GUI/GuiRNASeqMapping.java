@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 
 import com.novelbio.analysis.seq.fastq.FastQ;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
+import com.novelbio.analysis.seq.mapping.MapBowtie;
 import com.novelbio.analysis.seq.mapping.MapLibrary;
 import com.novelbio.analysis.seq.mapping.MapTophat;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
@@ -118,7 +119,7 @@ public class GuiRNASeqMapping extends JPanel {
 		
 		cmbSensitive = new JComboBoxData<>();
 		cmbSensitive.setBounds(500, 328, 225, 27);
-		cmbSensitive.setMapItem(MapTophat.getMapSensitive());
+		cmbSensitive.setMapItem(MapBowtie.getMapSensitive());
 		add(cmbSensitive);
 
 		

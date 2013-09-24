@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.novelbio.analysis.seq.fastq.FastQ;
+import com.novelbio.analysis.seq.mapping.MapBowtie;
 import com.novelbio.analysis.seq.mapping.MapDNA;
 import com.novelbio.analysis.seq.mapping.MapDNAint;
 import com.novelbio.analysis.seq.mapping.MapLibrary;
@@ -37,6 +38,7 @@ public class CtrlDNAMapping {
 	MapLibrary libraryType = MapLibrary.SingleEnd;
 	int gapLen = 5;
 	double mismatch = 2;
+	int sensitive = MapBowtie.Sensitive_Sensitive;
 	int thread = 4;
 	
 	String chrIndexFile;
@@ -102,6 +104,12 @@ public class CtrlDNAMapping {
 	}
 	public double getMismatch() {
 		return mismatch;
+	}
+	public void setSensitive(int sensitive) {
+		this.sensitive = sensitive;
+	}
+	public int getSensitive() {
+		return sensitive;
 	}
 	public void setSoftMapping(SoftWare softMapping) {
 		this.softMapping = softMapping;
@@ -169,7 +177,9 @@ public class CtrlDNAMapping {
 		} else {
 			mapSoftware.setFqFile(fastQs[0], fastQs[1]);
 		}
-		
+		if (mapSoftware instanceof MapBowtie) {
+			((MapBowtie)mapSoftware).setSensitive(sensitive);
+		}
 		mapSoftware.setOutFileName(outFilePrefix + prefix);
 		mapSoftware.setGapLength(gapLen);
 		mapSoftware.setMismatch(mismatch);

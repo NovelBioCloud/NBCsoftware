@@ -66,7 +66,7 @@ public class TestFastQC {
 		//Assert.assertTrue(FileOperate.isFileExist(reportPath + FileOperate.getSepPath() + EnumReport.FastQC.getReportXdocFileName()));
 	}
 	
-	@Test
+//	@Test
 	public void runReport() {
 		List<String> lsFolders = new ArrayList<>();
 		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.FastQC.getResultFolder()));

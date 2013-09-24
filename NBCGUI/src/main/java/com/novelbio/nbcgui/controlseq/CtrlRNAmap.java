@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import com.google.common.collect.ArrayListMultimap;
 import com.novelbio.analysis.seq.fastq.FastQ;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
+import com.novelbio.analysis.seq.mapping.MapBowtie;
 import com.novelbio.analysis.seq.mapping.MapLibrary;
 import com.novelbio.analysis.seq.mapping.MapRNA;
 import com.novelbio.analysis.seq.mapping.MapRsem;
@@ -47,7 +48,7 @@ public class CtrlRNAmap {
 	 * 之后每一行为基因表达情况
 	 *  */
 	List<List<String>> lsExpResultRsemCounts = new ArrayList<>();
-	int sensitive = MapTophat.Sensitive_Sensitive;
+	int sensitive = MapBowtie.Sensitive_Sensitive;
 	public CtrlRNAmap(int mapType) {
 		if (mapType == TOP_HAT) {
 			this.mapType = TOP_HAT;
