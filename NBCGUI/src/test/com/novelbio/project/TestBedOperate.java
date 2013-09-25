@@ -15,15 +15,14 @@ public class TestBedOperate {
 	@Before
 	public void init(){
 		mapParams = new HashMap<String, String[]>();
-		mapParams.put("inputData", new String[]{"/hdfs:/nbCloud/public/test/miRNA/test_miRNA.fq,/hdfs:/nbCloud/public/test/miRNA/test1_miRNA.fq"});
+		mapParams.put("inputData", new String[]{"/hdfs:/nbCloud/public/test/samToBam/abc1.bed"});
 		mapParams.put("extend", new String[]{"1"});
 		mapParams.put("extendValue", new String[]{"10"});
-		mapParams.put("mappingNumFrom", new String[]{"0"});
-		mapParams.put("mappingNumTo", new String[]{"20"});
+		mapParams.put("mappingNumFrom", new String[]{"1"});
+		mapParams.put("mappingNumTo", new String[]{"1"});
 		mapParams.put("filterReads", new String[]{"1"});
 		mapParams.put("filterReadsValue", new String[]{"trans"});
 		mapParams.put("sortBed", new String[]{"1"});
-		mapParams.put("savePath", new String[]{"/hdfs:/nbCloud/staff/gaozhu/我的文档"});
 	}
 	
 	@Test

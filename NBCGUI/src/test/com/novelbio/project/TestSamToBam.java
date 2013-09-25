@@ -66,14 +66,10 @@ public class TestSamToBam {
 			}
 		}
 		
-		String resultMergePath = FileOperate.addSep( mapParams.get("savePath")[0]);
-		String saveFolder = resultMergePath + "SamToBam_Result";
-		if(!FileOperate.isFileFoldExist(saveFolder)){
-			FileOperate.createFolders(saveFolder);
-		}
+		String resultMergePath = FileOperate.addSep(FileOperate.getParentPathName(samInputFiles[0]));
 		for (String prefix : mapPrefix2FileName.keySet()) {
 			List<String> lsSamFiles = mapPrefix2FileName.get(prefix);
-			convertSamFile(saveFolder, prefix, lsSamFiles);
+			convertSamFile(resultMergePath, prefix, lsSamFiles);
 		}
 		
 	}
