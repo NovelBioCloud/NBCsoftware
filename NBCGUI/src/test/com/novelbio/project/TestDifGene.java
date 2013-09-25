@@ -23,7 +23,7 @@ public class TestDifGene {
 	}
 	
 	@Test
-	public void runTest() {
+	public void runTest() throws Exception {
 		
 		String savePath = "/media/hdfs/nbCloud/staff/gaozhu/我的文档/Difference-Expression_result";
 		List<String> lsList = new ArrayList<>();
