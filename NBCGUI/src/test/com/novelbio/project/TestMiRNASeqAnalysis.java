@@ -14,6 +14,7 @@ import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.generalConf.PathDetailNBC;
+import com.novelbio.nbcReport.Params.EnumReport;
 
 public class TestMiRNASeqAnalysis {
 	Map<String, String[]> mapParams;
@@ -52,7 +53,7 @@ public class TestMiRNASeqAnalysis {
 		ctrlMiRNAfastq.setMappingAll2Genome(mapParams.get("mappingAllToGenome") != null);
 		ctrlMiRNAfastq.setRfamSpeciesSpecific(mapParams.get("mappingToSpecies") != null);
 		ctrlMiRNAfastq.setSpecies(species);
-		String savePath = FoldeCreate.createAndInFold(FileOperate.addSep(mapParams.get("savePath")[0]), "miRNASeqAnalysis_result");
+		String savePath = FoldeCreate.createAndInFold(FileOperate.addSep(mapParams.get("savePath")[0]), EnumReport.MiRNASeqAnalysis.getResultFolder());
 		ctrlMiRNAfastq.setOutPath(FileOperate.addSep(savePath));
 		ctrlMiRNAfastq.setGffChrAbs(gffChrAbs);
 		ctrlMiRNAfastq.setLsFastqFile(lsfastqFile2Prefix);
