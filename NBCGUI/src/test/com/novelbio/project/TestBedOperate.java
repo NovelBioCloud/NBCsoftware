@@ -27,12 +27,14 @@ public class TestBedOperate {
 	
 	@Test
 	public void goRun(){
-		String[] inputFiles = mapParams.get("inputData")[0].split(",");
+		String[] inputFiles = mapParams.get("inputData");
 		for (int i = 0; i < inputFiles.length; i++) {
 			BedSeq bedSeq = new BedSeq(inputFiles[i]);
 			if (mapParams.get("extend") != null) {
 				int extendLen = Integer.parseInt(mapParams.get("extendValue")[0]);
-				bedSeq = bedSeq.extend(extendLen);
+				if (extendLen > 0) {
+					bedSeq = bedSeq.extend(extendLen);
+				}
 			}
 			if (mapParams.get("filterReads") != null) {
 				Boolean strand = null;
