@@ -16,6 +16,7 @@ import com.novelbio.analysis.seq.mapping.MapTophat;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.base.dataStructure.MathComput;
 import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
 import com.novelbio.nbcReport.Params.EnumReport;
 
 public class CtrlRNAmap {
@@ -161,7 +162,7 @@ public class CtrlRNAmap {
 		if (mapType == TOP_HAT) {
 			mapRNA.setFileRef(gffChrAbs.getSpecies().getIndexChr(mapRNA.getBowtieVersion()));
 		} else {
-			mapRNA.setFileRef(gffChrAbs.getSpecies().getRefseqFile(true));
+			mapRNA.setFileRef(gffChrAbs.getSpecies().getIndexRef(SoftWare.rsem, true));
 		}
 	}
 	private void setMapLibrary(MapLibrary mapLibrary) {
