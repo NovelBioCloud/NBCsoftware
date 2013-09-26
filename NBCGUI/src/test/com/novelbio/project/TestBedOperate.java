@@ -15,25 +15,26 @@ public class TestBedOperate {
 	@Before
 	public void init(){
 		mapParams = new HashMap<String, String[]>();
-		mapParams.put("inputData", new String[]{"/hdfs:/nbCloud/public/test/miRNA/test_miRNA.fq,/hdfs:/nbCloud/public/test/miRNA/test1_miRNA.fq"});
+		mapParams.put("inputData", new String[]{"/hdfs:/nbCloud/public/test/samToBam/abc1.bed"});
 		mapParams.put("extend", new String[]{"1"});
 		mapParams.put("extendValue", new String[]{"10"});
-		mapParams.put("mappingNumFrom", new String[]{"0"});
-		mapParams.put("mappingNumTo", new String[]{"20"});
+		mapParams.put("mappingNumFrom", new String[]{"1"});
+		mapParams.put("mappingNumTo", new String[]{"1"});
 		mapParams.put("filterReads", new String[]{"1"});
 		mapParams.put("filterReadsValue", new String[]{"trans"});
 		mapParams.put("sortBed", new String[]{"1"});
-		mapParams.put("savePath", new String[]{"/hdfs:/nbCloud/staff/gaozhu/我的文档"});
 	}
 	
 	@Test
 	public void goRun(){
-		String[] inputFiles = mapParams.get("inputData")[0].split(",");
+		String[] inputFiles = mapParams.get("inputData");
 		for (int i = 0; i < inputFiles.length; i++) {
 			BedSeq bedSeq = new BedSeq(inputFiles[i]);
 			if (mapParams.get("extend") != null) {
 				int extendLen = Integer.parseInt(mapParams.get("extendValue")[0]);
-				bedSeq = bedSeq.extend(extendLen);
+				if (extendLen > 0) {
+					bedSeq = bedSeq.extend(extendLen);
+				}
 			}
 			if (mapParams.get("filterReads") != null) {
 				Boolean strand = null;

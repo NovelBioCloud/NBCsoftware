@@ -11,28 +11,26 @@ import com.novelbio.base.dataOperate.DateUtil;
  * 
  */
 public enum EnumReport {
-	GeneExp("GeneExp","GeneExpression_result",new ReportGeneExpressionAll()),
-	GOAnalysis("GOAnalysis","GO-Analysis_result",new ReportGOAll()),
-	PathWay("PathWay","PathWay-Analysis_result",new ReportPathWayAll()),
-	SamAndRPKM("SamAndRPKM","SamAndRPKM_result",new ReportSamAndRPKMAll()),
-	FastQC("FastQC","Quality-Control_result",new ReportQCAll()),
-	DNASeqMap("DNASeqMap","DNASeqMap_result",new ReportDNASeqMap()),
-	RNASeqMap("RNASeqMap","RNASeqMap_result",new ReportRNASeqMap()),
-	DiffExp("DiffExp","Difference-Expression_result",new ReportDifGeneAll()),
-	GOTree("GOTree","GO-Trees_result",null),
-	GeneAct("GeneAct","Gene-Act-Network_result",null),
-	MiRNA("MiRNA","miRNA-Target-Network_result",null),
-	PathwayAct("PathwayAct","Pathway-Act-network_result",null),
-	LncRNA("LncRNA","Co-Exp-Net_LncRNA_result",null),
-	Project("project","Novelbio_Result",null),
-	Picture("picture","Picture",null),
-	Excel("excel","Excel",null);
-	
-	String type;
+	GeneExp("GeneExpression_result",new ReportGeneExpressionAll()),
+	GOAnalysis("GOAnalysis_result",new ReportGOAll()),
+	PathWay("PathWayAnalysis_result",new ReportPathWayAll()),
+	SamAndRPKM("SamAndRPKM_result",new ReportSamAndRPKMAll()),
+	FastQC("QualityControl_result",new ReportQCAll()),
+	DNASeqMap("DNASeqMap_result",new ReportDNASeqMap()),
+	RNASeqMap("RNASeqMap_result",new ReportRNASeqMap()),
+	DiffExp("DifferenceExpression_result",new ReportDifGeneAll()),
+	GOTree("GOTrees_result",null),
+	GeneActNetwork("GeneActNetwork_result",null),
+	MiRNATargetNetwork("MiRNATargetNetwork_result",null),
+	PathwayActNetwork("PathwayActNetwork_result",null),
+	CoExpNetLncRNA("CoExpNetLncRNA_result",null),
+	Project("Novelbio_Result",null),
+	Picture("Picture",null),
+	Excel("Excel",null),
+	MiRNASeqAnalysis("MiRNASeqAnalysis_result",null);
 	String tempName;
 	ReportBase reportBase;
-	EnumReport(String type,String tempName,ReportBase reportBase) {
-		this.type = type;
+	EnumReport(String tempName,ReportBase reportBase) {
 		this.tempName = tempName;
 		this.reportBase = reportBase;
 	}
@@ -43,7 +41,7 @@ public enum EnumReport {
 	 * @return
 	 */
 	public String getReportXdocFileName() {
-		return "report_" + type + ".txt";
+		return "report_" + this.name() + ".txt";
 	}
 	
 	/**
@@ -51,7 +49,7 @@ public enum EnumReport {
 	 * @return
 	 */
 	public String getReportRandomFileName(){
-		return "report_" + type + DateUtil.getDateAndRandom();
+		return "report_" + this.name() + DateUtil.getDateAndRandom();
 	}
 	/**
 	 * 得到xdoc模板路径

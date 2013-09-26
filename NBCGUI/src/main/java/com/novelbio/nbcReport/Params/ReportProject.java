@@ -22,7 +22,6 @@ import org.dom4j.io.XMLWriter;
 import com.hg.xdoc.XDoc;
 import com.hg.xdoc.XDocIO;
 import com.novelbio.base.PathDetail;
-import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.fileOperate.ZipOperate;
 
@@ -47,7 +46,7 @@ public class ReportProject extends ReportBase {
 	 * @param folderPath
 	 *            一个目录
 	 */
-	public ReportProject(String folderPath) {
+	public ReportProject(String folderPath)  throws Exception{
 		List<String> lsChildren = FileOperate.getFoldFileNameLs(folderPath, "*", "*");
 		for (String fileName : lsChildren) {
 			if (!FileOperate.isFileDirectory(fileName))
@@ -72,7 +71,7 @@ public class ReportProject extends ReportBase {
 	 * 
 	 * @param folderChildren
 	 */
-	public ReportProject(List<String> folderChildren) {
+	public ReportProject(List<String> folderChildren)  throws Exception{
 		for (String fileName : folderChildren) {
 			if (!FileOperate.isFileDirectory(fileName))
 				continue;
@@ -112,7 +111,7 @@ public class ReportProject extends ReportBase {
 	/**
 	 * 根据渲染的String结果查找标题来创建目录
 	 */
-	private void createCatalog(String content) {
+	private void createCatalog(String content)  throws Exception{
 		Document doc = null;
 		try {
 			// 读取并解析XML文档
@@ -146,7 +145,7 @@ public class ReportProject extends ReportBase {
 	/**
 	 * 给定保存路径outPath、文件名fileName后缀名suffix，输出带有页面页脚的最终结果报告
 	 */
-	public boolean outputReport(String outPathFile) {
+	public boolean outputReport(String outPathFile) throws Exception{
 		try {
 			// 设置目录
 			String tempPath = PathDetail.getTmpPathRandom();
@@ -181,7 +180,7 @@ public class ReportProject extends ReportBase {
 	/**
 	 * 根据一个xml字符串读取里面的<img src="aaa">标签的src属性 返回一个图片全路径序列集合
 	 */
-	public List<String> findAllImageSrc(String result) {
+	public List<String> findAllImageSrc(String result) throws Exception {
 		List<String> lsImageSrcs = new ArrayList<String>();
 		Document doc = null;
 		String picTempPath = FileOperate.addSep(EnumReport.Picture.getTempPath()) + "picTemp.PNG";
@@ -219,7 +218,7 @@ public class ReportProject extends ReportBase {
 	 * @param reportPath
 	 *            生成的word报告文件，包含全路径
 	 */
-	public void motifyReport(List<String> lsImageSrcs, String reportPath) {
+	public void motifyReport(List<String> lsImageSrcs, String reportPath) throws Exception {
 		// word转成的压缩包名
 		String zipFileName = FileOperate.changeFileSuffixReal(reportPath, null, "zip");
 		// 解压后的文件夹全名
@@ -256,7 +255,7 @@ public class ReportProject extends ReportBase {
 
 	/** 去页眉页脚改表格边框线，同时设置行间距1.5倍 */
 	@SuppressWarnings("unchecked")
-	private void modifyWord(String documtXMLPath) {
+	private void modifyWord(String documtXMLPath) throws Exception {
 		// 去掉首页的页眉页脚
 		SAXReader saxReader = new SAXReader();
 		Document document = null;

@@ -95,7 +95,7 @@ public class TestRNASeqMap {
 	}
 	
 	@Test
-	public void runReport() {
+	public void runReport() throws Exception {
 		List<String> lsFolders = new ArrayList<>();
 		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.RNASeqMap.getResultFolder()));
 		ReportProject reportProject = new ReportProject(lsFolders);

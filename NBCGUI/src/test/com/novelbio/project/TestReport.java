@@ -20,14 +20,14 @@ public class TestReport {
 	
 	
 	@Before
-	public void init(){
+	public void init() throws Exception{
 //		List<String> lsFolders = new ArrayList<>();
 //		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.GOAnalysis.getResultFolder()));
 		reportProject = new ReportProject(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档"));
 	}
 	
 	@Test
-	public void runReport() {
+	public void runReport() throws Exception {
 		String reportTest = "/home/novelbio/桌面/testReport.docx";
 		reportProject.outputReport(reportTest);
 		Assert.assertNotNull(FileOperate.isFileExist(reportTest));

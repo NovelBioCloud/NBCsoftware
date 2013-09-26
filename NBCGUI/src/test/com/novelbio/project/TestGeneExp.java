@@ -49,7 +49,7 @@ public class TestGeneExp {
 	}
 	
 	@Test
-	public void GoTest() {
+	public void GoTest() throws Exception {
 		String savePath = FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/GeneExpression_result");
 		Assert.assertTrue(FileOperate.isFileExist(FileOperate.addSep(savePath)+reportGeneExpressionAll.getEnumReport().getReportXdocFileName()));
 		List<String> lsList = new ArrayList<>();

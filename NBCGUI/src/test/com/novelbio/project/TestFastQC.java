@@ -67,7 +67,7 @@ public class TestFastQC {
 	}
 	
 //	@Test
-	public void runReport() {
+	public void runReport() throws Exception {
 		List<String> lsFolders = new ArrayList<>();
 		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.FastQC.getResultFolder()));
 		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的图片/"+EnumReport.FastQC.getResultFolder()));

@@ -101,7 +101,7 @@ public class TestGo {
 	}
 	
 	@Test
-	public void runReport() {
+	public void runReport() throws Exception {
 		List<String> lsFolders = new ArrayList<>();
 		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.GOAnalysis.getResultFolder()));
 		ReportProject reportProject = new ReportProject(lsFolders);
