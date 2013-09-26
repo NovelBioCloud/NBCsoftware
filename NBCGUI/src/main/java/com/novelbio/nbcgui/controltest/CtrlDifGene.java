@@ -29,7 +29,8 @@ public class CtrlDifGene {
 	}
 
 	public void addFileName2Compare(String fileName, String[] comparePair) {
-		diffExpAbs.addFileName2Compare(fileName, comparePair);
+		String difFold = EnumReport.DiffExp.getResultFolder();
+		diffExpAbs.addFileName2Compare(fileName, difFold, comparePair);
 	}
 
 	public void setGeneInfo(ArrayList<String[]> lsGeneInfo) {
@@ -45,8 +46,7 @@ public class CtrlDifGene {
 	}
 
 	public void calculateResult() {
-		String difFold = EnumReport.DiffExp.getResultFolder();
-		diffExpAbs.calculateResult(difFold);
+		diffExpAbs.calculateResult();
 		getDiffReport();
 	}
 	
