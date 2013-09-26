@@ -13,9 +13,9 @@ public class TestBedOperate {
 	Map<String, String[]> mapParams;
 	
 	@Before
-	public void init(){
+	public void init() {
 		mapParams = new HashMap<String, String[]>();
-		mapParams.put("inputData", new String[]{"/hdfs:/nbCloud/public/test/samToBam/abc1.bed"});
+		mapParams.put("inputData", new String[]{"/hdfs:/nbCloud/public/test/samToBam/abc2.bed.gz"});
 		mapParams.put("extend", new String[]{"1"});
 		mapParams.put("extendValue", new String[]{"10"});
 		mapParams.put("mappingNumFrom", new String[]{"1"});

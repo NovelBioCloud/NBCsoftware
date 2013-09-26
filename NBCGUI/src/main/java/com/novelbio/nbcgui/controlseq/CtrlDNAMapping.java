@@ -155,7 +155,7 @@ public class CtrlDNAMapping {
 	 * @param prefix 文件前缀，实际输出文本为{@link #outFilePrefix} + prefix +.txt
 	 * @param fastQs
 	 */
-	public String mapping(String prefix, String[] fastQsFile) {
+	public void mapping(String prefix, String[] fastQsFile) {
 		FastQ[] fastQs = CopeFastq.convertFastqFile(fastQsFile);
 		softWareInfo.setName(softMapping);
 		MapDNAint mapSoftware = MapDNA.creatMapDNA(softMapping);		
@@ -189,7 +189,6 @@ public class CtrlDNAMapping {
 		samFileStatistics = new SamFileStatistics(prefix);
 		mapSoftware.addAlignmentRecorder(samFileStatistics);
 		mapSoftware.mapReads();
-		return mapSoftware.getCmdMapping();
 	}
 	
 	public static HashMap<String, Integer> getMapStr2Index() {
