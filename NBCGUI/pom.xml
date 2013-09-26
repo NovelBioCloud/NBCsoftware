@@ -4,6 +4,7 @@
   <artifactId>NBCGUI</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <distributionManagement>
+  
 		<!-- use the following if you're not using a snapshot version. -->
 		<repository>
 			<id>my-nexus-releases</id>
