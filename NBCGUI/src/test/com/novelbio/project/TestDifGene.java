@@ -21,7 +21,7 @@ public class TestDifGene {
 
 	public static void main(String[] args) {
 		System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
-		int DiffExpID = DiffExpAbs.TTest;
+		int DiffExpID = DiffExpAbs.LIMMA;
 		CtrlDifGene ctrlDifGene = new CtrlDifGene(DiffExpID);
 		int colId = 1;
 		ctrlDifGene.setColID(colId);
@@ -45,7 +45,7 @@ public class TestDifGene {
 		String inFileName = "/hdfs:/nbCloud/public/test/DifGene0910/rawdata/All_Fragments_0.txt";
 		ArrayList<String[]> lsStrings = ExcelTxtRead.readLsExcelTxt(inFileName, 1);
 		ctrlDifGene.setGeneInfo(lsStrings);
-		String outFilePath = "/hdfs:/nbCloud/staff/gaozhu/我的文档";
+		String outFilePath = "/hdfs:/nbCloud/staff/gaozhu/临时文件夹";
 		if (FileOperate.isFileDirectory(outFilePath)) {
 			outFilePath = FileOperate.addSep(outFilePath);
 		}
