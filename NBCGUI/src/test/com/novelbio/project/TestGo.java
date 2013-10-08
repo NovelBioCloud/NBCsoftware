@@ -25,7 +25,7 @@ public class TestGo {
 	@Before
 	public void init(){
 		mapParams = new HashMap<String, String[]>();
-		mapParams.put("inputData", new String[]{FileHadoop.getHdfsHeadSymbol("/nbCloud/public/test/gopath/A18VSA6-Dif_anno.xls"),FileHadoop.getHdfsHeadSymbol("/nbCloud/public/test/gopath/D6VSD0-Dif_anno.xls")});
+		mapParams.put("inputData", new String[]{"/hdfs:/nbCloud/public/test/gopath/A18VSA6-Dif_anno.xls","/hdfs:/nbCloud/public/test/gopath/D6VSD0-Dif_anno.xls"});
 		mapParams.put("inputDataPrefix", new String[]{"test1","test2"});
 		mapParams.put("goAlgorithm", new String[]{GoAlgorithm.novelgo.name()});
 		mapParams.put("querySpecies", new String[]{"4577"});
@@ -38,8 +38,8 @@ public class TestGo {
 //		mapParams.put("clusterGoPath", new String[]{});
 		mapParams.put("upValue", new String[]{"1"});
 		mapParams.put("downValue", new String[]{"-1"});
-		mapParams.put("background", new String[]{FileHadoop.getHdfsHeadSymbol("/nbCloud/public/test/gopath/maizeBG.txt")});
-		mapParams.put("savePath", new String[]{FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/")});
+		mapParams.put("background", new String[]{"/hdfs:/nbCloud/public/test/gopath/maizeBG.txt"});
+		mapParams.put("savePath", new String[]{"/hdfs:/nbCloud/staff/gaozhu/我的文档/"});
 	}
 	
 	@Test
@@ -100,7 +100,7 @@ public class TestGo {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void runReport() throws Exception {
 		List<String> lsFolders = new ArrayList<>();
 		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.GOAnalysis.getResultFolder()));
