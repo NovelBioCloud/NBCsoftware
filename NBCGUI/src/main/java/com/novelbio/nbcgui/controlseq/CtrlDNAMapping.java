@@ -40,7 +40,7 @@ public class CtrlDNAMapping {
 	double mismatch = 2;
 	int sensitive = MapBowtie.Sensitive_Sensitive;
 	int thread = 4;
-	
+	boolean isNeedSort = true;
 	String chrIndexFile;
 	Species species;
 	int map2Index = MAP_TO_CHROM;
@@ -92,7 +92,9 @@ public class CtrlDNAMapping {
 	public String getOutFilePrefix() {
 		return outFilePrefix;
 	}
-	
+	public void setSortNeed(boolean isNeedSort) {
+		this.isNeedSort = isNeedSort;
+	}
 	public void setGapLen(int gapLen) {
 		this.gapLen = gapLen;
 	}
@@ -162,14 +164,14 @@ public class CtrlDNAMapping {
 		mapSoftware.setExePath(softWareInfo.getExePath());
 
 		if (species.getTaxID() == 0) {
-			mapSoftware.setChrFile(chrIndexFile);
+			mapSoftware.setChrIndex(chrIndexFile);
 		} else {
 			if (map2Index == MAP_TO_CHROM) {
-				mapSoftware.setChrFile(species.getIndexChr(softMapping));
+				mapSoftware.setChrIndex(species.getIndexChr(softMapping));
 			} else if (map2Index == MAP_TO_REFSEQ) {
-				mapSoftware.setChrFile(species.getIndexRef(softMapping, true));
+				mapSoftware.setChrIndex(species.getIndexRef(softMapping, true));
 			} else if (map2Index == MAP_TO_REFSEQ_LONGEST_ISO) {
-				mapSoftware.setChrFile(species.getIndexRef(softMapping, false));
+				mapSoftware.setChrIndex(species.getIndexRef(softMapping, false));
 			}
 		}
 		if (fastQs.length == 1) {
@@ -185,6 +187,7 @@ public class CtrlDNAMapping {
 		mapSoftware.setMismatch(mismatch);
 		mapSoftware.setSampleGroup(prefix, prefix, prefix, null);
 		mapSoftware.setMapLibrary(libraryType);
+		mapSoftware.setSortNeed(isNeedSort);
 		mapSoftware.setThreadNum(thread);
 		samFileStatistics = new SamFileStatistics(prefix);
 		mapSoftware.addAlignmentRecorder(samFileStatistics);

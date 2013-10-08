@@ -111,14 +111,14 @@ public class CtrlFastQ {
 	 * 1: prefix <br>
 	 * 2: group
 	 */
-	public void setLsFastQfileLeft(ArrayList<String> lsFastQfileLeft) {
+	public void setLsFastQfileLeft(List<String> lsFastQfileLeft) {
 		copeFastq.setLsFastQfileLeft(lsFastQfileLeft);
 	}
-	public void setLsFastQfileRight(ArrayList<String> lsFastQfileRight) {
+	public void setLsFastQfileRight(List<String> lsFastQfileRight) {
 		copeFastq.setLsFastQfileRight(lsFastQfileRight);
 	}
 	/**必须对每个文件都有一个前缀 */
-	public void setLsPrefix(ArrayList<String> lsPrefix) {
+	public void setLsPrefix(List<String> lsPrefix) {
 		copeFastq.setLsCondition(lsPrefix);
 	}
 	

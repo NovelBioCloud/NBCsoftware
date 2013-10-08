@@ -24,7 +24,7 @@ public class CtrlDifGene {
 		diffExpAbs = (DiffExpAbs) DiffExpAbs.createDiffExp(diffGeneID);
 	}
 
-	public void setCol2Sample(ArrayList<String[]> lsSampleColumn2GroupName) {
+	public void setCol2Sample(List<String[]> lsSampleColumn2GroupName) {
 		diffExpAbs.setCol2Sample(lsSampleColumn2GroupName);
 	}
 
