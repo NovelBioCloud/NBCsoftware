@@ -27,6 +27,7 @@ import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
+import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.nbcgui.controlseq.CopeFastq;
 import com.novelbio.nbcgui.controlseq.CtrlRNAmap;
@@ -191,10 +192,10 @@ public class GuiRNASeqMapping extends JPanel {
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (rdbtnRsem.isSelected()) {
-					ctrlRNAmap = new CtrlRNAmap(CtrlRNAmap.RSEM);
+					ctrlRNAmap = new CtrlRNAmap(SoftWare.rsem);
 				}
 				else if (rdbtnTophat.isSelected()) {
-					ctrlRNAmap = new CtrlRNAmap(CtrlRNAmap.TOP_HAT);
+					ctrlRNAmap = new CtrlRNAmap(SoftWare.tophat);
 				}
 
 				Species species = cmbSpecies.getSelectedValue();
@@ -212,9 +213,9 @@ public class GuiRNASeqMapping extends JPanel {
 				if (species == null || species.getTaxID() == 0) {
 					ctrlRNAmap.setGtfAndGene2Iso(txtGtfGene2Iso.getText());
 					ctrlRNAmap.setIndexFile(txtMappingIndex.getText());
-					
 				} else {
 					ctrlRNAmap.setGffChrAbs(new GffChrAbs(species));
+					ctrlRNAmap.setSpecies(species);
 				}
 				
 				ctrlRNAmap.setLibrary(cmbLibraryType.getSelectedValue());

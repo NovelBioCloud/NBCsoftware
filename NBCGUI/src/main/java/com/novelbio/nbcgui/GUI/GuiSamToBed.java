@@ -486,7 +486,7 @@ public class GuiSamToBed extends JPanel {
 		}
 		List<SamFile> lsBamFile = new ArrayList<SamFile>();
 		for (SamFile samFile : lsSamFiles) {
-			lsBamFile.add(samFile.convertToBam());
+			lsBamFile.add(samFile.convertToBam(false));
 		}
 		
 		if (chckbxMergebyprefix.isSelected()) {
