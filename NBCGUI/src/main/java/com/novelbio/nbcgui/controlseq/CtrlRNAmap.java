@@ -1,6 +1,8 @@
 package com.novelbio.nbcgui.controlseq;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -12,29 +14,30 @@ import com.novelbio.analysis.seq.mapping.MapBowtie;
 import com.novelbio.analysis.seq.mapping.MapLibrary;
 import com.novelbio.analysis.seq.mapping.MapRNA;
 import com.novelbio.analysis.seq.mapping.MapRsem;
+import com.novelbio.analysis.seq.mapping.MapSplice;
 import com.novelbio.analysis.seq.mapping.MapTophat;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.base.dataStructure.MathComput;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
+import com.novelbio.database.model.species.Species;
 import com.novelbio.nbcReport.Params.EnumReport;
 
 public class CtrlRNAmap {
-	public static final int TOP_HAT = 2;
-	public static final int RSEM = 4;
-	int mapType;
+	SoftWare softWare;
 	MapLibrary mapLibrary;
 	StrandSpecific strandSpecific;
 	
-	int threadNum = 4;
+	int threadNum = 10;
 	Map<String, List<List<String>>> mapPrefix2LsFastq;
 	
 	MapRNA mapRNA;
 	
 	GffChrAbs gffChrAbs;
+	Species species;
 	String indexFile = "";
 	/** ""表示使用GTF */
-	String gtfAndGene2Iso = "";
+	String gtfAndGene2Iso;
 	
 	/** tophat是否用GTF文件进行校正，默认为true，如果出错就要考虑不用GTF */
 	boolean useGTF = true;
@@ -50,26 +53,24 @@ public class CtrlRNAmap {
 	 *  */
 	List<List<String>> lsExpResultRsemCounts = new ArrayList<>();
 	int sensitive = MapBowtie.Sensitive_Sensitive;
-	public CtrlRNAmap(int mapType) {
-		if (mapType == TOP_HAT) {
-			this.mapType = TOP_HAT;
-		}
-		else if (mapType == RSEM) {
-			this.mapType = RSEM;
-		}	
+	public CtrlRNAmap(SoftWare softWare) {
+		this.softWare = softWare;
 	}
 	public void setMapPrefix2LsFastq(CopeFastq copeFastq) {
 		copeFastq.setMapCondition2LsFastQLR();
 		this.mapPrefix2LsFastq = copeFastq.getMapCondition2LslsFastq();
 	}
 	
-	/** 输入CopeFastq的对象，该对象设定完后直接传入本方法，即可完成项目配置 */
-	public void setCopeFastq(CopeFastq copeFastq) {
-		
-	}
+//	/** 输入CopeFastq的对象，该对象设定完后直接传入本方法，即可完成项目配置 */
+//	public void setCopeFastq(CopeFastq copeFastq) {
+//		
+//	}
 	
 	public void setGffChrAbs(GffChrAbs gffChrAbs) {
 		this.gffChrAbs = gffChrAbs;
+	}
+	public void setSpecies(Species species) {
+		this.species = species;
 	}
 	
 	public void setOutPathPrefix(String outPathPrefix) {
@@ -89,6 +90,7 @@ public class CtrlRNAmap {
 		this.mapLibrary = mapLibrary;
 	}
 	public void setThreadNum(int threadNum) {
+		if (threadNum < 0) return;
 		this.threadNum = threadNum;
 	}
 	public void setIsUseGTF(boolean useGTF) {
@@ -112,9 +114,8 @@ public class CtrlRNAmap {
 		lsExpResultRsemRPKM = new ArrayList<>();
 		lsExpResultRsemCounts = new ArrayList<>();
 		for (Entry<String, List<List<String>>> entry : mapPrefix2LsFastq.entrySet()) {
-			if (!creatMapRNA()) {
-				return;
-			}
+			creatMapRNA();
+
 			mapRNA.setGffChrAbs(gffChrAbs);
 			setRefFile();
 			String prefix = entry.getKey();
@@ -127,7 +128,7 @@ public class CtrlRNAmap {
 			mapRNA.setThreadNum(threadNum);
 			mapRNA.setOutPathPrefix(outPrefix + prefix);
 			
-			if (mapType == TOP_HAT && !useGTF) {
+			if (softWare == SoftWare.tophat && !useGTF) {
 				mapRNA.setGtf_Gene2Iso(null);
 				((MapTophat)mapRNA).setSensitiveLevel(sensitive);
 			} else {
@@ -140,29 +141,25 @@ public class CtrlRNAmap {
 		}
 	}
 	
-	private boolean creatMapRNA() {
-		if (mapType == TOP_HAT) {
+	private void creatMapRNA() {
+		if (softWare == SoftWare.tophat) {
 			mapRNA = new MapTophat();
-			return true;
-		}
-		else if (mapType == RSEM) {
+		} else if (softWare == SoftWare.rsem) {
 			mapRNA = new MapRsem();
-			return true;
-		}
-		else {
-			return false;
+		} else if (softWare == SoftWare.mapsplice) {
+			mapRNA = new MapSplice();
 		}
 	}
 	private void setRefFile() {
 		if (gffChrAbs == null || FileOperate.isFileExist(indexFile)) {
-			mapRNA.setFileRef(indexFile);
+			mapRNA.setRefIndex(indexFile);
 			return;
 		}
 		
-		if (mapType == TOP_HAT) {
-			mapRNA.setFileRef(gffChrAbs.getSpecies().getIndexChr(mapRNA.getBowtieVersion()));
+		if (softWare == SoftWare.tophat) {
+			mapRNA.setRefIndex(gffChrAbs.getSpecies().getIndexChr(mapRNA.getBowtieVersion()));
 		} else {
-			mapRNA.setFileRef(gffChrAbs.getSpecies().getIndexRef(SoftWare.rsem, true));
+			mapRNA.setRefIndex(gffChrAbs.getSpecies().getIndexRef(SoftWare.rsem, true));
 		}
 	}
 	private void setMapLibrary(MapLibrary mapLibrary) {
@@ -178,9 +175,8 @@ public class CtrlRNAmap {
 	}
 	/** 获得基因表达 */
 	private void setExpResultRPKM(String prefix, MapRNA mapRNA) {
-		if (mapType != RSEM) {
-			return;
-		}
+		if (softWare != SoftWare.rsem) return;
+		
 		MapRsem mapRsem = (MapRsem) mapRNA;
 		ArrayListMultimap<String, Double> mapGeneID2LsExp = mapRsem.getMapGeneID2LsExp();
 		//第一组结果直接装进去
@@ -210,9 +206,8 @@ public class CtrlRNAmap {
 	}
 	/** 获得基因表达 */
 	private void setExpResultCounts(String prefix, MapRNA mapRNA) {
-		if (mapType != RSEM) {
-			return;
-		}
+		if (softWare != SoftWare.rsem) return;
+		
 		MapRsem mapRsem = (MapRsem) mapRNA;
 		ArrayListMultimap<String, Integer> mapGeneID2LsCounts = mapRsem.getMapGeneID2LsCounts();
 		//第一组结果直接装进去
@@ -262,5 +257,13 @@ public class CtrlRNAmap {
 			lsResult.add(tmpResult);
 		}
 		return lsResult;
+	}
+	
+	public static Map<String, SoftWare> getMapRNAmapType() {
+		Map<String, SoftWare> mapName2Type = new LinkedHashMap<>();
+		mapName2Type.put("Tophat", SoftWare.tophat);
+		mapName2Type.put("MapSplicer", SoftWare.mapsplice);
+		mapName2Type.put("RSEM", SoftWare.rsem);
+		return mapName2Type;
 	}
 }
