@@ -29,7 +29,7 @@ public class CtrlBlast {
 	 * @param databaseSeq
 	 */
 	public void setDatabaseSeq(String databaseSeq) {
-		blastNBC.setDatabaseSeq(databaseSeq);
+		blastNBC.setSubjectSeq(databaseSeq);
 	}
 
 	/**

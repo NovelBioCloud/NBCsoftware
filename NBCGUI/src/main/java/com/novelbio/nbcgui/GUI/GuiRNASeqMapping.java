@@ -61,11 +61,9 @@ public class GuiRNASeqMapping extends JPanel {
 	
 	JComboBoxData<StrandSpecific> cmbStrandType;
 	JComboBoxData<MapLibrary> cmbLibraryType;
-
+	JComboBoxData<SoftWare> cmbRNAsoftware;
 	
 	ButtonGroup buttonGroup = new ButtonGroup();
-	JRadioButton rdbtnRsem;
-	JRadioButton rdbtnTophat;
 	JButton btnGtf;
 
 	
@@ -191,12 +189,7 @@ public class GuiRNASeqMapping extends JPanel {
 		btnRun.setBounds(653, 512, 118, 24);
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (rdbtnRsem.isSelected()) {
-					ctrlRNAmap = new CtrlRNAmap(SoftWare.rsem);
-				}
-				else if (rdbtnTophat.isSelected()) {
-					ctrlRNAmap = new CtrlRNAmap(SoftWare.tophat);
-				}
+				ctrlRNAmap = new CtrlRNAmap(cmbRNAsoftware.getSelectedValue());
 
 				Species species = cmbSpecies.getSelectedValue();
 				species.setVersion(cmbSpeciesVersion.getSelectedValue());
@@ -225,7 +218,7 @@ public class GuiRNASeqMapping extends JPanel {
 				ctrlRNAmap.setSensitive(cmbSensitive.getSelectedValue());
 				ctrlRNAmap.setOutPathPrefix(out);
 				ctrlRNAmap.mapping();
-				if (rdbtnRsem.isSelected()) {
+				if (cmbRNAsoftware.getSelectedValue() == SoftWare.rsem) {
 					TxtReadandWrite txtWriteRpkm = new TxtReadandWrite(out + "ResultRPKM.xls", true);
 					TxtReadandWrite txtWriteCounts = new TxtReadandWrite(out + "ResultCounts.xls", true);
 					txtWriteRpkm.ExcelWrite(ctrlRNAmap.getLsExpRsemRPKM());
@@ -267,36 +260,6 @@ public class GuiRNASeqMapping extends JPanel {
 		add(txtThreadNum);
 		txtThreadNum.setColumns(10);
 		
-		rdbtnRsem = new JRadioButton("Rsem");
-		rdbtnRsem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				lblLibraryType.setVisible(false);
-				lblStrandType.setVisible(false);
-				cmbLibraryType.setVisible(false);
-				cmbStrandType.setVisible(false);
-				chckbxUseGtf.setVisible(false);
-				cmbSensitive.setVisible(false);
-				lblGtfGene2Iso.setText("Gene2IsoFile");
-			}
-		});
-		rdbtnRsem.setBounds(418, 261, 88, 22);
-		add(rdbtnRsem);
-		
-		rdbtnTophat = new JRadioButton("Tophat");
-		rdbtnTophat.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				lblLibraryType.setVisible(true);
-				lblStrandType.setVisible(true);
-				cmbLibraryType.setVisible(true);
-				cmbStrandType.setVisible(true);
-				chckbxUseGtf.setVisible(true);
-				cmbSensitive.setVisible(true);
-				lblGtfGene2Iso.setText("GTFfile");
-			}
-		});
-		rdbtnTophat.setBounds(599, 261, 151, 22);
-		add(rdbtnTophat);
-		
 		lblStrandType = new JLabel("StrandType");
 		lblStrandType.setBounds(10, 304, 90, 14);
 		add(lblStrandType);
@@ -330,6 +293,39 @@ public class GuiRNASeqMapping extends JPanel {
 		});
 		btnGtf.setBounds(359, 428, 134, 24);
 		add(btnGtf);
+		
+		cmbRNAsoftware = new JComboBoxData<>();
+		cmbRNAsoftware.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (cmbRNAsoftware.getSelectedValue() == SoftWare.tophat) {
+					lblLibraryType.setVisible(true);
+					lblStrandType.setVisible(true);
+					cmbLibraryType.setVisible(true);
+					cmbStrandType.setVisible(true);
+					chckbxUseGtf.setVisible(true);
+					cmbSensitive.setVisible(true);
+					lblGtfGene2Iso.setText("GTFfile");
+				} else {
+					lblLibraryType.setVisible(false);
+					lblStrandType.setVisible(false);
+					cmbLibraryType.setVisible(false);
+					cmbStrandType.setVisible(false);
+					chckbxUseGtf.setVisible(false);
+					cmbSensitive.setVisible(false);
+					if (cmbRNAsoftware.getSelectedValue() == SoftWare.rsem) {
+						lblGtfGene2Iso.setText("Gene2IsoFile");
+					}else if (cmbRNAsoftware.getSelectedValue() == SoftWare.mapsplice) {
+						lblGtfGene2Iso.setText("Chr_Seperate_Seq_Path");
+					}
+				}
+			}
+		});
+		cmbRNAsoftware.setBounds(409, 260, 215, 24);
+		add(cmbRNAsoftware);
+		
+		JLabel lblAlgorithm = new JLabel("Algorithm");
+		lblAlgorithm.setBounds(409, 233, 82, 18);
+		add(lblAlgorithm);
 
 
 		
@@ -355,15 +351,12 @@ public class GuiRNASeqMapping extends JPanel {
 		lsComponentsMapping.add(btnMappingindex);
 		btnMappingindex.setEnabled(false);
 		
-		buttonGroup.add(rdbtnRsem);
-		buttonGroup.add(rdbtnTophat);
-		
 		cmbStrandType.setMapItem(StrandSpecific.getMapStrandLibrary());
 		cmbLibraryType.setMapItem(MapLibrary.getMapLibrary());
-		rdbtnTophat.setSelected(true);
 		
 		chckbxUseGtf.setSelected(true);
 		selectSpecies();
+		cmbRNAsoftware.setMapItem(CtrlRNAmap.getMapRNAmapType());
 	}
 	
 	/**
