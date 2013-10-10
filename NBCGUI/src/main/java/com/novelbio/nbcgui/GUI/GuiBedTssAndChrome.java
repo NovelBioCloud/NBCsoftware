@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.genome.GffChrMap;
 import com.novelbio.analysis.seq.genome.gffOperate.GffDetailGene.GeneStructure;
+import com.novelbio.analysis.seq.genome.mappingOperate.EnumMapNormalizeType;
 import com.novelbio.analysis.seq.genome.mappingOperate.MapReadsAbs;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.fileOperate.FileOperate;
@@ -82,7 +83,7 @@ public class GuiBedTssAndChrome extends JPanel implements GuiRunningBarAbs, GuiN
 	JRadioButton rdbtnReadgene;
 	private GuiLayeredPaneSpeciesVersionGff layeredPaneSpecies;
 
-	JComboBoxData<Integer> cmbNormalizedType;
+	JComboBoxData<EnumMapNormalizeType> cmbNormalizedType;
 	JComboBoxData<Boolean> cmbReadsFilter;
 	
 	private JTextField txtChromHight;
@@ -200,7 +201,6 @@ public class GuiBedTssAndChrome extends JPanel implements GuiRunningBarAbs, GuiN
 				Boolean FilteredStrand = cmbReadsFilter.getSelectedValue();
 				ctrlMapReads.setFilter(chckOneSiteOneReads.isSelected(), (Integer)spinLoadFirstBp.getValue(), chckUniqueMapping.isSelected(), FilteredStrand);
 				ctrlMapReads.setInvNum((Integer)spinInvNum.getValue());
-				ctrlMapReads.setNormalType(MapReadsAbs.SUM_TYPE_MEAN);
 				ctrlMapReads.setSpecies(layeredPaneSpecies.getSelectSpecies());
 				gffChrMap.setMapReads(ctrlMapReads.getMapReads());
 				ctrlMapReads.execute();
@@ -309,7 +309,7 @@ public class GuiBedTssAndChrome extends JPanel implements GuiRunningBarAbs, GuiN
 		layeredPaneSpecies.setBounds(713, 54, 222, 158);
 		add(layeredPaneSpecies);
 		
-		cmbNormalizedType = new JComboBoxData<Integer>();
+		cmbNormalizedType = new JComboBoxData<>();
 		cmbNormalizedType.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ctrlMapReads.setNormalType(cmbNormalizedType.getSelectedValue());

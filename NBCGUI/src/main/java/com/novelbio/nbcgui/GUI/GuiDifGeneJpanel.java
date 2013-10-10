@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.novelbio.analysis.diffexpress.DiffExpAbs;
+import com.novelbio.analysis.diffexpress.EnumDifGene;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
@@ -31,7 +32,7 @@ public class GuiDifGeneJpanel extends JPanel {
 	GUIFileOpen guiFileOpen = new GUIFileOpen();
 	ArrayList<String[]> lsGeneInfo;
 	CtrlDifGene diffExpAbs;
-	JComboBoxData<Integer> cmbMethod;
+	JComboBoxData<EnumDifGene> cmbMethod;
 	
 	JComboBoxData<String> cmbGroup = new JComboBoxData<String>();
 	
@@ -113,7 +114,7 @@ public class GuiDifGeneJpanel extends JPanel {
 		});
 		add(btnSave);
 		
-		cmbMethod = new JComboBoxData<Integer>();
+		cmbMethod = new JComboBoxData<>();
 		cmbMethod.setBounds(635, 463, 239, 23);
 		add(cmbMethod);
 		

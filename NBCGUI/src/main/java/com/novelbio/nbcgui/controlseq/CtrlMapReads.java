@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import com.novelbio.analysis.seq.AlignSeq;
 import com.novelbio.analysis.seq.FormatSeq;
 import com.novelbio.analysis.seq.bed.BedSeq;
+import com.novelbio.analysis.seq.genome.mappingOperate.EnumMapNormalizeType;
 import com.novelbio.analysis.seq.genome.mappingOperate.MapReads;
 import com.novelbio.analysis.seq.genome.mappingOperate.MapReadsAbs;
 import com.novelbio.analysis.seq.genome.mappingOperate.MapReadsAbs.MapReadsProcessInfo;
@@ -72,7 +73,7 @@ public class CtrlMapReads implements RunGetInfo<MapReadsAbs.MapReadsProcessInfo>
 	  * 默认是NORMALIZATION_ALL_READS
 	  * @param normalType
 	  */
-	public void setNormalType(int normalType) {
+	public void setNormalType(EnumMapNormalizeType normalType) {
 		if (mapReads != null) {
 			mapReads.setNormalType(normalType);
 		}
