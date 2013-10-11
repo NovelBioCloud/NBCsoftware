@@ -26,9 +26,11 @@ import com.novelbio.analysis.seq.mirna.CtrlMiRNApredict;
 import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
+import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.generalConf.PathDetailNBC;
+import javax.swing.JScrollPane;
 
 public class GuiMiRNASeq extends JPanel{
 	private static final long serialVersionUID = -5940420720636777182L;
@@ -42,6 +44,7 @@ public class GuiMiRNASeq extends JPanel{
 	
 	JButton btnOutpath;
 	JScrollPaneData sclpanFastq;
+	JScrollPaneData sclAnnoMiRNA;
 	JCheckBox chkPredictMiRNA;
 	JScrollPaneData sclNovelMiRNAbed;
 	JButton btnDelFastQfilerow;
@@ -95,7 +98,7 @@ public class GuiMiRNASeq extends JPanel{
 				running();
 			}
 		});
-		btnRunning.setBounds(705, 526, 92, 24);
+		btnRunning.setBounds(712, 526, 92, 24);
 		add(btnRunning);
 		
 		chkMapping = new JCheckBox("MappingAndAnalysis");
@@ -108,12 +111,12 @@ public class GuiMiRNASeq extends JPanel{
 		add(chkMapping);
 		
 		txtOutPathPrefix = new JTextField();
-		txtOutPathPrefix.setBounds(439, 470, 233, 18);
+		txtOutPathPrefix.setBounds(441, 493, 233, 18);
 		add(txtOutPathPrefix);
 		txtOutPathPrefix.setColumns(10);
 		
 		JLabel lblOutpathprefix = new JLabel("OutPathPrefix");
-		lblOutpathprefix.setBounds(440, 447, 105, 20);
+		lblOutpathprefix.setBounds(441, 468, 105, 20);
 		add(lblOutpathprefix);
 		
 		btnOutpath = new JButton("OutPath");
@@ -123,7 +126,7 @@ public class GuiMiRNASeq extends JPanel{
 				txtOutPathPrefix.setText(fileName);
 			}
 		});
-		btnOutpath.setBounds(709, 465, 95, 24);
+		btnOutpath.setBounds(712, 490, 95, 24);
 		add(btnOutpath);
 		
 		btnFastqfile = new JButton("FastqFile");
@@ -200,6 +203,36 @@ public class GuiMiRNASeq extends JPanel{
 		chckbxMappingToSpecies = new JCheckBox("Mapping To Species Specific Rfam");
 		chckbxMappingToSpecies.setBounds(454, 305, 312, 22);
 		add(chckbxMappingToSpecies);
+		
+		sclAnnoMiRNA = new JScrollPaneData();
+		JComboBoxData<Species> cmbSpeciesBlast = new JComboBoxData<Species>();
+		cmbSpeciesBlast.setMapItem(Species.getSpeciesName2Species(Species.SEQINFO_SPECIES));
+		sclAnnoMiRNA.setTitle(new String[]{"BlastSpecies"});
+		sclAnnoMiRNA.setItem(0, cmbSpeciesBlast);
+		sclAnnoMiRNA.setBounds(441, 366, 233, 95);
+		add(sclAnnoMiRNA);
+		
+		JLabel lblNovelMirnaAnnotation = new JLabel("Novel MiRNA Annotation");
+		lblNovelMirnaAnnotation.setBounds(441, 340, 178, 18);
+		add(lblNovelMirnaAnnotation);
+		
+		JButton btnAdd = new JButton("Add");
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				sclAnnoMiRNA.addItem(new String[]{""});
+			}
+		});
+		btnAdd.setBounds(686, 360, 102, 28);
+		add(btnAdd);
+		
+		JButton btnDel = new JButton("Del");
+		btnDel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				sclAnnoMiRNA.deleteSelRows();
+			}
+		});
+		btnDel.setBounds(686, 432, 102, 28);
+		add(btnDel);
 		initialize();
 	}
 	
@@ -316,7 +349,13 @@ public class GuiMiRNASeq extends JPanel{
 		ctrlMiRNApredict.setSpecies(species);
 		ctrlMiRNApredict.setLsSamFile2Prefix(mapBedFile2Prefix);
 		ctrlMiRNApredict.setOutPath(txtOutPathPrefix.getText());
-		
+		List<String[]> lsBlastTo = sclAnnoMiRNA.getLsDataInfo();
+		List<Species> lsSpecies = new ArrayList<>();
+		for (String[] strings : lsBlastTo) {
+			Species species2 = Species.getSpeciesName2Species(Species.SEQINFO_SPECIES).get(strings[0]);
+			lsSpecies.add(species2);
+		}
+		ctrlMiRNApredict.setLsSpeciesBlastTo(lsSpecies);
 		ctrlMiRNApredict.runMiRNApredict();
 		ctrlMiRNApredict.writeToFile();
 	}
