@@ -202,7 +202,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			List<AlignmentRecorder> lsAlignmentRecorders = new ArrayList<AlignmentRecorder>();
 			SamFileStatistics samFileStatistics = null;
 			if (isCountExpression && gffChrAbs.getGffHashGene() != null) {
-				rpkMcomput.setCurrentCondition(prefix);
+				rpkMcomput.setAndAddCurrentCondition(prefix);
 				rpkMcomput.setConsiderStrand(strandSpecific);
 				rpkMcomput.setCalculateFPKM(isCalculateFPKM);
 				lsAlignmentRecorders.add(rpkMcomput);
