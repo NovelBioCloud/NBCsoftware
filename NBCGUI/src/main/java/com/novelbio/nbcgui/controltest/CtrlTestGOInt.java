@@ -8,7 +8,7 @@ import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.database.domain.geneanno.GOtype;
 import com.novelbio.nbcReport.Params.ReportGO;
-
+/** 不是单例 */
 public interface CtrlTestGOInt {
 	public void setTaxID(int taxID);
 	/** lsAccID2Value  arraylist-string[] 若为string[2],则第二个为上下调关系，判断上下调

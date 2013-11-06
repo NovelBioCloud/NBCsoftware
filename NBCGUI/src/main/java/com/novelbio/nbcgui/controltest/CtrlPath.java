@@ -37,8 +37,8 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 		return GoAlgorithm.novelgo;
 	}
 	@Override
-	protected void copeFile(String prix, String excelPath) {
-	}
+	protected void copeFile(String prix, String excelPath) { }
+	
 	@Override
 	String getGene2ItemFileName(String fileName) {
 		String suffix = "_Path_Item";

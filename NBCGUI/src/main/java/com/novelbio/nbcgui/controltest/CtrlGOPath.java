@@ -185,10 +185,10 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			try {
 				if (strings.length == 1) {
 					mapPrefix2AccID.put("All", strings[0]);
-				} else if (strings.length > 1 && Double.parseDouble(strings[1]) >= up ) {
+				} else if (strings.length > 1 && getDoubleValue(strings[1]) >= up) {
 					mapPrefix2AccID.put("Up", strings[0]);
 					mapPrefix2AccID.put("All", strings[0]);
-				} else if (strings.length > 1 && Double.parseDouble(strings[1]) <= down) {
+				} else if (strings.length > 1 && getDoubleValue(strings[1]) <= down) {
 					mapPrefix2AccID.put("Down", strings[0]);
 					mapPrefix2AccID.put("All", strings[0]);
 				}
@@ -199,6 +199,22 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		for (String prefix : mapPrefix2SetAccID.keySet()) {
 			getResult(prefix, mapPrefix2SetAccID.get(prefix));
 		}
+	}
+	
+	private Double getDoubleValue(String valueStr) {
+		Double value = null;
+		if (valueStr.equalsIgnoreCase("inf")) {
+			return Double.MAX_VALUE;
+		} else if (valueStr.equalsIgnoreCase("-inf")) {
+			return Double.MIN_VALUE;
+		} else {
+			try {
+				value = Double.parseDouble(valueStr);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		return value;
 	}
 	
 	private<T> void setGeneNum(HashMultimap<String, T> mapPrefix2Gene) {
