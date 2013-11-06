@@ -21,16 +21,13 @@ import com.novelbio.analysis.seq.AlignSeq;
 import com.novelbio.analysis.seq.FormatSeq;
 import com.novelbio.analysis.seq.bed.BedSeq;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
-import com.novelbio.analysis.seq.mirna.CtrlMiRNAfastq;
-import com.novelbio.analysis.seq.mirna.CtrlMiRNApredict;
+import com.novelbio.analysis.seq.mirna.CtrlMiRNApipeline;
 import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.database.model.species.Species;
-import com.novelbio.generalConf.PathDetailNBC;
-import javax.swing.JScrollPane;
 
 public class GuiMiRNASeq extends JPanel{
 	private static final long serialVersionUID = -5940420720636777182L;
@@ -55,8 +52,6 @@ public class GuiMiRNASeq extends JPanel{
 	
 	GUIFileOpen guiFileOpen = new GUIFileOpen();
 	
-	CtrlMiRNAfastq ctrlMiRNAfastq = new CtrlMiRNAfastq();
-	CtrlMiRNApredict ctrlMiRNApredict = new CtrlMiRNApredict();
 	GuiLayeredPaneSpeciesVersionGff guiSpeciesVersionGff;
 	
 	private JButton btnFastqfile;
@@ -98,7 +93,7 @@ public class GuiMiRNASeq extends JPanel{
 				running();
 			}
 		});
-		btnRunning.setBounds(712, 526, 92, 24);
+		btnRunning.setBounds(712, 555, 92, 24);
 		add(btnRunning);
 		
 		chkMapping = new JCheckBox("MappingAndAnalysis");
@@ -107,16 +102,16 @@ public class GuiMiRNASeq extends JPanel{
 				chkSelected(chkMapping.isSelected(), chkPredictMiRNA.isSelected());
 			}
 		});
-		chkMapping.setBounds(79, 527, 206, 22);
+		chkMapping.setBounds(70, 556, 206, 22);
 		add(chkMapping);
 		
 		txtOutPathPrefix = new JTextField();
-		txtOutPathPrefix.setBounds(441, 493, 233, 18);
+		txtOutPathPrefix.setBounds(441, 520, 233, 21);
 		add(txtOutPathPrefix);
 		txtOutPathPrefix.setColumns(10);
 		
 		JLabel lblOutpathprefix = new JLabel("OutPathPrefix");
-		lblOutpathprefix.setBounds(441, 468, 105, 20);
+		lblOutpathprefix.setBounds(441, 495, 105, 20);
 		add(lblOutpathprefix);
 		
 		btnOutpath = new JButton("OutPath");
@@ -126,7 +121,7 @@ public class GuiMiRNASeq extends JPanel{
 				txtOutPathPrefix.setText(fileName);
 			}
 		});
-		btnOutpath.setBounds(712, 490, 95, 24);
+		btnOutpath.setBounds(709, 519, 95, 24);
 		add(btnOutpath);
 		
 		btnFastqfile = new JButton("FastqFile");
@@ -186,13 +181,13 @@ public class GuiMiRNASeq extends JPanel{
 				chkSelected(chkMapping.isSelected(), chkPredictMiRNA.isSelected());
 			}
 		});
-		chkPredictMiRNA.setBounds(315, 527, 131, 22);
+		chkPredictMiRNA.setBounds(320, 556, 131, 22);
 		add(chkPredictMiRNA);
 		
 	 
 		
 		guiSpeciesVersionGff = new GuiLayeredPaneSpeciesVersionGff();
-		guiSpeciesVersionGff.setBounds(23, 340, 295, 158);
+		guiSpeciesVersionGff.setBounds(23, 340, 243, 148);
 		add(guiSpeciesVersionGff);
 		
 		chkMapAllToRfam = new JCheckBox("Mapping All To Rfam");
@@ -303,15 +298,21 @@ public class GuiMiRNASeq extends JPanel{
 	private void running() {
 		Species species = guiSpeciesVersionGff.getSelectSpecies();
 		GffChrAbs gffChrAbs = new GffChrAbs(species);
-		ctrlMiRNAfastq.clear();
-		Map<AlignSeq, String> mapBedFile2Prefix = new LinkedHashMap<AlignSeq, String>();
+		CtrlMiRNApipeline ctrlMiRNApipeline = new CtrlMiRNApipeline(species);
+		Map<String, AlignSeq> mapPrefix2AlignSeq = new LinkedHashMap<>();
 		if (chkMapping.isSelected()) {
-			runMapping(gffChrAbs, species, sclpanFastq.getLsDataInfo());
-			mapBedFile2Prefix = ctrlMiRNAfastq.getMapGenomeBed2Prefix();
+			ctrlMiRNApipeline.setMapMirna(true);
+			List<String[]> lsFastq2Prefix = sclpanFastq.getLsDataInfo();
+			Map<String, String> mapPrefix2Fastq = new LinkedHashMap<>();
+			for (String[] strings : lsFastq2Prefix) {
+				mapPrefix2Fastq.put(strings[1], strings[0]);
+			}
+			ctrlMiRNApipeline.setMapPrefix2Fastq(mapPrefix2Fastq);
 		}
 		if (chkPredictMiRNA.isSelected()) {
+			ctrlMiRNApipeline.setPredictMirna(true);
 			//如果没有mapping，则取输入的bed文件
-			if (mapBedFile2Prefix.size() == 0) {
+			if (mapPrefix2AlignSeq.size() == 0) {
 				List<String[]> lsInfo = sclNovelMiRNAbed.getLsDataInfo();
 				for (String[] strings : lsInfo) {
 					AlignSeq alignSeq = null;
@@ -322,60 +323,21 @@ public class GuiMiRNASeq extends JPanel{
 					}
 					
 					if (alignSeq != null) {
-						mapBedFile2Prefix.put(alignSeq, strings[1]);
+						mapPrefix2AlignSeq.put(strings[1], alignSeq);
 					}
 				}
 			}
-			runPredict(mapBedFile2Prefix, gffChrAbs, species);
+			ctrlMiRNApipeline.setMapPrefix2AlignFile(mapPrefix2AlignSeq);
 		}
-	}
-	
-	private void runMapping(GffChrAbs gffChrAbs, Species species, ArrayList<String[]> lsfastqFile2Prefix) {
-		ctrlMiRNAfastq.setMappingAll2Genome(chkMapAllBedFileToGenome.isSelected());
-		ctrlMiRNAfastq.setRfamSpeciesSpecific(chckbxMappingToSpecies.isSelected());
-		ctrlMiRNAfastq.setSpecies(species);
-		ctrlMiRNAfastq.setOutPath(txtOutPathPrefix.getText());
-		ctrlMiRNAfastq.setGffChrAbs(gffChrAbs);
-		ctrlMiRNAfastq.setLsFastqFile(lsfastqFile2Prefix);
-		ctrlMiRNAfastq.setMiRNAinfo(PathDetailNBC.getMiRNADat());
-		ctrlMiRNAfastq.setRfamFile(PathDetailNBC.getRfamTab());
-		ctrlMiRNAfastq.setMapAll2Rfam(chkMapAllToRfam.isSelected());
-		ctrlMiRNAfastq.mappingAndCounting();
-		ctrlMiRNAfastq.writeToFile();
-	}
-	
-	private void runPredict(Map<AlignSeq, String> mapBedFile2Prefix, GffChrAbs gffChrAbs, Species species) {
-		ctrlMiRNApredict.setGffChrAbs(gffChrAbs);
-		ctrlMiRNApredict.setSpecies(species);
-		ctrlMiRNApredict.setLsSamFile2Prefix(mapBedFile2Prefix);
-		ctrlMiRNApredict.setOutPath(txtOutPathPrefix.getText());
 		List<String[]> lsBlastTo = sclAnnoMiRNA.getLsDataInfo();
-		List<Species> lsSpecies = new ArrayList<>();
+		List<Species> lsSpeciesBlastTo = new ArrayList<>();
 		for (String[] strings : lsBlastTo) {
-			Species species2 = Species.getSpeciesName2Species(Species.SEQINFO_SPECIES).get(strings[0]);
-			lsSpecies.add(species2);
+			Species speciesBlastTo = Species.getSpeciesName2Species(Species.SEQINFO_SPECIES).get(strings[0]);
+			lsSpeciesBlastTo.add(speciesBlastTo);
 		}
-		ctrlMiRNApredict.setLsSpeciesBlastTo(lsSpecies);
-		ctrlMiRNApredict.runMiRNApredict();
-		ctrlMiRNApredict.writeToFile();
+		ctrlMiRNApipeline.setLsSpeciesBlastTo(lsSpeciesBlastTo);
+		ctrlMiRNApipeline.setOutPath(txtOutPathPrefix.getText());
+		ctrlMiRNApipeline.run();
 	}
 
-	/**
-	 * 将输出的那个txtprefix分割为outpath和prefix
-	 * @return
-	 * 1: prefix<br>
-	 * 0: path
-	 */
-	private String[] getTxtOutPathAndPrefix() {
-		String[] result = new String[2];
-		String out = txtOutPathPrefix.getText();
-		if (FileOperate.isFileDirectory(out) || out.endsWith("\\|/")) {
-			result[0] = "";
-			result[1] = out;
-			return result;
-		}
-		result[0] = FileOperate.getFileName(out);
-		result[1] = FileOperate.getParentPathName(out);
-		return result;
-	}
 }

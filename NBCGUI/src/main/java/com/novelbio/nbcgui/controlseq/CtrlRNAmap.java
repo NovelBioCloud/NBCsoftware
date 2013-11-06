@@ -19,6 +19,7 @@ import com.novelbio.analysis.seq.mapping.MapTophat;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.base.dataStructure.MathComput;
 import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.database.domain.information.SoftWareInfo;
 import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.nbcReport.Params.EnumReport;
@@ -124,6 +125,7 @@ public class CtrlRNAmap {
 			mapRNA.setLeftFq(CopeFastq.convertFastqFile(lsFastqFR.get(0)));
 			mapRNA.setRightFq(CopeFastq.convertFastqFile(lsFastqFR.get(1)));
 			setMapLibrary(mapLibrary);
+			
 			mapRNA.setStrandSpecifictype(strandSpecific);
 			mapRNA.setThreadNum(threadNum);
 			mapRNA.setOutPathPrefix(outPrefix + prefix);
@@ -155,11 +157,19 @@ public class CtrlRNAmap {
 			mapRNA.setRefIndex(indexFile);
 			return;
 		}
-		
+		SoftWareInfo softBowtie = new SoftWareInfo(mapRNA.getBowtieVersion());
 		if (softWare == SoftWare.tophat) {
 			mapRNA.setRefIndex(gffChrAbs.getSpecies().getIndexChr(mapRNA.getBowtieVersion()));
-		} else {
+			SoftWareInfo softTophat = new SoftWareInfo(SoftWare.tophat);
+			mapRNA.setExePath(softTophat.getExePath(), softBowtie.getExePath());
+		} else if (softWare == SoftWare.rsem) {
 			mapRNA.setRefIndex(gffChrAbs.getSpecies().getIndexRef(SoftWare.rsem, true));
+			SoftWareInfo softRsem = new SoftWareInfo(SoftWare.rsem);
+			mapRNA.setExePath(softRsem.getExePath(), softBowtie.getExePath());
+		} else if (softWare == SoftWare.mapsplice) {
+			mapRNA.setRefIndex(gffChrAbs.getSpecies().getIndexChr(mapRNA.getBowtieVersion()));
+			SoftWareInfo softMapSplice = new SoftWareInfo(SoftWare.mapsplice);
+			mapRNA.setExePath(softMapSplice.getExePath(), softBowtie.getExePath());
 		}
 	}
 	private void setMapLibrary(MapLibrary mapLibrary) {

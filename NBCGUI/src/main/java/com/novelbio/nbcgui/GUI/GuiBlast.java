@@ -25,7 +25,7 @@ import com.novelbio.database.model.species.Species;
 import com.novelbio.database.updatedb.database.BlastUp2DB;
 import com.novelbio.nbcgui.controlquery.CtrlBlast;
 
-public class GuiBlast extends JPanel implements GuiNeedOpenFile{
+public class GuiBlast extends JPanel implements GuiNeedOpenFile {
 	private JTextField textQueryFasta;
 	private JTextField textSubjectFasta;
 	private JTextField textEvalue;
@@ -238,7 +238,7 @@ public class GuiBlast extends JPanel implements GuiNeedOpenFile{
 		Map<String, Species> mapComName2Species = Species.getSpeciesName2Species(Species.ALL_SPECIES);
 		for (String[] content : sclPaneBlastFile.getLsDataInfo()) {
 			BlastUp2DB blast = new BlastUp2DB();
-			blast.setUpdate(chckbxSavetodb.isSelected());
+			blast.setUpdate(chckbxSavetodb.isSelected(), content[0]);
 			
 			//设定一个默认参数
 			int taxIDQ = 1234;

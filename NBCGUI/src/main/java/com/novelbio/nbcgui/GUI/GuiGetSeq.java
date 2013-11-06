@@ -508,7 +508,7 @@ public class GuiGetSeq extends JPanel {
 		ctrlGetSeq.setOutPutFile(txtSavePath.getText());
 		ctrlGetSeq.setGetAAseq(chckbxGetaminoacid.isSelected());
 		ctrlGetSeq.setUpAndDownStream(new int[]{upstream, dowstream});
-		ctrlGetSeq.setGetAllIso(true);
+		ctrlGetSeq.setGetAllIso(chckbxGetalliso.isSelected());
 		ctrlGetSeq.setGeneStructure(cmbGeneStructure.getSelectedValue());
 		ctrlGetSeq.setGetIntron(false);
 		
