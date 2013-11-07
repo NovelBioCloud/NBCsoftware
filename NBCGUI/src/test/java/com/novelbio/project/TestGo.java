@@ -95,7 +95,8 @@ public class TestGo {
 			ctrlGO.setLsAccID2Value(lsAccID);
 			ctrlGO.setTeamName(excelPrefixs[i]);
 			ctrlGO.run();
-			ctrlGO.saveExcel(FileOperate.addSep(mapParams.get("savePath")[0])+excelPrefixs[i]);
+			ctrlGO.saveExcel_And_GetGoType2File(FileOperate.addSep(mapParams.get("savePath")[0])+excelPrefixs[i]);
+			ctrlGO.savePic_And_GetPre2Pic();
 			ctrlGO.getReportGO().writeAsFile(FileOperate.addSep(mapParams.get("savePath")[0]) + EnumReport.GOAnalysis.getResultFolder());
 		}
 	}

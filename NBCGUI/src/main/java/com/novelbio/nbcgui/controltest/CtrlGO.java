@@ -20,7 +20,7 @@ public class CtrlGO extends CtrlGOPath {
 	GOtype GOClass = GOtype.BP;
 	GoAlgorithm goAlgorithm = GoAlgorithm.novelgo;
 	int goLevel = -1;
-	public GOtype getGOClass() {
+	public GOtype getGOType() {
 		return GOClass;
 	}
 	
@@ -100,6 +100,6 @@ public class CtrlGO extends CtrlGOPath {
 	
 	/** 返回文件的名字，用于excel和画图 */
 	public String getResultBaseTitle() {
-		return "GO-Analysis_"+getGOClass().getTwoWord();
+		return "GO-Analysis_"+getGOType().getTwoWord();
 	}
 }

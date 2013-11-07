@@ -27,8 +27,12 @@ public interface CtrlTestGOInt {
 	public void setLsBG(String fileName);
 	
 	public void setIsCluster(boolean isCluster);
-
-	public void saveExcel(String excelPath);
+	
+	/**
+	 * 保存图片并返回保存的前缀和文件名
+	 * @return
+	 */
+	public Map<GOtype, String> saveExcel_And_GetGoType2File(String excelPath);
 	
 	
 	public ReportGO getReportGO();
@@ -73,11 +77,17 @@ public interface CtrlTestGOInt {
 	
 	public String getResultBaseTitle();
 	
-	/** 获得保存到的文件夹路径 */
-	public String getSaveParentPath();
 	/** 获得保存到文件夹的前缀，譬如保存到/home/zong0jie/stage10，那么前缀就是stage10 */
 	public String getSavePrefix();
 	
 	/**设置对比组名*/
 	public void setTeamName(String teamName);
+	
+	/** 之前要先调用
+	 * {@link #saveExcel_And_GetGoType2File(String)}
+	 * 方法
+	 * @return
+	 * 保存图片并返回保存的前缀和文件名
+	 */
+	Map<String, String> savePic_And_GetPre2Pic();
 }

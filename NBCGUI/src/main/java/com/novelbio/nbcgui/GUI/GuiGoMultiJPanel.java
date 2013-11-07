@@ -421,7 +421,8 @@ public class GuiGoMultiJPanel extends JPanel{
 		ctrlGO.setLsBG(backGroundFile);
 		ctrlGO.setLsAccID2Value(lsAccID);
 		ctrlGO.run();
-		ctrlGO.saveExcel(outFile);
+		ctrlGO.saveExcel_And_GetGoType2File(outFile);
+		ctrlGO.savePic_And_GetPre2Pic();
 	}
 	
 	/**

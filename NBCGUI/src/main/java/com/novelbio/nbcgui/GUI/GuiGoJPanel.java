@@ -347,7 +347,8 @@ public class GuiGoJPanel extends JPanel{
 				public void actionPerformed(ActionEvent evt) {
 					String savefilename = guiFileOpen.saveFileNameAndPath("excel2007", "");
 					if (ctrlGO != null) {
-						ctrlGO.saveExcel(savefilename);
+						ctrlGO.saveExcel_And_GetGoType2File(savefilename);
+						ctrlGO.savePic_And_GetPre2Pic();
 					}
 				}
 			});
@@ -490,7 +491,7 @@ public class GuiGoJPanel extends JPanel{
 		jTabbedPaneGoResult.removeAll();
 		for (CtrlGO ctrlGOResult : hashResult.values()) {
 			for (Entry<String, FunctionTest> entry : ctrlGOResult.getMapResult_Prefix2FunTest().entrySet()) {
-				settab(jTabbedPaneGoResult, entry.getKey() + ctrlGOResult.getGOClass().toString(), entry.getValue().getTestResult());
+				settab(jTabbedPaneGoResult, entry.getKey() + ctrlGOResult.getGOType().toString(), entry.getValue().getTestResult());
 			}
 		}
 	}

@@ -2,6 +2,7 @@ package com.novelbio.nbcgui.controltest;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -33,8 +34,8 @@ public class CtrlGOall implements CtrlTestGOInt {
 	List<Integer> lsBlastTaxID = new ArrayList<Integer>();
 	boolean isCluster = false;
 	ReportGO reportGO = new ReportGO();
-	String saveParentPath = "";
-	String savePathPrefix = "";
+	String savePathPrefix;
+	String savePrefix = "";
 	
 	@Override
 	public void setTaxID(int taxID) {
@@ -98,45 +99,6 @@ public class CtrlGOall implements CtrlTestGOInt {
 	}
 	
 	@Override
-	public void saveExcel(String excelPath) {
-		String saveExcelPrefix = FoldeCreate.createAndInFold(excelPath, EnumReport.GOAnalysis.getResultFolder());
-		if (saveExcelPrefix.endsWith("\\") || saveExcelPrefix.endsWith("/")) {
-			saveParentPath = saveExcelPrefix;
-		} else {
-			saveParentPath = FileOperate.getParentPathName(saveExcelPrefix);
-			savePathPrefix = FileOperate.getFileName(saveExcelPrefix);
-		}
-		
-		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
-			String saveName;
-			if (saveExcelPrefix.endsWith("\\") || saveExcelPrefix.endsWith("/")) {
-				saveName = saveExcelPrefix + ctrlGO.getResultBaseTitle() + ".xls";
-			} else {
-				saveName = FileOperate.changeFilePrefix(saveExcelPrefix, ctrlGO.getResultBaseTitle() + "_", "xls");
-			}
-			for(XdocTmpltExcel xdocTmpltExcel : ctrlGO.saveExcel(saveName)){
-				for (String excelFile : xdocTmpltExcel.getAllExcelFileName()) {
-					reportGO.addResultFile(excelFile);
-				}
-			}
-		}
-		savePic();
-	}
-	
-	
-	/** 获得保存到的文件夹路径 */
-	@Override
-	public String getSaveParentPath() {
-		return saveParentPath;
-	}
-	
-	/** 获得保存到文件夹的前缀，譬如保存到/home/zong0jie/stage10，那么前缀就是stage10 */
-	@Override
-	public String getSavePrefix() {
-		return savePathPrefix;
-	}
-	
-	@Override
 	public void setGoAlgorithm(GoAlgorithm goAlgorithm) {
 		CtrlGO ctrlGO = new CtrlGO();
 		ctrlGO.setGoAlgorithm(goAlgorithm);
@@ -192,7 +154,40 @@ public class CtrlGOall implements CtrlTestGOInt {
 		}
 	}
 	
-	public void savePic() {
+	@Override
+	public Map<GOtype, String> saveExcel_And_GetGoType2File(String excelPath) {
+		Map<GOtype, String> mapGoType2File = new HashMap<>();
+		savePathPrefix = FoldeCreate.createAndInFold(excelPath, EnumReport.GOAnalysis.getResultFolder());
+		if (!savePathPrefix.endsWith("\\") && !savePathPrefix.endsWith("/")) {
+			savePrefix = FileOperate.getFileName(savePathPrefix);
+		}
+		
+		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
+			String saveName;
+			if (savePathPrefix.endsWith("\\") || savePathPrefix.endsWith("/")) {
+				saveName = savePathPrefix + ctrlGO.getResultBaseTitle() + ".xls";
+			} else {
+				saveName = FileOperate.changeFilePrefix(savePathPrefix, ctrlGO.getResultBaseTitle() + "_", "xls");
+			}
+			mapGoType2File.put(ctrlGO.getGOType(), saveName);
+			for(XdocTmpltExcel xdocTmpltExcel : ctrlGO.saveExcel(saveName)){
+				for (String excelFile : xdocTmpltExcel.getAllExcelFileName()) {
+					reportGO.addResultFile(excelFile);
+				}
+			}
+		}
+		return mapGoType2File;
+	}
+	
+	/** 获得保存到文件夹的前缀，譬如保存到/home/zong0jie/stage10，那么前缀就是stage10 */
+	@Override
+	public String getSavePrefix() {
+		return savePrefix;
+	}
+
+	@Override
+	public Map<String, String> savePic_And_GetPre2Pic() {
+		Map<String, String> mapPrefix2Pic = new HashMap<>();
 		for (String prefix : getPrefix()) {
 			List<BufferedImage> lsGOimage = new ArrayList<BufferedImage>();
 			String excelSavePath = "";
@@ -204,12 +199,17 @@ public class CtrlGOall implements CtrlTestGOInt {
 			BufferedImage bfImageCombine = ImageUtils.combineBfImage(true, 30, lsGOimage);
 			String picNameLog2P = excelSavePath +  "GO-Analysis-Log2P_" + prefix + "_" + getSavePrefix() + ".png";
 			
-			ImageUtils.saveBufferedImage(bfImageCombine, picNameLog2P);
-			reportGO.addResultFile(picNameLog2P);
-			XdocTmpltPic xdocTmpltPic = new XdocTmpltPic(picNameLog2P);
-			//图片的宽度和描述都可以在这里设置
-			reportGO.addXdocTempPic(xdocTmpltPic);
+			String picName = ImageUtils.saveBufferedImage(bfImageCombine, picNameLog2P);
+			if (picName != null) {
+				reportGO.addResultFile(picName);
+				XdocTmpltPic xdocTmpltPic = new XdocTmpltPic(picName);
+				//图片的宽度和描述都可以在这里设置
+				reportGO.addXdocTempPic(xdocTmpltPic);
+				mapPrefix2Pic.put(prefix, picName);
+			}
+
 		}
+		return mapPrefix2Pic;
 	}
 	
 	/** 将本次GO分析的前缀全部抓出来，方便画图 */
