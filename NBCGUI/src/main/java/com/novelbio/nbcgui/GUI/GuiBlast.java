@@ -238,7 +238,7 @@ public class GuiBlast extends JPanel implements GuiNeedOpenFile {
 		Map<String, Species> mapComName2Species = Species.getSpeciesName2Species(Species.ALL_SPECIES);
 		for (String[] content : sclPaneBlastFile.getLsDataInfo()) {
 			BlastUp2DB blast = new BlastUp2DB();
-			blast.setUpdate(chckbxSavetodb.isSelected(), content[0]);
+			blast.setUpdate(chckbxSavetodb.isSelected());
 			
 			//设定一个默认参数
 			int taxIDQ = 1234;
