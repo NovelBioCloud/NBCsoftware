@@ -29,6 +29,10 @@ import com.novelbio.nbcReport.Params.ReportGO;
 public class CtrlGOall implements CtrlTestGOInt {
 	
 	Map<GOtype, CtrlGO> mapGOtype2CtrlGO = new LinkedHashMap<GOtype, CtrlGO>();
+	/** 结果文件列表 */
+	Map<GOtype, List<String>> mapGoType2File = new HashMap<>();
+	List<String> lsResultPic = new ArrayList<>();
+
 	GoAlgorithm goAlgorithm;
 	int taxID = 0;
 	List<Integer> lsBlastTaxID = new ArrayList<Integer>();
@@ -155,8 +159,8 @@ public class CtrlGOall implements CtrlTestGOInt {
 	}
 	
 	@Override
-	public Map<GOtype, String> saveExcel_And_GetGoType2File(String excelPath) {
-		Map<GOtype, String> mapGoType2File = new HashMap<>();
+	public void saveExce(String excelPath) {
+		mapGoType2File.clear();
 		savePathPrefix = FoldeCreate.createAndInFold(excelPath, EnumReport.GOAnalysis.getResultFolder());
 		if (!savePathPrefix.endsWith("\\") && !savePathPrefix.endsWith("/")) {
 			savePrefix = FileOperate.getFileName(savePathPrefix);
@@ -169,14 +173,14 @@ public class CtrlGOall implements CtrlTestGOInt {
 			} else {
 				saveName = FileOperate.changeFilePrefix(savePathPrefix, ctrlGO.getResultBaseTitle() + "_", "xls");
 			}
-			mapGoType2File.put(ctrlGO.getGOType(), saveName);
+			mapGoType2File.put(ctrlGO.getGOType(), ctrlGO.getLsResultExcel());
 			for(XdocTmpltExcel xdocTmpltExcel : ctrlGO.saveExcel(saveName)){
 				for (String excelFile : xdocTmpltExcel.getAllExcelFileName()) {
 					reportGO.addResultFile(excelFile);
 				}
 			}
 		}
-		return mapGoType2File;
+		savePic();
 	}
 	
 	/** 获得保存到文件夹的前缀，譬如保存到/home/zong0jie/stage10，那么前缀就是stage10 */
@@ -185,9 +189,8 @@ public class CtrlGOall implements CtrlTestGOInt {
 		return savePrefix;
 	}
 
-	@Override
-	public Map<String, String> savePic_And_GetPre2Pic() {
-		Map<String, String> mapPrefix2Pic = new HashMap<>();
+	private void savePic() {
+		lsResultPic.clear();
 		for (String prefix : getPrefix()) {
 			List<BufferedImage> lsGOimage = new ArrayList<BufferedImage>();
 			String excelSavePath = "";
@@ -205,11 +208,9 @@ public class CtrlGOall implements CtrlTestGOInt {
 				XdocTmpltPic xdocTmpltPic = new XdocTmpltPic(picName);
 				//图片的宽度和描述都可以在这里设置
 				reportGO.addXdocTempPic(xdocTmpltPic);
-				mapPrefix2Pic.put(prefix, picName);
+				lsResultPic.add( picName);
 			}
-
 		}
-		return mapPrefix2Pic;
 	}
 	
 	/** 将本次GO分析的前缀全部抓出来，方便画图 */
@@ -246,5 +247,14 @@ public class CtrlGOall implements CtrlTestGOInt {
 	
 	public void setTeamName(String teamName){
 		reportGO.setTeamName(teamName);
+	}
+	
+	@Override
+	public Map<GOtype, List<String>> getMapGoType2File() {
+		return mapGoType2File;
+	}
+	@Override
+	public List<String> getLsResultPic() {
+		return lsResultPic;
 	}
 }

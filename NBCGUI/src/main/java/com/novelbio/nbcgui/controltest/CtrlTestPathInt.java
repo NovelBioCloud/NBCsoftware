@@ -62,4 +62,6 @@ public interface CtrlTestPathInt {
 	 public String getSavePrefix();
 	 
 	public void setTeamName(String teamName);
+	public List<String> getLsResultExcel();
+	List<String> getLsResultPic();
 }

@@ -43,6 +43,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	/** 是否为clusterGO */
 	boolean isCluster = false;
 	
+	List<String> lsResultExcel = new ArrayList<>();
 	/** 
 	 * 读入的gene2Value表
 	 * lsAccID2Value  arraylist-string[] 若为string[2],则第二个为上下调关系，判断上下调
@@ -288,6 +289,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 
 	public List<XdocTmpltExcel> saveExcel(String excelPath) {
 		saveExcelPrefix = excelPath;
+		lsResultExcel.clear();
 		if (isCluster) {
 			return saveExcelCluster(excelPath);
 		} else {
@@ -304,9 +306,12 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		List<XdocTmpltExcel> lsXdocTmpltExcels = new ArrayList<>();
 		ExcelOperate excelResult = new ExcelOperate();
 		excelResult.openExcel(excelPath);
+		lsResultExcel.add(excelPath);
 		ExcelOperate excelResultAll = new ExcelOperate();
 		String excelAllPath = FileOperate.changeFileSuffix(excelPath, "_All",null);
 		excelResultAll.openExcel(excelAllPath);
+		lsResultExcel.add(excelAllPath);
+
 		for (String prefix : mapPrefix2FunTest.keySet()) {
 			FunctionTest functionTest = mapPrefix2FunTest.get(prefix);
 			Map<String,   List<String[]>> mapSheetName2LsInfo = functionTest.getMapWriteToExcel();
@@ -364,6 +369,8 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			ExcelOperate excelResult = new ExcelOperate();
 			String excelPathOut = FileOperate.changeFileSuffix(excelPath, "_" + prefix, null);
 			excelResult.openExcel(excelPathOut);
+			lsResultExcel.add(excelPathOut);
+
 			Map<String, List<String[]>> mapSheetName2LsInfo = mapPrefix2FunTest.get(prefix).getMapWriteToExcel();
 			for (String sheetName : mapSheetName2LsInfo.keySet()) {
 				excelResult.WriteExcel(sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName));
@@ -374,6 +381,9 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		}
 		
 		return lsXdocTmpltExcels;
+	}
+	public List<String> getLsResultExcel() {
+		return lsResultExcel;
 	}
 	
 	/**

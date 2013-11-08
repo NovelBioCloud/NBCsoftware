@@ -32,7 +32,7 @@ public interface CtrlTestGOInt {
 	 * 保存图片并返回保存的前缀和文件名
 	 * @return
 	 */
-	public Map<GOtype, String> saveExcel_And_GetGoType2File(String excelPath);
+	public void saveExce(String excelPath);
 	
 	
 	public ReportGO getReportGO();
@@ -83,11 +83,6 @@ public interface CtrlTestGOInt {
 	/**设置对比组名*/
 	public void setTeamName(String teamName);
 	
-	/** 之前要先调用
-	 * {@link #saveExcel_And_GetGoType2File(String)}
-	 * 方法
-	 * @return
-	 * 保存图片并返回保存的前缀和文件名
-	 */
-	Map<String, String> savePic_And_GetPre2Pic();
+	Map<GOtype, List<String>> getMapGoType2File();
+	List<String> getLsResultPic();
 }

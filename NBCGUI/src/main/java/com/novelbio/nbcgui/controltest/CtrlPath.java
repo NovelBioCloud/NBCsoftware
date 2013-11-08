@@ -3,7 +3,9 @@ package com.novelbio.nbcgui.controltest;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
@@ -26,8 +28,8 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 	String saveParentPath = "";
 	String savePrefix = "";
 	ReportPathWay reportPathWay = new ReportPathWay();
-	
-	
+	List<String> lsResultPic = new ArrayList<>();
+
 	/** @param QtaxID */
 	public CtrlPath() {
 		functionTest = FunctionTest.getInstance(FunctionTest.FUNCTION_PATHWAY_KEGG);
@@ -91,7 +93,8 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 		return lsXdocTmpltExcels;
 	}
 	
-	public void savePic() {
+	private void savePic() {
+		lsResultPic.clear();
 		for (Entry<String, FunctionTest> entry : getMapResult_Prefix2FunTest().entrySet()) {
 			String prix = entry.getKey();
 			BufferedImage bfImageLog2Pic = entry.getValue().getImagePvalue();;
@@ -104,6 +107,7 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 			if (bfImageEnrichment == null) continue;
 			String picEnrichmentName = getSavePicEnrichmentName(prix);
 			ImageUtils.saveBufferedImage(bfImageEnrichment, picEnrichmentName);
+			lsResultPic.add(picEnrichmentName);
 			XdocTmpltPic xdocTmpltPic1 = new XdocTmpltPic(picEnrichmentName);
 			reportPathWay.addXdocTempPic(xdocTmpltPic1);
 		}
@@ -135,5 +139,9 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 	@Override
 	public void setTeamName(String teamName) {
 		reportPathWay.setTeamName(teamName);
+	}
+	@Override
+	public List<String> getLsResultPic() {
+		return lsResultPic;
 	}
 }
