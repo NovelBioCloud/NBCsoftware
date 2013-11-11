@@ -51,6 +51,9 @@ public class CtrlGOall implements CtrlTestGOInt {
 	
 	public ReportGO getReportGO() {
 		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
+			if (ctrlGO.getMapResult_Prefix2FunTest().size() == 0) {
+				continue;
+			}
 			reportGO.setFinderCondition(ctrlGO.getFinderCondition());
 			reportGO.setUpRegulation(ctrlGO.getUpAndDownRegulation()[0]);
 			reportGO.setDownRegulation(ctrlGO.getUpAndDownRegulation()[1]);
@@ -173,12 +176,12 @@ public class CtrlGOall implements CtrlTestGOInt {
 			} else {
 				saveName = FileOperate.changeFilePrefix(savePathPrefix, ctrlGO.getResultBaseTitle() + "_", "xls");
 			}
-			mapGoType2File.put(ctrlGO.getGOType(), ctrlGO.getLsResultExcel());
 			for(XdocTmpltExcel xdocTmpltExcel : ctrlGO.saveExcel(saveName)){
 				for (String excelFile : xdocTmpltExcel.getAllExcelFileName()) {
 					reportGO.addResultFile(excelFile);
 				}
 			}
+			mapGoType2File.put(ctrlGO.getGOType(), ctrlGO.getLsResultExcel());
 		}
 		savePic();
 	}

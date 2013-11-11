@@ -53,6 +53,7 @@ public class GuiMiRNASeq extends JPanel{
 	GUIFileOpen guiFileOpen = new GUIFileOpen();
 	
 	GuiLayeredPaneSpeciesVersionGff guiSpeciesVersionGff;
+	JCheckBox chckbxOverlap;
 	
 	private JButton btnFastqfile;
 	private JButton btnNovelmirnabed;
@@ -93,7 +94,7 @@ public class GuiMiRNASeq extends JPanel{
 				running();
 			}
 		});
-		btnRunning.setBounds(712, 555, 92, 24);
+		btnRunning.setBounds(709, 555, 95, 24);
 		add(btnRunning);
 		
 		chkMapping = new JCheckBox("MappingAndAnalysis");
@@ -228,6 +229,10 @@ public class GuiMiRNASeq extends JPanel{
 		});
 		btnDel.setBounds(686, 432, 102, 28);
 		add(btnDel);
+		
+		chckbxOverlap = new JCheckBox("overlap");
+		chckbxOverlap.setBounds(831, 554, 115, 26);
+		add(chckbxOverlap);
 		initialize();
 	}
 	
@@ -337,7 +342,7 @@ public class GuiMiRNASeq extends JPanel{
 		}
 		ctrlMiRNApipeline.setLsSpeciesBlastTo(lsSpeciesBlastTo);
 		ctrlMiRNApipeline.setOutPath(txtOutPathPrefix.getText());
+		ctrlMiRNApipeline.setOverlap(chckbxOverlap.isSelected());
 		ctrlMiRNApipeline.run();
 	}
-
 }
