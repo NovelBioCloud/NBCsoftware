@@ -14,6 +14,7 @@ import com.novelbio.nbcReport.XdocTmpltPic;
  * 
  */
 public class ReportGO extends ReportBase{
+	private static final long serialVersionUID = 5362772692510596256L;
 	private String testMethod;
 	private String finderCondition;
 	private String teamName;

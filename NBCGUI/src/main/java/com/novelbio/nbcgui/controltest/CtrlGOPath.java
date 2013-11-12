@@ -346,6 +346,10 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		int fdrSum5 = 0;
 		int pValueSum1 = 0;
 		String[] result = { "FDR&lt;0.01", "FDR&lt;0.05", "P-value&lt;0.01", "P-value&lt;0.05" };
+		if (mapPrefix2FunTest.size() == 0) {
+			return result[1];
+		}
+		FunctionTest functionTest = mapPrefix2FunTest.values().iterator().next();
 		for (StatisticTestResult testResult : functionTest.getTestResult()) {
 			if (testResult.getPvalue() < 0.01) {
 				pValueSum1++;

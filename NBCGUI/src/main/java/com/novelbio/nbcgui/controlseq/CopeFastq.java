@@ -44,6 +44,8 @@ public class CopeFastq {
 	/**
 	 * <b>先运行{@link #setMapCondition2LsFastQLR()}</b>
 	 * 返回整理好的结果
+	 * 前缀和该前缀所对应的一系列fastq文件。
+	 * 如果是单端，则Fastq[]长度为1，如果是双端，则Fastq[]长度为2
 	 * @return null 表示没有东西
 	 */
 	public Map<String, List<String[]>> getMapCondition2LsFastQLR() {

@@ -1,7 +1,6 @@
 package com.novelbio.nbcgui.controlseq;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -10,7 +9,8 @@ import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.novelbio.analysis.seq.fastq.FastQ;
+import com.google.common.collect.HashMultimap;
+import com.novelbio.analysis.seq.FormatSeq;
 import com.novelbio.analysis.seq.mapping.MapBowtie;
 import com.novelbio.analysis.seq.mapping.MapDNA;
 import com.novelbio.analysis.seq.mapping.MapDNAint;
@@ -34,7 +34,7 @@ public class CtrlDNAMapping {
 	
 	private String outFilePrefix = "";
 	
-	private Map<String, List<String[]>> mapCondition2CombFastQLRFiltered = new LinkedHashMap<>();
+	private Map<String, List<List<String>>> mapPrefix2LsFastq;
 	MapLibrary libraryType = MapLibrary.SingleEnd;
 	int gapLen = 5;
 	double mismatch = 2;
@@ -65,13 +65,13 @@ public class CtrlDNAMapping {
 	}
 	
 	/** 设定输入文件 */
-	public void setMapCondition2CombFastQLRFiltered(Map<String, List<String[]>> mapCondition2CombFastQLRFiltered) {
-		this.mapCondition2CombFastQLRFiltered = mapCondition2CombFastQLRFiltered;
+	public void setMapCondition2CombFastQLRFiltered(Map<String, List<List<String>>> mapPrefix2LsLRfq) {
+		this.mapPrefix2LsFastq = mapPrefix2LsLRfq;
 	}
 	
 	public void setCopeFastq(CopeFastq copeFastq) {
 		copeFastq.setMapCondition2LsFastQLR();
-		this.mapCondition2CombFastQLRFiltered = copeFastq.getMapCondition2LsFastQLR();
+		this.mapPrefix2LsFastq = copeFastq.getMapCondition2LslsFastq();
 	}
 	
 	public SamFileStatistics getSamFileStatistics() {
@@ -131,18 +131,11 @@ public class CtrlDNAMapping {
 	}
 	
 	private void mapping() {
-		for (Entry<String, List<String[]>> entry : mapCondition2CombFastQLRFiltered.entrySet()) {
-			List<String[]> lsFastQs = entry.getValue();
-			if (lsFastQs.size() == 1) {
-				mapping(entry.getKey(), lsFastQs.get(0));
-				SamFileStatistics.saveInfo(outFilePrefix + entry.getKey(), samFileStatistics);
-			} else {
-				for (int i = 0; i < lsFastQs.size(); i++) {
-					String[] fastQs = lsFastQs.get(i);
-					mapping(entry.getKey() + "_" + i, fastQs);
-					SamFileStatistics.saveInfo(entry.getKey() + "_" + i, samFileStatistics);
-				}
-			}
+		for (Entry<String, List<List<String>>> entry : mapPrefix2LsFastq.entrySet()) {
+			List<List<String>> lsFastQs = entry.getValue();
+			mapping(entry.getKey(), lsFastQs);
+			SamFileStatistics.saveExcel(outFilePrefix + entry.getKey(), samFileStatistics);
+			SamFileStatistics.savePic(outFilePrefix + entry.getKey(), samFileStatistics);
 		}
 	}
 	
@@ -157,8 +150,7 @@ public class CtrlDNAMapping {
 	 * @param prefix 文件前缀，实际输出文本为{@link #outFilePrefix} + prefix +.txt
 	 * @param fastQs
 	 */
-	public void mapping(String prefix, String[] fastQsFile) {
-		FastQ[] fastQs = CopeFastq.convertFastqFile(fastQsFile);
+	public void mapping(String prefix, List<List<String>> fastQsFile) {
 		softWareInfo.setName(softMapping);
 		MapDNAint mapSoftware = MapDNA.creatMapDNA(softMapping);		
 		mapSoftware.setExePath(softWareInfo.getExePath());
@@ -174,14 +166,12 @@ public class CtrlDNAMapping {
 				mapSoftware.setChrIndex(species.getIndexRef(softMapping, false));
 			}
 		}
-		if (fastQs.length == 1) {
-			mapSoftware.setFqFile(fastQs[0], null);
-		} else {
-			mapSoftware.setFqFile(fastQs[0], fastQs[1]);
-		}
+		mapSoftware.setLeftFq(CopeFastq.convertFastqFile(fastQsFile.get(0)));
+		mapSoftware.setRightFq(CopeFastq.convertFastqFile(fastQsFile.get(1)));
 		if (mapSoftware instanceof MapBowtie) {
 			((MapBowtie)mapSoftware).setSensitive(sensitive);
 		}
+		mapSoftware.setPrefix(prefix);
 		mapSoftware.setOutFileName(outFilePrefix + prefix);
 		mapSoftware.setGapLength(gapLen);
 		mapSoftware.setMismatch(mismatch);
@@ -192,6 +182,25 @@ public class CtrlDNAMapping {
 		samFileStatistics = new SamFileStatistics(prefix);
 		mapSoftware.addAlignmentRecorder(samFileStatistics);
 		mapSoftware.mapReads();
+	}
+	
+	/**
+	 * 预判结果文件<br>
+	 * key: 文件类型<br>
+	 * value：结果文件名
+	 * @return
+	 */
+	public HashMultimap<String, String> getPredictMapPrefix2Result(List<String> lsPrefix) {
+		HashMultimap<String, String> mapFileFormat2FileName = HashMultimap.create();
+		softWareInfo.setName(softMapping);
+		MapDNAint mapSoftware = MapDNA.creatMapDNA(softMapping);
+		for (String prefix : lsPrefix) {
+			mapSoftware.setOutFileName(outFilePrefix + prefix);
+			mapFileFormat2FileName.put(FormatSeq.BAM.toString(), mapSoftware.getOutNameCope());
+			mapFileFormat2FileName.put("Excel", SamFileStatistics.getSaveExcel(outFilePrefix + prefix));
+			mapFileFormat2FileName.put("Pic", SamFileStatistics.getSavePic(outFilePrefix + prefix));
+		}
+		return mapFileFormat2FileName;
 	}
 	
 	public static HashMap<String, Integer> getMapStr2Index() {

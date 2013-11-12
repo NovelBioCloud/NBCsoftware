@@ -125,8 +125,8 @@ public class CtrlFastQfilter {
 		HashMultimap<String, String> mapParam = HashMultimap.create();
 		try {
 			if (fastQCbefore.length <= 1 || fastQCbefore[1] == null) {
-				fastQCbefore[0].saveToPathPic(savePathAndPrefix + "_BeforeFilter");
-				fastQCbefore[0].saveToPathTable(savePathAndPrefix + "_BeforeFilter");
+				fastQCbefore[0].saveToPathPic(fileName + "_BeforeFilter");
+				fastQCbefore[0].saveToPathTable(fileName + "_BeforeFilter");
 			} else {
 				fastQCbefore[0].saveToPathPic(30, fastQCbefore[1], fileName + "_BeforeFilter");
 				fastQCbefore[0].saveToPathTable(30, fastQCbefore[1], fileName + "_BeforeFilter");
@@ -135,8 +135,8 @@ public class CtrlFastQfilter {
 			List<String> lsPicPathAndNames = new ArrayList<>();
 			List<String> lsEecelPathAndNames = new ArrayList<>();
 			if (fastQCafter.length <= 1 || fastQCafter[1] == null) {
-				lsPicPathAndNames = fastQCafter[0].saveToPathPic(savePathAndPrefix + "_AfterFilter");
-				lsEecelPathAndNames = fastQCafter[0].saveToPathTable(savePathAndPrefix + "_AfterFilter");
+				lsPicPathAndNames = fastQCafter[0].saveToPathPic(fileName + "_AfterFilter");
+				lsEecelPathAndNames = fastQCafter[0].saveToPathTable(fileName + "_AfterFilter");
 			} else {
 				lsPicPathAndNames = fastQCafter[0].saveToPathPic(30, fastQCafter[1], fileName + "_AfterFilter");
 				lsEecelPathAndNames = fastQCafter[0].saveToPathTable(30, fastQCafter[1], fileName + "_AfterFilter");
