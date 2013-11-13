@@ -13,12 +13,12 @@ import org.junit.Test;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.mapping.MapBowtie;
 import com.novelbio.analysis.seq.mapping.MapLibrary;
-import com.novelbio.analysis.seq.mapping.MapTophat;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.dataStructure.ArrayOperate;
 import com.novelbio.base.fileOperate.FileHadoop;
 import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportProject;
@@ -41,21 +41,15 @@ public class TestRNASeqMap {
 		mapParams.put("GTFfile", new String[]{""});
 		mapParams.put("strandType", new String[]{"NONE"});
 		mapParams.put("savePath", new String[]{"/hdfs:/nbCloud/staff/gaozhu/我的文档"});
-		mapParams.put("algorithm", new String[]{"tophat"});
+		mapParams.put("algorithm", new String[]{"Tophat"});
 		mapParams.put("sensitive", new String[]{"Sensitive"});
 		mapParams.put("taxId", new String[]{"10090"});
 		mapParams.put("speciesVersion", new String[]{"mm10_NCBI"});
 	}
 	
-	//@Test
+	@Test
 	public void rnaMapingRun(){
-		CtrlRNAmap ctrlRNAmap = null;
-		if (mapParams.get("algorithm")[0].equalsIgnoreCase("rsem")) {
-			ctrlRNAmap = new CtrlRNAmap(CtrlRNAmap.RSEM);
-		}
-		else if (mapParams.get("algorithm")[0].equalsIgnoreCase("tophat")) {
-			ctrlRNAmap = new CtrlRNAmap(CtrlRNAmap.TOP_HAT);
-		}
+		CtrlRNAmap ctrlRNAmap = getCtrlRNAmap(mapParams.get("algorithm")[0]);
 
 		int taxID = Integer.parseInt(mapParams.get("taxId")[0]);
 		String version = mapParams.get("speciesVersion")[0];
@@ -94,7 +88,16 @@ public class TestRNASeqMap {
 		}
 	}
 	
-	@Test
+	private CtrlRNAmap getCtrlRNAmap(String rnaType) {
+		SoftWare rnasoftware = CtrlRNAmap.getMapRNAmapType().get(rnaType);
+		if (rnasoftware == null) {
+			System.out.println("出现未知 RNA type类型：" + rnaType);
+		}
+		CtrlRNAmap ctrlRNAmap = new CtrlRNAmap(rnasoftware);
+		return ctrlRNAmap;
+	}
+	
+	//@Test
 	public void runReport() throws Exception {
 		List<String> lsFolders = new ArrayList<>();
 		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.RNASeqMap.getResultFolder()));

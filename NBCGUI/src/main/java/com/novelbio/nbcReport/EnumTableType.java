@@ -2,6 +2,7 @@ package com.novelbio.nbcReport;
 
 import java.io.Serializable;
 
+
 public enum EnumTableType implements Serializable{
 
 	GO_Result(new XdocTable( "100,100,60,60,60,60,60,60,80,80"  )),
