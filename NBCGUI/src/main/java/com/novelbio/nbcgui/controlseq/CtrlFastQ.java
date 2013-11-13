@@ -31,7 +31,7 @@ public class CtrlFastQ {
 	String outFilePrefix = "";
 	
 	/** 过滤好的结果 */
-	Map<String, List<String[]>> mapCondition2LRFiltered = new LinkedHashMap<>();
+	Map<String, List<List<String>>> mapCondition2LRFiltered = new LinkedHashMap<>();
 		
 	/** 过滤前质控 */
 	Map<String, FastQC[]> mapCond2FastQCBefore;
@@ -133,11 +133,11 @@ public class CtrlFastQ {
 	/** 当设定好lsCondition和lsLeft和lsRight后，可以不filter直接获得该项目<br>
 	 * 这时候获得的就是所有没过滤的fastq文件
 	 */
-	public Map<String, List<String[]>> getFilteredMap() {
+	public Map<String, List<List<String>>> getFilteredMap() {
 		if (mapCondition2LRFiltered.size() == 0) {
 			if (copeFastq.getMapCondition2LsFastQLR().size() == 0) {
 				copeFastq.setMapCondition2LsFastQLR();
-				return copeFastq.getMapCondition2LsFastQLR();
+				return copeFastq.getMapCondition2LslsFastq();
 			}
 		}
 		return mapCondition2LRFiltered;
@@ -150,7 +150,7 @@ public class CtrlFastQ {
 		for (String prefix : copeFastq.getLsPrefix()) {
 			List<String[]> lsFastQLR = copeFastq.getMapCondition2LsFastQLR().get(prefix);
 			if (!fastQfilterRecord.isFiltered() && lsFastQLR.size() < 2) {
-				mapCondition2LRFiltered.put(prefix, lsFastQLR);
+				mapCondition2LRFiltered.put(prefix, copeFastq.getMapCondition2LslsFastq().get(prefix));
 				continue;
 			}
 			CtrlFastQfilter ctrlFastQfilter = (CtrlFastQfilter)SpringFactory.getFactory().getBean("ctrlFastQfilter");
@@ -169,9 +169,10 @@ public class CtrlFastQ {
 			ctrlFastQfilter.setFastQLRfiltered(createCombineFastq(prefix, lsFastQLR));
 			ctrlFastQfilter.filteredAndCombineReads();
 			
-			HashMultimap<String, String> mapParam = ctrlFastQfilter.saveFastQC(outFilePrefix + prefix);
-			saveFastQCfilterParamSingle(mapParam);
+			ctrlFastQfilter.saveFastQC(outFilePrefix + prefix);			
 			lsReportQCs.add(ctrlFastQfilter.getReportQC());
+			
+			mapCondition2LRFiltered.put(prefix, ctrlFastQfilter.getLsFastQLRfiltered());
 		}
 		Map<String, FastQC[]> mapParam2FastqcLR = new LinkedHashMap<>();
 		for (String prefix : mapCond2FastQCBefore.keySet()) {
@@ -218,12 +219,6 @@ public class CtrlFastQ {
 			fastQs[1] = new FastQ(outFilePrefix + condition + "_2.fq.gz", true);
 		}
 		return fastQs;
-	}
-
-	/** 单个过滤写入文本 */
-	private void saveFastQCfilterParamSingle(HashMultimap<String, String> mapParam) {
-		String savePath = FileOperate.getPathName(outFilePrefix);
-//		ReportBuilder.writeDescFile(savePath, mapParam);
 	}
 	
 }

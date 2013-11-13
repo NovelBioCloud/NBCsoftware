@@ -15,6 +15,7 @@ import com.novelbio.analysis.seq.mapping.MapBowtie;
 import com.novelbio.analysis.seq.mapping.MapDNA;
 import com.novelbio.analysis.seq.mapping.MapDNAint;
 import com.novelbio.analysis.seq.mapping.MapLibrary;
+import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.analysis.seq.sam.SamFileStatistics;
 import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
@@ -51,6 +52,12 @@ public class CtrlDNAMapping {
 	ReportDNASeqMap reportDNASeqMap = new ReportDNASeqMap();
 	
 	SamFileStatistics samFileStatistics;
+	
+	//结果文件
+	Map<String, String> mapPrefix2Bam = new HashMap<>();
+	Map<String, String> mapPrefix2Statistics = new HashMap<>();
+	Map<String, String> mapPrefix2Pic = new HashMap<>();
+	
 	/** 
 	 * @param species
 	 * @param map2Index mapping到什么上面去，有chrom，refseq和refseqLongestIso三种
@@ -131,11 +138,22 @@ public class CtrlDNAMapping {
 	}
 	
 	private void mapping() {
-		for (Entry<String, List<List<String>>> entry : mapPrefix2LsFastq.entrySet()) {
-			List<List<String>> lsFastQs = entry.getValue();
-			mapping(entry.getKey(), lsFastQs);
-			SamFileStatistics.saveExcel(outFilePrefix + entry.getKey(), samFileStatistics);
-			SamFileStatistics.savePic(outFilePrefix + entry.getKey(), samFileStatistics);
+		mapPrefix2Bam.clear();
+		mapPrefix2Pic.clear();
+		mapPrefix2Statistics.clear();
+		
+		for (String prefix : mapPrefix2LsFastq.keySet()) {
+			List<List<String>> lsFastQs = mapPrefix2LsFastq.get(prefix);
+			SamFile samFile = mapping(prefix, lsFastQs);
+			if (samFile != null) {
+				mapPrefix2Bam.put(prefix, samFile.getFileName());
+			} else {
+				continue;
+			}
+			String excel = SamFileStatistics.saveExcel(outFilePrefix + prefix, samFileStatistics);
+			String pic = SamFileStatistics.savePic(outFilePrefix + prefix, samFileStatistics);
+			mapPrefix2Statistics.put(prefix, excel);
+			mapPrefix2Pic.put(prefix, pic);
 		}
 	}
 	
@@ -150,7 +168,7 @@ public class CtrlDNAMapping {
 	 * @param prefix 文件前缀，实际输出文本为{@link #outFilePrefix} + prefix +.txt
 	 * @param fastQs
 	 */
-	public void mapping(String prefix, List<List<String>> fastQsFile) {
+	public SamFile mapping(String prefix, List<List<String>> fastQsFile) {
 		softWareInfo.setName(softMapping);
 		MapDNAint mapSoftware = MapDNA.creatMapDNA(softMapping);		
 		mapSoftware.setExePath(softWareInfo.getExePath());
@@ -181,7 +199,7 @@ public class CtrlDNAMapping {
 		mapSoftware.setThreadNum(thread);
 		samFileStatistics = new SamFileStatistics(prefix);
 		mapSoftware.addAlignmentRecorder(samFileStatistics);
-		mapSoftware.mapReads();
+		return mapSoftware.mapReads();
 	}
 	
 	/**
@@ -201,6 +219,16 @@ public class CtrlDNAMapping {
 			mapFileFormat2FileName.put("Pic", SamFileStatistics.getSavePic(outFilePrefix + prefix));
 		}
 		return mapFileFormat2FileName;
+	}
+	
+	public Map<String, String> getMapPrefix2Bam() {
+		return mapPrefix2Bam;
+	}
+	public Map<String, String> getMapPrefix2Pic() {
+		return mapPrefix2Pic;
+	}
+	public Map<String, String> getMapPrefix2Statistics() {
+		return mapPrefix2Statistics;
 	}
 	
 	public static HashMap<String, Integer> getMapStr2Index() {

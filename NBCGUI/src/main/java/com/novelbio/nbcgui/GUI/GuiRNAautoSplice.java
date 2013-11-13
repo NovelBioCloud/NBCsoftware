@@ -66,6 +66,7 @@ public class GuiRNAautoSplice extends JPanel implements GUIinfo {
 	int level;
 	
 	JComboBoxData<String> cmbGroup = new JComboBoxData<String>();
+	private JCheckBox chckbxReconstructIso;
 	
 	/**
 	 * Create the panel.
@@ -174,7 +175,8 @@ public class GuiRNAautoSplice extends JPanel implements GUIinfo {
 		add(btnDeleteCompare);
 		
 		chckbxDisplayAllSplicing = new JCheckBox("Display All Splicing Events");
-		chckbxDisplayAllSplicing.setBounds(20, 400, 286, 22);
+		chckbxDisplayAllSplicing.setSelected(true);
+		chckbxDisplayAllSplicing.setBounds(20, 400, 243, 22);
 		add(chckbxDisplayAllSplicing);
 		
 		progressBar = new JProgressBar();
@@ -212,6 +214,11 @@ public class GuiRNAautoSplice extends JPanel implements GUIinfo {
 		cmbStrand.setBounds(642, 226, 198, 24);
 		add(cmbStrand);
 		
+		chckbxReconstructIso = new JCheckBox("reconstruct iso");
+		chckbxReconstructIso.setSelected(true);
+		chckbxReconstructIso.setBounds(295, 398, 180, 26);
+		add(chckbxReconstructIso);
+		
 		initial();
 	}
 	private void initial() {
@@ -248,6 +255,7 @@ public class GuiRNAautoSplice extends JPanel implements GUIinfo {
 			Species species = guiLayeredPaneSpeciesVersionGff.getSelectSpecies();
 			GffChrAbs gffChrAbs = new GffChrAbs(species);
 			gffHashGeneResult = gffChrAbs.getGffHashGene();
+			gffChrAbs.close();
 		}
 		return gffHashGeneResult;
 	}
@@ -260,7 +268,9 @@ public class GuiRNAautoSplice extends JPanel implements GUIinfo {
 		String outFile = txtSaveTo.getText();
 		ctrlSplicing.setOutFile(outFile);
 		ctrlSplicing.setLsBam2Prefix(scrlBam.getLsDataInfo());
+		ctrlSplicing.setReconstructIso(chckbxReconstructIso.isSelected());
 		ctrlSplicing.setLsCompareGroup(scrlCompare.getLsDataInfo());
+		ctrlSplicing.setMemoryLow(false);
 		//TODO
 		btnRun.setEnabled(false);
 		Thread thread = new Thread(ctrlSplicing);
