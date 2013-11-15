@@ -132,6 +132,9 @@ public class CtrlRNAmap {
 				mapRNA.setGtf_Gene2Iso(null);
 				((MapTophat)mapRNA).setSensitiveLevel(sensitive);
 			} else {
+				if (gtfAndGene2Iso == null) {
+					gtfAndGene2Iso = "";
+				}
 				mapRNA.setGtf_Gene2Iso(gtfAndGene2Iso);
 			}
 			

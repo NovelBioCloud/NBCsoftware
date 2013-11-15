@@ -41,7 +41,7 @@ public class CtrlDNAMapping {
 	double mismatch = 2;
 	int sensitive = MapBowtie.Sensitive_Sensitive;
 	int thread = 4;
-	boolean isNeedSort = true;
+	boolean isNeedSort = false;
 	String chrIndexFile;
 	Species species;
 	int map2Index = MAP_TO_CHROM;
@@ -208,10 +208,11 @@ public class CtrlDNAMapping {
 	 * value：结果文件名
 	 * @return
 	 */
-	public HashMultimap<String, String> getPredictMapPrefix2Result(List<String> lsPrefix) {
+	public HashMultimap<String, String> getPredictMapPrefix2Result(boolean isNeedSort, List<String> lsPrefix) {
 		HashMultimap<String, String> mapFileFormat2FileName = HashMultimap.create();
 		softWareInfo.setName(softMapping);
 		MapDNAint mapSoftware = MapDNA.creatMapDNA(softMapping);
+		mapSoftware.setSortNeed(isNeedSort);
 		for (String prefix : lsPrefix) {
 			mapSoftware.setOutFileName(outFilePrefix + prefix);
 			mapFileFormat2FileName.put(FormatSeq.BAM.toString(), mapSoftware.getOutNameCope());

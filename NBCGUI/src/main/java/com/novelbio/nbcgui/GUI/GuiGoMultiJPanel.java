@@ -343,8 +343,7 @@ public class GuiGoMultiJPanel extends JPanel{
 		jTxtBGGo.setBounds(104, 58, 200, 18);
 		cmbSpecies = new JComboBoxData<Species>();
 		cmbSpecies.setBounds(131, 28, 173, 23);
-		cmbSpecies.setMapItem(Species
-				.getSpeciesName2Species(Species.KEGGNAME_SPECIES));
+		cmbSpecies.setMapItem(Species.getSpeciesName2Species(Species.KEGGNAME_SPECIES, true, null));
 		cmbSpecies.setEditable(true);
 	}
 	

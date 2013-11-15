@@ -382,8 +382,8 @@ public class GuiGoJPanel extends JPanel{
 		{
 			cmbSelSpeGo = new JComboBoxData<Species>();
 			cmbSelSpeGo.setBounds(131, 77, 173, 23);
-			cmbSelSpeGo.setMapItem(Species.getSpeciesName2Species(Species.KEGGNAME_SPECIES));
-			cmbSelSpeGo.setEditable(true);
+			cmbSelSpeGo.setMapItem(Species.getSpeciesName2Species(Species.KEGGNAME_SPECIES, true, null));
+//			cmbSelSpeGo.setEditable(true);
 		}
 	}
 	

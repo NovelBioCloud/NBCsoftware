@@ -515,7 +515,7 @@ public class GuiBlastJpanel extends JPanel {
 		if(jCobTaxSelect == null) {
 			jCobTaxSelect = new JComboBoxData<Species>();
 			jCobTaxSelect.setBounds(800, 2, 228, 23);
-			jCobTaxSelect.setMapItem(Species.getSpeciesName2Species(Species.KEGGNAME_SPECIES));
+			jCobTaxSelect.setMapItem(Species.getSpeciesName2Species(Species.ALL_SPECIES, true, null));
 			jCobTaxSelect.setEditable(true);
 		}
 		return jCobTaxSelect;

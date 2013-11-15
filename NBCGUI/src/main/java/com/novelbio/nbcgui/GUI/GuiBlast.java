@@ -241,20 +241,24 @@ public class GuiBlast extends JPanel implements GuiNeedOpenFile {
 			blast.setUpdate(chckbxSavetodb.isSelected());
 			
 			//设定一个默认参数
-			int taxIDQ = 1234;
+			int taxIDQ = 0;
+			String taxName = null;
 			Species speciesQ = mapComName2Species.get(content[1]);
 			if (speciesQ == null) {
 				try {
 					taxIDQ = Integer.parseInt(content[1].trim());
 				} catch (Exception e) {
-					taxIDQ = 1234;
+					taxName = content[1];
 				}
 			} else {
 				taxIDQ = speciesQ.getTaxID();
 			}
 			int taxIDS = mapComName2Species.get(content[2]).getTaxID();
-						
-			blast.setTaxID(taxIDQ);
+			if (taxIDQ > 0) {
+				blast.setTaxID(taxIDQ);
+			} else if (taxName != null && !taxName.equals("")) {
+				blast.setTaxName(taxName);
+			}
 			blast.setSubTaxID(taxIDS);
 			if (chckbxSavetodb.isSelected()) {
 				blast.setTxtWriteExcep(FileOperate.changeFileSuffix(content[0].trim(), "_cannotUpDate", null));
