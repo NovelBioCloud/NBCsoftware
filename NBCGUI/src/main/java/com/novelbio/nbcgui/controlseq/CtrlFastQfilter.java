@@ -11,7 +11,7 @@ import com.google.common.collect.HashMultimap;
 import com.novelbio.analysis.seq.fastq.FastQ;
 import com.novelbio.analysis.seq.fastq.FastQC;
 import com.novelbio.analysis.seq.fastq.FastQReadingChannel;
-import com.novelbio.analysis.seq.fastq.FastQRecordFilter;
+import com.novelbio.analysis.seq.fastq.FastQFilter;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.nbcReport.XdocTmpltPic;
 import com.novelbio.nbcReport.Params.ReportQC;
@@ -23,7 +23,7 @@ public class CtrlFastQfilter {
 	private static final Logger logger = Logger.getLogger(CtrlFastQ.class);
 	public static String FOLDER_NAME = "QCResults" + FileOperate.getSepPath();
 	
-	FastQRecordFilter fastQfilterRecord;
+	FastQFilter fastQfilterRecord;
 
 	String outFilePrefix = "";
 	String prefix = "";
@@ -45,7 +45,7 @@ public class CtrlFastQfilter {
 	HashMultimap<String, String> mapPrefix2QCresult = HashMultimap.create();
 	
 	/** 设定过滤参数 */
-	public void setFastQfilterParam(FastQRecordFilter fastQfilterRecord) {
+	public void setFastQfilterParam(FastQFilter fastQfilterRecord) {
 		this.fastQfilterRecord = fastQfilterRecord;
 	}
 	

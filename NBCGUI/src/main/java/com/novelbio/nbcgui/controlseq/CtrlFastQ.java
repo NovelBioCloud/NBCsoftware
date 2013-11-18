@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.HashMultimap;
 import com.novelbio.analysis.seq.fastq.FastQ;
 import com.novelbio.analysis.seq.fastq.FastQC;
-import com.novelbio.analysis.seq.fastq.FastQRecordFilter;
+import com.novelbio.analysis.seq.fastq.FastQFilter;
 import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
@@ -24,7 +24,7 @@ import com.novelbio.nbcReport.Params.ReportQC;
 @Scope("prototype")
 public class CtrlFastQ {
 	private static final Logger logger = Logger.getLogger(CtrlFastQ.class);
-	FastQRecordFilter fastQfilterRecord = new FastQRecordFilter();
+	FastQFilter fastQfilter = new FastQFilter();
 	
 	CopeFastq copeFastq = new CopeFastq();
 	
@@ -54,27 +54,27 @@ public class CtrlFastQ {
 	}
 	
 	public void setAdaptorLeft(String adaptorLeft) {
-		fastQfilterRecord.setFilterParamAdaptorLeft(adaptorLeft.trim());
+		fastQfilter.setFilterParamAdaptorLeft(adaptorLeft.trim());
 	}
 	public void setAdaptorRight(String adaptorRight) {
-		fastQfilterRecord.setFilterParamAdaptorRight(adaptorRight.trim());
+		fastQfilter.setFilterParamAdaptorRight(adaptorRight.trim());
 	}
 	public void setAdaptorLowercase(boolean adaptorLowercase) {
-		fastQfilterRecord.setFilterParamAdaptorLowercase(adaptorLowercase);
+		fastQfilter.setFilterParamAdaptorLowercase(adaptorLowercase);
 	}
 
 	public void setFastqQuality(int fastqQuality) {
-		fastQfilterRecord.setQualityFilter(fastqQuality);
+		fastQfilter.setQualityFilter(fastqQuality);
 	}
 	/** 是否过滤，如果不过滤则直接合并 */
 	public void setFilter(boolean filter) {
-		fastQfilterRecord.setIsFiltered(filter);
+		fastQfilter.setIsFiltered(filter);
 	}
 	public void setReadsLenMin(int readsLenMin) {
-		fastQfilterRecord.setFilterParamReadsLenMin(readsLenMin);
+		fastQfilter.setFilterParamReadsLenMin(readsLenMin);
 	}
 	public void setTrimNNN(boolean trimNNN) {
-		fastQfilterRecord.setFilterParamTrimNNN(trimNNN);
+		fastQfilter.setFilterParamTrimNNN(trimNNN);
 	}
 	
 	public void setOutFilePrefix(String outFilePrefix) {
@@ -82,7 +82,7 @@ public class CtrlFastQ {
 	}
 	
 	public boolean isFiltered() {
-		return fastQfilterRecord.isFiltered();
+		return fastQfilter.isFiltered();
 	}
 	
 	public String getOutFilePrefix() {
@@ -154,12 +154,12 @@ public class CtrlFastQ {
 		mapCond2FastQCAfter = new LinkedHashMap<String, FastQC[]>();
 		for (String prefix : copeFastq.getLsPrefix()) {
 			List<String[]> lsFastQLR = copeFastq.getMapCondition2LsFastQLR().get(prefix);
-			if (!fastQfilterRecord.isFiltered() && lsFastQLR.size() < 2) {
+			if (!fastQfilter.isFiltered() && lsFastQLR.size() < 2) {
 				mapCondition2LRFiltered.put(prefix, copeFastq.getMapCondition2LslsFastq().get(prefix));
 				continue;
 			}
 			CtrlFastQfilter ctrlFastQfilter = (CtrlFastQfilter)SpringFactory.getFactory().getBean("ctrlFastQfilter");
-			ctrlFastQfilter.setFastQfilterParam(fastQfilterRecord);
+			ctrlFastQfilter.setFastQfilterParam(fastQfilter);
 			ctrlFastQfilter.setOutFilePrefix(outFilePrefix);
 			ctrlFastQfilter.setPrefix(prefix);
 			ctrlFastQfilter.setLsFastQLR(lsFastQLR);
@@ -171,7 +171,7 @@ public class CtrlFastQ {
 			mapCond2FastQCAfter.put(prefix, fastQCsAfter);
 			ctrlFastQfilter.setFastQCafter(fastQCsAfter);
 			
-			ctrlFastQfilter.setFastQLRfiltered(createCombineFastq(fastQfilterRecord.isFiltered(), outFilePrefix, prefix, lsFastQLR));
+			ctrlFastQfilter.setFastQLRfiltered(createCombineFastq(fastQfilter.isFiltered(), outFilePrefix, prefix, lsFastQLR));
 			ctrlFastQfilter.filteredAndCombineReads();
 			
 			ctrlFastQfilter.saveFastQC(outFilePrefix + prefix);			
@@ -254,8 +254,10 @@ public class CtrlFastQ {
 	 * @return
 	 */
 	public static HashMultimap<String, String> getPredictMapPrefix2FilteredFQ(CopeFastq copeFastq, String outPrefix, boolean isFilter) {
+		copeFastq.setMapCondition2LsFastQLR();
+
 		HashMultimap<String, String> mapPrefix2LsFilteredFile = HashMultimap.create();
-		outPrefix = FoldeCreate.createAndInFold(outPrefix, EnumReport.FastQC.getResultFolder());
+		outPrefix = FoldeCreate.getInFold(outPrefix, EnumReport.FastQC.getResultFolder());
 		for (String prefix : copeFastq.getLsPrefix()) {
 			List<String[]> lsFastQLR = copeFastq.getMapCondition2LsFastQLR().get(prefix);
 			if (!isFilter && lsFastQLR.size() < 2) {

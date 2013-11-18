@@ -31,6 +31,7 @@ public class CopeFastq {
 	 * 一个prefix对应两个list，分别是左端fq文件名的list 和 右端fq文件名的list
 	 */
 	Map<String, List<List<String>>> mapCondition2LslsFastq = new LinkedHashMap<>();
+	boolean checkFileIsExist = true;
 	
 	public void setLsCondition(List<String> lsCondition) {
 		this.lsCondition = lsCondition;
@@ -40,6 +41,10 @@ public class CopeFastq {
 	}
 	public void setLsFastQfileRight(List<String> lsFastQfileRight) {
 		this.lsFastQfileRight = lsFastQfileRight;
+	}
+	/** 是否校验输入的文件，默认为true */
+	public void setCheckFileIsExist(boolean checkFileIsExist) {
+		this.checkFileIsExist = checkFileIsExist;
 	}
 	/**
 	 * <b>先运行{@link #setMapCondition2LsFastQLR()}</b>
@@ -132,7 +137,7 @@ public class CopeFastq {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 往list中添加Fastq文件，如果list中为双端数据，则fastqL和fastqR都必须存在。
 	 * 如果list为单端，则只能存在fastqL
@@ -143,26 +148,34 @@ public class CopeFastq {
 	 * @return
 	 */
 	private boolean setFastqLR(List<String[]> lsPrefixFastQLR, String[] tmpFastQLR, String fastqL, String fastqR) {
-		if (FileOperate.isFileExistAndBigThanSize(fastqL, 1.0) && FileOperate.isFileExistAndBigThanSize(fastqR, 1.0)) {
+		boolean isFqLExist = fileIsExist(checkFileIsExist, fastqL);
+		boolean isFqRExist = fileIsExist(checkFileIsExist, fastqR);
+		if (isFqLExist && isFqRExist) {
 			tmpFastQLR = new String[2];
 			tmpFastQLR[0] = fastqL;
 			tmpFastQLR[1] = fastqR;
 		}
-		else if (FileOperate.isFileExistAndBigThanSize(fastqL, 1)) {
+		else if (isFqLExist) {
 			tmpFastQLR = new String[1];
 			tmpFastQLR[0] = fastqL;
 		}
-		else if (FileOperate.isFileExistAndBigThanSize(fastqR, 1)) {
+		else if (isFqRExist) {
 			tmpFastQLR = new String[1];
 			tmpFastQLR[0] = fastqR;
 		}
+		
 		if (lsPrefixFastQLR.size() > 0 && (tmpFastQLR == null ||  lsPrefixFastQLR.get(0).length != tmpFastQLR.length)) {
 			return false;
 		}
 		lsPrefixFastQLR.add(tmpFastQLR);
 		return true;
 	}
-
+	
+	private boolean fileIsExist(boolean checkFileIsExist, String fileName) {
+		return checkFileIsExist? FileOperate.isFileExistAndBigThanSize(fileName, 1.0)
+				: (fileName != null && !fileName.equals(""));
+	}
+	
 	/** 将输入的文件数组转化为FastQ数组 */
 	public static FastQ[] convertFastqFile(String[] fastqFile) {
 		if (fastqFile == null) return null;
