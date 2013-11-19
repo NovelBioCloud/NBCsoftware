@@ -22,6 +22,7 @@ import javax.swing.LayoutStyle;
 
 import com.novelbio.analysis.coexp.simpCoExp.SimpCoExp;
 import com.novelbio.base.dataOperate.ExcelOperate;
+import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
@@ -264,9 +265,7 @@ public class GuiPearsonJpanel extends JPanel{
 	 * 查看文件的鼠标或键盘事件响应时调用
 	 */
 	private void setPathProview(String filePath) {
-		ExcelOperate excelOperate = new ExcelOperate();
-		excelOperate.openExcel(filePath);
-		ArrayList<String[]> PathRawData = excelOperate.ReadLsExcel(1, 1, excelOperate.getRowCount(), excelOperate.getColCount());
+		ArrayList<String[]> PathRawData = ExcelTxtRead.readLsExcelTxt(filePath, 1);
 		jScrollPaneInputPath.setItemLs(PathRawData);
 	}
 	
