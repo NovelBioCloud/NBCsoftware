@@ -3,7 +3,10 @@ package com.novelbio.nbcgui.controlseq;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.HashMultimap;
+import com.novelbio.analysis.seq.fasta.SeqHash;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
+import com.novelbio.analysis.seq.genome.GffHashModifyORF;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.genome.gffOperate.GffType;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
@@ -11,30 +14,28 @@ import com.novelbio.analysis.seq.rnaseq.CuffMerge;
 import com.novelbio.analysis.seq.rnaseq.CufflinksGTF;
 import com.novelbio.analysis.seq.rnaseq.GffHashMerge;
 import com.novelbio.analysis.seq.rnaseq.TranscriptomStatistics;
+import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.information.SoftWareInfo;
 import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
+import com.novelbio.nbcReport.Params.EnumReport;
 
 public class CtrlCufflinksTranscriptome {
 	boolean reconstructTranscriptome = false;
 	SoftWareInfo softWareInfo = new SoftWareInfo(SoftWare.cufflinks);
 	CufflinksGTF cufflinksGTF = new CufflinksGTF();
-
-	GffChrAbs gffChrAbs;
-	GffHashGene gffHashGene;
+	GffChrAbs gffChrAbs = new GffChrAbs();
 	String outPrefix;
 	int thread = 4;
 	String gtfRefFile;
-	
+	String chrSeq;
 	String outGtf;
 	String outStatistics;
 	
-	
-	
 	/** 输入已有的物种信息<br>
 	 * 和{@link #setGTFfile(String)} 两者选一
-	 * @param gffChrAbs
+	 * @param gffChrAbs 注意结束后会关闭流
 	 */
 	public void setGffChrAbs(GffChrAbs gffChrAbs) {
 		this.gffChrAbs = gffChrAbs;
@@ -60,23 +61,48 @@ public class CtrlCufflinksTranscriptome {
 	public void setReconstructTranscriptome(boolean reconstructTranscriptome) {
 		this.reconstructTranscriptome = reconstructTranscriptome;
 	}
-	private void setExepath() {
-		cufflinksGTF.setExePath(softWareInfo.getExePath(), gffChrAbs.getSpecies().getChromSeq());
+	/** 是否根据prefix合并bam文件，然后再做cufflinks分析 默认false */
+	public void setIsMergeBamByPrefix(boolean isMergeBamByPrefix) {
+		cufflinksGTF.setIsMergeBamByPrefix(isMergeBamByPrefix);
+	}
+	/** 在junction 的一头搭上exon的最短比例 0-1之间，默认0.09 */
+	public void setSmallAnchorFraction(double anchorLength) {
+		cufflinksGTF.setSmallAnchorFraction(anchorLength);
+	}
+	/** 是否用上四分之一位点标准化 */
+	public void setUpQuartileNormalized(boolean isUpQuartileNormalized) {
+		cufflinksGTF.setUpQuartileNormalized(isUpQuartileNormalized);
+	}
+
+	public void setOutPathPrefix(String outPathPrefix) {
+		this.outPrefix = FoldeCreate.createAndInFold(outPathPrefix, EnumReport.ReconstructTranscriptome.getResultFolder());
+		String tmpCufflinksResult = FileOperate.getPathName(outPrefix) + "tmpCufflinks/";
+		FileOperate.createFolders(tmpCufflinksResult);
+		cufflinksGTF.setOutPathPrefix(tmpCufflinksResult);
 	}
 	
-	public void setOutPathPrefix(String outPathPrefix) {
-		cufflinksGTF.setOutPathPrefix(outPathPrefix);
-		this.outPrefix = outPathPrefix;
-	}
 	public void run() {
-		gffHashGene = null;
-		setExepath();
-		outGtf = outPrefix + "novelTranscriptom.gtf";
-		outStatistics =  outPrefix + "novelTranscriptomStatistics.txt";
-		cufflinksGTF.setGtfFile(getGtfFileName());
+		reconstruct();
+		close();
+	}
+	
+	public void reconstruct() {
+		setGffHashRef();
+		setSeqHash();
+
+		cufflinksGTF.setExePath(softWareInfo.getExePath(), getChromFaFile());
+		cufflinksGTF.setGtfFile(getGtfFileName(), reconstructTranscriptome);
 		cufflinksGTF.setIntronLen(getIntronSmall2Big());
+		cufflinksGTF.setSkipErrorMode(true);
 		cufflinksGTF.runCufflinks();
 		List<String> lsResultGTF = cufflinksGTF.getLsCufflinksResult();
+		if (!reconstructTranscriptome) {
+			return;
+		}
+		
+		outGtf = outPrefix + "novelTranscriptom.gtf";
+		outStatistics =  outPrefix + "novelTranscriptomStatistics.txt";
+		String resultGtf = null;
 		if (lsResultGTF.size() > 1) {
 			CuffMerge cuffMerge = new CuffMerge();
 			cuffMerge.setExePath(softWareInfo.getExePath());
@@ -85,31 +111,31 @@ public class CtrlCufflinksTranscriptome {
 			cuffMerge.setOutputPrefix(outGtf);
 			try { cuffMerge.setRefChrFa(gffChrAbs.getSpecies().getChromSeq()); } catch (Exception e) { }
 			cuffMerge.setThreadNum(thread);
-			outGtf = cuffMerge.runCuffmerge();
+			resultGtf = cuffMerge.runCuffmerge();
+			
 		} else if (lsResultGTF.size() == 1) {
-			outGtf = lsResultGTF.get(0);
+			resultGtf = lsResultGTF.get(0);
 		}
 		
-		if (!reconstructTranscriptome) {
-			return;
-		}
+		GffHashModifyORF gffHashModifyORF = new GffHashModifyORF();
+		//TODO modify orf
 		
 		GffHashMerge gffHashMerge = new GffHashMerge();
-		gffHashMerge.setSpecies(gffChrAbs.getSpecies());
-		gffHashMerge.setGffHashGeneRef(getGffHashRef());
+		gffHashMerge.setSeqHash(gffChrAbs.getSeqHash());
+		gffHashMerge.setGffHashGeneRef(gffChrAbs.getGffHashGene());
 		gffHashMerge.addGffHashGene(new GffHashGene(GffType.GTF, outGtf));
 		TranscriptomStatistics transcriptomStatistics = gffHashMerge.getStatisticsCompareGff();
 		TxtReadandWrite txtOut = new TxtReadandWrite(outStatistics, true);
 		txtOut.ExcelWrite(transcriptomStatistics.getStatisticsResult());
 		txtOut.close();
 	}
-	
+
 	/** 根据gff文件，返回最小和最大intron的长度
 	 * 如果gff不存在，则返回null
 	 * @return
 	 */
 	private int[] getIntronSmall2Big() {
-		GffHashGene gffHashGene = getGffHashRef();
+		GffHashGene gffHashGene = gffChrAbs.getGffHashGene();
 		if (gffHashGene == null) {
 			return null;
 		}
@@ -125,21 +151,54 @@ public class CtrlCufflinksTranscriptome {
 			gtfFile = gtfRefFile;
 		} else if (gffChrAbs != null && gffChrAbs.getGffHashGene() != null) {
 			gtfFile = gffChrAbs.getGtfFile();
-		} else {
-			gtfFile = "";
 		}
 		return gtfFile;
 	}
-	
-	private GffHashGene getGffHashRef() {
-		if (gffHashGene != null) {
-			return gffHashGene;
+	private String getChromFaFile() {
+		String chromFa = null;
+		if (FileOperate.isFileExistAndBigThanSize(chrSeq, 10)) {
+			chromFa = chrSeq;
+		} else if (gffChrAbs != null && gffChrAbs.getSeqHash() != null) {
+			chromFa = gffChrAbs.getSeqHash().getChrFile();
 		}
-		if (FileOperate.isFileExistAndBigThanSize(gtfRefFile, 10)) {
-			gffHashGene = new GffHashGene(GffType.GTF, gtfRefFile);
-		} else if (gffChrAbs != null && gffChrAbs.getGffHashGene() != null) {
-			gffHashGene = gffChrAbs.getGffHashGene();
-		}
-		return gffHashGene;
+		return chromFa;		
 	}
+	
+	private void setGffHashRef() {
+		if (FileOperate.isFileExistAndBigThanSize(gtfRefFile, 10)) {
+			GffHashGene gffHashGene = new GffHashGene(GffType.GTF, gtfRefFile);
+			gffChrAbs.setGffHash(gffHashGene);
+		}
+	}
+	
+	private void setSeqHash() {
+		if (FileOperate.isFileExistAndBigThanSize(chrSeq, 10)) {
+			SeqHash seqHash = new SeqHash(chrSeq, null);
+			if (gffChrAbs.getSeqHash() != null) {
+				gffChrAbs.getSeqHash().close();
+				gffChrAbs.setSeqHash(seqHash);
+			}
+		}
+	}
+	/** 关闭gffChrAbs中的seqhash信息 */
+	private void close() {
+		gffChrAbs.close();
+	}
+	
+	/** 返回预测的文件名
+	 * @param isFilter 是否过滤，如果不过滤就直接合并
+	 * @return
+	 */
+	public static HashMultimap<String, String> getPredictMapPrefix2FilteredFQ(String outPrefix, boolean isReconstruct) {
+		HashMultimap<String, String> mapPrefix2File = HashMultimap.create();
+		if (!isReconstruct) return mapPrefix2File;
+			
+		String outFoldPrefix = FoldeCreate.getInFold(outPrefix, EnumReport.ReconstructTranscriptome.getResultFolder());
+		String outGtf = outFoldPrefix + "novelTranscriptom.gtf";
+		String outStatistics = outFoldPrefix + "novelTranscriptomStatistics.txt";
+		mapPrefix2File.put("reconstruct_gtf", outGtf);
+		mapPrefix2File.put("reconstruct_statistics", outStatistics);
+		return mapPrefix2File;
+	}
+
 }

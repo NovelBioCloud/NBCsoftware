@@ -19,6 +19,7 @@ public enum EnumReport {
 	DNASeqMap("DNASeqMap_result",new ReportDNASeqMap()),
 	RNASeqMap("RNASeqMap_result",new ReportRNASeqMap()),
 	DiffExp("DifferenceExpression_result",new ReportDifGeneAll()),
+	ReconstructTranscriptome("ReconstructTranscriptome_result", null),
 	GOTree("GOTrees_result",null),
 	GeneActNetwork("GeneActNetwork_result",null),
 	MiRNATargetNetwork("MiRNATargetNetwork_result",null),
