@@ -311,7 +311,7 @@ public class GuiPathJpanel extends JPanel{
 			jCombSelSpePath = new JComboBoxData<Species>();
 			jCombSelSpePath.setBounds(12, 112, 174, 23);
 			jCombSelSpePath.setEditable(true);
-			jCombSelSpePath.setMapItem(Species.getSpeciesName2Species(Species.ALL_SPECIES));
+			jCombSelSpePath.setMapItem(Species.getSpeciesName2Species(Species.KEGGNAME_SPECIES, true, null));
 		}
 	}
 	

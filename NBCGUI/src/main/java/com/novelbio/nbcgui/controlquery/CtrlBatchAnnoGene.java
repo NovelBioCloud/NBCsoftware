@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.novelbio.analysis.annotation.genAnno.AnnoQuery;
 import com.novelbio.analysis.annotation.genAnno.AnnoQuery.AnnoQueryDisplayInfo;
+import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.database.domain.geneanno.GOtype;
@@ -27,6 +28,10 @@ public class CtrlBatchAnnoGene implements RunGetInfo<AnnoQuery.AnnoQueryDisplayI
 	}
 	public void setAnnotationType(int annotationType) {
 		annoQuery.setAnnoType(annotationType);
+	}
+	/** 当注释annotation时，如果需要同时注释基因的坐标信息，就设定这个 */
+	public void setGffChrAbs(GffChrAbs gffChrAbs) {
+		annoQuery.setGffChrAbs(gffChrAbs);
 	}
 	/** GOtype */
 	public void setGOtype(GOtype gOtype) {

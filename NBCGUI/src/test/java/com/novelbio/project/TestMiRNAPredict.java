@@ -64,7 +64,7 @@ public class TestMiRNAPredict {
 		}
 		ctrlMiRNApredict.setGffChrAbs(gffChrAbs);
 		ctrlMiRNApredict.setSpecies(species);
-		ctrlMiRNApredict.setLsSamFile2Prefix(mapBedFile2Prefix);
+		ctrlMiRNApredict.setMapPrefix2GenomeSamFile(mapBedFile2Prefix);
 		ctrlMiRNApredict.setOutPath(FileOperate.addSep(mapParams.get("savePath")[0]));
 		
 		ctrlMiRNApredict.runMiRNApredict();

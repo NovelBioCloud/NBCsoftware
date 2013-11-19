@@ -67,12 +67,36 @@ public class ReportProject extends ReportBase {
 	}
 
 	/**
-	 * 指定若干个子文件夹　初始化项目报告对象
-	 * 
-	 * @param folderChildren
+	 * 指定若干个文件夹　初始化项目报告对象
+	 * @param lsFolders　
+	 * @param isChildFolder 结果文件夹是此文件夹，还是子文件夹
 	 */
-	public ReportProject(List<String> folderChildren)  throws Exception{
-		for (String fileName : folderChildren) {
+	public ReportProject(List<String> lsFolders,boolean isChildFolder)  throws Exception{
+		if(isChildFolder){
+			for (String fileName : lsFolders) {
+				if (!FileOperate.isFileDirectory(fileName))
+					continue;
+				for (String fileName1 : FileOperate.getFile(fileName).list()) {
+					String realFilePathAndName = FileOperate.addSep(fileName) + fileName1;
+					if(!FileOperate.isFileDirectory(realFilePathAndName))
+						continue;
+					EnumReport enumReport = EnumReport.findByFolderName(fileName1);
+					if (enumReport == null)
+						continue;
+					ReportBase reportBase =  enumReport.getReportAll();
+					boolean readResult = reportBase.readReportFromFile(realFilePathAndName);
+					if (readResult) {
+						String xdocString =  reportBase.outputReportXdoc();
+						if (xdocString != null) {
+							lsXdocChildren.add(xdocString);
+						}
+					}
+					lsMethod.add(enumReport.getResultFolder());
+				}
+			}
+			return;
+		}
+		for (String fileName : lsFolders) {
 			if (!FileOperate.isFileDirectory(fileName))
 				continue;
 			EnumReport enumReport = EnumReport.findByFolderName(FileOperate.getFileName(fileName));
@@ -89,7 +113,31 @@ public class ReportProject extends ReportBase {
 			lsMethod.add(enumReport.getResultFolder());
 		}
 	}
-
+	
+	/**
+	 * 指定若干个父文件夹　寻找文件夹中的子结果文件　初始化项目报告对象
+	 * 
+	 * @param folderChildren
+	 */
+	public ReportProject(List<String> parentfolders)  throws Exception{
+		for (String fileName : parentfolders) {
+			if (!FileOperate.isFileDirectory(fileName))
+				continue;
+			EnumReport enumReport = EnumReport.findByFolderName(FileOperate.getFileName(fileName));
+			if (enumReport == null)
+				continue;
+			ReportBase reportBase =  enumReport.getReportAll();
+			boolean readResult = reportBase.readReportFromFile(fileName);
+			if (readResult) {
+				String xdocString =  reportBase.outputReportXdoc();
+				if (xdocString != null) {
+					lsXdocChildren.add(xdocString);
+				}
+			}
+			lsMethod.add(enumReport.getResultFolder());
+		}
+	}
+	
 	@Override
 	public EnumReport getEnumReport() {
 		return EnumReport.Project;

@@ -43,6 +43,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	/** 是否为clusterGO */
 	boolean isCluster = false;
 	
+	List<String> lsResultExcel = new ArrayList<>();
 	/** 
 	 * 读入的gene2Value表
 	 * lsAccID2Value  arraylist-string[] 若为string[2],则第二个为上下调关系，判断上下调
@@ -185,10 +186,10 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			try {
 				if (strings.length == 1) {
 					mapPrefix2AccID.put("All", strings[0]);
-				} else if (strings.length > 1 && Double.parseDouble(strings[1]) >= up ) {
+				} else if (strings.length > 1 && getDoubleValue(strings[1]) >= up) {
 					mapPrefix2AccID.put("Up", strings[0]);
 					mapPrefix2AccID.put("All", strings[0]);
-				} else if (strings.length > 1 && Double.parseDouble(strings[1]) <= down) {
+				} else if (strings.length > 1 && getDoubleValue(strings[1]) <= down) {
 					mapPrefix2AccID.put("Down", strings[0]);
 					mapPrefix2AccID.put("All", strings[0]);
 				}
@@ -199,6 +200,22 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		for (String prefix : mapPrefix2SetAccID.keySet()) {
 			getResult(prefix, mapPrefix2SetAccID.get(prefix));
 		}
+	}
+	
+	private Double getDoubleValue(String valueStr) {
+		Double value = null;
+		if (valueStr.equalsIgnoreCase("inf")) {
+			return Double.MAX_VALUE;
+		} else if (valueStr.equalsIgnoreCase("-inf")) {
+			return Double.MIN_VALUE;
+		} else {
+			try {
+				value = Double.parseDouble(valueStr);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		return value;
 	}
 	
 	private<T> void setGeneNum(HashMultimap<String, T> mapPrefix2Gene) {
@@ -272,6 +289,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 
 	public List<XdocTmpltExcel> saveExcel(String excelPath) {
 		saveExcelPrefix = excelPath;
+		lsResultExcel.clear();
 		if (isCluster) {
 			return saveExcelCluster(excelPath);
 		} else {
@@ -288,9 +306,12 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		List<XdocTmpltExcel> lsXdocTmpltExcels = new ArrayList<>();
 		ExcelOperate excelResult = new ExcelOperate();
 		excelResult.openExcel(excelPath);
+		lsResultExcel.add(excelPath);
 		ExcelOperate excelResultAll = new ExcelOperate();
 		String excelAllPath = FileOperate.changeFileSuffix(excelPath, "_All",null);
 		excelResultAll.openExcel(excelAllPath);
+		lsResultExcel.add(excelAllPath);
+
 		for (String prefix : mapPrefix2FunTest.keySet()) {
 			FunctionTest functionTest = mapPrefix2FunTest.get(prefix);
 			Map<String,   List<String[]>> mapSheetName2LsInfo = functionTest.getMapWriteToExcel();
@@ -325,6 +346,10 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		int fdrSum5 = 0;
 		int pValueSum1 = 0;
 		String[] result = { "FDR&lt;0.01", "FDR&lt;0.05", "P-value&lt;0.01", "P-value&lt;0.05" };
+		if (mapPrefix2FunTest.size() == 0) {
+			return result[1];
+		}
+		FunctionTest functionTest = mapPrefix2FunTest.values().iterator().next();
 		for (StatisticTestResult testResult : functionTest.getTestResult()) {
 			if (testResult.getPvalue() < 0.01) {
 				pValueSum1++;
@@ -348,6 +373,8 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			ExcelOperate excelResult = new ExcelOperate();
 			String excelPathOut = FileOperate.changeFileSuffix(excelPath, "_" + prefix, null);
 			excelResult.openExcel(excelPathOut);
+			lsResultExcel.add(excelPathOut);
+
 			Map<String, List<String[]>> mapSheetName2LsInfo = mapPrefix2FunTest.get(prefix).getMapWriteToExcel();
 			for (String sheetName : mapSheetName2LsInfo.keySet()) {
 				excelResult.WriteExcel(sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName));
@@ -358,6 +385,9 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		}
 		
 		return lsXdocTmpltExcels;
+	}
+	public List<String> getLsResultExcel() {
+		return lsResultExcel;
 	}
 	
 	/**

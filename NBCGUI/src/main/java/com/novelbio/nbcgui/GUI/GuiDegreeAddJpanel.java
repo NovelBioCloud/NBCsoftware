@@ -25,6 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
 import javax.swing.table.DefaultTableModel;
 
+import com.novelbio.analysis.coexp.simpCoExp.DegreeAnnotation;
 import com.novelbio.analysis.coexp.simpCoExp.SimpCoExp;
 import com.novelbio.base.dataOperate.ExcelOperate;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
@@ -153,7 +154,10 @@ public class GuiDegreeAddJpanel extends JPanel{
 						savefilename = savefilename+".xls";
 					}
 					try {
-						SimpCoExp.getCoExpDegree(jTxtFilePathPath.getText(), jCombSelSpePath.getSelectedValue().getTaxID(), savefilename);
+						DegreeAnnotation degreeAnnotation = new DegreeAnnotation();
+						degreeAnnotation.setTaxID(jCombSelSpePath.getSelectedValue().getTaxID());
+						degreeAnnotation.readData(jTxtFilePathPath.getText());
+						degreeAnnotation.writeToFile(savefilename);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

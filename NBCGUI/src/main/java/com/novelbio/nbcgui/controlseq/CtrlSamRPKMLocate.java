@@ -202,7 +202,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			List<AlignmentRecorder> lsAlignmentRecorders = new ArrayList<AlignmentRecorder>();
 			SamFileStatistics samFileStatistics = null;
 			if (isCountExpression && gffChrAbs.getGffHashGene() != null) {
-				rpkMcomput.setCurrentCondition(prefix);
+				rpkMcomput.setAndAddCurrentCondition(prefix);
 				rpkMcomput.setConsiderStrand(strandSpecific);
 				rpkMcomput.setCalculateFPKM(isCalculateFPKM);
 				lsAlignmentRecorders.add(rpkMcomput);
@@ -243,9 +243,8 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 				readByte = alignSeqReading.getReadByte();
 			}
 			if (samFileStatistics != null) {
-				List<String> lsStrings =  SamFileStatistics.saveInfo(resultPrefix+ prefix, samFileStatistics);
-				picPathAndName = lsStrings.get(0);
-				excelPathAndName = lsStrings.get(1);
+				picPathAndName = SamFileStatistics.savePic(resultPrefix+ prefix, samFileStatistics);
+				excelPathAndName = SamFileStatistics.saveExcel(resultPrefix+ prefix, samFileStatistics);
 			}
 			logger.info("finish reading " + prefix);
 			try {

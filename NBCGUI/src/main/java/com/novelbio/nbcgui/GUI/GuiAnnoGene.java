@@ -13,7 +13,9 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 
+import com.hg.doc.fa;
 import com.novelbio.analysis.annotation.genAnno.AnnoAbs;
+import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
@@ -35,16 +37,17 @@ public class GuiAnnoGene extends JPanel implements GuiNeedOpenFile {
 	JButton btnDel;
 	
 	GUIFileOpen guiFileOpen = new GUIFileOpen();
-	
+	GffChrAbs gffChrAbs = new GffChrAbs();
 	CtrlBatchAnnoGene ctrlBatchAnno;
 	private JButton btnRun;
 	private JCheckBox chckbxBlastto;
 	JComboBoxData<Species> cmbBlastSpecies;
 	JComboBoxData<Species> cmbSpecies;
+	GuiLayeredPaneSpeciesVersionGff guiCmbSpeciesGff;
 	
 	JComboBoxData<Integer> cmbAnnoType;
 	JComboBoxData<GOtype> cmbGOtype;
-	
+	JCheckBox chckbxAddlocinfo;
 	/**
 	 * Create the panel.
 	 */
@@ -52,7 +55,7 @@ public class GuiAnnoGene extends JPanel implements GuiNeedOpenFile {
 		setLayout(null);
 		
 		scrollPaneData = new JScrollPaneData();
-		scrollPaneData.setBounds(12, 30, 693, 516);
+		scrollPaneData.setBounds(12, 34, 693, 516);
 		add(scrollPaneData);
 		
 		JButton btnOpenfile = new JButton("OpenFile");
@@ -69,11 +72,11 @@ public class GuiAnnoGene extends JPanel implements GuiNeedOpenFile {
 				scrollPaneData.addItemLs(lsName2Out);
 			}
 		});
-		btnOpenfile.setBounds(717, 30, 118, 24);
+		btnOpenfile.setBounds(717, 30, 150, 24);
 		add(btnOpenfile);
 		
 		txtColAccID = new JTextField();
-		txtColAccID.setBounds(717, 121, 114, 18);
+		txtColAccID.setBounds(717, 121, 150, 18);
 		add(txtColAccID);
 		txtColAccID.setColumns(10);
 		
@@ -87,7 +90,7 @@ public class GuiAnnoGene extends JPanel implements GuiNeedOpenFile {
 				scrollPaneData.deleteSelRows();
 			}
 		});
-		btnDel.setBounds(717, 66, 118, 24);
+		btnDel.setBounds(717, 66, 150, 24);
 		add(btnDel);
 		
 		progressBar = new JProgressBar();
@@ -95,15 +98,15 @@ public class GuiAnnoGene extends JPanel implements GuiNeedOpenFile {
 		add(progressBar);
 		
 		chckbxBlastto = new JCheckBox("BlastTo");
-		chckbxBlastto.setBounds(717, 445, 131, 22);
+		chckbxBlastto.setBounds(713, 460, 131, 22);
 		add(chckbxBlastto);
 		
 		cmbBlastSpecies = new JComboBoxData<Species>();
-		cmbBlastSpecies.setBounds(717, 490, 118, 23);
+		cmbBlastSpecies.setBounds(717, 490, 150, 23);
 		add(cmbBlastSpecies);
 		
 		cmbSpecies = new JComboBoxData<Species>();
-		cmbSpecies.setBounds(717, 394, 118, 23);
+		cmbSpecies.setBounds(717, 280, 150, 23);
 		cmbSpecies.setEditable(true);
 		add(cmbSpecies);
 		
@@ -116,20 +119,36 @@ public class GuiAnnoGene extends JPanel implements GuiNeedOpenFile {
 				} else {
 					cmbGOtype.setVisible(false);
 				}
+				
+				if (cmbAnnoType.getSelectedValue() != AnnoAbs.ANNOTATION) {
+					chckbxAddlocinfo.setVisible(false);
+					selectLocInfo(false);
+				} else {
+					chckbxAddlocinfo.setVisible(true);
+					selectLocInfo(chckbxAddlocinfo.isSelected());
+				}
 			}
 		});
-		cmbAnnoType.setBounds(717, 164, 118, 27);
+		cmbAnnoType.setBounds(717, 164, 150, 27);
 		add(cmbAnnoType);
 		
 		cmbGOtype = new JComboBoxData<>();
-		cmbGOtype.setBounds(717, 245, 118, 27);
+		cmbGOtype.setBounds(717, 229, 150, 27);
 		add(cmbGOtype);
 		
 		btnRun = new JButton("Run");
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnRun.setEnabled(false);
+				ctrlBatchAnno.setGffChrAbs(null);
 				ctrlBatchAnno.setAnnotationType(cmbAnnoType.getSelectedValue());
+				if (cmbAnnoType.getSelectedValue() == AnnoAbs.ANNOTATION && chckbxAddlocinfo.isSelected()) {
+					gffChrAbs.setSpecies(guiCmbSpeciesGff.getSelectSpecies());
+					ctrlBatchAnno.setGffChrAbs(gffChrAbs);
+					ctrlBatchAnno.setSpecies(GuiBlastJpanel.getTaxID(cmbSpecies));
+				} else {
+					ctrlBatchAnno.setSpecies(GuiBlastJpanel.getTaxID(cmbSpecies));
+				}
 				ctrlBatchAnno.setGOtype(cmbGOtype.getSelectedValue());
 				ctrlBatchAnno.setListQuery(scrollPaneData.getLsDataInfo());
 				try {
@@ -142,17 +161,27 @@ public class GuiAnnoGene extends JPanel implements GuiNeedOpenFile {
 				try {
 					ctrlBatchAnno.setBlastTo(chckbxBlastto.isSelected(), GuiBlastJpanel.getTaxID(cmbBlastSpecies));
 				} catch (Exception e2) { }
-				ctrlBatchAnno.setSpecies(GuiBlastJpanel.getTaxID(cmbSpecies));
 				
 				ctrlBatchAnno.execute();
 				JOptionPane.showMessageDialog(null, "finish", "finish", JOptionPane.CLOSED_OPTION);
 				btnRun.setEnabled(true);
 			}
 		});
-		btnRun.setBounds(717, 561, 118, 24);
+		btnRun.setBounds(717, 561, 150, 24);
 		add(btnRun);
 		
-
+		chckbxAddlocinfo = new JCheckBox("addLocInfo");
+		chckbxAddlocinfo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				selectLocInfo(chckbxAddlocinfo.isSelected());
+			}
+		});
+		chckbxAddlocinfo.setBounds(713, 195, 115, 26);
+		add(chckbxAddlocinfo);
+		
+		guiCmbSpeciesGff = new GuiLayeredPaneSpeciesVersionGff();
+		guiCmbSpeciesGff.setBounds(713, 315, 206, 137);
+		add(guiCmbSpeciesGff);
 		initial();
 	}
 	
@@ -166,6 +195,7 @@ public class GuiAnnoGene extends JPanel implements GuiNeedOpenFile {
 		
 		cmbGOtype.setMapItem(GOtype.getMapStr2Gotype());
 		cmbGOtype.setVisible(false);
+		guiCmbSpeciesGff.setVisible(false);
 	}
 	
 	private void selectRadAnno() {
@@ -173,6 +203,16 @@ public class GuiAnnoGene extends JPanel implements GuiNeedOpenFile {
 		txtColAccID.setEditable(true);
 		chckbxBlastto.setEnabled(true);
 		cmbBlastSpecies.setEnabled(true);
+	}
+	
+	private void selectLocInfo(boolean isSelected) {
+		if (isSelected) {
+			cmbSpecies.setVisible(false);
+			guiCmbSpeciesGff.setVisible(true);
+		} else {
+			cmbSpecies.setVisible(true);
+			guiCmbSpeciesGff.setVisible(false);
+		}
 	}
 	
 	public void setGuiFileOpen(GUIFileOpen guiFileOpen) {

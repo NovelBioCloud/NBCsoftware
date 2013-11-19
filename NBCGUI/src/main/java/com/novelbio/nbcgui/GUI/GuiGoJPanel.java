@@ -347,7 +347,7 @@ public class GuiGoJPanel extends JPanel{
 				public void actionPerformed(ActionEvent evt) {
 					String savefilename = guiFileOpen.saveFileNameAndPath("excel2007", "");
 					if (ctrlGO != null) {
-						ctrlGO.saveExcel(savefilename);
+						ctrlGO.saveExce(savefilename);
 					}
 				}
 			});
@@ -382,8 +382,8 @@ public class GuiGoJPanel extends JPanel{
 		{
 			cmbSelSpeGo = new JComboBoxData<Species>();
 			cmbSelSpeGo.setBounds(131, 77, 173, 23);
-			cmbSelSpeGo.setMapItem(Species.getSpeciesName2Species(Species.KEGGNAME_SPECIES));
-			cmbSelSpeGo.setEditable(true);
+			cmbSelSpeGo.setMapItem(Species.getSpeciesName2Species(Species.KEGGNAME_SPECIES, true, null));
+//			cmbSelSpeGo.setEditable(true);
 		}
 	}
 	
@@ -490,7 +490,7 @@ public class GuiGoJPanel extends JPanel{
 		jTabbedPaneGoResult.removeAll();
 		for (CtrlGO ctrlGOResult : hashResult.values()) {
 			for (Entry<String, FunctionTest> entry : ctrlGOResult.getMapResult_Prefix2FunTest().entrySet()) {
-				settab(jTabbedPaneGoResult, entry.getKey() + ctrlGOResult.getGOClass().toString(), entry.getValue().getTestResult());
+				settab(jTabbedPaneGoResult, entry.getKey() + ctrlGOResult.getGOType().toString(), entry.getValue().getTestResult());
 			}
 		}
 	}

@@ -24,15 +24,18 @@ public class CtrlCufflinksTranscriptome {
 	GffChrAbs gffChrAbs;
 	String outPrefix;
 	int thread = 4;
-	String gtfFile;
-
+	String gtfRefFile;
+	
+	String outGtf;
+	String outStatistics;
+	
 	public void setGffChrAbs(GffChrAbs gffChrAbs) {
 		this.gffChrAbs = gffChrAbs;
 		cufflinksGTF.setGffChrAbs(gffChrAbs);
 	}
 	/** 用额外的GTF辅助重建转录本 */
 	public void setGTFfile(String gtfFile) {
-		this.gtfFile = gtfFile;
+		this.gtfRefFile = gtfFile;
 		cufflinksGTF.setGtfFile(gtfFile);
 	}
 	public void setLsBamFile2Prefix(ArrayList<String[]> lsBamFile2Prefix) {
@@ -59,9 +62,8 @@ public class CtrlCufflinksTranscriptome {
 	}
 	public void run() {
 		setExepath();
-		String outGtf = outPrefix + "novelTranscriptom.gtf";
-		String outStatistics =  outPrefix + "novelTranscriptomStatistics.txt";
-		String outCufflinksGTF = outPrefix + "cufflinksMerged.gtf";
+		outGtf = outPrefix + "novelTranscriptom.gtf";
+		outStatistics =  outPrefix + "novelTranscriptomStatistics.txt";
 		cufflinksGTF.runCufflinks();
 		List<String> lsResultGTF = cufflinksGTF.getLsCufflinksResult();
 		if (lsResultGTF.size() > 1) {
@@ -69,12 +71,12 @@ public class CtrlCufflinksTranscriptome {
 			cuffMerge.setExePath(softWareInfo.getExePath());
 			cuffMerge.setLsGtfTobeMerged(lsResultGTF);
 			cuffMerge.setRefGtf(cufflinksGTF.getGtfReffile());
-			cuffMerge.setOutputPrefix(outCufflinksGTF);
+			cuffMerge.setOutputPrefix(outGtf);
 			try { cuffMerge.setRefChrFa(gffChrAbs.getSpecies().getChromSeq()); } catch (Exception e) { }
 			cuffMerge.setThreadNum(thread);
-			outCufflinksGTF = cuffMerge.runCuffmerge();
+			outGtf = cuffMerge.runCuffmerge();
 		} else if (lsResultGTF.size() == 1) {
-			outCufflinksGTF = lsResultGTF.get(0);
+			outGtf = lsResultGTF.get(0);
 		}
 		
 		if (!reconstructTranscriptome) {
@@ -85,10 +87,10 @@ public class CtrlCufflinksTranscriptome {
 		gffHashMerge.setSpecies(gffChrAbs.getSpecies());
 		GffHashGene gffHashGeneRef = getGffHashRef();
 		gffHashMerge.setGffHashGeneRef(gffHashGeneRef);
-		gffHashMerge.addGffHashGene(new GffHashGene(GffType.GTF, outCufflinksGTF));
+		gffHashMerge.addGffHashGene(new GffHashGene(GffType.GTF, mergedGtf));
 		GffHashGene gffHashGene = gffHashMerge.getGffHashGeneModifyResult();
 		gffHashGene.removeDuplicateIso();
-		gffHashGene.writeToGTF(outGtf, "novelbio");
+		gffHashGene.writeToGTF(gffChrAbs.getSeqHash().getLsSeqName(), outGtf, "novelbio");
 
 		
 		gffHashMerge = new GffHashMerge();
@@ -103,8 +105,8 @@ public class CtrlCufflinksTranscriptome {
 	
 	private GffHashGene getGffHashRef() {
 		GffHashGene gffHashGene = null;
-		if (FileOperate.isFileExistAndBigThanSize(gtfFile, 10)) {
-			gffHashGene = new GffHashGene(GffType.GTF, gtfFile);
+		if (FileOperate.isFileExistAndBigThanSize(gtfRefFile, 10)) {
+			gffHashGene = new GffHashGene(GffType.GTF, gtfRefFile);
 		} else if (gffChrAbs != null) {
 			gffHashGene = gffChrAbs.getGffHashGene();
 		}
