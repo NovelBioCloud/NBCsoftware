@@ -41,6 +41,7 @@ public class GuiTranscriptomeCufflinks extends JPanel {
 	JSpinner spinThreadNum;
 	private JCheckBox chkCalculateUQfpkm;
 	private JTextField txtRefGTF;
+	private JTextField txtChrFile;
 	public GuiTranscriptomeCufflinks() {
 		setLayout(null);
 		
@@ -105,13 +106,17 @@ public class GuiTranscriptomeCufflinks extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<String[]> lsSamFileName = scrollPaneSamBamFile.getLsDataInfo();
 				cufflinksGTF.setLsBamFile2Prefix(lsSamFileName);
-				Species species = guiSpeciesGff.getSelectSpecies();
-				GffChrAbs gffChrAbs = new GffChrAbs(species);
-				cufflinksGTF.setGffChrAbs(gffChrAbs);
+
 				if (chckbxModifythisRefGtf.isSelected() && FileOperate.isFileExist(txtRefGTF.getText())) {
 					cufflinksGTF.setGTFfile(txtRefGTF.getText());
+				} else {
+					Species species = guiSpeciesGff.getSelectSpecies();
+					GffChrAbs gffChrAbs = new GffChrAbs(species);
+					cufflinksGTF.setGffChrAbs(gffChrAbs);
 				}
-			
+				cufflinksGTF.setIsMergeBamByPrefix(false);
+				cufflinksGTF.setUpQuartileNormalized(chkCalculateUQfpkm.isSelected());
+				cufflinksGTF.setChrSeq(txtChrFile.getText());
 				cufflinksGTF.setStrandSpecifictype(cmbStrandSpecific.getSelectedValue());
 				String outPathPrefix = txtSavePathAndPrefix.getText();
 				if (FileOperate.isFileDirectory(outPathPrefix)) {
@@ -126,15 +131,15 @@ public class GuiTranscriptomeCufflinks extends JPanel {
 		add(btnRun);
 		
 		cmbStrandSpecific = new JComboBoxData<StrandSpecific>();
-		cmbStrandSpecific.setBounds(256, 348, 194, 23);
+		cmbStrandSpecific.setBounds(629, 270, 194, 23);
 		add(cmbStrandSpecific);
 		
 		lblStrandtype = new JLabel("StrandType");
-		lblStrandtype.setBounds(256, 321, 118, 14);
+		lblStrandtype.setBounds(640, 247, 118, 14);
 		add(lblStrandtype);
 		
 		chckbxReconstructtrancsriptome = new JCheckBox("reconstructTrancsriptome");
-		chckbxReconstructtrancsriptome.setBounds(484, 349, 252, 22);
+		chckbxReconstructtrancsriptome.setBounds(248, 312, 252, 22);
 		add(chckbxReconstructtrancsriptome);
 		
 		JLabel lblThreadNum = new JLabel("ThreadNum");
@@ -146,7 +151,7 @@ public class GuiTranscriptomeCufflinks extends JPanel {
 		add(spinThreadNum);
 		
 		chkCalculateUQfpkm = new JCheckBox("Upper Quartile FPKM");
-		chkCalculateUQfpkm.setBounds(483, 317, 239, 23);
+		chkCalculateUQfpkm.setBounds(248, 285, 239, 23);
 		add(chkCalculateUQfpkm);
 
 		
@@ -166,12 +171,30 @@ public class GuiTranscriptomeCufflinks extends JPanel {
 				}
 			}
 		});
-		chckbxModifythisRefGtf.setBounds(14, 397, 389, 26);
+		chckbxModifythisRefGtf.setBounds(14, 397, 324, 26);
 		add(chckbxModifythisRefGtf);
 		
 		guiSpeciesGff = new GuiLayeredPaneSpeciesVersionGff();
-		guiSpeciesGff.setBounds(20, 261, 219, 110);
+		guiSpeciesGff.setBounds(20, 261, 218, 128);
 		add(guiSpeciesGff);
+		
+		txtChrFile = new JTextField();
+		txtChrFile.setBounds(248, 367, 538, 22);
+		add(txtChrFile);
+		txtChrFile.setColumns(10);
+		
+		JButton btnChrfile = new JButton("ChrFile");
+		btnChrfile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txtChrFile.setText(guiFileOpen.openFileName("", ""));
+			}
+		});
+		btnChrfile.setBounds(806, 366, 102, 28);
+		add(btnChrfile);
+		
+		JLabel lblIfNoSpecies = new JLabel("If No Species In database, use this Chromosome file");
+		lblIfNoSpecies.setBounds(248, 342, 349, 18);
+		add(lblIfNoSpecies);
 
 		
 		btnOpenFastqLeft.addActionListener(new ActionListener() {

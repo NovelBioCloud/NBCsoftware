@@ -33,6 +33,14 @@ public class CtrlCufflinksTranscriptome {
 	String outGtf;
 	String outStatistics;
 	
+	boolean isUseOldResult = true;
+	
+	/** 使用上次跑出来的结果
+	 * 同样的参数重跑，遇到上次跑出来的结果是否可以直接使用而不重跑
+	 *  */
+	public void setIsUseOldResult(boolean isUseOldResult) {
+		this.isUseOldResult = isUseOldResult;
+	}
 	/** 输入已有的物种信息<br>
 	 * 和{@link #setGTFfile(String)} 两者选一
 	 * @param gffChrAbs 注意结束后会关闭流
@@ -40,8 +48,16 @@ public class CtrlCufflinksTranscriptome {
 	public void setGffChrAbs(GffChrAbs gffChrAbs) {
 		this.gffChrAbs = gffChrAbs;
 	}
+	/**
+	 * species的chr文件优先级高于该文件
+	 * @param chrSeq
+	 */
+	public void setChrSeq(String chrSeq) {
+		this.chrSeq = chrSeq;
+	}
 	/** 用额外的GTF辅助重建转录本<br>
 	 * 和{@link #setGffChrAbs(gffChrAbs)} 两者选一
+	 * 优先级高于gffChrAbs
 	 * @param gtfFile
 	 */
 	public void setGTFfile(String gtfFile) {
@@ -57,6 +73,7 @@ public class CtrlCufflinksTranscriptome {
 	public void setStrandSpecifictype(StrandSpecific strandSpecific) {
 		cufflinksGTF.setStrandSpecifictype(strandSpecific);
 	}
+
 	/** 是否重建转录本 */
 	public void setReconstructTranscriptome(boolean reconstructTranscriptome) {
 		this.reconstructTranscriptome = reconstructTranscriptome;
@@ -94,6 +111,7 @@ public class CtrlCufflinksTranscriptome {
 		cufflinksGTF.setGtfFile(getGtfFileName(), reconstructTranscriptome);
 		cufflinksGTF.setIntronLen(getIntronSmall2Big());
 		cufflinksGTF.setSkipErrorMode(true);
+		cufflinksGTF.setIsUseOldResult(isUseOldResult);
 		cufflinksGTF.runCufflinks();
 		List<String> lsResultGTF = cufflinksGTF.getLsCufflinksResult();
 		if (!reconstructTranscriptome) {
@@ -103,12 +121,13 @@ public class CtrlCufflinksTranscriptome {
 		outGtf = outPrefix + "novelTranscriptom.gtf";
 		outStatistics =  outPrefix + "novelTranscriptomStatistics.txt";
 		String resultGtf = null;
+		String outMergePrefix = outPrefix + "tmpMerge";
 		if (lsResultGTF.size() > 1) {
 			CuffMerge cuffMerge = new CuffMerge();
 			cuffMerge.setExePath(softWareInfo.getExePath());
 			cuffMerge.setLsGtfTobeMerged(lsResultGTF);
 			cuffMerge.setRefGtf(cufflinksGTF.getGtfReffile());
-			cuffMerge.setOutputPrefix(outGtf);
+			cuffMerge.setOutputPrefix(outMergePrefix);
 			try { cuffMerge.setRefChrFa(gffChrAbs.getSpecies().getChromSeq()); } catch (Exception e) { }
 			cuffMerge.setThreadNum(thread);
 			resultGtf = cuffMerge.runCuffmerge();
@@ -164,10 +183,10 @@ public class CtrlCufflinksTranscriptome {
 	}
 	private String getChromFaFile() {
 		String chromFa = null;
-		if (FileOperate.isFileExistAndBigThanSize(chrSeq, 10)) {
-			chromFa = chrSeq;
-		} else if (gffChrAbs != null && gffChrAbs.getSeqHash() != null) {
+		if (gffChrAbs != null && gffChrAbs.getSeqHash() != null) {
 			chromFa = gffChrAbs.getSeqHash().getChrFile();
+		} else if(FileOperate.isFileExistAndBigThanSize(chrSeq, 10)) {
+			chromFa = chrSeq;
 		}
 		return chromFa;		
 	}
