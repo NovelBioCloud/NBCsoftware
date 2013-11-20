@@ -117,13 +117,21 @@ public class CtrlCufflinksTranscriptome {
 			resultGtf = lsResultGTF.get(0);
 		}
 		
+		GffHashGene gffHashGeneThis = new GffHashGene(GffType.GTF, resultGtf);
 		GffHashModifyORF gffHashModifyORF = new GffHashModifyORF();
-		//TODO modify orf
+		gffHashModifyORF.setGffHashGeneRaw(gffHashGeneThis);
+		gffHashModifyORF.setGffHashGeneRef(gffChrAbs.getGffHashGene());
+		gffHashModifyORF.setRenameGene(true);
+		gffHashModifyORF.setRenameIso(true);//TODO 可以考虑不换iso的名字
+		gffHashModifyORF.modifyGff();
+		
+		List<String> lsChrName = (gffChrAbs.getSeqHash() != null)? gffChrAbs.getSeqHash().getLsSeqName() : null;
+		gffHashGeneThis.writeToGTF(lsChrName, outGtf);
 		
 		GffHashMerge gffHashMerge = new GffHashMerge();
 		gffHashMerge.setSeqHash(gffChrAbs.getSeqHash());
 		gffHashMerge.setGffHashGeneRef(gffChrAbs.getGffHashGene());
-		gffHashMerge.addGffHashGene(new GffHashGene(GffType.GTF, outGtf));
+		gffHashMerge.addGffHashGene(gffHashGeneThis);
 		TranscriptomStatistics transcriptomStatistics = gffHashMerge.getStatisticsCompareGff();
 		TxtReadandWrite txtOut = new TxtReadandWrite(outStatistics, true);
 		txtOut.ExcelWrite(transcriptomStatistics.getStatisticsResult());
