@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.novelbio.GuiAnnoInfo;
+import com.novelbio.analysis.seq.mapping.MapTophat;
 import com.novelbio.analysis.seq.sam.AlignSamReading;
 import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.analysis.seq.sam.SamFileStatistics;
@@ -48,6 +49,12 @@ public class CtrlSamStatistics implements RunGetInfo<GuiAnnoInfo> {
 	
 	public void writeSamStatistics() {
 		AlignSamReading alignSamReading = new AlignSamReading(samFile);
+		String samFileName = samFile.getFileName();
+		String samFileUnmap = FileOperate.changeFilePrefix(samFileName, MapTophat.UnmapPrefix, null);
+		if (samFileName.endsWith(MapTophat.TophatSuffix) && FileOperate.isFileExistAndBigThanSize(samFileUnmap, 0)) {
+			SamFile samUnmap = new SamFile(samFileUnmap);
+			alignSamReading.addSeq(samUnmap);
+		}
 		samFileStatistics = new SamFileStatistics("");
 		alignSamReading.addAlignmentRecorder(samFileStatistics);
 		Thread thread = new Thread(alignSamReading);

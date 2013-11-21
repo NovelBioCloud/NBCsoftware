@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.HashMultimap;
+import com.novelbio.analysis.seq.GeneExpTable;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.mapping.MapBowtie;
 import com.novelbio.analysis.seq.mapping.MapLibrary;
@@ -15,11 +17,15 @@ import com.novelbio.analysis.seq.mapping.MapRsem;
 import com.novelbio.analysis.seq.mapping.MapSplice;
 import com.novelbio.analysis.seq.mapping.MapTophat;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
+import com.novelbio.analysis.seq.rnaseq.RPKMcomput.EnumExpression;
+import com.novelbio.base.FoldeCreate;
+import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.dataStructure.MathComput;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.information.SoftWareInfo;
 import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
 import com.novelbio.database.model.species.Species;
+import com.novelbio.generalConf.TitleFormatNBC;
 import com.novelbio.nbcReport.Params.EnumReport;
 
 public class CtrlRNAmap {
@@ -46,12 +52,14 @@ public class CtrlRNAmap {
 	 * 之后每一行为基因表达情况
 	 *  */
 	List<List<String>> lsExpResultRsemRPKM = new ArrayList<>();
-	/** 保存最终结果，只有rsem才会有
-	 * 第一行为标题
-	 * 之后每一行为基因表达情况
-	 *  */
-	List<List<String>> lsExpResultRsemCounts = new ArrayList<>();
+	
+	/** 保存最终结果，只有rsem才会有 */
+	GeneExpTable rsemExpCounts;
+	/** 保存最终结果，只有rsem才会有 */
+	GeneExpTable rsemExpFPKM;
+	
 	int sensitive = MapBowtie.Sensitive_Sensitive;
+	
 	public CtrlRNAmap(SoftWare softWare) {
 		this.softWare = softWare;
 	}
@@ -73,9 +81,7 @@ public class CtrlRNAmap {
 	}
 	
 	public void setOutPathPrefix(String outPathPrefix) {
-		String outPath = FileOperate.addSep(outPathPrefix) + EnumReport.RNASeqMap.getResultFolder() + FileOperate.getSepPath();
-		FileOperate.createFolders(outPath);
-		this.outPrefix = outPath;
+		outPrefix = FoldeCreate.createAndInFold(outPathPrefix, EnumReport.RNASeqMap.getResultFolder());
 	}
 	
 	public String getOutPrefix() {
@@ -93,7 +99,7 @@ public class CtrlRNAmap {
 		this.threadNum = threadNum;
 	}
 	public void setIsUseGTF(boolean useGTF) {
-		this.useGTF= useGTF;
+		this.useGTF = useGTF;
 	}
 	public void setSensitive(int sensitive) {
 		this.sensitive= sensitive;
@@ -111,7 +117,8 @@ public class CtrlRNAmap {
 	
 	public void mapping() {
 		lsExpResultRsemRPKM = new ArrayList<>();
-		lsExpResultRsemCounts = new ArrayList<>();
+		rsemExpCounts = new GeneExpTable(TitleFormatNBC.AccID);
+		rsemExpFPKM = new GeneExpTable(TitleFormatNBC.AccID);
 		for (Entry<String, List<List<String>>> entry : mapPrefix2LsFastq.entrySet()) {
 			creatMapRNA();
 
@@ -139,8 +146,7 @@ public class CtrlRNAmap {
 			}
 			
 			mapRNA.mapReads();
-			setExpResultCounts(prefix, mapRNA);
-			setExpResultRPKM(prefix, mapRNA);
+			setExpResult(prefix, mapRNA);
 		}
 	}
 	
@@ -185,89 +191,22 @@ public class CtrlRNAmap {
 		}
 	}
 	/** 获得基因表达 */
-	private void setExpResultRPKM(String prefix, MapRNA mapRNA) {
+	private void setExpResult(String prefix, MapRNA mapRNA) {
 		if (softWare != SoftWare.rsem) return;
 		
 		MapRsem mapRsem = (MapRsem) mapRNA;
-		ArrayListMultimap<String, Double> mapGeneID2LsExp = mapRsem.getMapGeneID2LsExp();
-		//第一组结果直接装进去
-		if (lsExpResultRsemRPKM.size() == 0) {
-			ArrayList<String> lsTitleRPKM = new ArrayList<String>();
-			lsTitleRPKM.add("GeneID"); lsTitleRPKM.add(prefix + "_RPKM");
-			lsExpResultRsemRPKM.add(lsTitleRPKM);
-			
-			for (String geneID : mapGeneID2LsExp.keySet()) {
-				ArrayList<String> lsDetail = new ArrayList<String>();
-				
-				List<Double> lsValue = mapGeneID2LsExp.get(geneID);
-				lsDetail.add(geneID);//获得基因名
-				lsDetail.add(MathComput.mean(lsValue) + "" );//获得平均数
-				lsExpResultRsemRPKM.add(lsDetail);
-			}
-		}
-		//后面的就在hash表里面查
-		else {
-			lsExpResultRsemRPKM.get(0).add(prefix + "_RPKM");
-			for (int i = 1; i < lsExpResultRsemRPKM.size(); i++) {
-				List<String> lsDetail = lsExpResultRsemRPKM.get(i);
-				List<Double> lsValue = mapGeneID2LsExp.get(lsDetail.get(0));
-				lsDetail.add(MathComput.mean(lsValue) + "");
-			}
-		}
-	}
-	/** 获得基因表达 */
-	private void setExpResultCounts(String prefix, MapRNA mapRNA) {
-		if (softWare != SoftWare.rsem) return;
-		
-		MapRsem mapRsem = (MapRsem) mapRNA;
-		ArrayListMultimap<String, Integer> mapGeneID2LsCounts = mapRsem.getMapGeneID2LsCounts();
-		//第一组结果直接装进去
-		if (lsExpResultRsemCounts.size() == 0) {
-			ArrayList<String> lsTitleCounts = new ArrayList<String>();
-			lsTitleCounts.add("GeneID"); lsTitleCounts.add(prefix + "_Counts");
-			lsExpResultRsemCounts.add(lsTitleCounts);
-			for (String geneID : mapGeneID2LsCounts.keySet()) {
-				List<Integer> lsValue = mapGeneID2LsCounts.get(geneID);
-
-				ArrayList<String> lsDetail = new ArrayList<String>();
-				lsDetail.add(geneID);//获得基因名
-				lsDetail.add((int)MathComput.mean(lsValue) + "" );//获得平均数
-				lsExpResultRsemCounts.add(lsDetail);
-			}
-		}
-		//后面的就在hash表里面查
-		else {
-			lsExpResultRsemCounts.get(0).add(prefix + "_Counts");
-			for (int i = 1; i < lsExpResultRsemCounts.size(); i++) {
-				List<String> lsDetail = lsExpResultRsemCounts.get(i);
-				List<Integer> lsValue = mapGeneID2LsCounts.get(lsDetail.get(0));
-				lsDetail.add((int)MathComput.mean(lsValue) + "");
-			}
-		}
+		mapRsem.getGeneExpInfo(prefix, rsemExpFPKM, rsemExpCounts);
 	}
 	
-	public ArrayList<String[]> getLsExpRsemRPKM() {
-		ArrayList<String[]> lsResult = new ArrayList<String[]>();
-		for (List<String> lsTmpResult : lsExpResultRsemRPKM) {
-			String[] tmpResult = new String[lsTmpResult.size()];
-			for (int i = 0; i < tmpResult.length; i++) {
-				tmpResult[i] = lsTmpResult.get(i);
-			}
-			lsResult.add(tmpResult);
+	public void writeToResult() {
+		if (softWare == SoftWare.rsem) {
+			TxtReadandWrite txtWriteRpkm = new TxtReadandWrite(outPrefix + "ResultFPKM.xls", true);
+			TxtReadandWrite txtWriteCounts = new TxtReadandWrite(outPrefix + "ResultCounts.xls", true);
+			txtWriteRpkm.ExcelWrite(rsemExpFPKM.getLsCountsNum(EnumExpression.RawValue));
+			txtWriteCounts.ExcelWrite(rsemExpFPKM.getLsCountsNum(EnumExpression.Counts));
+			txtWriteRpkm.close();
+			txtWriteCounts.close();
 		}
-		return lsResult;
-	}
-	
-	public ArrayList<String[]> getLsExpRsemCounts() {
-		ArrayList<String[]> lsResult = new ArrayList<String[]>();
-		for (List<String> lsTmpResult : lsExpResultRsemCounts) {
-			String[] tmpResult = new String[lsTmpResult.size()];
-			for (int i = 0; i < tmpResult.length; i++) {
-				tmpResult[i] = lsTmpResult.get(i);
-			}
-			lsResult.add(tmpResult);
-		}
-		return lsResult;
 	}
 	
 	public static Map<String, SoftWare> getMapRNAmapType() {
@@ -277,4 +216,30 @@ public class CtrlRNAmap {
 		mapName2Type.put("RSEM", SoftWare.rsem);
 		return mapName2Type;
 	}
+	
+	public static HashMultimap<String, String> getPredictMapPrefix2File(String outPrefix, SoftWare softWare, List<String> lsPrefix) {
+		outPrefix = FoldeCreate.getInFold(outPrefix, EnumReport.RNASeqMap.getResultFolder());
+		HashMultimap<String, String> mapPrefix2Value = HashMultimap.create();
+		if (softWare == SoftWare.rsem) {
+			mapPrefix2Value.put("resultFPKM", outPrefix + "ResultFPKM.xls");
+			mapPrefix2Value.put("resultFPKM", outPrefix + "ResultCounts.xls");
+			for (String prefix : lsPrefix) {
+				Map<String, String> mapInfo2Value = MapRsem.mapPredictPrefix2File(outPrefix + prefix);
+				for (String info : mapInfo2Value.keySet()) {
+					mapPrefix2Value.put(prefix + "_" + info, mapInfo2Value.get(info));
+				}
+			}
+		} else if (softWare == SoftWare.tophat) {
+			for (String prefix : lsPrefix) {
+				Map<String, String> mapInfo2Value = MapTophat.mapPredictPrefix2File(outPrefix + prefix);
+				for (String info : mapInfo2Value.keySet()) {
+					mapPrefix2Value.put(prefix + "_" + info, mapInfo2Value.get(info));
+				}
+			}
+		} else if (softWare == SoftWare.mapsplice) {
+			//TODO
+		}
+		return mapPrefix2Value;
+	}
+
 }

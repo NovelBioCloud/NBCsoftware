@@ -212,14 +212,6 @@ public class GuiRNASeqMapping extends JPanel {
 				ctrlRNAmap.setSensitive(cmbSensitive.getSelectedValue());
 				ctrlRNAmap.setOutPathPrefix(out);
 				ctrlRNAmap.mapping();
-				if (cmbRNAsoftware.getSelectedValue() == SoftWare.rsem) {
-					TxtReadandWrite txtWriteRpkm = new TxtReadandWrite(out + "ResultRPKM.xls", true);
-					TxtReadandWrite txtWriteCounts = new TxtReadandWrite(out + "ResultCounts.xls", true);
-					txtWriteRpkm.ExcelWrite(ctrlRNAmap.getLsExpRsemRPKM());
-					txtWriteCounts.ExcelWrite(ctrlRNAmap.getLsExpRsemCounts());
-					txtWriteRpkm.close();
-					txtWriteCounts.close();
-				}
 			}
 		});
 		add(btnRun);
