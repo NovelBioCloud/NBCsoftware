@@ -1,8 +1,18 @@
 package com.novelbio.nbcgui.GUI;
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
+import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import com.novelbio.analysis.seq.genome.GffSpeciesInfo;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
@@ -13,23 +23,8 @@ import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.database.model.species.Species;
-import com.novelbio.nbcgui.GUI.GuiLayeredPaneSpeciesVersionGff;
-import java.awt.Color;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import javax.swing.JComboBox;
 
 public class GuiSpeciesInfo extends JPanel {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7042827927643252396L;
 	private JTextField txtOutPath;
 	GUIFileOpen guiFileOpen = new GUIFileOpen();
@@ -94,7 +89,8 @@ public class GuiSpeciesInfo extends JPanel {
 				} else if (selectType.equals("GeneDescription")) {
 					specieInformation.writeGeneDescription(outpath);
 				} else if (selectType.equals("GTFfile")) {
-					specieInformation.getGffChrAbs().getGffHashGene().writeToGTF(outpath + species.getAbbrName() + "_GTFfile.gtf");
+					String gtfFile = specieInformation.getGffChrAbs().getGtfFile();
+					FileOperate.copyFile(gtfFile, outpath + species.getAbbrName() + "_GTFfile.gtf", true);
 				}
 			}
 		});

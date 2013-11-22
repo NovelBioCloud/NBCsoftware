@@ -18,10 +18,13 @@ import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
+import net.sf.samtools.SAMFileHeader.SortOrder;
+
 import com.google.common.collect.ArrayListMultimap;
 import com.novelbio.analysis.seq.bed.BedSeq;
 import com.novelbio.analysis.seq.sam.AlignSamReading;
 import com.novelbio.analysis.seq.sam.SamFile;
+import com.novelbio.analysis.seq.sam.SamToBamSort;
 import com.novelbio.analysis.seq.sam.SamToBed;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
@@ -71,6 +74,7 @@ public class GuiSamToBed extends JPanel {
 	JComboBoxData<String> cmbVersion;
 	private JTextField txtReferenceSequence;
 	private JCheckBox chckbxGeneratepileupfile;
+	private JCheckBox chckbxAdduniqmapflag;
 	/**
 	 * Create the panel.
 	 */
@@ -219,20 +223,20 @@ public class GuiSamToBed extends JPanel {
 		add(chckbxSortBed);
 		
 		chckbxSortBam = new JCheckBox("sortBam");
-		chckbxSortBam.setBounds(295, 198, 91, 22);
+		chckbxSortBam.setBounds(12, 224, 91, 22);
 		add(chckbxSortBam);
 		
 		chckbxIndex = new JCheckBox("index");
-		chckbxIndex.setBounds(393, 198, 69, 22);
+		chckbxIndex.setBounds(142, 224, 69, 22);
 		add(chckbxIndex);
 		
 		
 		chckRealign = new JCheckBox("Realign");
-		chckRealign.setBounds(161, 224, 91, 22);
+		chckRealign.setBounds(12, 250, 91, 22);
 		add(chckRealign);
 		
 		chckRemoveduplicate = new JCheckBox("RemoveDuplicate");
-		chckRemoveduplicate.setBounds(12, 224, 147, 22);
+		chckRemoveduplicate.setBounds(355, 224, 147, 22);
 		add(chckRemoveduplicate);
 		
 		
@@ -250,7 +254,7 @@ public class GuiSamToBed extends JPanel {
 				}
 			}
 		});
-		chckRecalibrate.setBounds(295, 224, 231, 22);
+		chckRecalibrate.setBounds(142, 250, 209, 22);
 		add(chckRecalibrate);
 		
 		btnSamtobed = new JButton("SamtoBed");
@@ -353,7 +357,7 @@ public class GuiSamToBed extends JPanel {
 		add(radRefRNA);
 		
 		chckbxGeneratepileupfile = new JCheckBox("GeneratePileUpFile");
-		chckbxGeneratepileupfile.setBounds(12, 250, 187, 22);
+		chckbxGeneratepileupfile.setBounds(355, 250, 187, 22);
 		add(chckbxGeneratepileupfile);
 
 		sclVcfFile = new JScrollPaneData();
@@ -385,12 +389,16 @@ public class GuiSamToBed extends JPanel {
 		
 		chckbxMergebyprefix = new JCheckBox("MergeByPrefix");
 		chckbxMergebyprefix.setSelected(true);
-		chckbxMergebyprefix.setBounds(12, 198, 140, 23);
+		chckbxMergebyprefix.setBounds(269, 203, 128, 23);
 		add(chckbxMergebyprefix);
 		
 		chckbxAddGroupInfo = new JCheckBox("add Group Info");
-		chckbxAddGroupInfo.setBounds(161, 198, 128, 26);
+		chckbxAddGroupInfo.setBounds(436, 200, 128, 26);
 		add(chckbxAddGroupInfo);
+		
+		chckbxAdduniqmapflag = new JCheckBox("AddUniqMapFlag(UnSortedSam)");
+		chckbxAdduniqmapflag.setBounds(12, 198, 238, 26);
+		add(chckbxAdduniqmapflag);
 		initial();
 	}
 	
@@ -481,6 +489,16 @@ public class GuiSamToBed extends JPanel {
 		List<SamFile> lsSamFiles = new ArrayList<SamFile>(); 
 		for (String string : lsSamFilestr) {
 			SamFile samFile = new SamFile(string);
+			if (chckbxAdduniqmapflag.isSelected()) {
+				if (samFile.getHeader().getSortOrder() == SortOrder.unsorted ) {
+					String outName = FileOperate.changeFileSuffix(samFile.getFileName(), "_UniqMapFlag", null);
+					SamToBamSort samToBamSort = new SamToBamSort(outName, samFile, samFile.isPairend());
+					samToBamSort.setAddMultiHitFlag(true);
+					samToBamSort.convert();
+					samFile = samToBamSort.getSamFileBam();
+					samFile.close();
+				}
+			}
 			samFile.setReferenceFileName(refFile);
 			lsSamFiles.add(samFile);
 		}

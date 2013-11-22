@@ -3,7 +3,6 @@ package com.novelbio.nbcgui.controlseq;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
@@ -15,6 +14,7 @@ import com.novelbio.analysis.seq.mapping.MapBowtie;
 import com.novelbio.analysis.seq.mapping.MapDNA;
 import com.novelbio.analysis.seq.mapping.MapDNAint;
 import com.novelbio.analysis.seq.mapping.MapLibrary;
+import com.novelbio.analysis.seq.sam.AlignSeqReading;
 import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.analysis.seq.sam.SamFileStatistics;
 import com.novelbio.base.FoldeCreate;
@@ -168,7 +168,7 @@ public class CtrlDNAMapping {
 	 * @param prefix 文件前缀，实际输出文本为{@link #outFilePrefix} + prefix +.txt
 	 * @param fastQs
 	 */
-	public SamFile mapping(String prefix, List<List<String>> fastQsFile) {
+	private SamFile mapping(String prefix, List<List<String>> fastQsFile) {
 		softWareInfo.setName(softMapping);
 		MapDNAint mapSoftware = MapDNA.creatMapDNA(softMapping);		
 		mapSoftware.setExePath(softWareInfo.getExePath());
@@ -197,9 +197,13 @@ public class CtrlDNAMapping {
 		mapSoftware.setMapLibrary(libraryType);
 		mapSoftware.setSortNeed(isNeedSort);
 		mapSoftware.setThreadNum(thread);
+		
+		SamFile samFile = mapSoftware.mapReads();
 		samFileStatistics = new SamFileStatistics(prefix);
-		mapSoftware.addAlignmentRecorder(samFileStatistics);
-		return mapSoftware.mapReads();
+		AlignSeqReading alignSeqReading = new AlignSeqReading(samFile);
+		alignSeqReading.addAlignmentRecorder(samFileStatistics);
+		alignSeqReading.run();
+		return samFile;
 	}
 	
 	/**

@@ -52,23 +52,21 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	ReportSamAndRPKM reportSamAndRPKM;
 	
 	List<String[]> lsReadFile;
-	boolean isCountExpression = true;
-	boolean isCalculateFPKM = true;
-	
+
 	
 	StrandSpecific strandSpecific = StrandSpecific.NONE;
 	
-	String picPathAndName;
-	
-	String excelPathAndName;
-	
 	String RPKMFileName;
-	
 	String fragmentsFileName;
-	
 	String  geneStructureResultFile;
 	
-	boolean isLocStatistics = true;
+	/** 是否统计Sam结果 */
+	boolean isSamStatistics = true;
+	/** 是否统计GeneStructure结果 */
+	boolean isGeneStructureStatistics = true;
+	boolean isCountExpression = true;
+	boolean isCalculateFPKM = true;
+	boolean isCountNCrna = false;
 	
 	Set<String> setPrefix;
 	Map<String, GffChrStatistics> mapPrefix2LocStatistics;
@@ -78,7 +76,9 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	int[] tss;
 	int[] tes;
 	
-	String resultPrefix;
+	String resultSamPrefix;
+	String resultExpPrefix;
+	
 	List<String[]> lsCounts = null;
 	
 	/**
@@ -128,11 +128,16 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	@Override
 	public void clear() {
 		lsReadFile = null;
-		isCountExpression = true;
-		isCalculateFPKM = true;
 		strandSpecific = StrandSpecific.NONE;
 		
-		isLocStatistics = true;
+		
+		/** 是否统计Sam结果 */
+		isSamStatistics = true;
+		/** 是否统计GeneStructure结果 */
+		isGeneStructureStatistics = true;
+		isCountExpression = true;
+		isCalculateFPKM = true;
+		isCountNCrna = false;
 		
 		setPrefix = null;
 		mapPrefix2LocStatistics = null;
@@ -142,17 +147,19 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		tss = null;
 		tes = null;
 		
-		
-		resultPrefix = null;
+		resultExpPrefix = null;
+		resultSamPrefix = null;
 	}
 	
 	public void setQueryFile(List<String[]> lsReadFile) {
 		this.lsReadFile = lsReadFile;
 	}
-	public void setIsCountRPKM(boolean isCountExpression, StrandSpecific strandSpecific, boolean isCountFPKM) {
+	@Override
+	public void setIsCountRPKM(boolean isCountExpression, StrandSpecific strandSpecific, boolean isCountFPKM, boolean isCountNCRNA) {
 		this.isCountExpression = isCountExpression;
 		this.strandSpecific = strandSpecific;
 		this.isCalculateFPKM = isCountFPKM;
+		this.isCountNCrna = isCountNCRNA;
 	}
 	public void setTssRange(int[] tss) {
 		this.tss = tss;
@@ -162,15 +169,18 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	}
 	/** 设定输出文件路径前缀 */
 	public void setResultPrefix(String resultPrefix) {
-		this.resultPrefix = FoldeCreate.createAndInFold(resultPrefix, EnumReport.SamAndRPKM.getResultFolder());
+		this.resultSamPrefix = FoldeCreate.getInFold(resultPrefix, EnumReport.SamStatistics.getResultFolder());
+		this.resultExpPrefix = FoldeCreate.getInFold(resultPrefix, EnumReport.GeneExp.getResultFolder());
 	}
 	
 	public void run() {
-		rpkMcomput = new RPKMcomput();
-		
-		
-		if (!isCountExpression && !isLocStatistics) {
+		rpkMcomput = new RPKMcomput();		
+		if (!isCountExpression && !isSamStatistics && !isGeneStructureStatistics) {
 			return;
+		}
+		FileOperate.createFolders(FileOperate.getPathName(resultSamPrefix));
+		if (isCountExpression) {
+			FileOperate.createFolders(FileOperate.getPathName(resultExpPrefix));
 		}
 		try {
 			calculate();
@@ -179,7 +189,6 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		}
 		if (isCountExpression) {
 			writeReportGeneExp();
-			WriteReportSamAndRPKM();
 		}
 		
 		done(null);
@@ -191,60 +200,42 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			guiSamStatistics.getBtnSave().setEnabled(true);
 			guiSamStatistics.getBtnRun().setEnabled(true);
 		}
-	
 	}
 	
 	private void calculate() {
 		ArrayListMultimap<String, AlignSeqReading> mapPrefix2AlignSeqReadings = getMapPrefix2LsAlignSeqReadings();
 		double readByte = 0;
+		
 		for (String prefix : mapPrefix2AlignSeqReadings.keySet()) {
 			List<AlignSeqReading> lsAlignSeqReadings = mapPrefix2AlignSeqReadings.get(prefix);
 			List<AlignmentRecorder> lsAlignmentRecorders = new ArrayList<AlignmentRecorder>();
-			SamFileStatistics samFileStatistics = null;
 			if (isCountExpression && gffChrAbs.getGffHashGene() != null) {
 				rpkMcomput.setAndAddCurrentCondition(prefix);
 				rpkMcomput.setConsiderStrand(strandSpecific);
 				rpkMcomput.setCalculateFPKM(isCalculateFPKM);
+				
 				lsAlignmentRecorders.add(rpkMcomput);
 			}
-
-			if (isLocStatistics) {
-				if (gffChrAbs.getGffHashGene() != null) {
-					GffChrStatistics gffChrStatistics = new GffChrStatistics();
-					gffChrStatistics.setGffChrAbs(gffChrAbs);
-					gffChrStatistics.setTesRegion(tes);
-					gffChrStatistics.setTssRegion(tss);
-					lsAlignmentRecorders.add(gffChrStatistics);
-					mapPrefix2LocStatistics.put(prefix, gffChrStatistics);
+			if (isGeneStructureStatistics) {
+				setGeneStructure(prefix, lsAlignmentRecorders, gffChrAbs);
+			}
+			if (isSamStatistics) {
+				SamFile samFile = (SamFile)lsAlignSeqReadings.get(0).getFirstSamFile();
+				if (samFile != null) {
+					setSamStatistics(prefix, lsAlignmentRecorders, samFile.getMapChrIDLowcase2Length());
 				}
-				
-				samFileStatistics = new SamFileStatistics(prefix);
-				samFileStatistics.setCorrectChrReadsNum(chrReadsCorrect);
-				lsAlignmentRecorders.add(samFileStatistics);
-				try {
-					Map<String, Long> mapChrID2Len = ((SamFile)lsAlignSeqReadings.get(0).getSamFile()).getMapChrIDLowcase2Length();
-					samFileStatistics.setStandardData(mapChrID2Len);
-				} catch (Exception e) {
-					// TODO: handle exception
-				}
-
-				mapPrefix2Statistics.put(prefix, samFileStatistics);
 			}
 			
 			for (AlignSeqReading alignSeqReading : lsAlignSeqReadings) {
 				alignSeqReading.setReadInfo(0L, readByte);
 				alignSeqReading.addColAlignmentRecorder(lsAlignmentRecorders);
-				if (alignSeqReading.getSamFile() instanceof SamFile) {
-					rpkMcomput.setIsPairend(((SamFile)alignSeqReading.getSamFile()).isPairend());
+				if (alignSeqReading.getFirstSamFile() instanceof SamFile) {
+					rpkMcomput.setIsPairend(((SamFile)alignSeqReading.getFirstSamFile()).isPairend());
 				}
 				alignSeqReading.setRunGetInfo(this);
 				alignSeqReading.run();
-				logger.info("finish reading " + alignSeqReading.getSamFile().getFileName());
+				logger.info("finish reading " + alignSeqReading.getFirstSamFile().getFileName());
 				readByte = alignSeqReading.getReadByte();
-			}
-			if (samFileStatistics != null) {
-				picPathAndName = SamFileStatistics.savePic(resultPrefix+ prefix, samFileStatistics);
-				excelPathAndName = SamFileStatistics.saveExcel(resultPrefix+ prefix, samFileStatistics);
 			}
 			logger.info("finish reading " + prefix);
 			try {
@@ -259,8 +250,29 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
+	
+	/** 统计geneStructure的模块 */
+	private void setGeneStructure(String prefix, List<AlignmentRecorder> lsAlignmentRecorders, GffChrAbs gffChrAbs) {
+		if (gffChrAbs.getGffHashGene() != null) {
+			GffChrStatistics gffChrStatistics = new GffChrStatistics();
+			gffChrStatistics.setGffChrAbs(gffChrAbs);
+			gffChrStatistics.setTesRegion(tes);
+			gffChrStatistics.setTssRegion(tss);
+			lsAlignmentRecorders.add(gffChrStatistics);
+			mapPrefix2LocStatistics.put(prefix, gffChrStatistics);
+		}
+	}
+	
+	/** 统计geneStructure的模块 */
+	private void setSamStatistics(String prefix, List<AlignmentRecorder> lsAlignmentRecorders, Map<String, Long> mapChrIDlowcase2Len) {
+		SamFileStatistics samFileStatistics = new SamFileStatistics(prefix);
+		samFileStatistics.setCorrectChrReadsNum(chrReadsCorrect);
+		lsAlignmentRecorders.add(samFileStatistics);
+		samFileStatistics.setStandardData(mapChrIDlowcase2Len);
+		mapPrefix2Statistics.put(prefix, samFileStatistics);
+	}
+	
 	
 	/** 给AOP用的 */
 	public void aop() {
@@ -277,12 +289,6 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			fileSizeLong += (long) FileOperate.getFileSizeLong(fileName[0]);
 		}
 		return (int)(fileSizeLong/1024);
-	}
-	
-	/** 返回保存的路径 */
-	@Override
-	public String getResultPrefix() {
-		return resultPrefix;
 	}
 	
 	@Override
@@ -330,32 +336,39 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	
 	private void writeToFile() {
 		if (isCountExpression && gffChrAbs.getGffHashGene() != null) {
-			String suffixRPKM = "All_RPKM", suffixUQRPKM = "All_UQRPKM", suffixCounts = "All_Counts", tpm = "All_TPM";
+			String suffixRPKM = "All_RPKM", suffixUQRPKM = "All_UQRPKM", 
+					suffixCounts = "All_Counts", tpm = "All_TPM", ncrna = "All_ncRNA_Statistics;";
 			if (rpkMcomput.isCalculateFPKM()) {
 				suffixRPKM = "All_FPKM";
 				suffixUQRPKM = "All_UQFPKM";
 				suffixCounts = "All_Fragments";
 			}
-			if (!resultPrefix.endsWith("/") && !resultPrefix.endsWith("\\")) {
+			if (!resultExpPrefix.endsWith("/") && !resultExpPrefix.endsWith("\\")) {
 				suffixRPKM = "_" + suffixRPKM;
 				suffixUQRPKM = "_" + suffixUQRPKM;
 				suffixCounts = "_" + suffixCounts;
 				tpm = "_" + tpm;
 			}
 			
-			String outTPM = FileOperate.changeFileSuffix(resultPrefix, tpm, "txt");
-			String outRPKM = FileOperate.changeFileSuffix(resultPrefix, suffixRPKM, "txt");
-			
+			String outTPM = FileOperate.changeFileSuffix(resultExpPrefix, tpm, "txt");
+			String outRPKM = FileOperate.changeFileSuffix(resultExpPrefix, suffixRPKM, "txt");
+			String outNCrna = FileOperate.changeFileSuffix(resultExpPrefix, ncrna, "txt");
+
 			RPKMFileName = outRPKM;
-			String outCounts = FileOperate.changeFileSuffix(resultPrefix, suffixCounts, "txt");
+			String outCounts = FileOperate.changeFileSuffix(resultExpPrefix, suffixCounts, "txt");
 			fragmentsFileName = outCounts;
-			String outUQRPKM = FileOperate.changeFileSuffix(resultPrefix, suffixUQRPKM, "txt");
+			String outUQRPKM = FileOperate.changeFileSuffix(resultExpPrefix, suffixUQRPKM, "txt");
 			
 			List<String[]> lsTpm = rpkMcomput.getLsTPMs();
 			List<String[]> lsRpkm = rpkMcomput.getLsRPKMs();
 			List<String[]> lsUQRpkm = rpkMcomput.getLsUQRPKMs();
 			List<String[]> lsCounts2 = rpkMcomput.getLsCounts();
-			
+			if (isCountNCrna) {
+				List<String[]> lsNCRNA = rpkMcomput.getLsNCrnaStatistics();
+				TxtReadandWrite txtNCRNA = new TxtReadandWrite(outNCrna, true);
+				txtNCRNA.ExcelWrite(lsNCRNA);
+				txtNCRNA.close();
+			}
 			TxtReadandWrite txtWriteRpm = new TxtReadandWrite(outTPM, true);
 			txtWriteRpm.ExcelWrite(lsTpm);
 			TxtReadandWrite txtWriteRpkm = new TxtReadandWrite(outRPKM, true);
@@ -372,22 +385,37 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	}
 	
 	private void writeToFileCurrent(String prefix) {
+		String tmExpResult = FileOperate.getPathName(resultExpPrefix) + "tmp/";
+		String tmSamResult = FileOperate.getPathName(resultSamPrefix) + "tmp/";
+		
 		if (isCountExpression && gffChrAbs.getGffHashGene() != null) {
-			String suffixRPKM = "_RPKM", suffixUQRPKM = "_UQRPKM", suffixCounts = "_Counts", tpm = "_TPM";
+			FileOperate.createFolders(tmExpResult);
+			tmExpResult = tmExpResult + prefix;
+			String suffixRPKM = "_RPKM", suffixUQRPKM = "_UQRPKM", 
+					suffixCounts = "_Counts", suffixTpm = "_TPM", suffixNCrna = "_ncRNA_Statistics";
 			if (rpkMcomput.isCalculateFPKM()) {
 				suffixRPKM = "_FPKM";
 				suffixUQRPKM = "_UQFPKM";
 				suffixCounts = "_Fragments";
 			}
-			String outTPM = FileOperate.changeFileSuffix(resultPrefix, prefix + tpm, "txt");
-			String outRPKM = FileOperate.changeFileSuffix(resultPrefix, prefix + suffixRPKM, "txt");
-			String outUQRPKM = FileOperate.changeFileSuffix(resultPrefix, prefix + suffixUQRPKM, "txt");
-			String outCounts = FileOperate.changeFileSuffix(resultPrefix, prefix + suffixCounts, "txt");
+			String outTPM = tmExpResult + suffixTpm + ".txt";
+			String outRPKM =  tmExpResult + suffixRPKM + ".txt";
+			String outUQRPKM =  tmExpResult + suffixUQRPKM + ".txt";
+			String outCounts =  tmExpResult + suffixCounts + ".txt";
+			String outNcRNA =  tmExpResult + suffixNCrna + ".txt";
 			
+			lsCounts = rpkMcomput.getLsCountsCurrent();
+
 			List<String[]> lsTpm = rpkMcomput.getLsTPMsCurrent();
 			List<String[]> lsRpkm = rpkMcomput.getLsRPKMsCurrent();
 			List<String[]> lsUQRpkm = rpkMcomput.getLsUQRPKMsCurrent();
-			lsCounts = rpkMcomput.getLsCountsCurrent();
+			if (isCountNCrna) {
+				List<String[]> lsNCrna = rpkMcomput.getLsNCrnaStatisticsCurrent();
+				TxtReadandWrite txtWriteNCrna = new TxtReadandWrite(outNcRNA, true);
+				txtWriteNCrna.ExcelWrite(lsNCrna);
+				txtWriteNCrna.close();
+			}
+			
 			TxtReadandWrite txtWriteRpm = new TxtReadandWrite(outTPM, true);
 			txtWriteRpm.ExcelWrite(lsTpm);
 			TxtReadandWrite txtWriteRpkm = new TxtReadandWrite(outRPKM, true);
@@ -401,15 +429,11 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			txtWriteUQRpkm.close();
 			txtWriteRpm.close();
 		}
-		if (isLocStatistics) {
-			String prefixWrite = "_" + prefix; 
-			if (resultPrefix.endsWith("/") || resultPrefix.endsWith("\\")) {
-				prefixWrite = prefix;
-			}
+		if (isSamStatistics) {
 			if (gffChrAbs.getTaxID() != 0) {
 				GffChrStatistics gffChrStatistics = mapPrefix2LocStatistics.get(prefix);
 
-				String outStatistics = FileOperate.changeFileSuffix(resultPrefix, prefixWrite + "_GeneStructure", "txt");
+				String outStatistics =tmSamResult + "_GeneStructure.txt";
 				geneStructureResultFile = outStatistics;
 				TxtReadandWrite txtWrite = new TxtReadandWrite(outStatistics, true);
 				txtWrite.ExcelWrite(gffChrStatistics.getStatisticsResult());
@@ -417,24 +441,24 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			}
 			
 			SamFileStatistics samFileStatistics = mapPrefix2Statistics.get(prefix);
-			String outSamStatistics = FileOperate.changeFileSuffix(resultPrefix, prefixWrite + "_MappingStatistics", "txt");
+			String outSamStatistics = tmSamResult + "_MappingStatistics.txt";
 			TxtReadandWrite txtWriteStatistics = new TxtReadandWrite(outSamStatistics, true);
 			txtWriteStatistics.ExcelWrite(samFileStatistics.getMappingInfo());
 			txtWriteStatistics.close();
 		}
 	}
 	
-	public ReportSamAndRPKM WriteReportSamAndRPKM() {
+	public ReportSamAndRPKM WriteReportSamAndRPKM(String picPathName, String excelPathName) {
 		reportSamAndRPKM = new ReportSamAndRPKM();
 		
 		List<XdocTmpltExcel> lsExcels = new ArrayList<>();
 		XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(EnumTableType.MappingResult.getXdocTable());
 		xdocTmpltExcel.setExcelTitle("Mapping率分析统计结果");
-		xdocTmpltExcel.addExcel(excelPathAndName, 1);
+		xdocTmpltExcel.addExcel(excelPathName, 1);
 		
 		XdocTmpltExcel xdocTmpltExcel2 = new XdocTmpltExcel(EnumTableType.MappingChrFile.getXdocTable());
 		xdocTmpltExcel2.setExcelTitle("Reads在染色体上的分布统计");
-		xdocTmpltExcel2.addExcel(excelPathAndName, 2);	
+		xdocTmpltExcel2.addExcel(excelPathName, 2);	
 		
 		lsExcels.add(xdocTmpltExcel);
 		lsExcels.add(xdocTmpltExcel2);
@@ -446,20 +470,23 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		lsExcels.add(xdocTmpltExcel3);
 		reportSamAndRPKM.setLsExcels(lsExcels);
 		List<XdocTmpltPic> lsPics = new ArrayList<>();
-		XdocTmpltPic xdocTmpltPic = new XdocTmpltPic(picPathAndName);
+		XdocTmpltPic xdocTmpltPic = new XdocTmpltPic(picPathName);
 		xdocTmpltPic.setTitle("Reads在染色体上的分布柱状图");
 		lsPics.add(xdocTmpltPic);
 		reportSamAndRPKM.setLsTmpltPics(lsPics);
 		
 		Set<String> lsResultFile = new LinkedHashSet<>();
-		lsResultFile.add(excelPathAndName);
+		lsResultFile.add(excelPathName);
 		lsResultFile.add(geneStructureResultFile);
-		lsResultFile.add(picPathAndName);
+		lsResultFile.add(picPathName);
 		reportSamAndRPKM.setSetResultFile(lsResultFile);
 		
-		reportSamAndRPKM.writeAsFile(resultPrefix);
+		reportSamAndRPKM.writeAsFile(FileOperate.getPathName(resultSamPrefix));
 		return reportSamAndRPKM;
 	}
+	
+	//TODO 新增了NCrna统计表
+	
 	
 	public ReportGeneExpression writeReportGeneExp() {
 		ReportGeneExpression reportGeneExpression = new ReportGeneExpression();
@@ -488,10 +515,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		lsResult.add(fragmentsFileName);
 		lsResult.add(RPKMFileName);
 		reportGeneExpression.setSetResultFile(lsResult);
-		String geneExpResult = FileOperate.getParentPathName(resultPrefix);
-		geneExpResult = geneExpResult + EnumReport.GeneExp.getResultFolder();
-		System.out.println(geneExpResult);
-		reportGeneExpression.writeAsFile(geneExpResult);
+		reportGeneExpression.writeAsFile(FileOperate.getPathName(resultExpPrefix));
 		return reportGeneExpression;
 	}
 	

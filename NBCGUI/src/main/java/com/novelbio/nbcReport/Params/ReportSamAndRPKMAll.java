@@ -41,7 +41,7 @@ public class ReportSamAndRPKMAll   extends ReportBase {
 
 	@Override
 	public EnumReport getEnumReport() {
-		return EnumReport.SamAndRPKM;
+		return EnumReport.SamStatistics;
 	}
 
 	

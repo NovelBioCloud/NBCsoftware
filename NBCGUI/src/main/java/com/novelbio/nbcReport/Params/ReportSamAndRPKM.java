@@ -23,7 +23,7 @@ public class ReportSamAndRPKM extends ReportBase{
 	public Set<String> getSetResultFile() {
 		Set<String> lsSet = new LinkedHashSet<>();
 		for (String string : setResultFile) {
-			lsSet.add(EnumReport.SamAndRPKM + string.split(EnumReport.SamAndRPKM.getResultFolder())[1]);
+			lsSet.add(EnumReport.SamStatistics + string.split(EnumReport.SamStatistics.getResultFolder())[1]);
 		}
 		return lsSet;
 	}
@@ -59,7 +59,7 @@ public class ReportSamAndRPKM extends ReportBase{
 
 	@Override
 	public EnumReport getEnumReport() {
-		return EnumReport.SamAndRPKM;
+		return EnumReport.SamStatistics;
 	}
 
 	@Override

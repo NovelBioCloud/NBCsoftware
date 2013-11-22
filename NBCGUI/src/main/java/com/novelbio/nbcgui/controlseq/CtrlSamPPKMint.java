@@ -25,7 +25,7 @@ public interface CtrlSamPPKMint extends RunGetInfo<GuiAnnoInfo>, Runnable {
 	public void setGffHash(GffHashGeneAbs gffHashGene);
 	
 	public void setQueryFile(List<String[]> lsReadFile);
-	public void setIsCountRPKM(boolean isCountExpression, StrandSpecific strandSpecific, boolean isCountFPKM);
+	public void setIsCountRPKM(boolean isCountExpression, StrandSpecific strandSpecific, boolean isCountFPKM, boolean isCountNCRNA);
 	public void setTssRange(int[] tss);
 	public void setChrReadsCorrect(boolean chrReadsCorrect);
 	public void setTesRange(int[] tes);
@@ -37,5 +37,5 @@ public interface CtrlSamPPKMint extends RunGetInfo<GuiAnnoInfo>, Runnable {
 	public void aop();
 	void clear();
 	Map<String, Long> getMapChrID2Len();
-	String getResultPrefix();
+
 }

@@ -40,7 +40,7 @@ public class TestSamAndRPKM {
 		mapParams.put("dbType", new String[]{"NCBI"});
 		mapParams.put("outFileName", new String[]{"/hdfs:/nbCloud/staff/gaozhu/我的图片/"});
 		mapParams.put("gtfFile", new String[]{""});
-		
+		mapParams.put("ncRNAstatistics", new String[]{"true"});
 	}
 	
 	
@@ -55,6 +55,7 @@ public class TestSamAndRPKM {
 		int tssDown = Integer.parseInt(mapParams.get("tssDown")[0]);
 		int tesUp = Integer.parseInt(mapParams.get("tesUp")[0]);
 		int tesDown = Integer.parseInt(mapParams.get("tesDown")[0]);
+		boolean isNCrnastatistics = mapParams.containsKey("ncRNAstatistics");
 		String outFolder = mapParams.get("outFileName")[0];
 		String[] inFileArray =  mapParams.get("inFileArray")[0].split(",");
 		String[] prefixArray = mapParams.get("prefixArray")[0].split(",");
@@ -102,7 +103,7 @@ public class TestSamAndRPKM {
 		}else {
 			isExpressCount = true;
 		}
-		ctrlSamRPKMLocate.setIsCountRPKM(isExpressCount, StrandSpecific.getMapStrandLibrary().get(strandType), isFPKM);
+		ctrlSamRPKMLocate.setIsCountRPKM(isExpressCount, StrandSpecific.getMapStrandLibrary().get(strandType), isFPKM, isNCrnastatistics);
 		int[] tss = new int[]{tssUp,tssDown};
 		int[] tes = new int[]{tesUp,tesDown};
 		ctrlSamRPKMLocate.setTssRange(tss);
