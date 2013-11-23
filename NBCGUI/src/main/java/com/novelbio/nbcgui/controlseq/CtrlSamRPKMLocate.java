@@ -78,6 +78,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	
 	String resultSamPrefix;
 	String resultExpPrefix;
+	String resultGeneStructure;
 	
 	List<String[]> lsCounts = null;
 	
@@ -171,6 +172,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	public void setResultPrefix(String resultPrefix) {
 		this.resultSamPrefix = FoldeCreate.getInFold(resultPrefix, EnumReport.SamStatistics.getResultFolder());
 		this.resultExpPrefix = FoldeCreate.getInFold(resultPrefix, EnumReport.GeneExp.getResultFolder());
+		this.resultGeneStructure = FoldeCreate.getInFold(resultPrefix, EnumReport.GeneStructure.getResultFolder());
 	}
 	
 	public void run() {
@@ -181,6 +183,9 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		FileOperate.createFolders(FileOperate.getPathName(resultSamPrefix));
 		if (isCountExpression) {
 			FileOperate.createFolders(FileOperate.getPathName(resultExpPrefix));
+		}
+		if (isGeneStructureStatistics) {
+			FileOperate.createFolders(FileOperate.getPathName(resultGeneStructure));
 		}
 		try {
 			calculate();
@@ -246,7 +251,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			
 		}
 		try {
-			writeToFile();
+			writeExpToFile();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -334,7 +339,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		 return FormatSeq.getFileType(fileName);
 	}
 	
-	private void writeToFile() {
+	private void writeExpToFile() {
 		if (isCountExpression && gffChrAbs.getGffHashGene() != null) {
 			String suffixRPKM = "All_RPKM", suffixUQRPKM = "All_UQRPKM", 
 					suffixCounts = "All_Counts", tpm = "All_TPM", ncrna = "All_ncRNA_Statistics;";
@@ -385,12 +390,13 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	}
 	
 	private void writeToFileCurrent(String prefix) {
-		String tmExpResult = FileOperate.getPathName(resultExpPrefix) + "tmp/";
-		String tmSamResult = FileOperate.getPathName(resultSamPrefix) + "tmp/";
+		String tmpExpResult = FileOperate.getPathName(resultExpPrefix) + "tmp/";
+//		String tmpSamResult = FileOperate.getPathName(resultSamPrefix) + "tmp/";
+//		String tmpGeneStructure = FileOperate.getPathName(resultGeneStructure) + "tmp/";
 		
 		if (isCountExpression && gffChrAbs.getGffHashGene() != null) {
-			FileOperate.createFolders(tmExpResult);
-			tmExpResult = tmExpResult + prefix;
+			FileOperate.createFolders(tmpExpResult);
+			tmpExpResult = tmpExpResult + prefix;
 			String suffixRPKM = "_RPKM", suffixUQRPKM = "_UQRPKM", 
 					suffixCounts = "_Counts", suffixTpm = "_TPM", suffixNCrna = "_ncRNA_Statistics";
 			if (rpkMcomput.isCalculateFPKM()) {
@@ -398,11 +404,11 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 				suffixUQRPKM = "_UQFPKM";
 				suffixCounts = "_Fragments";
 			}
-			String outTPM = tmExpResult + suffixTpm + ".txt";
-			String outRPKM =  tmExpResult + suffixRPKM + ".txt";
-			String outUQRPKM =  tmExpResult + suffixUQRPKM + ".txt";
-			String outCounts =  tmExpResult + suffixCounts + ".txt";
-			String outNcRNA =  tmExpResult + suffixNCrna + ".txt";
+			String outTPM = tmpExpResult + suffixTpm + ".txt";
+			String outRPKM =  tmpExpResult + suffixRPKM + ".txt";
+			String outUQRPKM =  tmpExpResult + suffixUQRPKM + ".txt";
+			String outCounts =  tmpExpResult + suffixCounts + ".txt";
+			String outNcRNA =  tmpExpResult + suffixNCrna + ".txt";
 			
 			lsCounts = rpkMcomput.getLsCountsCurrent();
 
@@ -429,19 +435,26 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			txtWriteUQRpkm.close();
 			txtWriteRpm.close();
 		}
-		if (isSamStatistics) {
+		if (isGeneStructureStatistics) {
+//			FileOperate.createFolders(tmpGeneStructure);
+//			String tmpGeneStructure = tmpGeneStructure + prefix;
+			String tmpGeneStructure = resultGeneStructure + prefix;
 			if (gffChrAbs.getTaxID() != 0) {
 				GffChrStatistics gffChrStatistics = mapPrefix2LocStatistics.get(prefix);
 
-				String outStatistics =tmSamResult + "_GeneStructure.txt";
+				String outStatistics =tmpGeneStructure + "_GeneStructure.txt";
 				geneStructureResultFile = outStatistics;
 				TxtReadandWrite txtWrite = new TxtReadandWrite(outStatistics, true);
 				txtWrite.ExcelWrite(gffChrStatistics.getStatisticsResult());
 				txtWrite.close();
 			}
-			
+		}
+		if (isSamStatistics) {
+//			FileOperate.createFolders(tmpSamResult);
+//			tmpSamResult = tmpSamResult + prefix;
+			String tmpSamResult = resultSamPrefix + prefix;
 			SamFileStatistics samFileStatistics = mapPrefix2Statistics.get(prefix);
-			String outSamStatistics = tmSamResult + "_MappingStatistics.txt";
+			String outSamStatistics = tmpSamResult + "_MappingStatistics.txt";
 			TxtReadandWrite txtWriteStatistics = new TxtReadandWrite(outSamStatistics, true);
 			txtWriteStatistics.ExcelWrite(samFileStatistics.getMappingInfo());
 			txtWriteStatistics.close();

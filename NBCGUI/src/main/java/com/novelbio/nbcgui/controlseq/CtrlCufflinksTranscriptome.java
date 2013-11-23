@@ -124,6 +124,7 @@ public class CtrlCufflinksTranscriptome {
 		String outMergePrefix = outPrefix + "tmpMerge";
 		if (lsResultGTF.size() > 1) {
 			CuffMerge cuffMerge = new CuffMerge();
+			cuffMerge.setIsUseOldResult(isUseOldResult);
 			cuffMerge.setExePath(softWareInfo.getExePath());
 			cuffMerge.setLsGtfTobeMerged(lsResultGTF);
 			cuffMerge.setRefGtf(cufflinksGTF.getGtfReffile());
