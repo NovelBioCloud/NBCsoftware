@@ -33,6 +33,7 @@ public class GuiDifGeneJpanel extends JPanel {
 	ArrayList<String[]> lsGeneInfo;
 	CtrlDifGene diffExpAbs;
 	JComboBoxData<EnumDifGene> cmbMethod;
+	JCheckBox chckSensitive;
 	
 	JComboBoxData<String> cmbGroup = new JComboBoxData<String>();
 	
@@ -51,11 +52,11 @@ public class GuiDifGeneJpanel extends JPanel {
 		});
 		
 		scrollPaneNormData = new JScrollPaneData();
-		scrollPaneNormData.setBounds(12, 24, 611, 501);
+		scrollPaneNormData.setBounds(12, 24, 611, 528);
 		add(scrollPaneNormData);
 		
 		scrollPaneSample = new JScrollPaneData();
-		scrollPaneSample.setBounds(635, 24, 310, 195);
+		scrollPaneSample.setBounds(635, 24, 346, 195);
 		add(scrollPaneSample);
 		
 		JButton btnSetSample = new JButton("SetSample");
@@ -69,7 +70,7 @@ public class GuiDifGeneJpanel extends JPanel {
 		add(btnSetSample);
 		
 		JButton btnDelSample = new JButton("Delete");
-		btnDelSample.setBounds(870, 231, 75, 20);
+		btnDelSample.setBounds(906, 231, 75, 20);
 		btnDelSample.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				scrollPaneSample.deleteSelRows();
@@ -79,7 +80,7 @@ public class GuiDifGeneJpanel extends JPanel {
 		add(btnDelSample);
 		
 		scrollPaneDesign = new JScrollPaneData();
-		scrollPaneDesign.setBounds(635, 268, 310, 150);
+		scrollPaneDesign.setBounds(635, 268, 346, 150);
 		add(scrollPaneDesign);
 		
 		JButton btnSetDesign = new JButton("addDesign");
@@ -93,7 +94,7 @@ public class GuiDifGeneJpanel extends JPanel {
 		add(btnSetDesign);
 		
 		JButton btnDelDesign = new JButton("delete");
-		btnDelDesign.setBounds(858, 431, 87, 20);
+		btnDelDesign.setBounds(894, 430, 87, 20);
 		btnDelDesign.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				scrollPaneDesign.deleteSelRows();
@@ -104,7 +105,7 @@ public class GuiDifGeneJpanel extends JPanel {
 		add(btnDelDesign);
 		
 		JButton btnSave = new JButton("Save");
-		btnSave.setBounds(912, 497, 57, 20);
+		btnSave.setBounds(924, 532, 57, 20);
 		btnSave.setMargin(new Insets(0, 0, 0, 0));
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -115,15 +116,20 @@ public class GuiDifGeneJpanel extends JPanel {
 		add(btnSave);
 		
 		cmbMethod = new JComboBoxData<>();
-		cmbMethod.setBounds(635, 463, 239, 23);
+		cmbMethod.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				selectMethod();
+			}
+		});
+		cmbMethod.setBounds(635, 463, 271, 23);
 		add(cmbMethod);
 		
-		final JCheckBox chckbxIslogvalueOnlyforlimma = new JCheckBox("isLog2Value OnlyForLimma");
-		chckbxIslogvalueOnlyforlimma.setBounds(217, 526, 239, 26);
+		final JCheckBox chckbxIslogvalueOnlyforlimma = new JCheckBox("isAlreadyLogValue OnlyForLimma");
+		chckbxIslogvalueOnlyforlimma.setBounds(218, 552, 258, 26);
 		add(chckbxIslogvalueOnlyforlimma);
 		
 		txtSave = new JTextField();
-		txtSave.setBounds(635, 498, 252, 18);
+		txtSave.setBounds(635, 534, 277, 18);
 		add(txtSave);
 		txtSave.setColumns(10);
 		
@@ -141,6 +147,7 @@ public class GuiDifGeneJpanel extends JPanel {
 				diffExpAbs.setGeneInfo(lsGeneInfo);
 				diffExpAbs.setCol2Sample(lsCol2Sample);
 				diffExpAbs.setIsLog2Value(chckbxIslogvalueOnlyforlimma.isSelected());
+				diffExpAbs.setSensitive(chckSensitive.isSelected());
 				String pathPrefix = getPathPrefix();
 				if (pathPrefix == null) {
 					return;
@@ -161,7 +168,7 @@ public class GuiDifGeneJpanel extends JPanel {
 				JOptionPane.showMessageDialog(null, "Your Diff Expressed Gene Is Already Finding", "Info",JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
-		btnRun.setBounds(827, 537, 118, 24);
+		btnRun.setBounds(863, 563, 118, 24);
 		add(btnRun);
 		
 		JButton btnOpenfile = new JButton("OpenFile");
@@ -172,17 +179,21 @@ public class GuiDifGeneJpanel extends JPanel {
 				scrollPaneNormData.setItemLs(lsGeneInfo);
 			}
 		});
-		btnOpenfile.setBounds(505, 537, 118, 24);
+		btnOpenfile.setBounds(506, 563, 118, 24);
 		add(btnOpenfile);
 		
 		txtColAccID = new JTextField();
-		txtColAccID.setBounds(79, 530, 114, 18);
+		txtColAccID.setBounds(80, 556, 114, 18);
 		add(txtColAccID);
 		txtColAccID.setColumns(10);
 		
 		JLabel lblColaccid = new JLabel("ColAccID");
-		lblColaccid.setBounds(11, 532, 69, 14);
+		lblColaccid.setBounds(12, 558, 69, 14);
 		add(lblColaccid);
+		
+		chckSensitive = new JCheckBox("Sensitive");
+		chckSensitive.setBounds(631, 494, 275, 26);
+		add(chckSensitive);
 		initial();
 	}
 	
@@ -192,6 +203,7 @@ public class GuiDifGeneJpanel extends JPanel {
 		scrollPaneDesign.setTitle(new String[]{"group1","group2","FileName"});
 		scrollPaneDesign.setItem(0, cmbGroup);
 		scrollPaneDesign.setItem(1, cmbGroup);
+		selectMethod();
 	}
 	
 	private String getPathPrefix() {
@@ -204,6 +216,21 @@ public class GuiDifGeneJpanel extends JPanel {
 			return FileOperate.addSep(pathPrefix);
 		}
 		return pathPrefix;
+	}
+	
+	private void selectMethod() {
+		if (cmbMethod.getSelectedValue() == EnumDifGene.DESeq) {
+			chckSensitive.setVisible(true);
+			chckSensitive.setText("Sensitive For Replicate");
+		} else if (cmbMethod.getSelectedValue() == EnumDifGene.EBSeq) {
+			chckSensitive.setVisible(true);
+			chckSensitive.setText("Sensitive");
+		} else if (cmbMethod.getSelectedValue() == EnumDifGene.EdgeR) {
+			chckSensitive.setVisible(true);
+			chckSensitive.setText("Sensitive For NonReplicate");
+		} else {
+			chckSensitive.setVisible(false);
+		}
 	}
 	
 	private void changeSclCompareGroup() {

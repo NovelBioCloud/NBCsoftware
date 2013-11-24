@@ -42,7 +42,8 @@ public class GuiBlast extends JPanel implements GuiNeedOpenFile {
 	
 	JCheckBox chckbxSavetodb;
 	JScrollPaneData sclPaneBlastFile;
-
+	JCheckBox chckbxQueryseqshortthan;
+	
 	int queryType = SeqFasta.SEQ_UNKNOWN;
 	int subjectType = SeqFasta.SEQ_UNKNOWN;
 	private JTextField txtThreadNum;
@@ -158,6 +159,7 @@ public class GuiBlast extends JPanel implements GuiNeedOpenFile {
 				ctrlBlast.setResultAlignNum(Integer.parseInt(textResultNum.getText()));
 				ctrlBlast.setResultSeqNum(Integer.parseInt(textResultNum.getText()));
 				ctrlBlast.setResultFile(textResultFile.getText());
+				ctrlBlast.setShortQuerySeq(chckbxQueryseqshortthan.isSelected());
 				ctrlBlast.setResultType((Integer)combResultType.getSelectedValue());
 				ctrlBlast.blast();
 			}
@@ -217,6 +219,10 @@ public class GuiBlast extends JPanel implements GuiNeedOpenFile {
 		JLabel lblThreadnum = new JLabel("ThreadNum");
 		lblThreadnum.setBounds(218, 279, 98, 14);
 		add(lblThreadnum);
+		
+		chckbxQueryseqshortthan = new JCheckBox("Query Seq Short Than 60Bp");
+		chckbxQueryseqshortthan.setBounds(227, 173, 209, 26);
+		add(chckbxQueryseqshortthan);
 		
 		initial();
 	}

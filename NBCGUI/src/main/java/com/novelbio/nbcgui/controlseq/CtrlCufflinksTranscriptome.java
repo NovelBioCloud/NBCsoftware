@@ -15,6 +15,7 @@ import com.novelbio.analysis.seq.rnaseq.CufflinksGTF;
 import com.novelbio.analysis.seq.rnaseq.GffHashMerge;
 import com.novelbio.analysis.seq.rnaseq.TranscriptomStatistics;
 import com.novelbio.base.FoldeCreate;
+import com.novelbio.base.dataOperate.DateUtil;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.information.SoftWareInfo;
@@ -32,9 +33,21 @@ public class CtrlCufflinksTranscriptome {
 	String chrSeq;
 	String outGtf;
 	String outStatistics;
+	String prefixNewGene;
 	
 	boolean isUseOldResult = true;
 	
+	/** 新基因的前缀 */
+	public void setGenePrefixNew(String prefixNewGene) {
+		if (prefixNewGene == null || prefixNewGene.trim().equals("")) {
+			return;
+		}
+		prefixNewGene = prefixNewGene.trim();
+		if (!prefixNewGene.endsWith("_")) {
+			prefixNewGene += "_";
+		}
+		this.prefixNewGene = prefixNewGene;
+	}
 	/** 使用上次跑出来的结果
 	 * 同样的参数重跑，遇到上次跑出来的结果是否可以直接使用而不重跑
 	 *  */
@@ -142,6 +155,8 @@ public class CtrlCufflinksTranscriptome {
 		gffHashModifyORF.setGffHashGeneRaw(gffHashGeneThis);
 		gffHashModifyORF.setGffHashGeneRef(gffChrAbs.getGffHashGene());
 		gffHashModifyORF.setRenameGene(true);
+		gffHashModifyORF.setPrefixGeneName(getGenePrefix());
+		
 		gffHashModifyORF.setRenameIso(true);//TODO 可以考虑不换iso的名字
 		gffHashModifyORF.modifyGff();
 		
@@ -157,7 +172,19 @@ public class CtrlCufflinksTranscriptome {
 		txtOut.ExcelWrite(transcriptomStatistics.getStatisticsResult());
 		txtOut.close();
 	}
-
+	
+	private String getGenePrefix() {
+		if (prefixNewGene != null && !prefixNewGene.trim().equals("")) {
+			return prefixNewGene;
+		}
+		if (gffChrAbs != null && gffChrAbs.getSpecies().getTaxID() != 0) {
+			prefixNewGene = gffChrAbs.getSpecies().getAbbrName() + "_" + (short)DateUtil.getNowTimeLong();
+		} else {
+			prefixNewGene = "NBC_";
+		}
+		return prefixNewGene;
+	}
+	
 	/** 根据gff文件，返回最小和最大intron的长度
 	 * 如果gff不存在，则返回null
 	 * @return
