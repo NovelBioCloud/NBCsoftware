@@ -210,6 +210,7 @@ public class CtrlGOall implements CtrlTestGOInt {
 				reportGO.addResultFile(picName);
 				XdocTmpltPic xdocTmpltPic = new XdocTmpltPic(picName);
 				//图片的宽度和描述都可以在这里设置
+				xdocTmpltPic.setHeight(200);
 				reportGO.addXdocTempPic(xdocTmpltPic);
 				lsResultPic.add( picName);
 			}

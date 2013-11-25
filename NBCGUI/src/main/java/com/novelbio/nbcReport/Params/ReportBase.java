@@ -70,6 +70,7 @@ public abstract class ReportBase  implements Cloneable, Serializable {
 	public boolean writeAsFile(String savePath){
 		String reportPath = FileOperate.addSep(savePath) + FileOperate.getSepPath() + ".report";
 		FileOperate.createFolders(reportPath);
+		FileOperate.delAllFile(reportPath);
 		String randomReportFile = FileOperate.addSep(reportPath) +  getEnumReport().getReportRandomFileName();
 		FileOperate.writeObjectToFile(this, randomReportFile);
 		return true;
