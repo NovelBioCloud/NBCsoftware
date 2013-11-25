@@ -195,7 +195,7 @@ public class CtrlFastQ {
 		}else{
 			FileOperate.createFolders(FileOperate.getParentPathName(totalExcelPath));
 		}
-		txtWrite = new TxtReadandWrite(totalExcelPath, true, true);
+		txtWrite = new TxtReadandWrite(totalExcelPath, true);
 		txtWrite.ExcelWrite(lsSummary);
 		txtWrite.close();
 		mapPrefix2ResultQC.put("Summary", totalExcelPath);

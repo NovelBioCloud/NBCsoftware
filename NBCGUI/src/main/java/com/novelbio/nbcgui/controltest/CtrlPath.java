@@ -104,6 +104,7 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 			String picPvalueName = getSavePicPvalueName(prix);
 			ImageUtils.saveBufferedImage(bfImageLog2Pic,picPvalueName );
 			XdocTmpltPic xdocTmpltPic = new XdocTmpltPic(picPvalueName);
+			xdocTmpltPic.setHeight(600);
 			reportPathWay.addXdocTempPic(xdocTmpltPic);
 			BufferedImage bfImageEnrichment = entry.getValue().getImageEnrichment();
 			if (bfImageEnrichment == null) continue;
@@ -111,6 +112,7 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 			ImageUtils.saveBufferedImage(bfImageEnrichment, picEnrichmentName);
 			lsResultPic.add(picEnrichmentName);
 			XdocTmpltPic xdocTmpltPic1 = new XdocTmpltPic(picEnrichmentName);
+			xdocTmpltPic1.setHeight(500);
 			reportPathWay.addXdocTempPic(xdocTmpltPic1);
 		}
 	}
