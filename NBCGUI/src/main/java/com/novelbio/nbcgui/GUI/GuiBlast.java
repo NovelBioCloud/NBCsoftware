@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -268,6 +269,11 @@ public class GuiBlast extends JPanel implements GuiNeedOpenFile {
 			blast.setSubTaxID(taxIDS);
 			if (chckbxSavetodb.isSelected()) {
 				blast.setTxtWriteExcep(FileOperate.changeFileSuffix(content[0].trim(), "_cannotUpDate", null));
+			}
+			String info = blast.checkFile(content[0]);
+			if (info != null) {
+				JOptionPane.showMessageDialog(null, info, "error", JOptionPane.ERROR_MESSAGE);
+				break;
 			}
 			blast.updateFile(content[0]);
 		}

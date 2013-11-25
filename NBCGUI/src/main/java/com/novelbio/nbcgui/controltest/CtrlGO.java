@@ -87,7 +87,9 @@ public class CtrlGO extends CtrlGOPath {
 		if (goLevel > 0) {
 			suffix = suffix + "_" + goLevel + "Level";
 		}
-		return FileOperate.changeFileSuffix(fileName, suffix, "txt");
+		String bgName = FileOperate.changeFileSuffix(fileName, suffix, "txt");
+		bgName = FileOperate.changeFilePrefix(bgName, ".", null);
+		return bgName;
 	}
 	
 	@Override
