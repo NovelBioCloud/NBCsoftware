@@ -164,7 +164,7 @@ public class XdocTmpltExcel implements Serializable{
 			Configuration cf = new Configuration();
 			cf.setClassicCompatible(true);
 			// 模板存放路径
-			cf.setDirectoryForTemplateLoading(new File(EnumReport.Excel.getTempPath()));
+			cf.setClassForTemplateLoading(EnumReport.class,EnumReport.Excel.getTempPath());
 			cf.setEncoding(Locale.getDefault(), "UTF-8");
 			// 模板名称
 			Template template = cf.getTemplate(EnumReport.Excel.getTempName());

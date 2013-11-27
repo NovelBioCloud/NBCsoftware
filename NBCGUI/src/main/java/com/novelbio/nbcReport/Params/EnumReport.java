@@ -1,6 +1,18 @@
 package com.novelbio.nbcReport.Params;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import org.springframework.core.io.ClassPathResource;
+
 import com.novelbio.base.dataOperate.DateUtil;
+
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 
 
 
@@ -58,10 +70,10 @@ public enum EnumReport {
 	 * 得到xdoc模板路径
 	 * 
 	 * @return
+	 * @throws IOException 
 	 */
-	public String getTempPath() {
-		String path = EnumReport.class.getClassLoader().getResource("xdocTemplate").getFile();
-		return path;
+	public String getTempPath() throws IOException {
+		return "xdocTemplate";
 	}
 	
 	public ReportBase getReportAll(){
