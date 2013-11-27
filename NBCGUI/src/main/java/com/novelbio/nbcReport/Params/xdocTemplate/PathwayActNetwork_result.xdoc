@@ -1,0 +1,87 @@
+ <#if no != 1>
+ 	 <para lineSpacing="4" breakPage="true" />
+ </#if>
+    <para lineSpacing="4" name="title">
+      <text fontName="黑体"  name="3" fontSize="16">3.2.${no} 信号通路调控网络构建（Pathway-Act-Network)</text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4">
+      <text>\t</text>
+      <text fontName="宋体">受体蛋白将细胞外信号转变为细胞内信号，经信号级联放大、分散和调节，最终产生一系列综合性的细胞应答，包括下游基因表达的调节、细胞内酶活性的变化、细胞骨架构型和DNA合成的改变等。这些变化并非都是由一种信号引起的，也可以通过几种信号的不同组合产生不同的反应。</text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4" name="title">
+      <text fontName="黑体" name="4" fontSize="16">3.2.${no}.1 方法</text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4">
+      <text>\t</text>
+      <text fontName="宋体">将所有pathway之间的相互调控关系整理成数据库，通过构建信号通路调控网络，从宏观层面看到了pathway之间的信号传递关系，在多个显著性pathway中发现受试验影响的核心pathway，以及实验影响的信号通路之间的调控机理</text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4" name="title">
+      <text fontName="黑体" name="4" fontSize="16">3.2.${no}.2 结果</text>
+     </para>
+      <para lineSpacing="4" >
+      <text fontName="宋体" fontSize="14">\t通过信号通路调控网络的构建分析，${result}</text>
+    </para>
+      <para lineSpacing="4" >
+     <text fontName="宋体" fontSize="14">\t基因功能分析具体结果获取路径如下：</text>
+    </para>
+    <#list lsResultFiles as resultFile>
+    	<para lineSpacing="4" >
+    	<text fontName="宋体" fontSize="14">\t${resultFile}</text>
+    	</para>
+    </#list>
+    <para lineSpacing="4" />
+     <para lineSpacing="4" />
+        <#list lsExcels as excel>
+    	${excel}
+		<#if !excel_has_next >
+		  
+    <para lineSpacing="4" align="center"/>
+    <para lineSpacing="4" align="center">
+      <text fontName="宋体">下表</text>
+      <text fontName="宋体">功能调控网络</text>
+      <text fontName="宋体">列表说明</text>
+    </para>
+    <para lineSpacing="4" align="center">
+      <table cols="200,415" rows="28,48,100">
+        <cell col="1" name="x670"  fillColor="#1e90ff"  color="#ffffff"  row="1">
+          <para lineSpacing="4" align="center" >
+            <text fontName="宋体" fontStyle="bold">Files</text>
+          </para>
+        </cell>
+        <cell col="2" name="x673"  fillColor="#1e90ff" color="#ffffff"  row="1">
+          <para lineSpacing="4" align="center">
+            <text fontName="宋体" fontStyle="bold">Description</text>
+          </para>
+        </cell>
+        <cell col="1" name="x676"   fillColor="#d3d3d3" color="#ffffff"   row="2">
+          <para lineSpacing="4">
+            <text fontName="宋体">Source&amp;Target&amp;Pathway Term</text>
+          </para>
+        </cell>
+        <cell col="2" name="x679"   fillColor="#d3d3d3" color="#ffffff"  row="2">
+          <para lineSpacing="4">
+            <text fontName="宋体">信号通路的条目</text>
+          </para>
+        </cell>
+        <cell col="1" name="x682"  fillColor="#d3d3d3" color="#ffffff" row="3">
+          <para lineSpacing="4" align="center">
+            <text fontName="宋体">Source Style&amp;Target Style&amp;Style</text>
+          </para>
+        </cell>
+        <cell col="2" name="x685"  fillColor="#d3d3d3" color="#ffffff" row="3">
+          <para lineSpacing="4">
+            <text fontName="宋体">Pathway Term的属性，up表示上调 ，down表示下调，All表示PathwayTerm中既有上调基因又有下调基因，up sig表示显著上调，down sig表示显著下调，All sig表示显著Pathway Term中既有上调基因又有下调基因。</text>
+          </para>
+        </cell>
+      </table>
+    </para>
+    	 	</#if>
+    </#list>
+    <para lineSpacing="4" />
+   <#list lsPictures as picture>
+	    ${picture}
+    </#list>

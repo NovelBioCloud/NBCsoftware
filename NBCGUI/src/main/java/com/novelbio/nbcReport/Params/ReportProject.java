@@ -1,7 +1,9 @@
 package com.novelbio.nbcReport.Params;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +12,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
+import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -231,7 +235,7 @@ public class ReportProject extends ReportBase {
 	public List<String> findAllImageSrc(String result) throws Exception {
 		List<String> lsImageSrcs = new ArrayList<String>();
 		Document doc = null;
-		String picTempPath = FileOperate.addSep(EnumReport.Picture.getTempPath()) + "picTemp.PNG";
+		String picTempPath = EnumReport.class.getResource(FileOperate.addSep(EnumReport.Picture.getTempPath())).getFile() + "picTemp.PNG";//EnumReport.class.getResource(FileOperate.addSep(EnumReport.Picture.getTempPath()) + "picTemp.PNG");
 		try {
 			// 读取并解析XML文档
 			// 下面的是通过解析xml字符串的
@@ -256,6 +260,17 @@ public class ReportProject extends ReportBase {
 
 		}
 		return lsImageSrcs;
+	}
+	public static void main(String[] args){
+		ReportProject reportProject = null;
+		try {
+			reportProject = new ReportProject("/home/novelbio/桌面/mongo");
+			reportProject.outputReport("/home/novelbio/桌面/faaaa.docx");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
 	}
 
 	/**
@@ -440,7 +455,7 @@ public class ReportProject extends ReportBase {
 		Configuration cf = new Configuration();
 		cf.setClassicCompatible(true);
 		// 模板存放路径
-		cf.setDirectoryForTemplateLoading(new File(getEnumReport().getTempPath()));
+		cf.setClassForTemplateLoading(EnumReport.class,getEnumReport().getTempPath());
 		cf.setEncoding(Locale.getDefault(), "UTF-8");
 		// 模板名称
 		Template template = cf.getTemplate("background_catalog.xdoc");

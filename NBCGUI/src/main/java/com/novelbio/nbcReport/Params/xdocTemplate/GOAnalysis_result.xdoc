@@ -1,0 +1,305 @@
+ 	<para lineSpacing="4" name="title" >
+      <text fontName="黑体" name="3" fontSize="16">3.2.${no} 基因功能分析（Gene Ontology Analysis）</text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4">
+      <text>\t</text>
+      <text fontName="宋体">GO-Analysis是基于基因注释数据库，检测差异基因显著功能的手段。因此，GO-Analysis的关键在两点：（1）拥有完备的数据库和较完整的GO注释；（2）用合理的算法检验GO的显著性富集。</text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4" name="title">
+      <text fontName="黑体" name="4" fontSize="16">3.2.${no}.1 方法</text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4">
+      <text>\t</text>
+      <text fontName="宋体">将预测得到的靶基因基于数据库进行GO注释，得到基因参与的所有GO，采用${testMethod}检验计算每个GO的显著性水平(P-Value)，对多重假设检验的结果进行校正并获得误判率(FDR)，从而筛选出差异基因富集的显著性GO。其中，${finderCondition}。</text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4" name="title">
+      <text fontName="黑体" name="4" fontSize="16">3.2.${no}.2 结果</text>
+    </para>
+    <para lineSpacing="4" />
+    <#list lsReportGOs as reportGO>
+	     <para lineSpacing="4">
+	      <text>\t</text>
+	      <text fontName="宋体">${reportGO_index+1}、通过对${reportGO.teamName}组进行基因功能分析，共得到</text>
+	      <text fontName="宋体" fontStyle="bold">${reportGO.upRegulation}</text>
+	      <text fontName="宋体">个显著上调的GO-Term和 </text>
+	      <text fontName="宋体" fontStyle="bold"> ${reportGO.downRegulation}</text>
+	      <text fontName="宋体">个显著下调的GO-Term。</text>
+	    </para>
+	     <para lineSpacing="4">
+	      <text>\t基因功能分析具体结果获取路径如下：</text>
+	    </para>
+	      <#list reportGO.setResultFiles as resultFile>
+	    	<para lineSpacing="4" >
+	    	<text fontName="宋体" fontSize="14">\t${resultFile}</text>
+	    	</para>
+	    </#list>
+	    <para lineSpacing="4">
+	      <text fontName="宋体">\t下图分别是基因功能分析中子表格的截图展示，表格中显著性GO和显著性GO对应的Gene用蓝白相间填充，其它表为说明。</text>
+	    </para>
+	    <#list reportGO.pictures as picture>
+			${picture}
+		 </#list>
+	    <para lineSpacing="4">
+	      <text>\t</text>
+	      <text fontName="宋体" fontSize="12">注：横轴------功能显著性水平（P-Value）的-log </text>
+	      <text fontName="宋体" fontSize="6">2</text>
+	      <text fontName="宋体" fontSize="12"> P值</text>
+	    </para>
+	    <para lineSpacing="4">
+	      <text>\t</text>
+	      <text fontName="宋体" fontSize="12">纵轴------Gene Ontology数据库中对应GO的条目名称</text>
+	    </para>
+	    <para lineSpacing="4"/>
+    </#list>
+
+    <para lineSpacing="4"/>
+    
+    <para lineSpacing="4" align="center">
+      <text fontName="宋体">基因功能列表说明</text>
+    </para>
+    <para lineSpacing="4" align="center">
+      <table cols="140,500"  rows="28,29,31,30,30,30,30,30,54,54,30,30,30,41">
+        <cell col="1" name="x330"   row="1"  fillColor="#1e90ff" color="#ffffff" >
+          <para lineSpacing="4" align="center">
+            <text fontName="宋体" fontStyle="bold">Name</text>
+          </para>
+        </cell>
+        <cell col="2" name="x333"  row="1"   fillColor="#1e90ff" color="#ffffff"  >
+          <para lineSpacing="4" align="center">
+            <text fontName="宋体" fontStyle="bold">Description</text>
+          </para>
+        </cell>
+        <cell col="1" name="x336"  row="2"   fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">GO ID</text>
+          </para>
+        </cell>
+        <cell col="2" name="x339"  row="2"   fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">Gene Ontology数据库中对应GO的索引序列号</text>
+          </para>
+        </cell>
+        <cell col="1" name="x346"  row="3"  fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">GO Term</text>
+          </para>
+        </cell>
+        <cell col="2" name="x349"  row="3"  fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">Gene Ontology数据库中对应GO的条目名称</text>
+          </para>
+        </cell>
+        <cell col="1" name="x355"  row="4"   fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">Dif Gene</text>
+          </para>
+        </cell>
+        <cell col="2" name="x359"  row="4"   fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">差异基因在某一GO中的数目</text>
+          </para>
+        </cell>
+        <cell col="1" name="x364"  row="5"  fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">All Dif Gene</text>
+          </para>
+        </cell>
+        <cell col="2" name="x367"  row="5"  fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">具有GO的所有差异基因数目</text>
+          </para>
+        </cell>
+        <cell col="1" name="x372"  row="6"   fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">Gene In GO</text>
+          </para>
+        </cell>
+        <cell col="2" name="x375"  row="6"   fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">某一GO中含有基因的总数目</text>
+          </para>
+        </cell>
+        <cell col="1" name="x380"  row="7"  fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">All Gene</text>
+          </para>
+        </cell>
+        <cell col="2" name="x383"  row="7"  fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">芯片上所有有GO注释的基因的总数</text>
+          </para>
+        </cell>
+        <cell col="1" name="x388"  row="8"   fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">P-Value</text>
+          </para>
+        </cell>
+        <cell col="2" name="x391"  row="8"   fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">基因功能的显著性水平， P值越低，GO越显著</text>
+          </para>
+        </cell>
+        <cell col="1" name="x398"  row="9"  fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">FDR</text>
+          </para>
+        </cell>
+        <cell col="2" name="x401"  row="9"  fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">用BH算法对多重假设检验的P-Value结果进行校正后的值， FDR越低，误判率越低，说明该GO的显著性水平越可信</text>
+          </para>
+        </cell>
+        <cell col="1" name="x412"  row="10"   fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">Enrichment</text>
+          </para>
+        </cell>
+        <cell col="2" name="x415"  row="10"   fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">表示GO的富集程度，在相同的P值下，富集度大的GO在实验中体现的越多，该功能所属基因对实验的影响越具体。</text>
+          </para>
+        </cell>
+        <cell col="1" name="x418"  row="11"  fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">-log </text>
+            <text fontName="宋体" fontSize="6">2</text>
+            <text fontName="宋体"> P</text>
+          </para>
+        </cell>
+        <cell col="2" name="x424"  row="11"  fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4" >
+            <text fontName="宋体">表示对P-Value进行-log2的计算，P-Value越小，-log </text>
+            <text fontName="宋体" fontSize="6">2</text>
+            <text fontName="宋体"> P越大</text>
+          </para>
+        </cell>
+        <cell col="1" name="x437"  row="12"   fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">Query ID</text>
+          </para>
+        </cell>
+        <cell col="2" name="x440"  row="12"   fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">NovelBio数据库中对应的ID</text>
+          </para>
+        </cell>
+        <cell col="1" name="x444"  row="13"  fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">Description</text>
+          </para>
+        </cell>
+        <cell col="2" name="x447"  row="13"  fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">基因的描述</text>
+          </para>
+        </cell>
+        <cell col="1" name="x450"  row="14"   fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4" align="center">
+            <text fontName="宋体">Evidence</text>
+          </para>
+        </cell>
+        <cell col="2" name="x453"  row="14"   fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">功能条目的证实手段</text>
+          </para>
+        </cell>
+      </table>
+    </para>
+     <para lineSpacing="4"/>
+     <para lineSpacing="4"/>
+    <para lineSpacing="4" align="center">
+      <text fontName="宋体">基因功能分析各子表格内容说明</text>
+    </para>
+    <para lineSpacing="4" align="center">
+      <table cols="110,520" rows="28,31,31,31,31,77,54,54">
+        <cell col="1" name="x466"  row="1"   fillColor="#1e90ff" color="#ffffff" >
+          <para lineSpacing="4" align="center">
+            <text fontName="宋体" fontStyle="bold">Files</text>
+          </para>
+        </cell>
+        <cell col="2" name="x469"  row="1"   fillColor="#1e90ff" color="#ffffff" >
+          <para lineSpacing="4" align="center">
+            <text fontName="宋体" fontStyle="bold">Description</text>
+          </para>
+        </cell>
+        <cell col="1" name="x472"  row="2"   fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">Up GO_Result</text>
+          </para>
+        </cell>
+        <cell col="2" name="x475"  row="2"   fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">差异表达上调的miRNA所对靶基因参与的GO</text>
+          </para>
+        </cell>
+        <cell col="1" name="x481"  row="3"  fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">Down GO_Result</text>
+          </para>
+        </cell>
+        <cell col="2" name="x484"  row="3"  fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">差异表达下调的miRNA所对靶基因参与的GO</text>
+          </para>
+        </cell>
+        <cell col="1" name="x490"  row="4"   fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">Up Gene2GO</text>
+          </para>
+        </cell>
+        <cell col="2" name="x493"  row="4"   fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">差异表达上调的miRNA所对靶基因参与的GO对应的基因</text>
+          </para>
+        </cell>
+        <cell col="1" name="x499"  row="5"  fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">Down Gene2GO</text>
+          </para>
+        </cell>
+        <cell col="2" name="x502"  row="5"  fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">差异表达下调的miRNA所对靶基因参与的GO对应的基因</text>
+          </para>
+        </cell>
+        <cell col="1" name="x508"  row="6"   fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">Up-GO-Fig-P</text>
+          </para>
+        </cell>
+        <cell col="2" name="x511"  row="6"   fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">差异表达上调的miRNA所对靶基因显著参与的GO的管状图。横轴是功能显著性水平（P-Value）的-log </text>
+            <text fontName="宋体" fontSize="6">2</text>
+            <text fontName="宋体"> P值，纵轴是Gene Ontology数据库中对应GO的条目名称。</text>
+          </para>
+        </cell>
+        <cell col="1" name="x518"  row="7"  fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">Down-GO-Fig</text>
+          </para>
+        </cell>
+        <cell col="2" name="x521"  row="7"  fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">差异表达下调的miRNA所对靶基因显著参与的GO的管状图。横轴、纵轴情况同“Up-GO-Fig-P”</text>
+          </para>
+        </cell>
+        <cell col="1" name="x526"  row="8"   fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">All-GO-Fig-E</text>
+          </para>
+        </cell>
+        <cell col="2" name="x529"  row="8"   fillColor="#d3d3d3" color="#ffffff" >
+          <para lineSpacing="4">
+            <text fontName="宋体">所有差异miRNA所对靶基因参与的显著性GO的管状图。横轴是功能显著性水平的Enrichment值，纵轴是Gene Ontology数据库中对应GO的条目名称。</text>
+          </para>
+        </cell>
+      </table>
+    </para>
+     <para lineSpacing="4"/>
+   
+

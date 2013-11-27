@@ -1,0 +1,147 @@
+ <#if no != 1>
+ 	 <para lineSpacing="4" breakPage="true" />
+ </#if>
+    <para lineSpacing="4" name="title" >
+      <text fontName="黑体" name="3" fontSize="16">3.2.${no} 基因间相互作用关系分析（Gene-Act-Network）</text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4">
+      <text>\t</text>
+      <text fontName="宋体">在基因有Pathway注释的情况下，虽然一个基因可能同时参与多个信号转导通路或者和多个基因有结合关系，将基因间关系拆解成一对一之后，基因和基因之间会形成对应的调控关系，将所有差异基因之间的相互调控关系整合在一起，就形成了基因间的相互作用关系网络，从而系统的研究差异基因间的调控关系。此分析方法不仅研究了信号转导的流程，更易于研究者发现实验影响下重要调控环节的相关基因。</text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4" name="title" >
+      <text fontName="黑体" name="4" fontSize="16">3.2.${no}.1 方法</text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4">
+      <text>\t</text>
+      <text fontName="宋体">对表达谱芯片的显著性Pathway中包含的基因进行基于KEGG的基因间相互作用关系网络整合，得到基因间的相互作用关系网络。</text>
+    </para>
+    <para lineSpacing="4" />
+    <para lineSpacing="4" name="title" >
+      <text fontName="黑体" name="4" fontSize="16">3.2.${no}.2 结果</text>
+    </para>
+    <para lineSpacing="4" />
+    <#list lsExcels as excel>
+    	${excel}
+		<#if !excel_has_next >
+    <para lineSpacing="4" align="center">
+      <text fontName="宋体">下表是基因间相互作用列表说明</text>
+    </para>
+    <para lineSpacing="4" align="center" >
+      <table cols="160,400" height="307" name="x6743" width="564" rows="28,31,31,31,31,31,31,31,31,31">
+        <cell col="1" name="x6744"  fillColor="#1e90ff"   color="#ffffff"   row="1">
+          <para lineSpacing="4">
+            <text fontName="宋体" fontStyle="bold">Name</text>
+          </para>
+        </cell>
+        <cell col="2" name="x6747"  fillColor="#1e90ff"   color="#ffffff"   row="1">
+          <para lineSpacing="4">
+            <text fontName="宋体" fontStyle="bold">Description</text>
+          </para>
+        </cell>
+        <cell col="1" name="x6750"  fillColor="#d3d3d3" color="#ffffff"   row="2">
+          <para lineSpacing="4" >
+            <text fontName="宋体">Source</text>
+          </para>
+        </cell>
+        <cell col="2" name="x6753"  fillColor="#d3d3d3" color="#ffffff"   row="2">
+          <para lineSpacing="4" >
+            <text fontName="宋体">上游基因</text>
+          </para>
+        </cell>
+        <cell col="1" name="x6756"   fillColor="#d3d3d3" color="#ffffff"  row="3">
+          <para lineSpacing="4">
+            <text fontName="宋体">Target</text>
+          </para>
+        </cell>
+        <cell col="2" name="x6759"   fillColor="#d3d3d3" color="#ffffff"  row="3">
+          <para lineSpacing="4" >
+            <text fontName="宋体">下游基因</text>
+          </para>
+        </cell>
+        <cell col="1" name="x6762"  fillColor="#d3d3d3" color="#ffffff"   row="4">
+          <para lineSpacing="4" >
+            <text fontName="宋体">Relation</text>
+          </para>
+        </cell>
+        <cell col="2" name="x6765"  fillColor="#d3d3d3" color="#ffffff"   row="4">
+          <para lineSpacing="4">
+            <text fontName="宋体">上下游基因之间的关系</text>
+          </para>
+        </cell>
+        <cell col="1" name="x6768"    fillColor="#d3d3d3" color="#ffffff"  row="5">
+          <para lineSpacing="4">
+            <text fontName="宋体">Gene ID</text>
+          </para>
+        </cell>
+        <cell col="2" name="x6771"   fillColor="#d3d3d3" color="#ffffff"  row="5">
+          <para lineSpacing="4" >
+            <text fontName="宋体">NCBI Gene Bank中对应Gene的索引序列号</text>
+          </para>
+        </cell>
+        <cell col="1" name="x6777"  fillColor="#d3d3d3" color="#ffffff"   row="6">
+          <para lineSpacing="4" >
+            <text fontName="宋体">Gene Symbol</text>
+          </para>
+        </cell>
+        <cell col="2" name="x6780"  fillColor="#d3d3d3" color="#ffffff"   row="6">
+          <para lineSpacing="4" >
+            <text fontName="宋体">NCBI Gene Bank中的基因名称</text>
+          </para>
+        </cell>
+        <cell col="1" name="x6784"   fillColor="#d3d3d3" color="#ffffff"  row="7">
+          <para lineSpacing="4" >
+            <text fontName="宋体">Description</text>
+          </para>
+        </cell>
+        <cell col="2" name="x6787"   fillColor="#d3d3d3" color="#ffffff"  row="7">
+          <para lineSpacing="4" >
+            <text fontName="宋体">基因的描述</text>
+          </para>
+        </cell>
+        <cell col="1" name="x6790"  fillColor="#d3d3d3" color="#ffffff"   row="8">
+          <para lineSpacing="4" >
+            <text fontName="宋体">Indegree</text>
+          </para>
+        </cell>
+        <cell col="2" name="x6793"  fillColor="#d3d3d3" color="#ffffff"   row="8">
+          <para lineSpacing="4" >
+            <text fontName="宋体">输入基因节点的度</text>
+          </para>
+        </cell>
+        <cell col="1" name="x6796"   fillColor="#d3d3d3" color="#ffffff"  row="9">
+          <para lineSpacing="4">
+            <text fontName="宋体">Outdegree</text>
+          </para>
+        </cell>
+        <cell col="2" name="x6799"   fillColor="#d3d3d3" color="#ffffff"  row="9">
+          <para lineSpacing="4" >
+            <text fontName="宋体">输出基因节点的度</text>
+          </para>
+        </cell>
+        <cell col="1" name="x6802"  fillColor="#d3d3d3" color="#ffffff"   row="10">
+          <para lineSpacing="4" >
+            <text fontName="宋体">Degree</text>
+          </para>
+        </cell>
+        <cell col="2" name="x6805"  fillColor="#d3d3d3" color="#ffffff"   row="10">
+          <para lineSpacing="4">
+            <text fontName="宋体">基因节点的度</text>
+          </para>
+        </cell>
+      </table>
+    </para>
+       	 	</#if>
+    </#list>
+    <#list lsPictures as picture>
+	    ${picture}
+  	<#if !picture_has_next >
+    
+    <para lineSpacing="4" align="center">
+      <img height="27" name="x6814" left="955" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgwAAAAbCAIAAACfqEBSAAAEkUlEQVR42u2cvVXkMBDHXQIlEFKDo81JaID3iPbRAeFSgjNCSiBzSgkUQLAlXAl3YuW1ZkYzsrzW+uP4/4J7/pK80mjmL43FVX8BAAAAgwpdAAAAACIBAAAAIgEAAAAiAQAAACIBAADb4M8JiAQAAACFt7e35+dniAQAAACF9/f3p6cniMSFHI/HwjW2+307tkRVjS0zqfh307Rlm1D8p07sE5DuWk/dfLuxsHf/rpDvpv75jRgEy4jEkAPq98lVd1jHI8uq9jJ/n0kkDofD7e2t68SSQ7vOcLuhQH3V4snS2U24QlxoEBKuH3l72/o4XK9TJLrfB5FY4UpiUMD9RGRoZE329/lEws+qykiFm5fVOSF29sVDvnlym7DgMgNM8G3Rxe7aajsdIrFSkcixjb6SKOvvc4tEEalo965fDFfs3uBuhBP/2Lm3+uunq2SaFxIE7DFRXCQTvIV6ze8OznYzVcJqgqhXnCoXZKvluLhCoxbmeDweND5tZt1z8tOLia6KLeiNcDYNGbm9iU4PdwVJ1epgOR2HOWjCiGFoYNqwdLrJDiC1YjuZbmq7ARM9UMbfpUjsdrtqLpxU0G8V/mJWx4bwTr2xF9U++AYd5is31lddurh/9ucg1GMU795LwrxQm+5RQyWMJpykIxyIU/29stXsp16nUcviIr4qEjubm5ubxCC0Sj08PPiav76+8kdpMo0Yd3LvxiS49zG/Nz/zcnlbGwyxnYURxe1NioQbCZ9r4uXl5fHxceRQIaHCMJO4GIcyMknw379ktRP9fZmVhMNJrvianSkSZOHO52zuTA51tlijJ+Q4DuMs7CrF2Qqv70tWJX1TrBJmE4S/ilP1vUqr1TVq0Ub9R7hBaPn8x8eHF4lRU5lUzB3sZPoEEwn2gcNPILSqTJGQRpRVbtKyTrx3a+Lu7u7+/n5UQNMdLG07dqiNDdtvL/P3BUQiloex6zNOIoiZIhE6qW34WkSuv+LiwRTMMLZdFBHSm0BuivTSeYIQvVd18KilxRsFLkk3DXdytkgYVeWKBCt+vvj6+grrzZxuKioS6kxwqr+7UTGrSEyTB56QIQFQ3QzWtm1SJLx6NmFnoiKytggb3a7GU6kSiSYYcaY7Vd+rtFodY4UbBQbmMfFKzl0Z7OQ8kejsrlQ1SSTAxkViqNil/j6TSLjF+6A8ZKzO4tyKT6KFdvdptqZNryRkXoAv1ZLxlEYBtdfFm5hKJJsQ9ON0JE7t9/JWW18iijbqt5KVFCWJYm50tZNtkYhTA+xiqipyWzMi/XICy15HJEamm1RfGyMS6gyhhL9X23E/vitJJm7IViU1W3N+lAXvmp91Zev+275ZXG4oIueN3GtEVGKoCfwPsMTfY2nvFb+c7YhiuxvKNwoiMej9Wjox0cktSQw2NEdI85OpXW1shHUm6wyvGFFmPaETs4tEcEDV1wzbCbfVt8tVbI4wzd/x33IAsP781Xr/FA9MSTdtY2IE0wIAkQAQCYgEABtVCOSDtoHfTg2RAAAA8IuASAAAAIBIAAAAgEgAAACASAAAAIBIAAAAWJR/loOqD167+WYAAAAASUVORK5CYII=" top="174" width="524"/>
+    </para>
+    </#if>
+      </#list>
+    

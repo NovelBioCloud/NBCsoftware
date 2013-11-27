@@ -47,7 +47,7 @@ public abstract class ReportBase  implements Cloneable, Serializable {
 			Configuration cf = new Configuration();
 			cf.setClassicCompatible(true);
 			// 模板存放路径
-			cf.setDirectoryForTemplateLoading(new File(getEnumReport().getTempPath()));
+			cf.setClassForTemplateLoading(EnumReport.class,getEnumReport().getTempPath());
 			cf.setEncoding(Locale.getDefault(), "UTF-8");
 			// 模板名称
 			Template template = cf.getTemplate(getEnumReport().getTempName());
