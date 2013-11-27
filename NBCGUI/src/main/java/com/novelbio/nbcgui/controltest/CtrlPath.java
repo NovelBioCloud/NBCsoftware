@@ -52,7 +52,9 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 				suffix = suffix + "_" + i;
 			}
 		}
-		return FileOperate.changeFileSuffix(fileName, suffix, "txt");
+		String bgName = FileOperate.changeFileSuffix(fileName, suffix, "txt");
+		bgName = FileOperate.changeFilePrefix(bgName, ".", null);
+		return bgName;
 	}
 	
 	public ReportPathWay getReportPathWay() {
