@@ -15,7 +15,6 @@ import com.novelbio.nbcReport.EnumTableType;
 import com.novelbio.nbcReport.XdocTmpltExcel;
 import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportDifGene;
-import com.novelbio.nbcgui.controlseq.CopeFastq;
 
 public class CtrlDifGene {
 	DiffExpAbs diffExpAbs;
@@ -92,31 +91,14 @@ public class CtrlDifGene {
 		return reportDifGene;
 	}
 	
-	/** 返回预测的文件名
+	/** 
+	 * 输入比较的文件名和组后，
+	 * 返回预测的文件名
 	 * @param copeFastq
 	 * @param isFilter 是否过滤，如果不过滤就直接合并
 	 * @return
 	 */
-	public static HashMultimap<String, String> getPredictMapPrefix2Result(CopeFastq copeFastq, String outPrefix, boolean isFilter) {
-		copeFastq.setMapCondition2LsFastQLR();
-
-		HashMultimap<String, String> mapPrefix2LsFilteredFile = HashMultimap.create();
-		outPrefix = FoldeCreate.getInFold(outPrefix, EnumReport.FastQC.getResultFolder());
-		for (String prefix : copeFastq.getLsPrefix()) {
-			List<String[]> lsFastQLR = copeFastq.getMapCondition2LsFastQLR().get(prefix);
-			if (!isFilter && lsFastQLR.size() < 2) {
-				mapPrefix2LsFilteredFile.put(prefix, lsFastQLR.get(0)[0]);
-				if (lsFastQLR.get(0).length > 1) {
-					mapPrefix2LsFilteredFile.put(prefix, lsFastQLR.get(0)[1]);
-				}
-				continue;
-			}
-			String[] fastqName = createCombineFQname(isFilter, outPrefix, prefix, lsFastQLR);
-			mapPrefix2LsFilteredFile.put(prefix, fastqName[0]);
-			if (fastqName != null) {
-				mapPrefix2LsFilteredFile.put(prefix, fastqName[1]);
-			}
-		}
-		return mapPrefix2LsFilteredFile;
+	public HashMultimap<String, String> getPredictMapPrefix2Result() {
+		return diffExpAbs.getPredictMapPrefix2Result();
 	}
 }

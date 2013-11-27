@@ -12,6 +12,7 @@ import java.util.Set;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.google.common.collect.HashMultimap;
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.base.FoldeCreate;
@@ -261,4 +262,5 @@ public class CtrlGOall implements CtrlTestGOInt {
 	public List<String> getLsResultPic() {
 		return lsResultPic;
 	}
+	
 }

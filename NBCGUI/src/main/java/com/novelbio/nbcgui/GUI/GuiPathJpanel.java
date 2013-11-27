@@ -108,7 +108,7 @@ public class GuiPathJpanel extends JPanel{
 		scrollPaneBlast = new JScrollPaneData();
 		scrollPaneBlast.setBounds(12, 385, 174, 138);
 		JComboBoxData<Species> cmbSpeciesBlast = new JComboBoxData<Species>();
-		cmbSpeciesBlast.setMapItem(Species.getSpeciesName2Species(Species.KEGGNAME_SPECIES));
+		cmbSpeciesBlast.setMapItem(Species.getSpeciesName2Species(Species.ALL_SPECIES));
 		scrollPaneBlast.setTitle(new String[]{"BlastSpecies"});
 		scrollPaneBlast.setItem(0, cmbSpeciesBlast);
 		add(scrollPaneBlast);
@@ -310,8 +310,8 @@ public class GuiPathJpanel extends JPanel{
 		{
 			jCombSelSpePath = new JComboBoxData<Species>();
 			jCombSelSpePath.setBounds(12, 112, 174, 23);
-			jCombSelSpePath.setEditable(true);
-			jCombSelSpePath.setMapItem(Species.getSpeciesName2Species(Species.KEGGNAME_SPECIES, true, null));
+			jCombSelSpePath.setEditable(false);
+			jCombSelSpePath.setMapItem(Species.getSpeciesName2Species(Species.ALL_SPECIES, true, null));
 		}
 	}
 	

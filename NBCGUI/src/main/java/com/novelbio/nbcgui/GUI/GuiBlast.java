@@ -272,7 +272,7 @@ public class GuiBlast extends JPanel implements GuiNeedOpenFile {
 			}
 			String info = blast.checkFile(content[0]);
 			if (info != null) {
-				JOptionPane.showMessageDialog(null, info, "error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,content[0].trim() + "cannot update\n" + info, "error", JOptionPane.ERROR_MESSAGE);
 				break;
 			}
 			blast.updateFile(content[0]);

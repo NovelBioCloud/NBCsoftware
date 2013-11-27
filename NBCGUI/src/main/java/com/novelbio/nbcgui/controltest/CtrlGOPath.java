@@ -6,9 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 
@@ -31,7 +28,6 @@ import com.novelbio.nbcReport.XdocTmpltExcel;
 
 public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	private static final Logger logger = Logger.getLogger(CtrlGOPath.class);
-	private static ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1, 8, 1000, TimeUnit.MICROSECONDS, new ArrayBlockingQueue<Runnable>(5000));
 	
 	FunctionTest functionTest = null;
 	
@@ -426,10 +422,6 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		return null;
 	}
 	
-	/** 获得做GO的线程池，线程池最大容量5000 */
-	public static ThreadPoolExecutor getThreadPoolExecutor() {
-		return threadPoolExecutor;
-	}
 }
 
 class GoPathInfo {

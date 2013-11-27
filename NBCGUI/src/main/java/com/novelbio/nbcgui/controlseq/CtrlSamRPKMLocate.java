@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.HashMultimap;
 import com.novelbio.GuiAnnoInfo;
 import com.novelbio.analysis.seq.AlignSeq;
 import com.novelbio.analysis.seq.FormatSeq;
@@ -439,7 +440,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 //			FileOperate.createFolders(tmpGeneStructure);
 //			String tmpGeneStructure = tmpGeneStructure + prefix;
 			String tmpGeneStructure = resultGeneStructure + prefix;
-			if (gffChrAbs.getTaxID() != 0) {
+			if (gffChrAbs.getGffHashGene() != null) {
 				GffChrStatistics gffChrStatistics = mapPrefix2LocStatistics.get(prefix);
 
 				String outStatistics =tmpGeneStructure + "_GeneStructure.txt";
@@ -454,10 +455,8 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 //			tmpSamResult = tmpSamResult + prefix;
 			String tmpSamResult = resultSamPrefix + prefix;
 			SamFileStatistics samFileStatistics = mapPrefix2Statistics.get(prefix);
-			String outSamStatistics = tmpSamResult + "_MappingStatistics.txt";
-			TxtReadandWrite txtWriteStatistics = new TxtReadandWrite(outSamStatistics, true);
-			txtWriteStatistics.ExcelWrite(samFileStatistics.getMappingInfo());
-			txtWriteStatistics.close();
+			SamFileStatistics.savePic(tmpSamResult, samFileStatistics);
+			SamFileStatistics.saveExcel(tmpSamResult, samFileStatistics);
 		}
 	}
 	
@@ -566,5 +565,63 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			guiSamStatistics.getBtnRun().setEnabled(true);
 		}
 	}
+	
+	/**
+	 * 预判结果文件<br>
+	 * key: 文件类型<br>
+	 * value：结果文件名
+	 * @return
+	 */
+	public static HashMultimap<String, String> getPredictMapPrefix2Result(int taxID, boolean isCountExpression,
+			boolean isGeneStructureStatistics, boolean isFPKM, boolean isCountNCrna,
+			boolean isSamStatistics, String resultPrefix, List<String> lsPrefix) {
+		HashMultimap<String, String> mapPrefix2File = HashMultimap.create();
+		String resultExpPrefix = FoldeCreate.getInFold(resultPrefix, EnumReport.GeneExp.getResultFolder());
+		String resultGeneStructure = FoldeCreate.getInFold(resultPrefix, EnumReport.GeneStructure.getResultFolder());
+		String resultSamPrefix = FoldeCreate.getInFold(resultPrefix, EnumReport.SamStatistics.getResultFolder());
+		for (String prefix : lsPrefix) {
+			if (isGeneStructureStatistics) {
+				String tmpGeneStructure = resultGeneStructure + prefix + "_GeneStructure.txt";
+				mapPrefix2File.put(prefix + "_GeneStructure", tmpGeneStructure);
+			}
+			if (isSamStatistics) {
+				String tmpSamResult = resultSamPrefix + prefix;
+				mapPrefix2File.put(prefix + "_SamStatisticPic", SamFileStatistics.getSavePic(tmpSamResult));
+				mapPrefix2File.put(prefix + "_SamStatisticTab", SamFileStatistics.getSaveExcel(tmpSamResult));
+			}
+		}
+		
+		if (isCountExpression) {
+			String suffixRPKM = "All_RPKM", suffixUQRPKM = "All_UQRPKM", 
+					suffixCounts = "All_Counts", tpm = "All_TPM", ncrna = "All_ncRNA_Statistics;";
+			if (isFPKM) {
+				suffixRPKM = "All_FPKM";
+				suffixUQRPKM = "All_UQFPKM";
+				suffixCounts = "All_Fragments";
+			}
+			if (!resultExpPrefix.endsWith("/") && !resultExpPrefix.endsWith("\\")) {
+				suffixRPKM = "_" + suffixRPKM;
+				suffixUQRPKM = "_" + suffixUQRPKM;
+				suffixCounts = "_" + suffixCounts;
+				tpm = "_" + tpm;
+			}
+			String outTPM = FileOperate.changeFileSuffix(resultExpPrefix, tpm, "txt");
+			String outRPKM = FileOperate.changeFileSuffix(resultExpPrefix, suffixRPKM, "txt");
+			String outNCrna = FileOperate.changeFileSuffix(resultExpPrefix, ncrna, "txt");
+			String outCounts = FileOperate.changeFileSuffix(resultExpPrefix, suffixCounts, "txt");
+			String outUQRPKM = FileOperate.changeFileSuffix(resultExpPrefix, suffixUQRPKM, "txt");
+			
+			if (isCountNCrna) {
+				mapPrefix2File.put("ncRNAstatistics", outNCrna);
+			}
+			mapPrefix2File.put("exp_tpm", outTPM);
+			mapPrefix2File.put("exp_rpkm", outRPKM);
+			mapPrefix2File.put("exp_uqrpkm", outUQRPKM);
+			mapPrefix2File.put("exp_counts", outCounts);
 
+		}
+		
+		return mapPrefix2File;
+	}
+	
 }

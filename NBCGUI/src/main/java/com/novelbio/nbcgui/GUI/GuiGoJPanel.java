@@ -169,7 +169,7 @@ public class GuiGoJPanel extends JPanel{
 		
 		sclBlast = new JScrollPaneData();
 		JComboBoxData<Species> cmbSpeciesBlast = new JComboBoxData<Species>();
-		cmbSpeciesBlast.setMapItem(Species.getSpeciesName2Species(Species.KEGGNAME_SPECIES));
+		cmbSpeciesBlast.setMapItem(Species.getSpeciesName2Species(Species.ALL_SPECIES));
 		sclBlast.setTitle(new String[]{"BlastSpecies"});
 		sclBlast.setItem(0, cmbSpeciesBlast);
 		sclBlast.setBounds(12, 426, 215, 118);
@@ -382,7 +382,7 @@ public class GuiGoJPanel extends JPanel{
 		{
 			cmbSelSpeGo = new JComboBoxData<Species>();
 			cmbSelSpeGo.setBounds(131, 77, 173, 23);
-			cmbSelSpeGo.setMapItem(Species.getSpeciesName2Species(Species.KEGGNAME_SPECIES, true, null));
+			cmbSelSpeGo.setMapItem(Species.getSpeciesName2Species(Species.ALL_SPECIES, true, null));
 //			cmbSelSpeGo.setEditable(true);
 		}
 	}
