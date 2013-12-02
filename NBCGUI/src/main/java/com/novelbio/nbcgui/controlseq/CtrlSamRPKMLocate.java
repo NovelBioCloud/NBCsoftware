@@ -228,7 +228,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			if (isSamStatistics) {
 				SamFile samFile = (SamFile)lsAlignSeqReadings.get(0).getFirstSamFile();
 				if (samFile != null) {
-					setSamStatistics(prefix, lsAlignmentRecorders, samFile.getMapChrIDLowcase2Length());
+					setSamStatistics(prefix, lsAlignmentRecorders, samFile.getMapChrID2Length());
 				}
 			}
 			
@@ -271,11 +271,11 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	}
 	
 	/** 统计geneStructure的模块 */
-	private void setSamStatistics(String prefix, List<AlignmentRecorder> lsAlignmentRecorders, Map<String, Long> mapChrIDlowcase2Len) {
+	private void setSamStatistics(String prefix, List<AlignmentRecorder> lsAlignmentRecorders, Map<String, Long> mapChrID2Len) {
 		SamFileStatistics samFileStatistics = new SamFileStatistics(prefix);
 		samFileStatistics.setCorrectChrReadsNum(chrReadsCorrect);
 		lsAlignmentRecorders.add(samFileStatistics);
-		samFileStatistics.setStandardData(mapChrIDlowcase2Len);
+		samFileStatistics.setStandardData(mapChrID2Len);
 		mapPrefix2Statistics.put(prefix, samFileStatistics);
 	}
 	

@@ -200,6 +200,7 @@ public class CtrlDNAMapping {
 		
 		SamFile samFile = mapSoftware.mapReads();
 		samFileStatistics = new SamFileStatistics(prefix);
+		samFileStatistics.setStandardData(samFile.getMapChrID2Length());
 		AlignSeqReading alignSeqReading = new AlignSeqReading(samFile);
 		alignSeqReading.addAlignmentRecorder(samFileStatistics);
 		alignSeqReading.run();

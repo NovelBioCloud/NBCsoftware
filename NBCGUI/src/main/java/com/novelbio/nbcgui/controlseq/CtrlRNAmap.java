@@ -212,7 +212,7 @@ public class CtrlRNAmap {
 	public static Map<String, SoftWare> getMapRNAmapType() {
 		Map<String, SoftWare> mapName2Type = new LinkedHashMap<>();
 		mapName2Type.put("Tophat", SoftWare.tophat);
-		mapName2Type.put("MapSplicer", SoftWare.mapsplice);
+		mapName2Type.put("MapSplice", SoftWare.mapsplice);
 		mapName2Type.put("RSEM", SoftWare.rsem);
 		return mapName2Type;
 	}
