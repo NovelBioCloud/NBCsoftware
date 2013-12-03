@@ -43,7 +43,8 @@ public enum EnumReport {
 	Project("Novelbio_Result",null),
 	Picture("Picture",null),
 	Excel("Excel",null),
-	MiRNASeqAnalysis("MiRNASeqAnalysis_result",null);
+	MiRNASeqAnalysis("MiRNASeqAnalysis_result",null),
+	SamConvert("SamConvert_result", null);
 	String tempName;
 	ReportBase reportBase;
 	EnumReport(String tempName,ReportBase reportBase) {
