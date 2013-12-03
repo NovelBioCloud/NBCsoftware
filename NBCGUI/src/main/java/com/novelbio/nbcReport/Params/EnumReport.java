@@ -36,6 +36,7 @@ public enum EnumReport {
 	ReconstructTranscriptome("ReconstructTranscriptome_result", null),
 	GOTree("GOTrees_result",null),
 	GeneActNetwork("GeneActNetwork_result",null),
+	MiRNATargetPredict("MiRNATargetPredict_result",null),
 	MiRNATargetNetwork("MiRNATargetNetwork_result",null),
 	PathwayActNetwork("PathwayActNetwork_result",null),
 	CoExpNetLncRNA("CoExpNetLncRNA_result",null),
