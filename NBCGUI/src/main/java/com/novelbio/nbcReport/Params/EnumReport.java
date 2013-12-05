@@ -66,7 +66,7 @@ public enum EnumReport {
 	 * @return
 	 */
 	public String getReportRandomFileName(){
-		return "report_" + this.name() + DateUtil.getDateAndRandom();
+		return "report_" + this.name();
 	}
 	/**
 	 * 得到xdoc模板路径
