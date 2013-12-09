@@ -135,6 +135,8 @@ public class XdocTmpltExcel implements Serializable{
 	/**把所有的表格数据格式化*/
 	private List<List<String>> formatDataList(List<List<String>> lsAllDatas) {
 		List<List<String>> lsNewDatas = new ArrayList<List<String>>();
+		if(lsAllDatas.size() == 0)
+			return lsAllDatas;
 		List<String> lsTitles = lsAllDatas.get(0);
 		lsNewDatas.add(lsTitles);
 		for (int i = 1; i < lsAllDatas.size(); i++) {
