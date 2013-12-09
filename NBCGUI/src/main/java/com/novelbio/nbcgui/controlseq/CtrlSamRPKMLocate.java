@@ -185,7 +185,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		if (isCountExpression) {
 			FileOperate.createFolders(FileOperate.getPathName(resultExpPrefix));
 		}
-		if (isGeneStructureStatistics) {
+		if (isGeneStructureStatistics && gffChrAbs.getGffHashGene() != null) {
 			FileOperate.createFolders(FileOperate.getPathName(resultGeneStructure));
 		}
 		try {
@@ -222,7 +222,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 				
 				lsAlignmentRecorders.add(rpkMcomput);
 			}
-			if (isGeneStructureStatistics) {
+			if (isGeneStructureStatistics && gffChrAbs.getGffHashGene() != null) {
 				setGeneStructure(prefix, lsAlignmentRecorders, gffChrAbs);
 			}
 			if (isSamStatistics) {
@@ -249,7 +249,6 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
 		}
 		try {
 			writeExpToFile();

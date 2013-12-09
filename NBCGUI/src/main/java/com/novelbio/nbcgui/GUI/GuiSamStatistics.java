@@ -21,7 +21,6 @@ import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.database.service.SpringFactory;
 import com.novelbio.nbcgui.controlseq.CtrlSamPPKMint;
-import javax.swing.JComboBox;
 
 /**
  * 批量注释，各种注释
