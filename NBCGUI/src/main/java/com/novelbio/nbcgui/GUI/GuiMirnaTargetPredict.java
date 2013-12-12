@@ -1,21 +1,21 @@
 package com.novelbio.nbcgui.GUI;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.JButton;
 
 import com.novelbio.analysis.seq.genome.GffChrAbs;
-import com.novelbio.analysis.seq.mirna.MiRNAtargetRNAhybrid;
-import com.novelbio.analysis.seq.mirna.MiRNAtargetRNAhybrid.RNAhybridClass;
+import com.novelbio.analysis.seq.rnahybrid.RNAhybrid;
+import com.novelbio.analysis.seq.rnahybrid.RNAhybrid.RNAhybridClass;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JTextFieldData;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.nbcgui.controlseq.CtrlMiRNAtargetPredict;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class GuiMirnaTargetPredict  extends JPanel {
 
@@ -171,7 +171,7 @@ public class GuiMirnaTargetPredict  extends JPanel {
 		txtEnergy.setNumOnly();
 		txtScore.setNumOnly();
 		txtPvalue.setNumOnly(5);
-		cmbRNAhybridSpeciesType.setMapItem(MiRNAtargetRNAhybrid.getMapSpeciesType2HybridClass());
+		cmbRNAhybridSpeciesType.setMapItem(RNAhybrid.getMapSpeciesType2HybridClass());
 		txtEnergy.setText(15 + "");
 		txtScore.setText(140 + "");
 		txtPvalue.setText(0.001 + "");
