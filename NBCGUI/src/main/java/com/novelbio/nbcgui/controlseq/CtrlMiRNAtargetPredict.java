@@ -3,9 +3,8 @@ package com.novelbio.nbcgui.controlseq;
 import java.util.ArrayList;
 
 import com.novelbio.analysis.seq.genome.GffChrAbs;
-import com.novelbio.analysis.seq.mirna.MiRNAtargetMiranda;
-import com.novelbio.analysis.seq.mirna.MiRNAtargetRNAhybrid;
-import com.novelbio.analysis.seq.mirna.MiRNAtargetRNAhybrid.RNAhybridClass;
+import com.novelbio.analysis.seq.mirna.MirTargetMammal;
+import com.novelbio.analysis.seq.rnahybrid.RNAhybrid.RNAhybridClass;
 import com.novelbio.analysis.tools.compare.CombineTab;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
@@ -36,24 +35,22 @@ public class CtrlMiRNAtargetPredict {
 		ctrlMiRNAtargetPredict.setTargetScore(150);
 		ctrlMiRNAtargetPredict.predict();
 	}
-	MiRNAtargetMiranda miranda = new MiRNAtargetMiranda();
-	MiRNAtargetRNAhybrid miRNAtargetRNAhybrid = new MiRNAtargetRNAhybrid();
+	MirTargetMammal mirTargetMammal = new MirTargetMammal();
 	String txtMirTargetOverlap;
 	CombineTab combineTab;
 	/** 本方法和setInputUTR3File二选一 */
 	public void setGffChrAbs(GffChrAbs gffChrAbs) {
-		miranda.setGffChrAbs(gffChrAbs);
+		mirTargetMammal.setGffChrAbs(gffChrAbs);
 	}
 	/** 设定UTR3的序列，没有的话就从gffChrSeq中提取 */
 	public void setInputUTR3File(String inputUTR3seq) {
 		if (!FileOperate.isFileExistAndBigThanSize(inputUTR3seq, 10)) {
 			return;
 		}
-		miranda.setInputUTR3File(inputUTR3seq);
+		mirTargetMammal.setInputUTR3File(inputUTR3seq);
 	}
 	public void setInputMiRNAseq(String inputMiRNAseq) {
-		miranda.setInputMiRNAseq(inputMiRNAseq);
-		miRNAtargetRNAhybrid.setInputMiRNAseq(inputMiRNAseq);
+		mirTargetMammal.setInputMiRNAseq(inputMiRNAseq);
 	}
 	/**
 	 * 最后结果交集文件
@@ -61,46 +58,27 @@ public class CtrlMiRNAtargetPredict {
 	 */
 	public void setMirTargetOverlap(String txtMirTargetOverlap) {
 		this.txtMirTargetOverlap = txtMirTargetOverlap;
-		miranda.setOutFile(FileOperate.changeFilePrefix(txtMirTargetOverlap, "tmp_miranda_", null));
-		miRNAtargetRNAhybrid.setOutFile(FileOperate.changeFilePrefix(txtMirTargetOverlap, "tmp_RNAhybrid_", null));
+		mirTargetMammal.setOutFile(txtMirTargetOverlap);
 	}
 	/** RNAhybrid的物种类型 */
 	public void setSpeciesType(RNAhybridClass rAhybridClass) {
-		miRNAtargetRNAhybrid.setSpeciesType(rAhybridClass);
+		mirTargetMammal.setSpeciesType(rAhybridClass);
 	}
 	/** 默认0.01 */
 	public void setTargetPvalue(double targetPvalue) {
-		miRNAtargetRNAhybrid.setTargetPvalue(targetPvalue);
+		mirTargetMammal.setTargetPvalue(targetPvalue);
 	}
 	/** 默认150 */
 	public void setTargetScore(int targetScore) {
-		miranda.setTargetScore(targetScore);
+		mirTargetMammal.setScore(targetScore);
 	}
 	/** 默认-15，输入的数会取绝对值再加负号 */
 	public void setTargetEnergy(int targetEnergy) {
-		miranda.setTargetEnergy(targetEnergy);
-		miRNAtargetRNAhybrid.setTargetEnergy(targetEnergy);
+		mirTargetMammal.setEnergy(targetEnergy);
 	}
 	
 	public void predict() {
-		String UTR3file = miranda.getInput3UTRseq();
-		miRNAtargetRNAhybrid.setInputUTR3File(UTR3file);
-		
-		SoftWareInfo softWareInfo = new SoftWareInfo();
-		softWareInfo.setName(SoftWare.miranada);
-		miranda.setExePath(softWareInfo.getExePath());
-		softWareInfo.setName(SoftWare.RNAhybrid);
-		miRNAtargetRNAhybrid.setExePath(softWareInfo.getExePath());
-		miRNAtargetRNAhybrid.mirnaPredict();
-		miranda.mirnaPredict();
-		
-		ArrayList<String[]> lsOverlapTarget = overLap(miranda.getPredictResultFinal(), miRNAtargetRNAhybrid.getPredictResultFinal());
-		TxtReadandWrite txtOut = new TxtReadandWrite(txtMirTargetOverlap, true);
-		txtOut.ExcelWrite(lsOverlapTarget);
-		txtOut.close();
-		try {
-			combineTab.renderScriptAndDrawImage(FileOperate.changeFileSuffix(txtMirTargetOverlap, "_Ven", "tiff"), "", "");
-		} catch (Exception e) {}
+		mirTargetMammal.predict();
 	}
 	
 	private ArrayList<String[]> overLap(String txtInputFileMiranda, String txtInputFileMiRNAhybrid) {
