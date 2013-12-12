@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.HashMultimap;
+import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.diffexpress.DiffExpAbs;
 import com.novelbio.analysis.diffexpress.EnumDifGene;
 import com.novelbio.base.FoldeCreate;
@@ -16,7 +17,7 @@ import com.novelbio.nbcReport.XdocTmpltExcel;
 import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportDifGene;
 
-public class CtrlDifGene {
+public class CtrlDifGene implements IntCmdSoft {
 	DiffExpAbs diffExpAbs;
 	
 	
@@ -100,5 +101,10 @@ public class CtrlDifGene {
 	 */
 	public HashMultimap<String, String> getPredictMapPrefix2Result() {
 		return diffExpAbs.getPredictMapPrefix2Result();
+	}
+
+	@Override
+	public List<String> getCmdExeStr() {
+		return diffExpAbs.getCmdExeStr();
 	}
 }
