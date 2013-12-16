@@ -73,8 +73,12 @@ public class CtrlFastQ {
 	public void setReadsLenMin(int readsLenMin) {
 		fastQfilter.setFilterParamReadsLenMin(readsLenMin);
 	}
-	public void setTrimNNN(boolean trimNNN) {
-		fastQfilter.setFilterParamTrimNNN(trimNNN);
+	/**
+	 * @param trimNNN 是否过滤两端低质量序列
+	 * @param qualityCutoff cutoff为多少
+	 */
+	public void setTrimNNN(boolean trimNNN, int qualityCutoff) {
+		fastQfilter.setFilterParamTrimNNN(trimNNN, qualityCutoff);
 	}
 	
 	public void setOutFilePrefix(String outFilePrefix) {

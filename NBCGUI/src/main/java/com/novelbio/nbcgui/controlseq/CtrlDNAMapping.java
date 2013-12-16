@@ -1,5 +1,6 @@
 package com.novelbio.nbcgui.controlseq;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.HashMultimap;
+import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.seq.FormatSeq;
 import com.novelbio.analysis.seq.mapping.MapBowtie;
 import com.novelbio.analysis.seq.mapping.MapDNA;
@@ -27,7 +29,7 @@ import com.novelbio.nbcReport.Params.ReportDNASeqMap;
 
 @Component
 @Scope("prototype")
-public class CtrlDNAMapping {
+public class CtrlDNAMapping implements IntCmdSoft {
 	private static final Logger logger = Logger.getLogger(CtrlDNAMapping.class);
 	public static final int MAP_TO_CHROM = 8;
 	public static final int MAP_TO_REFSEQ = 4;
@@ -35,6 +37,7 @@ public class CtrlDNAMapping {
 	
 	private String outFilePrefix = "";
 	
+	List<String> lsCmd = new ArrayList<>();
 	private Map<String, List<List<String>>> mapPrefix2LsFastq;
 	MapLibrary libraryType = MapLibrary.SingleEnd;
 	int gapLen = 5;
@@ -141,7 +144,7 @@ public class CtrlDNAMapping {
 		mapPrefix2Bam.clear();
 		mapPrefix2Pic.clear();
 		mapPrefix2Statistics.clear();
-		
+		lsCmd.clear();
 		for (String prefix : mapPrefix2LsFastq.keySet()) {
 			List<List<String>> lsFastQs = mapPrefix2LsFastq.get(prefix);
 			SamFile samFile = mapping(prefix, lsFastQs);
@@ -197,7 +200,7 @@ public class CtrlDNAMapping {
 		mapSoftware.setMapLibrary(libraryType);
 		mapSoftware.setSortNeed(isNeedSort);
 		mapSoftware.setThreadNum(thread);
-		
+		lsCmd.addAll(mapSoftware.getCmdExeStr());
 		SamFile samFile = mapSoftware.mapReads();
 		samFileStatistics = new SamFileStatistics(prefix);
 		samFileStatistics.setStandardData(samFile.getMapChrID2Length());
@@ -235,6 +238,11 @@ public class CtrlDNAMapping {
 	}
 	public Map<String, String> getMapPrefix2Statistics() {
 		return mapPrefix2Statistics;
+	}
+
+	@Override
+	public List<String> getCmdExeStr() {
+		return lsCmd;
 	}
 	
 	public static HashMap<String, Integer> getMapStr2Index() {

@@ -146,7 +146,7 @@ public class GuiDifGeneJpanel extends JPanel {
 				}
 				diffExpAbs.setGeneInfo(lsGeneInfo);
 				diffExpAbs.setCol2Sample(lsCol2Sample);
-				diffExpAbs.setIsLog2Value(chckbxIslogvalueOnlyforlimma.isSelected());
+				diffExpAbs.setLogTheValue(chckbxIslogvalueOnlyforlimma.isSelected());
 				diffExpAbs.setSensitive(chckSensitive.isSelected());
 				String pathPrefix = getPathPrefix();
 				if (pathPrefix == null) {

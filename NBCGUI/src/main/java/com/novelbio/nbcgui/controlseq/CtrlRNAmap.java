@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
+import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.seq.GeneExpTable;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.mapping.MapBowtie;
@@ -28,7 +29,7 @@ import com.novelbio.database.model.species.Species;
 import com.novelbio.generalConf.TitleFormatNBC;
 import com.novelbio.nbcReport.Params.EnumReport;
 
-public class CtrlRNAmap {
+public class CtrlRNAmap implements IntCmdSoft {
 	SoftWare softWare;
 	MapLibrary mapLibrary;
 	StrandSpecific strandSpecific;
@@ -37,6 +38,7 @@ public class CtrlRNAmap {
 	Map<String, List<List<String>>> mapPrefix2LsFastq;
 	
 	MapRNA mapRNA;
+	List<String> lsCmd = new ArrayList<>();
 	
 	GffChrAbs gffChrAbs;
 	Species species;
@@ -116,6 +118,7 @@ public class CtrlRNAmap {
 	}
 	
 	public void mapping() {
+		lsCmd.clear();
 		lsExpResultRsemRPKM = new ArrayList<>();
 		rsemExpCounts = new GeneExpTable(TitleFormatNBC.AccID);
 		rsemExpFPKM = new GeneExpTable(TitleFormatNBC.AccID);
@@ -144,7 +147,7 @@ public class CtrlRNAmap {
 				}
 				mapRNA.setGtf_Gene2Iso(gtfAndGene2Iso);
 			}
-			
+			lsCmd.addAll(mapRNA.getCmdExeStr());
 			mapRNA.mapReads();
 			setExpResult(prefix, mapRNA);
 		}
@@ -240,6 +243,10 @@ public class CtrlRNAmap {
 			//TODO
 		}
 		return mapPrefix2Value;
+	}
+	@Override
+	public List<String> getCmdExeStr() {
+		return lsCmd;
 	}
 
 }

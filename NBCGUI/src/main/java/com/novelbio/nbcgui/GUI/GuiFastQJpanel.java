@@ -25,6 +25,7 @@ import com.novelbio.database.service.SpringFactory;
 import com.novelbio.nbcgui.GUI.GuiLayeredPanSpeciesVersion.SpeciesSelect;
 import com.novelbio.nbcgui.controlseq.CtrlDNAMapping;
 import com.novelbio.nbcgui.controlseq.CtrlFastQ;
+import javax.swing.JSpinner;
 
 public class GuiFastQJpanel extends JPanel {
 	
@@ -70,6 +71,7 @@ public class GuiFastQJpanel extends JPanel {
 	JComboBoxData<SoftWare> cmbMappingSoftware;
 	ArrayList<Component> lsComponentsMapping = new ArrayList<Component>();
 	ArrayList<Component> lsComponentsFiltering = new ArrayList<Component>();
+	JSpinner spnTrimNNNcutoff;
 	
 	public GuiFastQJpanel() {
 		setLayout(null);
@@ -111,6 +113,15 @@ public class GuiFastQJpanel extends JPanel {
 		add(chckbxFilterreads);
 		
 		chckbxTrimEnd = new JCheckBox("TrimEnd");
+		chckbxTrimEnd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (chckbxTrimEnd.isSelected()) {
+					spnTrimNNNcutoff.setVisible(true);
+				} else {
+					spnTrimNNNcutoff.setVisible(false);
+				}
+			}
+		});
 		chckbxTrimEnd.setSelected(true);
 		chckbxTrimEnd.setBounds(347, 226, 95, 22);
 		add(chckbxTrimEnd);
@@ -235,7 +246,7 @@ public class GuiFastQJpanel extends JPanel {
 					ctrlFastQ.setAdaptorRight(txtRightAdaptor.getText());
 					ctrlFastQ.setAdaptorLowercase(chckbxLowcaseAdaptor.isSelected());
 					ctrlFastQ.setFastqQuality(cmbReadsQuality.getSelectedValue());
-					ctrlFastQ.setTrimNNN(chckbxTrimEnd.isSelected());
+					ctrlFastQ.setTrimNNN(chckbxTrimEnd.isSelected(), (int)spnTrimNNNcutoff.getValue());
 					ctrlFastQ.setOutFilePrefix(txtSavePathAndPrefix.getText());
 					ctrlFastQ.setFastQC(chckbxQcbeforefilter.isSelected(), chckbxQcafterFilter.isSelected());
 					try { ctrlFastQ.setReadsLenMin(Integer.parseInt(txtMinReadsLen.getText())); } catch (Exception e2) { }
@@ -274,7 +285,7 @@ public class GuiFastQJpanel extends JPanel {
 		});
 		btnOpenFastQRight.setBounds(821, 38, 86, 24);
 		add(btnOpenFastQRight);
-		
+
 		btnDeleteFastQRight = new JButton("Delete");
 		btnDeleteFastQRight.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -391,6 +402,11 @@ public class GuiFastQJpanel extends JPanel {
 		chckbxQcafterFilter.setBounds(175, 308, 140, 23);
 		add(chckbxQcafterFilter);
 		
+		spnTrimNNNcutoff = new JSpinner();
+		spnTrimNNNcutoff.setBounds(450, 226, 66, 22);
+		spnTrimNNNcutoff.setValue(15);
+		add(spnTrimNNNcutoff);
+		
 		
 		btnOpenFastqLeft.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -429,7 +445,7 @@ public class GuiFastQJpanel extends JPanel {
 		lsComponentsFiltering.add(chckbxLowcaseAdaptor);
 		lsComponentsFiltering.add(chckbxQcbeforefilter);
 		lsComponentsFiltering.add(chckbxQcafterFilter);
-		
+		lsComponentsFiltering.add(spnTrimNNNcutoff);
 		
 		lsComponentsMapping.add(txtGapLength);
 		lsComponentsMapping.add(txtMappingIndex);

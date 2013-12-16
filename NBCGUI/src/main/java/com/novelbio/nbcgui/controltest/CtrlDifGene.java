@@ -54,8 +54,9 @@ public class CtrlDifGene implements IntCmdSoft {
 		getDiffReport();
 	}
 	
-	public void setIsLog2Value(boolean isLog2Value) {
-		diffExpAbs.setLog2Value(isLog2Value);
+	/** 将输入的表达值取log */
+	public void setLogTheValue(boolean logTheValue) {
+		diffExpAbs.setLogValue(logTheValue);
 	}
 	
 	public void setSensitive(boolean isSensitive) {
