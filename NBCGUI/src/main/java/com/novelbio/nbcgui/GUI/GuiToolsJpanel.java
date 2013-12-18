@@ -12,6 +12,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import com.novelbio.base.MD5generate;
+import com.novelbio.base.SepSign;
+import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.dataStructure.PatternOperate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
@@ -21,6 +23,7 @@ import com.novelbio.database.domain.information.SoftWareInfo;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.nbcgui.controltools.CtrlCombFile;
 import com.novelbio.nbcgui.controltools.CtrlMedian;
+import javax.swing.JCheckBox;
 
 public class GuiToolsJpanel extends JPanel {
 	private static final long serialVersionUID = -6252286036589241467L;
@@ -31,8 +34,11 @@ public class GuiToolsJpanel extends JPanel {
 	GUIFileOpen guiFileOpenComb = new GUIFileOpen();
 	JScrollPaneData scrollPane;
 	
-	JScrollPaneData scrlFileName;
-	JScrollPaneData scrlMD5result;
+	JScrollPaneData scrlFile2Md5;
+	
+	JCheckBox chckbxSaveToFile;
+	JCheckBox chckbxChangeFileName;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -189,15 +195,15 @@ public class GuiToolsJpanel extends JPanel {
 		});
 		add(btnImportSoftwareInfo);
 		
-		scrlFileName = new JScrollPaneData();
-		scrlFileName.setBounds(509, 40, 413, 114);
-		add(scrlFileName);
+		scrlFile2Md5 = new JScrollPaneData();
+		scrlFile2Md5.setBounds(509, 40, 469, 341);
+		add(scrlFile2Md5);
 		
 		JLabel lblGetmd = new JLabel("GetMD5");
 		lblGetmd.setBounds(507, 14, 69, 14);
 		add(lblGetmd);
 		
-		JButton btnOpenfile = new JButton("OpenFile");
+		JButton btnOpenfile = new JButton("Open");
 		btnOpenfile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<String> lsFileName = guiFileOpenComb.openLsFileName("", "");
@@ -206,52 +212,74 @@ public class GuiToolsJpanel extends JPanel {
 					String[] strings = new String[]{string};
 					lsFile.add(strings);
 				}
-				scrlFileName.addItemLs(lsFile);
+				scrlFile2Md5.addItemLs(lsFile);
 			}
 		});
-		btnOpenfile.setBounds(509, 160, 118, 24);
+		btnOpenfile.setBounds(509, 393, 65, 24);
 		add(btnOpenfile);
 		
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				scrlFileName.deleteSelRows();
+				scrlFile2Md5.deleteSelRows();
 			}
 		});
-		btnDelete.setBounds(799, 160, 118, 24);
+		btnDelete.setBounds(587, 394, 82, 24);
 		add(btnDelete);
-		
-		scrlMD5result = new JScrollPaneData();
-		scrlMD5result.setBounds(509, 233, 413, 103);
-		add(scrlMD5result);
-		
-		JLabel lblMdresult = new JLabel("MD5Result");
-		lblMdresult.setBounds(509, 209, 97, 14);
-		add(lblMdresult);
 		
 		JButton btnRungetmd = new JButton("RunGetMD5");
 		btnRungetmd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<String[]> lsFileName = scrlFileName.getLsDataInfo();
+				ArrayList<String[]> lsFileName = scrlFile2Md5.getLsDataInfo();
 				ArrayList<String[]> lsResultMD5 = new ArrayList<String[]>();
 				for (String[] strings : lsFileName) {
-					String[] tmpResult = new String[1];
-					tmpResult[0] = MD5generate.getFileMD5String(strings[0]);
+					String[] tmpResult = new String[2];
+					tmpResult[0] = strings[0];
+					tmpResult[1] = MD5generate.getFileMD5String(strings[0]);
 					lsResultMD5.add(tmpResult);
+					if (chckbxSaveToFile.isSelected()) {
+						if (chckbxChangeFileName.isSelected()) {
+							FileOperate.changeFileSuffixReal(tmpResult[0], SepSign.SEP_INFO + tmpResult[1] + SepSign.SEP_INFO, null);
+						} else {
+							String md5File = tmpResult[0]+".md5";
+							TxtReadandWrite txtWrite = new TxtReadandWrite(md5File, true);
+							txtWrite.writefileln(tmpResult[1]);
+							txtWrite.close();
+						}
+					}
 				}
-				scrlMD5result.clean();
-				scrlMD5result.addItemLs(lsResultMD5);
+				scrlFile2Md5.clean();
+				scrlFile2Md5.setItemLs(lsResultMD5);
 			}
 		});
-		btnRungetmd.setBounds(799, 196, 118, 24);
+		btnRungetmd.setBounds(860, 436, 118, 24);
 		add(btnRungetmd);
+		
+		chckbxSaveToFile = new JCheckBox("save to file");
+		chckbxSaveToFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (chckbxSaveToFile.isSelected()) {
+					chckbxChangeFileName.setVisible(true);
+				} else {
+					chckbxChangeFileName.setVisible(false);
+				}
+			}
+		});
+		chckbxSaveToFile.setSelected(true);
+		chckbxSaveToFile.setBounds(810, 388, 115, 26);
+		add(chckbxSaveToFile);
+		
+		chckbxChangeFileName = new JCheckBox("change file name");
+		chckbxChangeFileName.setSelected(true);
+		chckbxChangeFileName.setBounds(810, 408, 171, 26);
+		add(chckbxChangeFileName);
+
 		
 		initial();
 	}
 	
 	private void initial() {
-		scrlFileName.setTitle(new String[]{"FileName"});
-		scrlMD5result.setTitle(new String[]{"MD5 Result"});
+		scrlFile2Md5.setTitle(new String[]{"FileName", "MD5"});
 	}
 	
 	private void getMedian(String inFile, String txtAccID, String txtColID, String outFile) {

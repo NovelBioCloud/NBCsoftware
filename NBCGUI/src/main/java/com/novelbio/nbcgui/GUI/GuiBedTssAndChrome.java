@@ -102,7 +102,7 @@ public class GuiBedTssAndChrome extends JPanel implements GuiRunningBarAbs, GuiN
 			public void actionPerformed(ActionEvent e) {
 				filePeakGene = guiFileOpen.openFileName("excel/txt", "");
 				lsGeneInfo = ExcelTxtRead.readLsExcelTxtFile(filePeakGene, 1, 1, 50, -1);
-				scrollPaneData.setItemLs(lsGeneInfo);
+				scrollPaneData.setItemLsWithTitle(lsGeneInfo);
 			}
 		});
 		btnOpenfile.setBounds(717, 224, 157, 24);

@@ -72,7 +72,7 @@ public class CtrlPeakStatistics implements RunGetInfo<GffChrStatistics.GffChrSta
 		guiPeakStatistics.getProcessBar().setValue(guiPeakStatistics.getProcessBar().getMaximum());
 		guiPeakStatistics.getBtnSave().setEnabled(true);
 		guiPeakStatistics.getBtnRun().setEnabled(true);
-		guiPeakStatistics.getJScrollPaneDataResult().setItemLs(getResult());
+		guiPeakStatistics.getJScrollPaneDataResult().setItemLsWithTitle(getResult());
 	}
 	@Override
 	public void threadSuspended(RunProcess<GffChrStatiscticsProcessInfo> runProcess) {

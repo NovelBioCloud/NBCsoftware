@@ -34,7 +34,7 @@ public class TestFastQC {
 //		mapParams.put("lowCaseAdaptor", new String[]{"1"});
 		mapParams.put("readsQuality", new String[]{"20"});
 		mapParams.put("trimEnd", new String[]{"1"});
-		mapParams.put("savePath", new String[]{FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/")});
+		mapParams.put("savePath", new String[]{FileHadoop.addHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/")});
 		mapParams.put("qcBeforeFilter", new String[]{"1"});
 		mapParams.put("qcAfterFilter", new String[]{"1"});
 		mapParams.put("retainBp", new String[]{"50"});
@@ -69,8 +69,8 @@ public class TestFastQC {
 //	@Test
 	public void runReport() throws Exception {
 		List<String> lsFolders = new ArrayList<>();
-		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.FastQC.getResultFolder()));
-		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的图片/"+EnumReport.FastQC.getResultFolder()));
+		lsFolders.add(FileHadoop.addHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.FastQC.getResultFolder()));
+		lsFolders.add(FileHadoop.addHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的图片/"+EnumReport.FastQC.getResultFolder()));
 		ReportProject reportProject = new ReportProject(lsFolders);
 		String reportTest = "/home/novelbio/桌面/testReportFastQC.docx";
 		reportProject.outputReport(reportTest);

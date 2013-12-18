@@ -295,7 +295,7 @@ public class GuiSrcToTrgJpanel extends JPanel{
 		ExcelOperate excelOperate = new ExcelOperate();
 		excelOperate.openExcel(filePath);
 		ArrayList<String[]> PathRawData = excelOperate.ReadLsExcel(1, 1, excelOperate.getRowCount(), excelOperate.getColCount());
-		jScrollPaneInputPath.setItemLs(PathRawData);
+		jScrollPaneInputPath.setItemLsWithTitle(PathRawData);
 	}
 	
 }

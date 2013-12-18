@@ -247,7 +247,7 @@ public class GuiDegreeAddJpanel extends JPanel{
 	 */
 	private void setPathProview(String filePath) {
 		ArrayList<String[]> PathRawData = ExcelTxtRead.readLsExcelTxt(filePath, 1);
-		jScrollPaneInputPath.setItemLs(PathRawData);
+		jScrollPaneInputPath.setItemLsWithTitle(PathRawData);
 	}
 	
 }

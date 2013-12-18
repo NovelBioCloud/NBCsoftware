@@ -23,7 +23,7 @@ public class TestReport {
 	public void init() throws Exception{
 //		List<String> lsFolders = new ArrayList<>();
 //		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.GOAnalysis.getResultFolder()));
-		reportProject = new ReportProject(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档"));
+		reportProject = new ReportProject(FileHadoop.addHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档"));
 	}
 	
 	@Test

@@ -27,9 +27,9 @@ public class TestDifGene {
 		ctrlDifGene.setColID(colId);
 		if (DiffExpID == DiffExpAbs.LIMMA) {
 			if ("1" == null) {
-				ctrlDifGene.setIsLog2Value(true);
+				ctrlDifGene.setLogTheValue(true);
 			} else {
-				ctrlDifGene.setIsLog2Value(false);
+				ctrlDifGene.setLogTheValue(false);
 			}
 		}
 		ArrayList<String[]> lsSampleColumn2GroupName = new ArrayList<String[]>();

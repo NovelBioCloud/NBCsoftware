@@ -68,7 +68,7 @@ public class TestDNASeqMap {
 	//@Test
 	public void runReport() throws Exception {
 		List<String> lsFolders = new ArrayList<>();
-		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.DNASeqMap.getResultFolder()));
+		lsFolders.add(FileHadoop.addHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.DNASeqMap.getResultFolder()));
 		ReportProject reportProject = new ReportProject(lsFolders);
 		String reportTest = "/home/novelbio/桌面/testReportDNASeqMap.docx";
 		reportProject.outputReport(reportTest);

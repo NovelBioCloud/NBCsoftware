@@ -28,11 +28,11 @@ public class TestGeneExp {
 		reportGeneExpression.setGeneExpType("FPKM");
 		List<XdocTmpltExcel> lsXdocTmpltExcels = new ArrayList<>();	
 		XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(EnumTableType.GeneExp.getXdocTable());
-		xdocTmpltExcel.addExcel(FileHadoop.getHdfsHeadSymbol("/nbCloud/public/test/GeneExp/All_Fragments.txt"), 1);
+		xdocTmpltExcel.addExcel(FileHadoop.addHdfsHeadSymbol("/nbCloud/public/test/GeneExp/All_Fragments.txt"), 1);
 		xdocTmpltExcel.setExcelTitle("标准化Fragment值列表");
 		
 		XdocTmpltExcel xdocTmpltExcel2 = new XdocTmpltExcel(EnumTableType.GeneExp.getXdocTable());
-		xdocTmpltExcel2.addExcel(FileHadoop.getHdfsHeadSymbol("/nbCloud/public/test/GeneExp/All_FPKM.txt"), 1);
+		xdocTmpltExcel2.addExcel(FileHadoop.addHdfsHeadSymbol("/nbCloud/public/test/GeneExp/All_FPKM.txt"), 1);
 		xdocTmpltExcel2.setExcelTitle("标准化FPKM值列表");
 		lsXdocTmpltExcels.add(xdocTmpltExcel);
 		lsXdocTmpltExcels.add(xdocTmpltExcel2);
@@ -50,7 +50,7 @@ public class TestGeneExp {
 	
 	@Test
 	public void GoTest() throws Exception {
-		String savePath = FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/GeneExpression_result");
+		String savePath = FileHadoop.addHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/GeneExpression_result");
 		Assert.assertTrue(FileOperate.isFileExist(FileOperate.addSep(savePath)+reportGeneExpressionAll.getEnumReport().getReportXdocFileName()));
 		List<String> lsList = new ArrayList<>();
 		lsList.add(savePath);
