@@ -13,6 +13,7 @@ import javax.swing.SwingConstants;
 
 import com.novelbio.base.MD5generate;
 import com.novelbio.base.SepSign;
+import com.novelbio.base.dataOperate.DateUtil;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.dataStructure.PatternOperate;
 import com.novelbio.base.fileOperate.FileOperate;
@@ -232,6 +233,10 @@ public class GuiToolsJpanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<String[]> lsFileName = scrlFile2Md5.getLsDataInfo();
 				ArrayList<String[]> lsResultMD5 = new ArrayList<String[]>();
+				if (lsFileName.size() == 0) {
+					return;
+				}
+				TxtReadandWrite txtWrite = new TxtReadandWrite(FileOperate.getPathName(lsFileName.get(0)[0]) + "MD5" + DateUtil.getDateAndRandom(), true);
 				for (String[] strings : lsFileName) {
 					String[] tmpResult = new String[2];
 					tmpResult[0] = strings[0];
@@ -241,13 +246,11 @@ public class GuiToolsJpanel extends JPanel {
 						if (chckbxChangeFileName.isSelected()) {
 							FileOperate.changeFileSuffixReal(tmpResult[0], SepSign.SEP_INFO + tmpResult[1] + SepSign.SEP_INFO, null);
 						} else {
-							String md5File = tmpResult[0]+".md5";
-							TxtReadandWrite txtWrite = new TxtReadandWrite(md5File, true);
-							txtWrite.writefileln(tmpResult[1]);
-							txtWrite.close();
+							txtWrite.writefileln(FileOperate.getFileName(tmpResult[0]) + "\t" + tmpResult[1]);
 						}
 					}
 				}
+				txtWrite.close();
 				scrlFile2Md5.clean();
 				scrlFile2Md5.setItemLs(lsResultMD5);
 			}
