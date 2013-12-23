@@ -214,8 +214,8 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 				guiRNAautoSpliceSimple = new GuiRNAautoSpliceSimple();
 				jTabbedPane1.addTab("ASD", guiRNAautoSpliceSimple);
 				
-				guiUpdateDB = new GuiUpdateDB();
-				jTabbedPane1.addTab("UpdateDB", guiUpdateDB);
+//				guiUpdateDB = new GuiUpdateDB();
+//				jTabbedPane1.addTab("UpdateDB", guiUpdateDB);
 			}
 			pack();
 			this.setSize(1150, 750);

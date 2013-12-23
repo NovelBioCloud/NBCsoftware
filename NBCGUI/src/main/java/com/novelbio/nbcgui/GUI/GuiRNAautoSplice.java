@@ -67,6 +67,7 @@ public class GuiRNAautoSplice extends JPanel implements GUIinfo {
 	
 	JComboBoxData<String> cmbGroup = new JComboBoxData<String>();
 	private JCheckBox chckbxReconstructIso;
+	private JCheckBox chckConsiderRepeat;
 	
 	/**
 	 * Create the panel.
@@ -219,6 +220,10 @@ public class GuiRNAautoSplice extends JPanel implements GUIinfo {
 		chckbxReconstructIso.setBounds(295, 398, 180, 26);
 		add(chckbxReconstructIso);
 		
+		chckConsiderRepeat = new JCheckBox("Consider Repeat");
+		chckConsiderRepeat.setBounds(735, 260, 167, 26);
+		add(chckConsiderRepeat);
+		
 		initial();
 	}
 	private void initial() {
@@ -271,6 +276,7 @@ public class GuiRNAautoSplice extends JPanel implements GUIinfo {
 		ctrlSplicing.setReconstructIso(chckbxReconstructIso.isSelected());
 		ctrlSplicing.setLsCompareGroup(scrlCompare.getLsDataInfo());
 		ctrlSplicing.setMemoryLow(false);
+		ctrlSplicing.setCombine(!chckConsiderRepeat.isSelected());
 		//TODO
 		btnRun.setEnabled(false);
 		Thread thread = new Thread(ctrlSplicing);

@@ -3,7 +3,9 @@ package com.novelbio.nbcgui.controlseq;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.novelbio.GuiAnnoInfo;
+import com.novelbio.analysis.ExceptionNBCsoft;
 import com.novelbio.analysis.seq.fasta.SeqHash;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
@@ -12,18 +14,20 @@ import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.nbcgui.GUIinfo;
 
-public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable{
+public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	GUIinfo guiRNAautoSplice;
 	GffHashGene gffHashGene;
 	SeqHash seqHash;
 	
 	boolean isDisplayAllEvent = true; 
 	String outFile;
-	List<String[]> lsBam2Prefix;
+	ArrayListMultimap<String, String> mapPrefix2LsBam;
 	List<String[]> lsCompareGroup;
 	StrandSpecific strandSpecific = StrandSpecific.NONE;
 	boolean memoryLow = false;
 	boolean isReconstruceIso = false;
+	/** 是否合并文件--也就是不考虑重复，默认为true，也就是合并文件 **/
+	boolean isCombine = true;
 	
 	public void setGuiRNAautoSplice(GUIinfo guiRNAautoSplice) {
 		this.guiRNAautoSplice = guiRNAautoSplice;
@@ -32,13 +36,20 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable{
 		this.memoryLow = memoryLow;
 	}
 	public void setLsBam2Prefix(List<String[]> lsBam2Prefix) {
-		this.lsBam2Prefix = lsBam2Prefix;
+		mapPrefix2LsBam = ArrayListMultimap.create();
+		for (String[] bam2Prefix : lsBam2Prefix) {
+			mapPrefix2LsBam.put(bam2Prefix[2], bam2Prefix[0]);
+		}
 	}
 	public void setLsCompareGroup(List<String[]> lsCompareGroup) {
 		this.lsCompareGroup = lsCompareGroup;
 	}
 	public void setReconstructIso(boolean isReconstructIso) {
 		this.isReconstruceIso = isReconstructIso;
+	}
+	/** 是否合并文件--也就是不考虑重复，默认为true，也就是合并文件 **/
+	public void setCombine(boolean isCombine) {
+		this.isCombine = isCombine;
 	}
 	
 	public void setStrandSpecific(StrandSpecific strandSpecific) {
@@ -97,49 +108,44 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable{
 	
 	@Override
 	public void run() {
-		ExonJunction exonJunction = new ExonJunction();
-		exonJunction.setStrandSpecific(strandSpecific);
-		exonJunction.setGffHashGene(gffHashGene);
-		exonJunction.setOneGeneOneSpliceEvent(!isDisplayAllEvent);
-		exonJunction.setRunGetInfo(this);
-		exonJunction.setIsLessMemory(memoryLow);
-
-		for (String[] strings : lsBam2Prefix) {
-			//TODO 暂时没有多对多比较
-			exonJunction.addBamSorted(strings[2], strings[0]);
+		for (String[] comparePrefix : lsCompareGroup) {
+			String treat = comparePrefix[0], ctrl = comparePrefix[1];
+			List<String> lsTreatBam = mapPrefix2LsBam.get(treat);
+			List<String> lsCtrlBam = mapPrefix2LsBam.get(ctrl);
+			ExonJunction exonJunction = new ExonJunction();
+			exonJunction.setStrandSpecific(strandSpecific);
+			exonJunction.setGffHashGene(gffHashGene);
+			exonJunction.setOneGeneOneSpliceEvent(!isDisplayAllEvent);
+			exonJunction.setRunGetInfo(this);
+			exonJunction.setIsLessMemory(memoryLow);
+			for (String bamFile : lsTreatBam) {
+				exonJunction.addBamSorted(treat, bamFile);
+			}
+			for (String bamFile : lsCtrlBam) {
+				exonJunction.addBamSorted(ctrl, bamFile);
+			}
+			exonJunction.setCompareGroups(treat, ctrl);
+			exonJunction.setResultFile(outFile);
+			exonJunction.setRunGetInfo(this);
+			exonJunction.setSeqHash(seqHash);
+			exonJunction.setCombine(isCombine);
+			if (isReconstruceIso) {
+				exonJunction.setgenerateNewIso();
+			}
+			long fileLength = exonJunction.getFileLength();
+			ArrayList<Double> lsLevels = new ArrayList<Double>();
+			lsLevels.add(0.3);
+			lsLevels.add(0.4);
+			lsLevels.add(0.7);
+			lsLevels.add(1.0);
+			setProgressBarLevelLs(lsLevels);
+			setProcessBarStartEndBarNum(0, 0, fileLength);
+			exonJunction.run();
+			if (!exonJunction.isFinished()) {
+				throw new ExceptionNBCsoft("Autonative Splicing Error:" + comparePrefix[0] + " vs " + comparePrefix[1]);
+			}
 		}
-		//TODO
-		exonJunction.setCompareGroupsLs(lsCompareGroup);
-		exonJunction.setResultFile(outFile);
-		exonJunction.setRunGetInfo(this);
-		exonJunction.setSeqHash(seqHash);
-		if (isReconstruceIso) {
-			exonJunction.setgenerateNewIso();
-		}
-		
-		
-		ArrayList<Double> lsLevels = new ArrayList<Double>();
-		lsLevels.add(0.3);
-		lsLevels.add(0.4);
-		lsLevels.add(0.7);
-		lsLevels.add(1.0);
-		long fileLength = exonJunction.getFileLength();
-		setProgressBarLevelLs(lsLevels);
-		setProcessBarStartEndBarNum(0, 0, fileLength);
-
-		Thread thread = new Thread(exonJunction);
-		thread.start();
-		
-		try { Thread.sleep(2000); } catch (InterruptedException e) { }
-
-		while (exonJunction.isRunning()) {
-			try { Thread.sleep(300); } catch (InterruptedException e) { }
-		}
-		if (!exonJunction.isFinished()) {
-			guiRNAautoSplice.setMessage("Running Error");
-		} else {
-			guiRNAautoSplice.setMessage("Congratulations! Enjoy your PASH.");
-		}
+		guiRNAautoSplice.setMessage("Congratulations! Enjoy your PASH.");
 		guiRNAautoSplice.done(null);
 	}
 

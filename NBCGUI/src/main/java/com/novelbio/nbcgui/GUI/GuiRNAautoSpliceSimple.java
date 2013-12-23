@@ -40,6 +40,7 @@ public class GuiRNAautoSpliceSimple extends JPanel implements GUIinfo {
 	JButton btnOpengtf;
 	JCheckBox chckbxDisplayAllSplicing;
 	JCheckBox chckbxReconstructIso;
+	JCheckBox chckConsiderRepeat;
 	GUIFileOpen guiFileOpen = new GUIFileOpen();
 	private JTextField txtSaveTo;
 	
@@ -215,6 +216,10 @@ public class GuiRNAautoSpliceSimple extends JPanel implements GUIinfo {
 		chckbxReconstructIso.setBounds(180, 341, 185, 26);
 		add(chckbxReconstructIso);
 		
+		chckConsiderRepeat = new JCheckBox("Consider Repeat");
+		chckConsiderRepeat.setBounds(638, 341, 185, 26);
+		add(chckConsiderRepeat);
+		
 		initial();
 	}
 	private void initial() {
@@ -271,6 +276,7 @@ public class GuiRNAautoSpliceSimple extends JPanel implements GUIinfo {
 		ctrlSplicing.setLsCompareGroup(scrlCompare.getLsDataInfo());
 		ctrlSplicing.setMemoryLow(chckbxLowMemoryUse.isSelected());
 		ctrlSplicing.setReconstructIso(chckbxReconstructIso.isSelected());
+		ctrlSplicing.setCombine(!chckConsiderRepeat.isSelected());
 		//TODO
 		btnRun.setEnabled(false);
 		Thread thread = new Thread(ctrlSplicing);

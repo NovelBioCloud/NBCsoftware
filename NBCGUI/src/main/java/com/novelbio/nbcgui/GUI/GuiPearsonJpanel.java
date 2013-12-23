@@ -6,18 +6,14 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-import javax.swing.GroupLayout;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.LayoutStyle;
 
 import com.novelbio.analysis.coexp.simpCoExp.CoExp;
-import com.novelbio.analysis.coexp.simpCoExp.SimpCoExp;
 import com.novelbio.base.dataOperate.ExcelOperate;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.fileOperate.FileOperate;
@@ -51,10 +47,10 @@ public class GuiPearsonJpanel extends JPanel{
 	private JTextField jTxtFilePathPath;
 	private JButton jBtnFileOpenPath;
 	private JTextFieldData jTxtPvalueCufoff;
-	private JComboBoxData<Species> jCombSelSpePath;
 	private JLabel jLabPathQtaxID;
 	private JScrollPaneData jScrollPaneInputPath;
 	private JLabel lblPvaluecutoff;
+	GUIFileOpen guiFileOpen = new GUIFileOpen();
 	////////////	
 	
 	public GuiPearsonJpanel() 
@@ -67,7 +63,6 @@ public class GuiPearsonJpanel extends JPanel{
 		setComponent();
 		setLayout(null);
 		add(jTxtFilePathPath);
-		add(jCombSelSpePath);
 		add(jLabPathQtaxID);
 		add(jLabPathPath);
 		add(jBtbSavePath);
@@ -113,7 +108,7 @@ public class GuiPearsonJpanel extends JPanel{
 			jBtnFileOpenPath.setMargin(new java.awt.Insets(1, 1, 1, 1));
 			jBtnFileOpenPath.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent evt) {
-					GUIFileOpen guiFileOpen = new GUIFileOpen();
+			
 					String filename = guiFileOpen.openFileName("txt/excel2003", "txt","xls");
 					jTxtFilePathPath.setText(filename);
 					try {
@@ -166,42 +161,22 @@ public class GuiPearsonJpanel extends JPanel{
 			jBtbSavePath.setMargin(new java.awt.Insets(1, 0, 1, 0));
 			jBtbSavePath.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent evt) {
-					GUIFileOpen guiFileOpen = new GUIFileOpen();
 					String savefilename = guiFileOpen.saveFileName("xls", "xls");
 					if (!FileOperate.getFileNameSep(savefilename)[1].equals("xls")) {
 						savefilename = savefilename+".xls";
 					}
 					try {
-						ExcelOperate excelOperate = new ExcelOperate();
 						String inputFile = jTxtFilePathPath.getText();
-						excelOperate.openExcel(inputFile);
-						int ColNum = excelOperate.getColCount(1);
-						ArrayList<String[]> aaa = excelOperate.ReadLsExcel(1, 1, 1, ColNum);
-						ColNum = 0;
-						for (int i = 0; i < aaa.get(0).length; i++) {
-							if (aaa.get(0)[i]!=null && !aaa.get(0)[i].trim().equals("")) {
-								ColNum++;
-							}
-						}
-						int[] columnID = new int[ColNum];
-						for (int i = 0; i < ColNum ; i++) {
-							columnID[i] = i+1;
-						}
 						CoExp coExp = new CoExp();
 						coExp.setPvalueCutoff( Double.parseDouble(jTxtPvalueCufoff.getText()));
-						coExp.readTxtExcel(inputFile, columnID);
+						coExp.readTxtExcel(inputFile, null);
 						coExp.writeToExcel(savefilename);
-						SimpCoExp.getCoExpInfo(jTxtFilePathPath.getText(), columnID,9606 , Double.parseDouble(jTxtPvalueCufoff.getText()), savefilename, false);
 					} catch (Exception e) {
-						// TODO: handle exception
+						e.printStackTrace();
 					}
 				}
 			});
 		}
-		
-		jCombSelSpePath = new JComboBoxData<Species>();
-		jCombSelSpePath.setBounds(14, 126, 174, 23);
-		jCombSelSpePath.setMapItem(Species.getSpeciesName2Species(Species.KEGGNAME_SPECIES));
 		initial();
 		
 	}
