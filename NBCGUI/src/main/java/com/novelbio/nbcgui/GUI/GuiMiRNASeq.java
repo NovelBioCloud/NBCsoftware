@@ -59,6 +59,7 @@ public class GuiMiRNASeq extends JPanel{
 	private JButton btnNovelmirnabed;
 	private JButton btnDelNovelMiRNAbedFileRow;
 	private JCheckBox chkMapAllToRfam;
+	private JTextField txtThread;
 	
 	/**
 	 * Launch the application.
@@ -234,6 +235,16 @@ public class GuiMiRNASeq extends JPanel{
 		chckbxIsUseOldResult.setSelected(true);
 		chckbxIsUseOldResult.setBounds(831, 554, 115, 26);
 		add(chckbxIsUseOldResult);
+		
+		txtThread = new JTextField();
+		txtThread.setText("7");
+		txtThread.setBounds(121, 520, 70, 22);
+		add(txtThread);
+		txtThread.setColumns(10);
+		
+		JLabel lblThreadnum = new JLabel("ThreadNum");
+		lblThreadnum.setBounds(38, 522, 81, 18);
+		add(lblThreadnum);
 		initialize();
 	}
 	
@@ -305,6 +316,11 @@ public class GuiMiRNASeq extends JPanel{
 		Species species = guiSpeciesVersionGff.getSelectSpecies();
 		GffChrAbs gffChrAbs = new GffChrAbs(species);
 		CtrlMiRNApipeline ctrlMiRNApipeline = new CtrlMiRNApipeline(species);
+		try {
+			ctrlMiRNApipeline.setThreadNum(Integer.parseInt(txtThread.getText()));
+		} catch (Exception e) {
+		}
+
 		Map<String, AlignSeq> mapPrefix2AlignSeq = new LinkedHashMap<>();
 		if (chkMapping.isSelected()) {
 			ctrlMiRNApipeline.setMapMirna(true);
