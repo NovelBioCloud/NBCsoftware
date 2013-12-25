@@ -2,6 +2,8 @@ package com.novelbio.nbcgui.controltools;
 
 import java.util.ArrayList;
 
+import org.broadinstitute.sting.jna.lsf.v7_0_6.LibLsf.lsfAcctRec;
+
 import com.novelbio.base.dataOperate.ExcelOperate;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.dataStructure.MathComput;
@@ -54,7 +56,9 @@ public class CtrlMedian {
 	 * @return
 	 */
 	public ArrayList<String[]> getResult() {
-		lsResult = MathComput.getMedian(lsFileInfo, accID, lsCol);
+		String[] title = lsFileInfo.get(0);
+		lsResult = MathComput.getMedian(lsFileInfo.subList(1, lsFileInfo.size()), accID, lsCol);
+		lsResult.add(0, title);
 		return lsResult;
 	}
 	

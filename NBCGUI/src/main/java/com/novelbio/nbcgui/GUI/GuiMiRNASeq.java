@@ -53,7 +53,7 @@ public class GuiMiRNASeq extends JPanel{
 	GUIFileOpen guiFileOpen = new GUIFileOpen();
 	
 	GuiLayeredPaneSpeciesVersionGff guiSpeciesVersionGff;
-	JCheckBox chckbxIsUseOldResult;
+	JCheckBox chckCoverExistResult;
 	
 	private JButton btnFastqfile;
 	private JButton btnNovelmirnabed;
@@ -231,10 +231,9 @@ public class GuiMiRNASeq extends JPanel{
 		btnDel.setBounds(686, 432, 102, 28);
 		add(btnDel);
 		
-		chckbxIsUseOldResult = new JCheckBox("overlap");
-		chckbxIsUseOldResult.setSelected(true);
-		chckbxIsUseOldResult.setBounds(831, 554, 115, 26);
-		add(chckbxIsUseOldResult);
+		chckCoverExistResult = new JCheckBox("cover exist result");
+		chckCoverExistResult.setBounds(831, 554, 184, 26);
+		add(chckCoverExistResult);
 		
 		txtThread = new JTextField();
 		txtThread.setText("7");
@@ -359,7 +358,7 @@ public class GuiMiRNASeq extends JPanel{
 		}
 		ctrlMiRNApipeline.setLsSpeciesBlastTo(lsSpeciesBlastTo);
 		ctrlMiRNApipeline.setOutPath(txtOutPathPrefix.getText());
-		ctrlMiRNApipeline.setIsUseOldResult(chckbxIsUseOldResult.isSelected());
+		ctrlMiRNApipeline.setIsUseOldResult(!chckCoverExistResult.isSelected());
 		ctrlMiRNApipeline.run();
 	}
 }
