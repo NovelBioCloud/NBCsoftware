@@ -33,6 +33,7 @@ public enum EnumReport {
 	DNASeqMap("DNASeqMap_result",new ReportDNASeqMap()),
 	RNASeqMap("RNASeqMap_result",new ReportRNASeqMap()),
 	DiffExp("DifferenceExpression_result",new ReportDifGeneAll()),
+	RfamStatistics("RfamStatistics_result", null),
 	ReconstructTranscriptome("ReconstructTranscriptome_result", null),
 	GOTree("GOTrees_result",null),
 	GeneActNetwork("GeneActNetwork_result",null),
