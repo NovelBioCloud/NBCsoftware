@@ -19,6 +19,7 @@ import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.information.SoftWareInfo;
 import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
 import com.novelbio.database.model.species.Species;
+import com.novelbio.generalConf.PathDetailNBC;
 import com.novelbio.generalConf.TitleFormatNBC;
 import com.novelbio.nbcReport.Params.EnumReport;
 
@@ -32,7 +33,7 @@ public class CtrlRfamStatistics implements IntCmdSoft {
 	int threadNum = 5;
 	RfamStatistic rfamStatistic = new RfamStatistic();
 	String rfamFile;
-	boolean isUseOldResult;
+	boolean isUseOldResult = true;
 
 	List<String[]> lsPrefix2Fq;
 	String outPath;
@@ -46,12 +47,15 @@ public class CtrlRfamStatistics implements IntCmdSoft {
 		Species species = new Species(9606);
 		rfamFile = species.getRfamFile(false);
 		List<String> lsRfamNameRaw = SeqHash.getLsSeqName(rfamFile);
+		rfamStatistic.readRfamTab(PathDetailNBC.getRfamTab());
 		expRfamID.addLsGeneName(rfamStatistic.getLsRfamID(lsRfamNameRaw));
 		expRfamID.addAnnotationArray(rfamStatistic.getMapRfamID2Info());
 		expRfamID.addLsTitle(RfamStatistic.getLsTitleRfamIDAnno());
 		expRfamClass.addLsGeneName(rfamStatistic.getLsRfamClass(lsRfamNameRaw));
 	}
-	
+	public void setThreadNum(int threadNum) {
+		this.threadNum = threadNum;
+	}
 	public void setOutPath(String outPath) {
 		this.outPath = FoldeCreate.createAndInFold(outPath, EnumReport.RfamStatistics.getResultFolder());
 	}
@@ -84,8 +88,12 @@ public class CtrlRfamStatistics implements IntCmdSoft {
 	}
 	
 	private String getSampleFq(String fastqFile) {
-		String samplingFq = outPath + TitleFormatNBC.TmpMapping.toString() + FileOperate.getFileName(fastqFile);
-		samplingFq = FileOperate.changeFileSuffix(outPath, "_sampling", null);
+		String samplingFq = outPath + TitleFormatNBC.TmpMapping.toString() + FileOperate.getSepPath() + FileOperate.getFileName(fastqFile);
+		FileOperate.createFolders(FileOperate.getPathName(samplingFq));
+		samplingFq = FileOperate.changeFileSuffix(samplingFq,  "_sampling", "fastq|fq", "fq.gz");
+		if (isUseOldResult && FileOperate.isFileExistAndBigThanSize(samplingFq, 0)) {
+			return samplingFq;
+		}
 		FastQ fastQSampling = new FastQ(samplingFq, true);
 		FastQ fastQ = new FastQ(fastqFile);
 		int i = 0;
@@ -110,12 +118,10 @@ public class CtrlRfamStatistics implements IntCmdSoft {
 		mapBowtie.setThreadNum(threadNum);
 		rfamStatistic.initial();
 		mapBowtie.addAlignmentRecorder(rfamStatistic);
-		if (isUseOldResult) {
-			if (FileOperate.isFileExistAndBigThanSize(mapBowtie.getOutNameCope(), 0)) {
-				SamFile samFile = new SamFile(mapBowtie.getOutNameCope());
-				rfamStatistic.setSamFile(samFile);
-				rfamStatistic.countRfamBam();
-			}
+		if (isUseOldResult && FileOperate.isFileExistAndBigThanSize(mapBowtie.getOutNameCope(), 0)) {
+			SamFile samFile = new SamFile(mapBowtie.getOutNameCope());
+			rfamStatistic.setSamFile(samFile);
+			rfamStatistic.countRfamBam();
 		} else {
 			mapBowtie.mapReads();
 		}
