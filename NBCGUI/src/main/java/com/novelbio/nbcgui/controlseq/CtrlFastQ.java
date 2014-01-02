@@ -45,6 +45,9 @@ public class CtrlFastQ {
 	List<ReportQC> lsReportQCs = new ArrayList<>();
 	/** 返回fastqc的结果文件 */
 	HashMultimap<String, String> mapPrefix2ResultQC = HashMultimap.create();
+	
+	boolean isJustFastqc = false;
+	
 	/**
 	 * 得到所有的报告
 	 * @return
@@ -72,6 +75,14 @@ public class CtrlFastQ {
 	}
 	public void setReadsLenMin(int readsLenMin) {
 		fastQfilter.setFilterParamReadsLenMin(readsLenMin);
+	}
+	/** 是否仅输出fastqc的结果<br>
+	 * true：仅输出fastqc<br>
+	 * false：还输出过滤的结果
+	 * @param isJustFastqc
+	 */
+	public void setJustFastqc(boolean isJustFastqc) {
+		this.isJustFastqc = isJustFastqc;
 	}
 	/**
 	 * @param trimNNN 是否过滤两端低质量序列
@@ -163,7 +174,6 @@ public class CtrlFastQ {
 				continue;
 			}
 			CtrlFastQfilter ctrlFastQfilter = (CtrlFastQfilter)SpringFactory.getFactory().getBean("ctrlFastQfilter");
-			ctrlFastQfilter.setFastQfilterParam(fastQfilter);
 			ctrlFastQfilter.setOutFilePrefix(outFilePrefix);
 			ctrlFastQfilter.setPrefix(prefix);
 			ctrlFastQfilter.setLsFastQLR(lsFastQLR);
@@ -174,8 +184,11 @@ public class CtrlFastQ {
 			FastQC[] fastQCsAfter = getFastQC(lsFastQLR, prefix, qcAfter);
 			mapCond2FastQCAfter.put(prefix, fastQCsAfter);
 			ctrlFastQfilter.setFastQCafter(fastQCsAfter);
-			
-			ctrlFastQfilter.setFastQLRfiltered(createCombineFastq(fastQfilter.isFiltered(), outFilePrefix, prefix, lsFastQLR));
+			ctrlFastQfilter.setJustFastqc(isJustFastqc);
+			if (!isJustFastqc) {
+				ctrlFastQfilter.setFastQfilterParam(fastQfilter);
+				ctrlFastQfilter.setFastQLRfilteredOut(createCombineFastq(fastQfilter.isFiltered(), outFilePrefix, prefix, lsFastQLR));
+			}
 			ctrlFastQfilter.filteredAndCombineReads();
 			
 			ctrlFastQfilter.saveFastQC(outFilePrefix + prefix);			

@@ -44,11 +44,16 @@ public class CtrlFastQfilter {
 	
 	HashMultimap<String, String> mapPrefix2QCresult = HashMultimap.create();
 	
+	boolean isJustFastqc = false;
+	
 	/** 设定过滤参数 */
 	public void setFastQfilterParam(FastQFilter fastQfilterRecord) {
 		this.fastQfilterRecord = fastQfilterRecord;
 	}
-	
+	/** 是否只进行fastqc工作 */
+	public void setJustFastqc(boolean isJustFastqc) {
+		this.isJustFastqc = isJustFastqc;
+	}
 	public void setOutFilePrefix(String outFilePrefix) {
 		this.outFilePrefix = outFilePrefix;
 	}
@@ -81,7 +86,7 @@ public class CtrlFastQfilter {
 		return outFilePrefix;
 	}
 
-	public void setFastQLRfiltered(FastQ[] fastQLRfiltered) {
+	public void setFastQLRfilteredOut(FastQ[] fastQLRfiltered) {
 		this.fastQLRfiltered = fastQLRfiltered;
 	}
 	public FastQ[] getFastQLRfiltered() {
@@ -119,12 +124,15 @@ public class CtrlFastQfilter {
 		fastQReadingChannel.setFastQRead(lsFastQLR);
 		// QC before Filter
 		fastQReadingChannel.setFastQC(fastQCbefore[0], fastQCbefore[1]);
-		// Filter
-		fastQReadingChannel.setFilter(fastQfilterRecord, lsFastQLR.get(0)[0].getOffset());
-		// QC after Filter
-		fastQReadingChannel.setFastQC(fastQCafter[0], fastQCafter[1]);
+		if (isJustFastqc) {
+			// Filter
+			fastQReadingChannel.setFilter(fastQfilterRecord, lsFastQLR.get(0)[0].getOffset());
+			// QC after Filter
+			fastQReadingChannel.setFastQC(fastQCafter[0], fastQCafter[1]);
+			fastQReadingChannel.setFastQWrite(fastQLRfiltered[0], fastQLRfiltered[1]);
+			fastQReadingChannel.setOutputResult(!isJustFastqc);
+		}
 
-		fastQReadingChannel.setFastQWrite(fastQLRfiltered[0], fastQLRfiltered[1]);
 		fastQReadingChannel.setThreadNum(8);
 		fastQReadingChannel.run();
 	}
