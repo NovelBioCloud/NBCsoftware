@@ -124,7 +124,7 @@ public class CtrlFastQfilter {
 		fastQReadingChannel.setFastQRead(lsFastQLR);
 		// QC before Filter
 		fastQReadingChannel.setFastQC(fastQCbefore[0], fastQCbefore[1]);
-		if (isJustFastqc) {
+		if (!isJustFastqc) {
 			// Filter
 			fastQReadingChannel.setFilter(fastQfilterRecord, lsFastQLR.get(0)[0].getOffset());
 			// QC after Filter
