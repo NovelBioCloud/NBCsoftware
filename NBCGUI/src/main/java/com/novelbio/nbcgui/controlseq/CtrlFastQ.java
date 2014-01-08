@@ -17,6 +17,7 @@ import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.service.SpringFactory;
+import com.novelbio.generalConf.TitleFormatNBC;
 import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportQC;
 
@@ -75,6 +76,10 @@ public class CtrlFastQ {
 	}
 	public void setReadsLenMin(int readsLenMin) {
 		fastQfilter.setFilterParamReadsLenMin(readsLenMin);
+	}
+	/** 最长的reads多少，一般不设定，仅在miRNA时才设定 */
+	public void setReadsLenMax(int readsLenMax) {
+		fastQfilter.setFilterParamReadsLenMax(readsLenMax);
 	}
 	/** 是否仅输出fastqc的结果<br>
 	 * true：仅输出fastqc<br>
@@ -197,14 +202,7 @@ public class CtrlFastQ {
 			mapCondition2LRFiltered.put(prefix, ctrlFastQfilter.getLsFastQLRfiltered());
 			addSupQCresult(prefix, ctrlFastQfilter.getMapPrefix2QCresult());
 		}
-		Map<String, FastQC[]> mapParam2FastqcLR = new LinkedHashMap<>();
-		for (String prefix : mapCond2FastQCBefore.keySet()) {
-			FastQC[] fastqcBefore = mapCond2FastQCBefore.get(prefix);
-			FastQC[] fastqcAfter = mapCond2FastQCAfter.get(prefix);
-			mapParam2FastqcLR.put(prefix, fastqcBefore);
-			mapParam2FastqcLR.put(prefix, fastqcAfter);
-		}
-		List<String[]> lsSummary = FastQC.combineFastQCbaseStatistics(mapParam2FastqcLR);
+		List<String[]> lsSummary = getStatistics();
 		String totalExcelPath = outFilePrefix + "basicStatsAll.xls";
 		TxtReadandWrite txtWrite = null;
 		if (FileOperate.isFileExist(totalExcelPath)) {
@@ -225,6 +223,71 @@ public class CtrlFastQ {
 			String prefixFinal = prefix + sep + subPrefix;
 			mapPrefix2ResultQC.putAll(prefixFinal, mapPrefix2File.get(subPrefix));
 		}
+	}
+	
+	private List<String[]> getStatistics() {
+		List<String[]> lsResult = new ArrayList<>();
+		if (isJustFastqc) {
+			lsResult.add(new String[]{"SampleName", "Encoding", "TotalReads", "TotalBase","GC%"});
+		} else {
+			lsResult.add(new String[]{"SampleName", "Encoding", "TotalReads_Before", "TotalBase_Before",
+					"TotalReads_After", "TotalBase_After", "ReadsFilter%", "BaseFilter%", "GC%_Before", "GC%_After"});
+		}
+		
+		for (String prefix : mapCond2FastQCBefore.keySet()) {
+			List<String> lsTmpResult = new ArrayList<>();
+			FastQC[] fastQCBefore = mapCond2FastQCBefore.get(prefix);
+			FastQC[] fastQCAfter = mapCond2FastQCAfter.get(prefix);
+			lsTmpResult.add(prefix);
+			lsTmpResult.add(fastQCBefore[0].getBasicStats().getEncoding());
+			long beforeReadsNum = 0, beforeBaseNum = 0;
+			double beforeCG = 0;
+			if (fastQCBefore.length > 1) {
+				beforeReadsNum = fastQCBefore[0].getBasicStats().getReadsNum() + fastQCBefore[1].getBasicStats().getReadsNum();
+				beforeBaseNum = fastQCBefore[0].getBasicStats().getBaseNum() + fastQCBefore[1].getBasicStats().getBaseNum();
+			} else {
+				beforeReadsNum = fastQCBefore[0].getBasicStats().getReadsNum();
+				beforeBaseNum = fastQCBefore[0].getBasicStats().getBaseNum();
+			}
+			beforeCG = 0;
+			if (fastQCBefore.length > 1) {
+				beforeCG = (fastQCBefore[0].getBasicStats().getGCpersentage() + fastQCBefore[1].getBasicStats().getGCpersentage())/2;
+			} else {
+				beforeCG = fastQCBefore[0].getBasicStats().getGCpersentage();
+			}
+			
+			long afterReadsNum = 0, afterBaseNum = 0;
+			double afterGC = 0;
+			if (!isJustFastqc) {
+				if (fastQCAfter.length > 1) {
+					afterReadsNum = fastQCAfter[0].getBasicStats().getReadsNum() + fastQCAfter[1].getBasicStats().getReadsNum();
+					afterBaseNum = fastQCAfter[0].getBasicStats().getBaseNum() + fastQCAfter[1].getBasicStats().getBaseNum();
+				} else {
+					afterReadsNum = fastQCAfter[0].getBasicStats().getReadsNum();
+					afterBaseNum = fastQCAfter[0].getBasicStats().getBaseNum();
+				}
+				if (fastQCAfter.length > 1) {
+					afterGC = (fastQCAfter[0].getBasicStats().getGCpersentage() + fastQCAfter[1].getBasicStats().getGCpersentage())/2;
+				} else {
+					afterGC = fastQCAfter[0].getBasicStats().getGCpersentage();
+				}
+			}
+			
+			lsTmpResult.add(beforeReadsNum + "");
+			lsTmpResult.add(beforeBaseNum + "");
+			if (!isJustFastqc) {
+				lsTmpResult.add(afterReadsNum + "");
+				lsTmpResult.add(afterBaseNum + "");
+				lsTmpResult.add((double)afterReadsNum/beforeReadsNum + "");
+				lsTmpResult.add((double)afterBaseNum/beforeBaseNum + "");
+			}
+			lsTmpResult.add(beforeCG + "");
+			if (!isJustFastqc) {
+				lsTmpResult.add(afterGC + "");
+			}
+			lsResult.add(lsTmpResult.toArray(new String[0]));
+		}
+		return lsResult;
 	}
 	
 	private static FastQC[] getFastQC(List<String[]> lsFastQLR, String prefix, boolean qc) {

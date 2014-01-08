@@ -124,13 +124,14 @@ public class CtrlFastQfilter {
 		fastQReadingChannel.setFastQRead(lsFastQLR);
 		// QC before Filter
 		fastQReadingChannel.setFastQC(fastQCbefore[0], fastQCbefore[1]);
+		fastQReadingChannel.setOutputResult(!isJustFastqc);
 		if (!isJustFastqc) {
 			// Filter
 			fastQReadingChannel.setFilter(fastQfilterRecord, lsFastQLR.get(0)[0].getOffset());
 			// QC after Filter
 			fastQReadingChannel.setFastQC(fastQCafter[0], fastQCafter[1]);
 			fastQReadingChannel.setFastQWrite(fastQLRfiltered[0], fastQLRfiltered[1]);
-			fastQReadingChannel.setOutputResult(!isJustFastqc);
+		
 		}
 
 		fastQReadingChannel.setThreadNum(8);
@@ -156,7 +157,7 @@ public class CtrlFastQfilter {
 
 			} else {
 				lsPic = fastQCbefore[0].saveToPathPic(30, fastQCbefore[1], fileName + "_BeforeFilter");
-				lsTable = fastQCbefore[0].saveToPathTable(30, fastQCbefore[1], fileName + "_BeforeFilter");
+				lsTable = fastQCbefore[0].saveToPathTable(fastQCbefore[1], fileName + "_BeforeFilter");
 			}
 			mapPrefix2QCresult.putAll("BeforeFilter_Pic", lsPic);
 			mapPrefix2QCresult.putAll("BeforeFilter_Table", lsTable);
@@ -169,7 +170,7 @@ public class CtrlFastQfilter {
 				lsTable = lsEecelPathAndNames = fastQCafter[0].saveToPathTable(fileName + "_AfterFilter");
 			} else {
 				lsPic = lsPicPathAndNames = fastQCafter[0].saveToPathPic(30, fastQCafter[1], fileName + "_AfterFilter");
-				lsTable = lsEecelPathAndNames = fastQCafter[0].saveToPathTable(30, fastQCafter[1], fileName + "_AfterFilter");
+				lsTable = lsEecelPathAndNames = fastQCafter[0].saveToPathTable(fastQCafter[1], fileName + "_AfterFilter");
 			}
 			mapPrefix2QCresult.putAll("AfterFilter_Pic", lsPic);
 			mapPrefix2QCresult.putAll("AfterFilter_Table", lsTable);

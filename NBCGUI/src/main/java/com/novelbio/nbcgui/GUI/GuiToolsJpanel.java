@@ -170,27 +170,13 @@ public class GuiToolsJpanel extends JPanel {
 		});
 		add(btnDelfile);
 		
-		JButton btnImportspeciesinfo = new JButton("ImportSpeciesInfo");
-		btnImportspeciesinfo.setBounds(89, 532, 246, 24);
-		btnImportspeciesinfo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String speciesFile = guiFileOpenComb.openFileName("txt/xls", "");
-				if (FileOperate.isFileExistAndBigThanSize(speciesFile, 0.1)) {
-					Species species = new Species();
-					species.setUpdateSpeciesFile(speciesFile);
-					species.update();
-				}
-			}
-		});
-		add(btnImportspeciesinfo);
-		
 		JButton btnImportSoftwareInfo = new JButton("ImportSoftwareInfo");
 		btnImportSoftwareInfo.setBounds(368, 532, 253, 24);
 		btnImportSoftwareInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String softToolsFile = guiFileOpenComb.openFileName("txt/xls", "");
 				if (FileOperate.isFileExistAndBigThanSize(softToolsFile, 0.1)) {
-					SoftWareInfo.updateInfo(true, softToolsFile);
+					SoftWareInfo.updateInfo(softToolsFile);
 				}
 			}
 		});

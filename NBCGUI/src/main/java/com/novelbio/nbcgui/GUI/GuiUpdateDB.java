@@ -115,9 +115,7 @@ public class GuiUpdateDB extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				String speciesFile = guiFileOpen.openFileName("txt/xls", "");
 				if (FileOperate.isFileExistAndBigThanSize(speciesFile, 0.1)) {
-					Species species = new Species();
-					species.setUpdateSpeciesFile(speciesFile);
-					species.update();
+					Species.updateTaxInfo(speciesFile);
 				}
 			}
 		});
@@ -130,7 +128,7 @@ public class GuiUpdateDB extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				String softToolsFile = guiFileOpen.openFileName("txt/xls", "");
 				if (FileOperate.isFileExistAndBigThanSize(softToolsFile, 0.01)) {
-					SoftWareInfo.updateInfo(true, softToolsFile);
+					SoftWareInfo.updateInfo(softToolsFile);
 				}
 			}
 		});
@@ -185,9 +183,7 @@ public class GuiUpdateDB extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				String taxFile = guiFileOpen.openFileName("txt/xls", "");
 				if (FileOperate.isFileExistAndBigThanSize(taxFile, 0.1)) {
-					Species species = new Species();
-					species.setUpdateTaxInfo(taxFile);
-					species.update();
+					Species.updateTaxInfo(taxFile);
 				}
 			}
 		});
