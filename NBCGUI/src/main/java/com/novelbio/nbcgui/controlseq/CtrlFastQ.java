@@ -17,7 +17,6 @@ import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.service.SpringFactory;
-import com.novelbio.generalConf.TitleFormatNBC;
 import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportQC;
 
@@ -44,7 +43,7 @@ public class CtrlFastQ {
 	boolean qcAfter = true;
 	
 	List<ReportQC> lsReportQCs = new ArrayList<>();
-	/** 返回fastqc的结果文件 */
+	/** 返回fastqc的质检文件 */
 	HashMultimap<String, String> mapPrefix2ResultQC = HashMultimap.create();
 	
 	boolean isJustFastqc = false;
@@ -198,8 +197,10 @@ public class CtrlFastQ {
 			
 			ctrlFastQfilter.saveFastQC(outFilePrefix + prefix);			
 			lsReportQCs.add(ctrlFastQfilter.getReportQC());
+			if (!isJustFastqc) {
+				mapCondition2LRFiltered.put(prefix, ctrlFastQfilter.getLsFastQLRfiltered());
+			}
 			
-			mapCondition2LRFiltered.put(prefix, ctrlFastQfilter.getLsFastQLRfiltered());
 			addSupQCresult(prefix, ctrlFastQfilter.getMapPrefix2QCresult());
 		}
 		List<String[]> lsSummary = getStatistics();
@@ -242,33 +243,26 @@ public class CtrlFastQ {
 			lsTmpResult.add(fastQCBefore[0].getBasicStats().getEncoding());
 			long beforeReadsNum = 0, beforeBaseNum = 0;
 			double beforeCG = 0;
-			if (fastQCBefore.length > 1) {
+			if (fastQCBefore[1] != null) {
 				beforeReadsNum = fastQCBefore[0].getBasicStats().getReadsNum() + fastQCBefore[1].getBasicStats().getReadsNum();
 				beforeBaseNum = fastQCBefore[0].getBasicStats().getBaseNum() + fastQCBefore[1].getBasicStats().getBaseNum();
+				beforeCG = (fastQCBefore[0].getBasicStats().getGCpersentage() + fastQCBefore[1].getBasicStats().getGCpersentage())/2;
 			} else {
 				beforeReadsNum = fastQCBefore[0].getBasicStats().getReadsNum();
 				beforeBaseNum = fastQCBefore[0].getBasicStats().getBaseNum();
-			}
-			beforeCG = 0;
-			if (fastQCBefore.length > 1) {
-				beforeCG = (fastQCBefore[0].getBasicStats().getGCpersentage() + fastQCBefore[1].getBasicStats().getGCpersentage())/2;
-			} else {
 				beforeCG = fastQCBefore[0].getBasicStats().getGCpersentage();
 			}
-			
+
 			long afterReadsNum = 0, afterBaseNum = 0;
 			double afterGC = 0;
 			if (!isJustFastqc) {
-				if (fastQCAfter.length > 1) {
+				if (fastQCBefore[1] != null) {
 					afterReadsNum = fastQCAfter[0].getBasicStats().getReadsNum() + fastQCAfter[1].getBasicStats().getReadsNum();
 					afterBaseNum = fastQCAfter[0].getBasicStats().getBaseNum() + fastQCAfter[1].getBasicStats().getBaseNum();
+					afterGC = (fastQCAfter[0].getBasicStats().getGCpersentage() + fastQCAfter[1].getBasicStats().getGCpersentage())/2;
 				} else {
 					afterReadsNum = fastQCAfter[0].getBasicStats().getReadsNum();
 					afterBaseNum = fastQCAfter[0].getBasicStats().getBaseNum();
-				}
-				if (fastQCAfter.length > 1) {
-					afterGC = (fastQCAfter[0].getBasicStats().getGCpersentage() + fastQCAfter[1].getBasicStats().getGCpersentage())/2;
-				} else {
 					afterGC = fastQCAfter[0].getBasicStats().getGCpersentage();
 				}
 			}

@@ -58,6 +58,23 @@ public class CtrlDifGene implements IntCmdSoft {
 	public void setLogTheValue(boolean logTheValue) {
 		diffExpAbs.setLogValue(logTheValue);
 	}
+	/** 
+	 * 设定用pvalue还是fdr卡，以及卡的阈值
+	 * @param titlePvalueFdr
+	 * @param threshold
+	 */
+	public void setThreshold(TitleFormatNBC titlePvalueFdr, double threshold) {
+		diffExpAbs.setThreshold(titlePvalueFdr, threshold);
+	}
+	
+	/** 默认是正负1，表示卡两倍阈值 */
+	public void setLogFCcutoff(double logFCcutoff) {
+		diffExpAbs.setLogFCcutoff(logFCcutoff);
+	}
+	
+	public void setMinSampleSumNum(double minSampleSumNum) {
+		diffExpAbs.setMinSampleSumNum(minSampleSumNum);
+	}
 	
 	public void setSensitive(boolean isSensitive) {
 		diffExpAbs.setSensitive(isSensitive);

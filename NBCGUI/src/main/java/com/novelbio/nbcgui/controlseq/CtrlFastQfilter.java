@@ -163,20 +163,21 @@ public class CtrlFastQfilter {
 			mapPrefix2QCresult.putAll("BeforeFilter_Table", lsTable);
 			
 			mapParam.putAll(fastQCbefore[0].getMapParam(fileName + "_BeforeFilter"));
-			List<String> lsPicPathAndNames = new ArrayList<>();
-			List<String> lsEecelPathAndNames = new ArrayList<>();
-			if (fastQCafter.length <= 1 || fastQCafter[1] == null) {
-				lsPic = lsPicPathAndNames = fastQCafter[0].saveToPathPic(fileName + "_AfterFilter");
-				lsTable = lsEecelPathAndNames = fastQCafter[0].saveToPathTable(fileName + "_AfterFilter");
-			} else {
-				lsPic = lsPicPathAndNames = fastQCafter[0].saveToPathPic(30, fastQCafter[1], fileName + "_AfterFilter");
-				lsTable = lsEecelPathAndNames = fastQCafter[0].saveToPathTable(fastQCafter[1], fileName + "_AfterFilter");
+			if (!isJustFastqc) {
+				if (fastQCafter.length <= 1 || fastQCafter[1] == null) {
+					lsPic = fastQCafter[0].saveToPathPic(fileName + "_AfterFilter");
+					lsTable = fastQCafter[0].saveToPathTable(fileName + "_AfterFilter");
+				} else {
+					lsPic = fastQCafter[0].saveToPathPic(30, fastQCafter[1], fileName + "_AfterFilter");
+					lsTable = fastQCafter[0].saveToPathTable(fastQCafter[1], fileName + "_AfterFilter");
+				}
+				mapPrefix2QCresult.putAll("AfterFilter_Pic", lsPic);
+				mapPrefix2QCresult.putAll("AfterFilter_Table", lsTable);
+				mapParam.putAll(fastQCafter[0].getMapParam(fileName + "_AfterFilter"));
 			}
-			mapPrefix2QCresult.putAll("AfterFilter_Pic", lsPic);
-			mapPrefix2QCresult.putAll("AfterFilter_Table", lsTable);
-			mapParam.putAll(fastQCafter[0].getMapParam(fileName + "_AfterFilter"));
 			
-			fillReport(lsPicPathAndNames, lsEecelPathAndNames);
+			//TODO 这里有问题，是否只将fastq过滤后的结果放入报告
+			fillReport(lsPic, lsTable);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("获取报告生成器出错！");
