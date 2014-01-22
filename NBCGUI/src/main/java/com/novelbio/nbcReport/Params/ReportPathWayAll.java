@@ -18,7 +18,7 @@ public class ReportPathWayAll extends ReportBase{
 	}
 
 	@Override
-	protected Map<String, Object> addParamMap() {
+	public Map<String, Object> buildFinalParamMap() {
 		Map<String, Object> mapKey2Params = new HashMap<String, Object>();
 		if (lsReportPathWays.size()>0) {
 			ReportPathWay reportPathWay = lsReportPathWays.get(0);

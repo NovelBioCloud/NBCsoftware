@@ -17,7 +17,7 @@ import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.nbcReport.Params.EnumReport;
-import com.novelbio.nbcReport.Params.ReportProject;
+import com.novelbio.nbcReport.Params.ReportAll;
 import com.novelbio.nbcgui.controlseq.CopeFastq;
 import com.novelbio.nbcgui.controlseq.CtrlDNAMapping;
 
@@ -69,7 +69,7 @@ public class TestDNASeqMap {
 	public void runReport() throws Exception {
 		List<String> lsFolders = new ArrayList<>();
 		lsFolders.add(FileHadoop.addHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.DNASeqMap.getResultFolder()));
-		ReportProject reportProject = new ReportProject(lsFolders);
+		ReportAll reportProject = new ReportAll(lsFolders);
 		String reportTest = "/home/novelbio/桌面/testReportDNASeqMap.docx";
 		reportProject.outputReport(reportTest);
 		Assert.assertNotNull(FileOperate.isFileExist(reportTest));

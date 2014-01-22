@@ -16,7 +16,7 @@ import com.novelbio.nbcReport.EnumTableType;
 import com.novelbio.nbcReport.XdocTmpltExcel;
 import com.novelbio.nbcReport.Params.ReportGeneExpression;
 import com.novelbio.nbcReport.Params.ReportGeneExpressionAll;
-import com.novelbio.nbcReport.Params.ReportProject;
+import com.novelbio.nbcReport.Params.ReportAll;
 
 public class TestGeneExp {
 	
@@ -54,7 +54,7 @@ public class TestGeneExp {
 		Assert.assertTrue(FileOperate.isFileExist(FileOperate.addSep(savePath)+reportGeneExpressionAll.getEnumReport().getReportXdocFileName()));
 		List<String> lsList = new ArrayList<>();
 		lsList.add(savePath);
-		ReportProject reportProject = new ReportProject(lsList);
+		ReportAll reportProject = new ReportAll(lsList);
 		reportProject.outputReport("/home/novelbio/桌面/abc.docx");
 
 	}

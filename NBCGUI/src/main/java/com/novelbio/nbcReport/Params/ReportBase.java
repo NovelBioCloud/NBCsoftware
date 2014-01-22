@@ -1,17 +1,12 @@
 package com.novelbio.nbcReport.Params;
 
-import java.io.File;
 import java.io.Serializable;
-import java.io.StringWriter;
-import java.util.Locale;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
-import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.nbcReport.XdocTable;
-
-import freemarker.template.Configuration;
-import freemarker.template.Template;
+import com.novelbio.base.word.NBCWord;
 
 /**
  * 参数对象基本抽象类
@@ -19,14 +14,25 @@ import freemarker.template.Template;
  *
  */
 public abstract class ReportBase  implements Cloneable, Serializable {
-	
-	
+	private static final long serialVersionUID = 1L;
 	/**
-	 * 添加报告参数
+	 * 所有的参数集合
 	 */
-	protected Map<String, Object> addParamMap() {
-		// TODO Auto-generated method stub
-		return null;
+	Map<String, Object> mapKey2Param = new HashMap<String, Object>();
+	/**
+	 * 保存路径
+	 */
+	protected String savePath;
+	/**
+	 * 子报告集合
+	 */
+	protected Map<String,LinkedHashSet<ReportBase>> mapTempName2setReportBase = new HashMap<>();
+	/**
+	 * 生成最终的报告参数
+	 */
+	public Map<String, Object> buildFinalParamMap() {
+		mapKey2Param.putAll(mapTempName2setReportBase);
+		return mapKey2Param;
 	}
 	
 	/**
@@ -37,37 +43,12 @@ public abstract class ReportBase  implements Cloneable, Serializable {
 	
 	
 	/**
-	 * 输出模板结果
-	 * @param filePath 结果目录
-	 * @return
-	 */
-	public String outputReportXdoc(){
-		Map<String, Object> mapKey2Params = addParamMap();
-		try {
-			Configuration cf = new Configuration();
-			cf.setClassicCompatible(true);
-			// 模板存放路径
-			cf.setClassForTemplateLoading(EnumReport.class,getEnumReport().getTempPath());
-			cf.setEncoding(Locale.getDefault(), "UTF-8");
-			// 模板名称
-			Template template = cf.getTemplate(getEnumReport().getTempName());
-			StringWriter sw = new StringWriter();
-			// 处理并把结果输出到字符串中
-			template.process(mapKey2Params, sw);
-			// 返回渲染好的xdoc字符串
-			return sw.toString();
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	/**
 	 * 把对象本身写成二进制文件
 	 * @param savePath 保存的路径，会添加.report目录
 	 * @return
 	 */
 	public boolean writeAsFile(String savePath){
+		this.savePath = savePath;
 		String reportPath = FileOperate.addSep(savePath) + FileOperate.getSepPath() + ".report";
 		FileOperate.createFolders(reportPath);
 		FileOperate.delAllFile(reportPath);
@@ -94,9 +75,38 @@ public abstract class ReportBase  implements Cloneable, Serializable {
 		return null;
 	}
 	
-	public static void main(String[] args) {
-		ReportSamAndRPKM object  = (ReportSamAndRPKM)FileOperate.readFileAsObject("/media/hdfs/nbCloud/staff/gaozhu/我的文档/SamAndRPKM_result/.report/report_SamAndRPKM2013-09-040118-27077");
-		System.out.println(object.getLsExcels().get(0).toString());
+	/**
+	 * 得到word模板的全路径
+	 * @return
+	 */
+	public String getTempPathAndName(){
+		String pathAndName = FileOperate.addSep(getEnumReport().getTempPath())+getEnumReport().getTempName();
+		if(!FileOperate.isFileExist(pathAndName))
+			return null;
+		return pathAndName;
 	}
 	
+	/**
+	 * 创建一个npcWord对象用来生成报告
+	 */
+	public NBCWord getWord() {
+		NBCWord word = new NBCWord(getTempPathAndName());
+		return word;
+	}
+	
+	/**
+	 * 添加子报告
+	 * @param reportAll
+	 */
+	public void addChildReport(ReportBase childReport) {
+		String tempName = childReport.getEnumReport().getTempName();
+		LinkedHashSet<ReportBase> setReportBases = new LinkedHashSet<>();
+		if(mapTempName2setReportBase.containsKey(tempName)){
+			setReportBases = mapTempName2setReportBase.get(tempName);
+			setReportBases.add(childReport);
+			return;
+		}
+		setReportBases.add(childReport);
+		mapTempName2setReportBase.put(tempName, setReportBases);
+	}
 }

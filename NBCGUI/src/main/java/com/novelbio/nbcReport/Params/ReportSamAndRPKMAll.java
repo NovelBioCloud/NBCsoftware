@@ -32,7 +32,7 @@ public class ReportSamAndRPKMAll   extends ReportBase {
 	}
 
 	@Override
-	protected Map<String, Object> addParamMap() {
+	public Map<String, Object> buildFinalParamMap() {
 		HashMap<String, Object> hashMap = new HashMap<>();
 		hashMap.put("lsSamAndRPKMs", lsSamAndRPKMs);
 		hashMap.put("no", no);

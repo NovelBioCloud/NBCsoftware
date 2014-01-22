@@ -1,18 +1,6 @@
 package com.novelbio.nbcReport.Params;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
-import org.springframework.core.io.ClassPathResource;
-
-import com.novelbio.base.dataOperate.DateUtil;
-
-import freemarker.template.Configuration;
-import freemarker.template.Template;
+import com.novelbio.base.PathDetail;
 
 
 
@@ -41,13 +29,23 @@ public enum EnumReport {
 	MiRNATargetNetwork("MiRNATargetNetwork_result",null),
 	PathwayActNetwork("PathwayActNetwork_result",null),
 	CoExpNetLncRNA("CoExpNetLncRNA_result",null),
-	Project("Novelbio_Result",null),
+	ReportAll("Novelbio_Result",new ReportAll()),
+	@Deprecated 
 	Picture("Picture",null),
+	@Deprecated 
 	Excel("Excel",null),
 	MiRNASeqAnalysis("MiRNASeqAnalysis_result",null),
 	SamConvert("SamConvert_result", null);
+	
+	/** 模板名称 也可以是结果文件夹名*/
 	String tempName;
+	/** 报告对象 */
 	ReportBase reportBase;
+	/**
+	 * 
+	 * @param tempName 模板名称 也可以是结果文件夹名
+	 * @param reportBase 报告对象
+	 */
 	EnumReport(String tempName,ReportBase reportBase) {
 		this.tempName = tempName;
 		this.reportBase = reportBase;
@@ -55,11 +53,11 @@ public enum EnumReport {
 
 	/**
 	 * 得到xdoc报告输出文件名
-	 * 
 	 * @return
 	 */
+	@Deprecated
 	public String getReportXdocFileName() {
-		return "report_" + this.name() + ".txt";
+		return "report_" + this.name() + ".doc";
 	}
 	
 	/**
@@ -70,16 +68,17 @@ public enum EnumReport {
 		return "report_" + this.name();
 	}
 	/**
-	 * 得到xdoc模板路径
-	 * 
-	 * @return
-	 * @throws IOException 
+	 * 得到word模板路径
 	 */
-	public String getTempPath() throws IOException {
-		return "xdocTemplate";
+	public String getTempPath(){
+		return PathDetail.getReportTempPath();
 	}
 	
-	public ReportBase getReportAll(){
+	/**
+	 * 获取reportBase 报告对象
+	 * @return
+	 */
+	public ReportBase getReportBase(){
 		return reportBase.getClone();
 	}
 	
@@ -88,7 +87,7 @@ public enum EnumReport {
 	 * @return
 	 */
 	public String getTempName(){
-		return tempName+".xdoc";
+		return tempName+".doc";
 	}
 	
 	/**
@@ -98,15 +97,4 @@ public enum EnumReport {
 	public String getResultFolder(){
 		return tempName;
 	}
-	
-	public static EnumReport findByFolderName(String folderName){
-		EnumReport[] enumReports = EnumReport.values();
-		for (int i = 0; i < enumReports.length; i++) {
-			if (enumReports[i].getResultFolder().equalsIgnoreCase(folderName)) {
-				return enumReports[i];
-			}
-		}
-		return null;
-	}
-	
 }

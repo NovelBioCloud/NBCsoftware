@@ -13,7 +13,7 @@ import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.fileOperate.FileHadoop;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.nbcReport.Params.ReportDifGeneAll;
-import com.novelbio.nbcReport.Params.ReportProject;
+import com.novelbio.nbcReport.Params.ReportAll;
 import com.novelbio.nbcgui.controltest.CtrlDifGene;
 
 public class TestDifGene {

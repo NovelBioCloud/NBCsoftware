@@ -18,7 +18,6 @@ import com.novelbio.nbcReport.XdocTmpltExcel;
  */
 public class ReportGOAll extends ReportBase {
 	private String no = "${no}";
-	private List<ReportGO> lsReportGOs = new ArrayList<ReportGO>();
 	
 	@Override
 	public EnumReport getEnumReport() {
@@ -27,22 +26,18 @@ public class ReportGOAll extends ReportBase {
 
 
 	@Override
-	protected Map<String, Object> addParamMap() {
+	public Map<String, Object> buildFinalParamMap() {
 		Map<String, Object> mapKey2Params = new HashMap<String, Object>();
-		if (lsReportGOs.size()>0) {
-			ReportGO reportGO = lsReportGOs.get(0);
+		if (mapTempName2setReportBase.get(EnumReport.GOAnalysis.getTempName()).size()>0) {
+			ReportGO reportGO = (ReportGO) mapTempName2setReportBase.get(EnumReport.GOAnalysis.getTempName()).iterator().next();
 			mapKey2Params.put("testMethod", reportGO.getTestMethod());
 			mapKey2Params.put("finderCondition", getFinderCondition());
 		}
+		mapKey2Params.putAll(mapTempName2setReportBase);
 		mapKey2Params.put("no", no);
-		mapKey2Params.put("lsReportGOs", lsReportGOs);
 		return mapKey2Params;
 	}
 	
-	public void addReportGO(ReportGO reportGO) {
-		lsReportGOs.add(reportGO);
-	}
-
 	/**
 	 * 统计结果，返回筛选条件
 	 * 
@@ -54,8 +49,8 @@ public class ReportGOAll extends ReportBase {
 	public String getFinderCondition() {
 		String[] result = { "FDR&lt;0.01", "FDR&lt;0.05", "P-value&lt;0.01", "P-value&lt;0.05" };
 		int conditionNum = 0;
-		for (ReportGO reportGO : lsReportGOs) {
-			String condition = reportGO.getFinderCondition();
+		for (ReportBase reportGO : mapTempName2setReportBase.get(EnumReport.GOAnalysis.getTempName())) {
+			String condition = ((ReportGO)reportGO).getFinderCondition();
 			for (int i = 0; i < result.length; i++) {
 				if (condition.equals(result[i]) && i > conditionNum)
 					conditionNum = i;
@@ -75,7 +70,7 @@ public class ReportGOAll extends ReportBase {
 		for (String reportFile : lsReportFiles) {
 			try {
 				ReportGO reportGO = (ReportGO)FileOperate.readFileAsObject(reportFile);
-				addReportGO(reportGO);
+				addChildReport(reportGO);
 			} catch (Exception e) {
 				continue;
 			}

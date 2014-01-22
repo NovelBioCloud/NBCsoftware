@@ -37,6 +37,11 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
+			<groupId>com.novelbio</groupId>
+			<artifactId>jacob</artifactId>
+			<version>1.17</version>
+		</dependency>
+		<dependency>
 			<groupId>com.taobao.metamorphosis</groupId>
 			<artifactId>metamorphosis-all</artifactId>
 			<version>1.4.6.2</version>

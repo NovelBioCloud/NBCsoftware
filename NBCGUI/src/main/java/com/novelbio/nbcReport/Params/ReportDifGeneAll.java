@@ -8,7 +8,7 @@ import java.util.Map;
 import com.novelbio.base.fileOperate.FileOperate;
 
 public class ReportDifGeneAll  extends ReportBase{
-	
+	private static final long serialVersionUID = 1L;
 	String no = "${no}";
 	List<ReportDifGene> lsDifGenes = new ArrayList<>();
 	
@@ -17,7 +17,7 @@ public class ReportDifGeneAll  extends ReportBase{
 	}
  
 	@Override
-	protected Map<String, Object> addParamMap() {
+	public Map<String, Object> buildFinalParamMap() {
 		HashMap<String, Object> map = new HashMap<>();
 		map.put("no", no);
 		map.put("lsDifGenes", lsDifGenes);

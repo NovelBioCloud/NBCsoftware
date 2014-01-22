@@ -33,8 +33,8 @@ import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 
-public class ReportProject extends ReportBase {
-	public static final Logger logger = Logger.getLogger(ReportProject.class);
+public class ReportOld extends ReportBase {
+	public static final Logger logger = Logger.getLogger(ReportOld.class);
 	private List<String> lsXdocChildren = new ArrayList<String>();
 	private String noAssign = "<#assign no=1 />";
 	private String noPlusOne = "<#assign no=no+1 />";
@@ -50,7 +50,7 @@ public class ReportProject extends ReportBase {
 	 * @param folderPath
 	 *            一个目录
 	 */
-	public ReportProject(String folderPath)  throws Exception{
+	public ReportOld(String folderPath)  throws Exception{
 		List<String> lsChildren = FileOperate.getFoldFileNameLs(folderPath, "*", "*");
 		for (String fileName : lsChildren) {
 			if (!FileOperate.isFileDirectory(fileName))
@@ -58,7 +58,7 @@ public class ReportProject extends ReportBase {
 			EnumReport enumReport = EnumReport.findByFolderName(FileOperate.getFileName(fileName));
 			if (enumReport == null)
 				continue;
-			ReportBase reportBase =  enumReport.getReportAll();
+			ReportBase reportBase =  enumReport.getReportBase();
 			boolean readResult = reportBase.readReportFromFile(fileName);
 			if (readResult) {
 				String xdocString =  reportBase.outputReportXdoc();
@@ -75,7 +75,7 @@ public class ReportProject extends ReportBase {
 	 * @param lsFolders　
 	 * @param isChildFolder 结果文件夹是此文件夹，还是子文件夹
 	 */
-	public ReportProject(List<String> lsFolders,boolean isChildFolder)  throws Exception{
+	public ReportOld(List<String> lsFolders,boolean isChildFolder)  throws Exception{
 		if(isChildFolder){
 			for (String fileName : lsFolders) {
 				if (!FileOperate.isFileDirectory(fileName))
@@ -87,7 +87,7 @@ public class ReportProject extends ReportBase {
 					EnumReport enumReport = EnumReport.findByFolderName(fileName1);
 					if (enumReport == null)
 						continue;
-					ReportBase reportBase =  enumReport.getReportAll();
+					ReportBase reportBase =  enumReport.getReportBase();
 					boolean readResult = reportBase.readReportFromFile(realFilePathAndName);
 					if (readResult) {
 						String xdocString =  reportBase.outputReportXdoc();
@@ -106,7 +106,7 @@ public class ReportProject extends ReportBase {
 			EnumReport enumReport = EnumReport.findByFolderName(FileOperate.getFileName(fileName));
 			if (enumReport == null)
 				continue;
-			ReportBase reportBase =  enumReport.getReportAll();
+			ReportBase reportBase =  enumReport.getReportBase();
 			boolean readResult = reportBase.readReportFromFile(fileName);
 			if (readResult) {
 				String xdocString =  reportBase.outputReportXdoc();
@@ -123,14 +123,14 @@ public class ReportProject extends ReportBase {
 	 * 
 	 * @param folderChildren
 	 */
-	public ReportProject(List<String> parentfolders)  throws Exception{
+	public ReportOld(List<String> parentfolders)  throws Exception{
 		for (String fileName : parentfolders) {
 			if (!FileOperate.isFileDirectory(fileName))
 				continue;
 			EnumReport enumReport = EnumReport.findByFolderName(FileOperate.getFileName(fileName));
 			if (enumReport == null)
 				continue;
-			ReportBase reportBase =  enumReport.getReportAll();
+			ReportBase reportBase =  enumReport.getReportBase();
 			boolean readResult = reportBase.readReportFromFile(fileName);
 			if (readResult) {
 				String xdocString =  reportBase.outputReportXdoc();
@@ -144,11 +144,11 @@ public class ReportProject extends ReportBase {
 	
 	@Override
 	public EnumReport getEnumReport() {
-		return EnumReport.Project;
+		return EnumReport.ReportAll;
 	}
 
 	@Override
-	protected Map<String, Object> addParamMap() {
+	protected Map<String, Object> buildFinalParamMap() {
 		Map<String, Object> mapKey2Param = new HashMap<String, Object>();
 		mapKey2Param.put("lsXdocChildren", lsXdocChildren);
 		mapKey2Param.put("noAssign", noAssign);
@@ -262,9 +262,9 @@ public class ReportProject extends ReportBase {
 		return lsImageSrcs;
 	}
 	public static void main(String[] args){
-		ReportProject reportProject = null;
+		ReportOld reportProject = null;
 		try {
-			reportProject = new ReportProject("/home/novelbio/桌面/mongo");
+			reportProject = new ReportOld("/home/novelbio/桌面/mongo");
 			reportProject.outputReport("/home/novelbio/桌面/faaaa.docx");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -433,7 +433,7 @@ public class ReportProject extends ReportBase {
 	 * @throws Exception
 	 */
 	private String addTitleNo(String tempString) throws Exception {
-		Map<String, Object> mapKey2Params = addParamMap();
+		Map<String, Object> mapKey2Params = buildFinalParamMap();
 		// TODO 异常待处理
 		// 加载模板
 		Configuration cfg = new Configuration();
@@ -449,7 +449,7 @@ public class ReportProject extends ReportBase {
 	}
 
 	private String addCatalogAndBG() throws Exception {
-		Map<String, Object> mapKey2Params = addParamMap();
+		Map<String, Object> mapKey2Params = buildFinalParamMap();
 		// TODO 异常待处理
 		// 加载模板
 		Configuration cf = new Configuration();

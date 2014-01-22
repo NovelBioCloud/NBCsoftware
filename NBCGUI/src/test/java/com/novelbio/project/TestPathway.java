@@ -19,7 +19,7 @@ import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportGOAll;
 import com.novelbio.nbcReport.Params.ReportPathWay;
 import com.novelbio.nbcReport.Params.ReportPathWayAll;
-import com.novelbio.nbcReport.Params.ReportProject;
+import com.novelbio.nbcReport.Params.ReportAll;
 import com.novelbio.nbcgui.controltest.CtrlTestPathInt;
 
 public class TestPathway {
@@ -100,7 +100,7 @@ public class TestPathway {
 	public void runReport() throws Exception {
 		List<String> lsFolders = new ArrayList<>();
 		lsFolders.add(FileHadoop.addHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.PathWay.getResultFolder()));
-		ReportProject reportProject = new ReportProject(lsFolders);
+		ReportAll reportProject = new ReportAll(lsFolders);
 		String reportTest = "/home/novelbio/桌面/testReportPathWay.docx";
 		reportProject.outputReport(reportTest);
 		Assert.assertNotNull(FileOperate.isFileExist(reportTest));

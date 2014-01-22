@@ -13,17 +13,17 @@ import org.junit.Test;
 import com.novelbio.base.fileOperate.FileHadoop;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.nbcReport.Params.EnumReport;
-import com.novelbio.nbcReport.Params.ReportProject;
+import com.novelbio.nbcReport.Params.ReportAll;
 
 public class TestReport {
-	ReportProject reportProject;
+	ReportAll reportProject;
 	
 	
 	@Before
 	public void init() throws Exception{
 //		List<String> lsFolders = new ArrayList<>();
 //		lsFolders.add(FileHadoop.getHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.GOAnalysis.getResultFolder()));
-		reportProject = new ReportProject(FileHadoop.addHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档"));
+		reportProject = new ReportAll(FileHadoop.addHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档"));
 	}
 	
 	@Test

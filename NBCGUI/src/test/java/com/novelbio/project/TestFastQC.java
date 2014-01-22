@@ -16,7 +16,7 @@ import com.novelbio.base.fileOperate.FileHadoop;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.service.SpringFactory;
 import com.novelbio.nbcReport.Params.EnumReport;
-import com.novelbio.nbcReport.Params.ReportProject;
+import com.novelbio.nbcReport.Params.ReportAll;
 import com.novelbio.nbcReport.Params.ReportQC;
 import com.novelbio.nbcgui.controlseq.CtrlFastQ;
 
@@ -71,7 +71,7 @@ public class TestFastQC {
 		List<String> lsFolders = new ArrayList<>();
 		lsFolders.add(FileHadoop.addHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的文档/"+EnumReport.FastQC.getResultFolder()));
 		lsFolders.add(FileHadoop.addHdfsHeadSymbol("/nbCloud/staff/gaozhu/我的图片/"+EnumReport.FastQC.getResultFolder()));
-		ReportProject reportProject = new ReportProject(lsFolders);
+		ReportAll reportProject = new ReportAll(lsFolders);
 		String reportTest = "/home/novelbio/桌面/testReportFastQC.docx";
 		reportProject.outputReport(reportTest);
 		Assert.assertNotNull(FileOperate.isFileExist(reportTest));

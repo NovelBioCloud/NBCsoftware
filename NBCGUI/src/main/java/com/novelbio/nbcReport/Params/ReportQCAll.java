@@ -26,7 +26,7 @@ public class ReportQCAll extends ReportBase {
 	}
 
 	@Override
-	protected Map<String, Object> addParamMap() {
+	public Map<String, Object> buildFinalParamMap() {
 		Map<String, Object> mapKey2Params = new HashMap<String, Object>();
 		mapKey2Params.put("no", no);
 		// 只要一个做为示例

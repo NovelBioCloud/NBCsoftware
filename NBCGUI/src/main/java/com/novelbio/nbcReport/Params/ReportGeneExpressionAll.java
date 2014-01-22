@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.nbcReport.XdocTmpltExcel;
 
 public class ReportGeneExpressionAll  extends ReportBase{
 
@@ -14,7 +13,7 @@ public class ReportGeneExpressionAll  extends ReportBase{
 	List<ReportGeneExpression> lsExpressions = new ArrayList<>();
 	
 	@Override
-	protected Map<String, Object> addParamMap() {
+	public Map<String, Object> buildFinalParamMap() {
 		HashMap<String, Object> mapName2Obj = new HashMap<>();
 		mapName2Obj.put("lsExpressions", lsExpressions);
 		mapName2Obj.put("no", no);

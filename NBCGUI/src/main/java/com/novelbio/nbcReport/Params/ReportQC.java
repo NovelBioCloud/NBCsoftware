@@ -126,5 +126,4 @@ public class ReportQC extends ReportBase{
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 }
