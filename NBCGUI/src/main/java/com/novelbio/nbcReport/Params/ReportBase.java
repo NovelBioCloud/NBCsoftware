@@ -112,7 +112,7 @@ public abstract class ReportBase  implements Cloneable, Serializable {
 	 * @param reportAll
 	 */
 	public void addChildReport(ReportBase childReport) {
-		String tempName = childReport.getEnumReport().getTempName();
+		String tempName = childReport.getEnumReport().getResultFolder();
 		LinkedHashSet<ReportBase> setReportBases = new LinkedHashSet<>();
 		if(mapTempName2setReportBase.containsKey(tempName)){
 			setReportBases = mapTempName2setReportBase.get(tempName);

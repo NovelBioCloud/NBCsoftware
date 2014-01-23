@@ -70,8 +70,9 @@ public enum EnumReport {
 	 * 获取reportBase 报告对象
 	 * @return
 	 */
-	public ReportBase getReportBase(){
-		return reportBase.getClone();
+	@SuppressWarnings("unchecked")
+	public <T> T getReportBase(){
+		return (T) reportBase.getClone();
 	}
 	
 	/**
@@ -83,7 +84,7 @@ public enum EnumReport {
 	}
 	
 	/**
-	 * 得到结果目录文件名
+	 * 得到结果目录文件名也可以是模板的名称
 	 * @return
 	 */
 	public String getResultFolder(){

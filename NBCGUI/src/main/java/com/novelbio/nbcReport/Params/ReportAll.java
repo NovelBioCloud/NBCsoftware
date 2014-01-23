@@ -3,8 +3,6 @@ package com.novelbio.nbcReport.Params;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-
-import com.novelbio.base.word.NBCWord;
 /**
  * 报告总类
  * @author Administrator
@@ -27,6 +25,8 @@ public class ReportAll extends ReportBase {
 
 	@Override
 	public Map<String, Object> buildFinalParamMap() {
+		mapKey2Param.putAll(mapTempName2setReportBase);
+		mapKey2Param.put("projectName", projectName);
 		return mapKey2Param;
 	}
 
@@ -35,10 +35,4 @@ public class ReportAll extends ReportBase {
 		this.projectName = projectName;
 	}
 
-	public static void main(String[] args) {
-		ReportBase reportAll = EnumReport.ReportAll.getReportBase();
-		reportAll.addChildReport(reportAll);
-		NBCWord word = reportAll.getWord();
-		word.renderReport(reportAll);
-	}
 }

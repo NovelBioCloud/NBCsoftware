@@ -16,6 +16,7 @@ public class Document extends BaseWord{
 	private ActiveXComponent wordApp;
 	private Documents documents;
 	private Document anotherDoc;
+	private Selection selection;
 	public Document(Dispatch instance,ActiveXComponent wordApp,Documents documents) {
 		super(instance);
 		this.documents = documents;
@@ -31,7 +32,7 @@ public class Document extends BaseWord{
 	 * 创建时间：2011-6-4 下午05:42:42
 	 */
 	public void saveAs(String filePathName) throws Exception{
-		Dispatch.call(instance, "SaveAs", filePathName);
+		Dispatch.call(instance, "SaveAs", filePathName,new Variant(0));
 	}
 	/**
 	 * 打开另一个子文档用来复制内容
@@ -46,7 +47,7 @@ public class Document extends BaseWord{
 	}
 	
 	/**
-	 * 复制另一个doc中的全部内容到当前doc的selection中
+	 * 复制另一个doc中的全部内容到当前doc的selection中然后关闭这个doc不保存
 	 * @param selection
 	 * @throws Exception 
 	 */
@@ -56,6 +57,7 @@ public class Document extends BaseWord{
 	    Dispatch textRange = Dispatch.get(getSelection().getInstance(), "Range")  
                 .toDispatch();  
         Dispatch.call(textRange, "Paste");
+        anotherDoc.close();
 	}
 	
 	public void save() throws Exception{
@@ -70,8 +72,10 @@ public class Document extends BaseWord{
 	 * 创建时间：2011-6-4 下午05:38:28
 	 */
 	public Selection getSelection() throws Exception{
-		Dispatch d= Dispatch.call(wordApp,"Selection").toDispatch();
-		Selection selection= new Selection(d,wordApp,instance);
+		if(selection == null){
+			Dispatch d= Dispatch.call(wordApp,"Selection").toDispatch();
+			selection= new Selection(d,wordApp,instance);
+		}
 		return selection;
 	}
 	/**

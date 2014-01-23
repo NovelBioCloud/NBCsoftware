@@ -43,6 +43,7 @@ public class NBCWord {
 		try {
 			render(nowDoc,reportBase.buildFinalParamMap());
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error("报告渲染出错");
 		}
 	}
@@ -72,9 +73,22 @@ public class NBCWord {
 					writeText(doc,key,(Collection<?>)param.get(key));
 				}
 			}else{
-				List<String> lsValues = new ArrayList<>();
-				lsValues.add(param.get(key)+"");
-				writeText(doc,key,lsValues);
+				List<Object> lsParam = new ArrayList<>();
+				if(param.get(key) instanceof NBCWordTable){
+					lsParam.add(param.get(key));
+					writeTables(doc,key,lsParam);
+				}else if(param.get(key) instanceof NBCWordImage){
+					lsParam.add(param.get(key));
+					writeImages(doc,key,lsParam);
+				}else if(param.get(key) instanceof ReportBase){
+					lsParam.add(param.get(key));
+					writeOtherTemp(doc,key, lsParam);
+				}else{
+					lsParam.add(param.get(key));
+					writeText(doc,key,lsParam);
+				}
+				
+				
 			}
 		}
 		replaceOtherKeyToDefault(doc);

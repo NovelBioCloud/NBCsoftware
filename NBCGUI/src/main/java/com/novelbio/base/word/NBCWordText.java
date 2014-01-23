@@ -62,7 +62,7 @@ public class NBCWordText {
 			}
 			Iterator iterator = values.iterator();
 			Object object = (Object) iterator.next();
-			selection.replaceSelected(preText + object + appendText);
+			selection.replaceSelected(preText + object.toString() + appendText);
 			while (iterator.hasNext()) {
 				if (perEnter)
 					selection.nextRow();
