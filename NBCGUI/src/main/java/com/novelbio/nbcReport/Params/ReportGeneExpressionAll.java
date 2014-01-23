@@ -61,19 +61,4 @@ public class ReportGeneExpressionAll  extends ReportBase{
 
 
 
-	@Override
-	public boolean readReportFromFile(String savePath) {
-		List<String> lsReportFiles = FileOperate.getFoldFileNameLs(FileOperate.addSep(savePath)+".report", "report_*", "*");
-		for (String reportFile : lsReportFiles) {
-			try {
-				ReportGeneExpression reportGeneExpression = (ReportGeneExpression)FileOperate.readFileAsObject(reportFile);
-				addGeneExp(reportGeneExpression);
-			} catch (Exception e) {
-				continue;
-			}
-		}
-		return true;
-	}
-
-
 }

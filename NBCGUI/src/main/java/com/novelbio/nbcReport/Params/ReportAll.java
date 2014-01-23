@@ -35,12 +35,6 @@ public class ReportAll extends ReportBase {
 		this.projectName = projectName;
 	}
 
-	@Override
-	public boolean readReportFromFile(String savePath) {
-		return false;
-	}
-	
-	
 	public static void main(String[] args) {
 		ReportBase reportAll = EnumReport.ReportAll.getReportBase();
 		reportAll.addChildReport(reportAll);

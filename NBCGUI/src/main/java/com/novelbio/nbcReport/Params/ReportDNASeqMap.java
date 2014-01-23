@@ -24,10 +24,5 @@ public class ReportDNASeqMap extends ReportBase{
 	public String getNo() {
 		return no;
 	}
-
-	@Override
-	public boolean readReportFromFile(String savePath) {
-		return true;
-	}
 	
 }

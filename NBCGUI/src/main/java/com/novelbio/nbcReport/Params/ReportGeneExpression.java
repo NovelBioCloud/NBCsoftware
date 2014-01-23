@@ -52,13 +52,5 @@ public class ReportGeneExpression  extends ReportBase{
 		return EnumReport.GeneExp;
 	}
 
-	@Override
-	public boolean readReportFromFile(String savePath) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
-	
-	
 
 }

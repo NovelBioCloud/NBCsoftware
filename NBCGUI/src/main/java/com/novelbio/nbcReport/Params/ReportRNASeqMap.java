@@ -24,10 +24,5 @@ public class ReportRNASeqMap extends ReportBase{
 	public String getNo() {
 		return no;
 	}
-
-	@Override
-	public boolean readReportFromFile(String savePath) {
-		return true;
-	}
 	
 }

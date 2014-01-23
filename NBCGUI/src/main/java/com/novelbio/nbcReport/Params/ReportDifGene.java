@@ -25,9 +25,6 @@ public class ReportDifGene  extends ReportBase{
 	
 	List<XdocTmpltExcel> lsTmpltExcels;
 	
-	
-	
-	
 
 	public String getDiffGeneType() {
 		return diffGeneType;
@@ -94,11 +91,6 @@ public class ReportDifGene  extends ReportBase{
 		return EnumReport.DiffExp;
 	}
 
-	@Override
-	public boolean readReportFromFile(String savePath) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 
 }

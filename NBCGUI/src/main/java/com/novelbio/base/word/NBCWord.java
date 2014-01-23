@@ -19,6 +19,10 @@ public class NBCWord {
 	public static Logger logger = Logger.getLogger(NBCWord.class);
 	private WordApp wordApp;
 	private Document nowDoc;
+	
+	/**
+	 * @param tempPath 模板路径
+	 */
 	public NBCWord(String tempPath) {
 		try {
 			wordApp = new WordApp(true);
@@ -206,7 +210,7 @@ public class NBCWord {
 
 	/**
 	 * 结果另存为
-	 * @param string
+	 * @param filePathName　新的全路径
 	 * @throws Exception 
 	 */
 	public void saveDocAs(String filePathName) throws Exception {
@@ -214,8 +218,7 @@ public class NBCWord {
 	}
 	
 	/**
-	 * 结果另存为
-	 * @param string
+	 * 保存打开的报告,如果是打开的模板,请调用saveDocAs方法,不然会覆盖模板,这是我们不希望看到的
 	 * @throws Exception 
 	 */
 	public void saveDoc() throws Exception {

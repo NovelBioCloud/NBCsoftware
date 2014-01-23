@@ -49,18 +49,4 @@ public class ReportSamAndRPKMAll   extends ReportBase {
 		lsSamAndRPKMs.add(reportSamAndRPKM);
 	}
 	
-	@Override
-	public boolean readReportFromFile(String savePath) {
-		List<String> lsReportFiles = FileOperate.getFoldFileNameLs(FileOperate.addSep(savePath)+".report", "report_*", "*");
-		for (String reportFile : lsReportFiles) {
-			try {
-				ReportSamAndRPKM reportSamAndRPKM = (ReportSamAndRPKM)FileOperate.readFileAsObject(reportFile);
-				addSamAndRPKMs(reportSamAndRPKM);
-			} catch (Exception e) {
-				continue;
-			}
-		}
-		return true;
-	}
-
 }

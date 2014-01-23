@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 自动化报告图片参数类
+ * @author novelbio
+ *
+ */
 public class NBCWordImage implements Serializable{
 	private static final long serialVersionUID = 1L;
 	/** 图片的标题 */

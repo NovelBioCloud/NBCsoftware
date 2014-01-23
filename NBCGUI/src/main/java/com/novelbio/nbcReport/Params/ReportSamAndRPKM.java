@@ -61,13 +61,5 @@ public class ReportSamAndRPKM extends ReportBase{
 	public EnumReport getEnumReport() {
 		return EnumReport.SamStatistics;
 	}
-
-	@Override
-	public boolean readReportFromFile(String savePath) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-
 	
 }

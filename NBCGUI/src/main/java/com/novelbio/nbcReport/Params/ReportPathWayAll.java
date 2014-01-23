@@ -59,18 +59,5 @@ public class ReportPathWayAll extends ReportBase{
 		return result[conditionNum];
 	}
 
-	@Override
-	public boolean readReportFromFile(String savePath) {
-		List<String> lsReportFiles = FileOperate.getFoldFileNameLs(FileOperate.addSep(savePath)+".report", "report_*", "*");
-		for (String reportFile : lsReportFiles) {
-			try {
-				ReportPathWay reportPathWay = (ReportPathWay)FileOperate.readFileAsObject(reportFile);
-				addReportPathWay(reportPathWay);
-			} catch (Exception e) {
-				continue;
-			}
-		}
-		return true;
-	}
 	
 }

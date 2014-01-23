@@ -3,7 +3,10 @@ package com.novelbio.nbcReport.Params;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
 
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.word.NBCWord;
@@ -15,6 +18,7 @@ import com.novelbio.base.word.NBCWord;
  */
 public abstract class ReportBase  implements Cloneable, Serializable {
 	private static final long serialVersionUID = 1L;
+	public static Logger logger = Logger.getLogger(ReportBase.class);
 	/**
 	 * 所有的参数集合
 	 */
@@ -47,21 +51,30 @@ public abstract class ReportBase  implements Cloneable, Serializable {
 	 * @param savePath 保存的路径，会添加.report目录
 	 * @return
 	 */
-	public boolean writeAsFile(String savePath){
+	public String writeAsFile(String savePath){
 		this.savePath = savePath;
-		String reportPath = FileOperate.addSep(savePath) + FileOperate.getSepPath() + ".report";
+		String reportPath = FileOperate.addSep(savePath) + ".report";
 		FileOperate.createFolders(reportPath);
 		FileOperate.delAllFile(reportPath);
 		String randomReportFile = FileOperate.addSep(reportPath) +  getEnumReport().getReportRandomFileName();
 		FileOperate.writeObjectToFile(this, randomReportFile);
-		return true;
+		return randomReportFile;
 	}
 	
 	/**
-	 * 从文件中反序列化对象并添加到reportAll中,会自动到savePath下的.report文件夹找所有的序列化文件
+	 * 从文件中反序列化报告对象
+	 * @param pathAndName 序列化文件的全路径
 	 * @return
 	 */
-	public abstract boolean readReportFromFile(String savePath);
+	public static ReportBase readReportFromFile(String pathAndName) {
+		try {
+			ReportBase reportBase = (ReportBase) FileOperate.readFileAsObject(pathAndName);
+			return reportBase;
+		} catch (Exception e) {
+			logger.error("报告文件 :"+pathAndName +" 序列化失败");
+			return null;
+		}
+	}
 	
 	/**
 	 * 取得克隆的对象

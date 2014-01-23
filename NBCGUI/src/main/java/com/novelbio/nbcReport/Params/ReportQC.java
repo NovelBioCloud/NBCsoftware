@@ -121,9 +121,4 @@ public class ReportQC extends ReportBase{
 		return EnumReport.FastQC;
 	}
 
-	@Override
-	public boolean readReportFromFile(String savePath) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 }

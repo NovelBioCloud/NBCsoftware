@@ -18,6 +18,7 @@ import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.plot.ImageUtils;
+import com.novelbio.base.word.NBCWordImage;
 import com.novelbio.database.domain.geneanno.GOtype;
 import com.novelbio.nbcReport.XdocTmpltExcel;
 import com.novelbio.nbcReport.XdocTmpltPic;
@@ -209,10 +210,9 @@ public class CtrlGOall implements CtrlTestGOInt {
 			String picName = ImageUtils.saveBufferedImage(bfImageCombine, picNameLog2P);
 			if (picName != null) {
 				reportGO.addResultFile(picName);
-				XdocTmpltPic xdocTmpltPic = new XdocTmpltPic(picName);
-				//图片的宽度和描述都可以在这里设置
-				xdocTmpltPic.setHeight(200);
-				reportGO.addXdocTempPic(xdocTmpltPic);
+				NBCWordImage image = new NBCWordImage();
+				image.addPicPath(picName);
+				reportGO.addNBCWordImage(image);
 				lsResultPic.add( picName);
 			}
 		}

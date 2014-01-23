@@ -4,6 +4,7 @@ import com.novelbio.base.PathDetail;
 
 
 
+
 /**
  * 参数枚举类
  * 
@@ -11,16 +12,16 @@ import com.novelbio.base.PathDetail;
  * 
  */
 public enum EnumReport {
-	GeneExp("GeneExpression_result",new ReportGeneExpressionAll()),
+	GeneExp("GeneExpression_result",new ReportGeneExpression()),
 	GeneStructure("GeneStructure_result",null),
-	GOAnalysis("GOAnalysis_result",new ReportGOAll()),
-	PathWay("PathWayAnalysis_result",new ReportPathWayAll()),
-	SamStatistics("SamStatistic_result",new ReportSamAndRPKMAll()),
+	GOAnalysis("GOAnalysis_result",new ReportGO()),
+	PathWay("PathWayAnalysis_result",new ReportPathWay()),
+	SamStatistics("SamStatistic_result",new ReportSamAndRPKM()),
 	NCRNAstatistics("ncrnaStatistic_result",null),
-	FastQC("QualityControl_result",new ReportQCAll()),
+	FastQC("QualityControl_result",new ReportQC()),
 	DNASeqMap("DNASeqMap_result",new ReportDNASeqMap()),
 	RNASeqMap("RNASeqMap_result",new ReportRNASeqMap()),
-	DiffExp("DifferenceExpression_result",new ReportDifGeneAll()),
+	DiffExp("DifferenceExpression_result",new ReportDifGene()),
 	RfamStatistics("RfamStatistics_result", null),
 	ReconstructTranscriptome("ReconstructTranscriptome_result", null),
 	GOTree("GOTrees_result",null),
@@ -29,7 +30,7 @@ public enum EnumReport {
 	MiRNATargetNetwork("MiRNATargetNetwork_result",null),
 	PathwayActNetwork("PathwayActNetwork_result",null),
 	CoExpNetLncRNA("CoExpNetLncRNA_result",null),
-	ReportAll("Novelbio_Result",new ReportAll()),
+	ReportAll("Novelbio_result",new ReportAll()),
 	@Deprecated 
 	Picture("Picture",null),
 	@Deprecated 
@@ -51,15 +52,6 @@ public enum EnumReport {
 		this.reportBase = reportBase;
 	}
 
-	/**
-	 * 得到xdoc报告输出文件名
-	 * @return
-	 */
-	@Deprecated
-	public String getReportXdocFileName() {
-		return "report_" + this.name() + ".doc";
-	}
-	
 	/**
 	 * 获得序列化随机文件名
 	 * @return

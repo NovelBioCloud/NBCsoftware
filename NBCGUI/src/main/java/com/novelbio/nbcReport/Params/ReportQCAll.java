@@ -71,23 +71,5 @@ public class ReportQCAll extends ReportBase {
 		return lsReportQCs;
 	}
 
-	@Override
-	public boolean readReportFromFile(String savePath) {
-		List<String> lsReportFiles = FileOperate.getFoldFileNameLs(FileOperate.addSep(savePath)+".report", "report_*", "*");
-		for (String reportFile : lsReportFiles) {
-			try {
-				ReportQC reportQC = (ReportQC)FileOperate.readFileAsObject(reportFile);
-				addReportQC(reportQC);
-				if (xdocTmpltExcel == null) {
-					XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(EnumTableType.QC_BasicStatAll.getXdocTable());
-					xdocTmpltExcel.addExcel(reportQC.getBasicStatExcelPath(), 1);
-					addXdocTempExcel(xdocTmpltExcel);
-				}
-			} catch (Exception e) {
-				continue;
-			}
-		}
-		return true;
-	}
 
 }

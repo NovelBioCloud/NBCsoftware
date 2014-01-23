@@ -136,8 +136,4 @@ public class ReportPathWay extends ReportBase{
 		return EnumReport.PathWay;
 	}
 
-	@Override
-	public boolean readReportFromFile(String savePath) {
-		return false;
-	}
 }

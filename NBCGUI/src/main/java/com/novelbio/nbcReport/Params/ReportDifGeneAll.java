@@ -52,18 +52,5 @@ public class ReportDifGeneAll  extends ReportBase{
 		this.lsDifGenes = lsDifGenes;
 	}
 
-	@Override
-	public boolean readReportFromFile(String savePath) {
-		List<String> lsReportFiles = FileOperate.getFoldFileNameLs(FileOperate.addSep(savePath)+".report", "report_*", "*");
-		for (String reportFile : lsReportFiles) {
-			try {
-				ReportDifGene reportDifGene = (ReportDifGene)FileOperate.readFileAsObject(reportFile);
-				addDifGene(reportDifGene);
-			} catch (Exception e) {
-				continue;
-			}
-		}
-		return true;
-	}
 
 }
