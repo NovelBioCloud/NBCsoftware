@@ -18,6 +18,8 @@ public class NBCWordTable implements Serializable{
 	private String expTeamName = "";
 	// 是否需要换行
 	private boolean withEnter = false;
+	// 存在时的文本内容
+	private String existText;
 	/** 最大读取行数 默认15行*/
 	private int maxRow = 15;
 	/** 表格所在路径和sheet的集合 */
@@ -33,6 +35,10 @@ public class NBCWordTable implements Serializable{
 		if(mapExcelPath2SheetName.size() == 0)
 			return;
 		paresePattern(pattern);
+		if (existText != null){
+			selection.replaceSelected(existText);
+			return;
+		}
 		addExcels(selection);
 	}
 	
@@ -51,6 +57,8 @@ public class NBCWordTable implements Serializable{
 		for (int i = 0; i < methods.length; i++) {
 			if (i == 0)
 				continue;
+			if (methods[i].startsWith("e|"))
+				this.existText = methods[i].split("e\\|")[1];
 			else if (methods[i].startsWith("r|")){
 				try {
 					this.maxRow = Integer.parseInt(methods[i].split("r\\|")[1]);

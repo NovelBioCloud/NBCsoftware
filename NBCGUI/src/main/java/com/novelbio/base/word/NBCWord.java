@@ -171,7 +171,18 @@ public class NBCWord {
 			}
 		}
 		while(doc.getSelection().find("\\$\\{"+key+"[#]*\\}",true)){
-			doc.getSelection().replaceSelected("");
+			String pattern = doc.getSelection().getText();
+			if(pattern.contains("##e|")){
+				String patternLeft = pattern.substring(2, pattern.length() - 1);
+				String[] methods = patternLeft.split("##");
+				for (int i = 0; i < methods.length; i++) {
+					if (methods[i].startsWith("e|")){
+						String existText = methods[i].split("e\\|")[1];
+						doc.getSelection().replaceSelected(existText);
+					}
+				}
+				return;
+			}
 			for (Object object : reportBases) {
 				ReportBase reportBase = (ReportBase)object;
 				Document otherDoc = doc.openDocumentForCopy(reportBase.getTempPathAndName());

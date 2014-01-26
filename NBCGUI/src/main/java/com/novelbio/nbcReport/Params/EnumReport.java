@@ -14,7 +14,14 @@ import com.novelbio.base.PathDetail;
 public enum EnumReport {
 	GeneExp("GeneExpression_result",new ReportGeneExpression()),
 	GeneStructure("GeneStructure_result",null),
+	
+	//以下是GO的所有报告模块
 	GOAnalysis("GOAnalysis_result",new ReportGO()),
+	GO_All("GO_All",new ReportGOAll()),
+	GO_UpDown("GO_UpDown",new ReportGOUpDown()),
+	GO_Cluster("GO_Cluster",new ReportGOCluster()),
+	GO_Cluster_Type("GO_Cluster_Type",new ReportGOClusterType()),
+	
 	PathWay("PathWayAnalysis_result",new ReportPathWay()),
 	SamStatistics("SamStatistic_result",new ReportSamAndRPKM()),
 	NCRNAstatistics("ncrnaStatistic_result",null),

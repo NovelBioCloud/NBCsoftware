@@ -12,12 +12,15 @@ public class NBCWordText {
 	private String appendText = "";
 	// 是否需要换行
 	private boolean withEnter = false;
+	// 存在时的文本内容
+	private String existText;
 	// 每个文本间都加上换行
 	private boolean perEnter = false;
 	// 选 中的文本
 	private Selection selection;
 	// 表达式
 	private String pattern;
+	
 
 	// ${aa##p|asf##a|aaaf##n|##d|bas}
 	public NBCWordText(Selection selection) {
@@ -32,7 +35,9 @@ public class NBCWordText {
 		for (int i = 0; i < methods.length; i++) {
 			if (i == 0)
 				continue;
-			if (methods[i].startsWith("p|"))
+			if (methods[i].startsWith("e|"))
+				this.existText = methods[i].split("e\\|")[1];
+			else if (methods[i].startsWith("p|"))
 				this.preText = methods[i].split("p\\|")[1];
 			else if (methods[i].startsWith("a|"))
 				this.appendText = methods[i].split("a\\|")[1];
@@ -51,16 +56,19 @@ public class NBCWordText {
 	 * @param obj
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	public void replaceAs(Object obj) throws Exception {
+		if (existText != null){
+			selection.replaceSelected(existText);
+			return;
+		}
 		if (obj == null)
 			return;
 		if (obj instanceof Collection) {
-			Collection values = (Collection) obj;
+			Collection<?> values = (Collection<?>) obj;
 			if (values.size() == 0) {
 				useDefaultText();
 			}
-			Iterator iterator = values.iterator();
+			Iterator<?> iterator = values.iterator();
 			Object object = (Object) iterator.next();
 			selection.replaceSelected(preText + object.toString() + appendText);
 			while (iterator.hasNext()) {

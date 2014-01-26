@@ -23,6 +23,8 @@ public class NBCWordImage implements Serializable{
 	private String expTeamName = "";
 	// 是否需要换行
 	private boolean withEnter = false;
+	// 存在时的文本内容
+	private String existText;
 	/** 图片所在路径 */
 	List<String> lsPicPaths = new ArrayList<>();
 	
@@ -36,6 +38,10 @@ public class NBCWordImage implements Serializable{
 		if(lsPicPaths.size() == 0)
 			return;
 		paresePattern(pattern);
+		if (existText != null){
+			selection.replaceSelected(existText);
+			return;
+		}
 		addPictures(selection);
 	}
 	
@@ -52,6 +58,8 @@ public class NBCWordImage implements Serializable{
 		for (int i = 0; i < methods.length; i++) {
 			if (i == 0)
 				continue;
+			if (methods[i].startsWith("e|"))
+				this.existText = methods[i].split("e\\|")[1];
 			else if (methods[i].startsWith("n|"))
 				this.withEnter = true;
 		}
