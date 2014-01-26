@@ -2,8 +2,6 @@ package com.novelbio.nbcgui.controltools;
 
 import java.util.ArrayList;
 
-import org.broadinstitute.sting.jna.lsf.v7_0_6.LibLsf.lsfAcctRec;
-
 import com.novelbio.base.dataOperate.ExcelOperate;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.dataStructure.MathComput;
