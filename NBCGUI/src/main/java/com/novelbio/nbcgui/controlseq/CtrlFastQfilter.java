@@ -44,6 +44,8 @@ public class CtrlFastQfilter {
 	
 	HashMultimap<String, String> mapPrefix2QCresult = HashMultimap.create();
 	
+	/** 是否检查文件格式 */
+	boolean isCheckFormat;
 	boolean isJustFastqc = false;
 	
 	/** 设定过滤参数 */
@@ -53,6 +55,9 @@ public class CtrlFastQfilter {
 	/** 是否只进行fastqc工作 */
 	public void setJustFastqc(boolean isJustFastqc) {
 		this.isJustFastqc = isJustFastqc;
+	}
+	public void setCheckFormat(boolean isCheckFormat) {
+		this.isCheckFormat = isCheckFormat;
 	}
 	public void setOutFilePrefix(String outFilePrefix) {
 		this.outFilePrefix = outFilePrefix;
@@ -121,6 +126,7 @@ public class CtrlFastQfilter {
 	}
 	public void filteredAndCombineReads() {
 		FastQReadingChannel fastQReadingChannel = new FastQReadingChannel();
+		fastQReadingChannel.setCheckFormat(isCheckFormat);
 		fastQReadingChannel.setFastQRead(lsFastQLR);
 		// QC before Filter
 		fastQReadingChannel.setFastQC(fastQCbefore[0], fastQCbefore[1]);

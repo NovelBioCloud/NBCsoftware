@@ -47,7 +47,7 @@ public class CtrlFastQ {
 	HashMultimap<String, String> mapPrefix2ResultQC = HashMultimap.create();
 	
 	boolean isJustFastqc = false;
-	
+	boolean isCheckFormat = true;
 	/**
 	 * 得到所有的报告
 	 * @return
@@ -55,7 +55,9 @@ public class CtrlFastQ {
 	public List<ReportQC> getLsReportQCs() {
 		return lsReportQCs;
 	}
-	
+	public void setCheckFormat(boolean isCheckFormat) {
+		this.isCheckFormat = isCheckFormat;
+	}
 	public void setAdaptorLeft(String adaptorLeft) {
 		fastQfilter.setFilterParamAdaptorLeft(adaptorLeft.trim());
 	}
@@ -181,7 +183,7 @@ public class CtrlFastQ {
 			ctrlFastQfilter.setOutFilePrefix(outFilePrefix);
 			ctrlFastQfilter.setPrefix(prefix);
 			ctrlFastQfilter.setLsFastQLR(lsFastQLR);
-			
+			ctrlFastQfilter.setCheckFormat(isCheckFormat);
 			FastQC[] fastQCsBefore = getFastQC(lsFastQLR, prefix, qcBefore);
 			mapCond2FastQCBefore.put(prefix, fastQCsBefore);
 			ctrlFastQfilter.setFastQCbefore(fastQCsBefore);
