@@ -533,8 +533,14 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	
 	@Override
 	public void setRunningInfo(GuiAnnoInfo info) {
-		guiSamStatistics.getProcessBar().setValue((int)( info.getNumDouble()/1024));
-		guiSamStatistics.getLabel().setText(info.getInfo());
+		if (guiSamStatistics != null) {
+			try {
+				guiSamStatistics.getProcessBar().setValue((int)( info.getNumDouble()/1024));
+				guiSamStatistics.getLabel().setText(info.getInfo());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	@Override

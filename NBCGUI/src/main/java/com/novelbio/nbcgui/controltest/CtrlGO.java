@@ -12,7 +12,6 @@ import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.base.PathDetail;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.geneanno.GOtype;
-import com.novelbio.nbcReport.Params.ReportGO;
 
 public class CtrlGO extends CtrlGOPath {
 	private static final Logger logger = Logger.getLogger(CtrlGO.class);
