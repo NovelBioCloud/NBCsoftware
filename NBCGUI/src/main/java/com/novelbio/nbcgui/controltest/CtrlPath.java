@@ -65,8 +65,9 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 		return reportPathWay;
 	}
 	
-	public List<XdocTmpltExcel> saveExcel(String excelPath) {
-		List<XdocTmpltExcel> lsXdocTmpltExcels = new ArrayList<>();
+	@Override
+	public List<String> saveExcel(String excelPath) {
+		List<String> lsResultFile = new ArrayList<>();
 		String excelPrefix = FoldeCreate.createAndInFold(excelPath, EnumReport.PathWay.getResultFolder());
 		if (excelPrefix.endsWith("\\") || excelPrefix.endsWith("/")) {
 			saveParentPath = excelPrefix;
@@ -81,18 +82,12 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 			saveExcelPrefix = FileOperate.changeFilePrefix(excelPrefix, getResultBaseTitle() + "_", "xls");
 		}
 		if (isCluster) {
-			lsXdocTmpltExcels =  saveExcelCluster(saveExcelPrefix);
+			lsResultFile =  saveExcelCluster(saveExcelPrefix);
 		} else {
-			lsXdocTmpltExcels =  saveExcelNorm(saveExcelPrefix);
-		}
-		for (XdocTmpltExcel xdocTmpltExcel : lsXdocTmpltExcels) {
-			reportPathWay.addXdocTempExcel(xdocTmpltExcel);
-			for (String excelFiles : xdocTmpltExcel.getAllExcelFileName()) {
-				reportPathWay.addResultFile(excelFiles);
-			}
+			lsResultFile =  saveExcelNorm(saveExcelPrefix);
 		}
 		savePic();
-		return lsXdocTmpltExcels;
+		return lsResultFile;
 	}
 	
 	private void savePic() {

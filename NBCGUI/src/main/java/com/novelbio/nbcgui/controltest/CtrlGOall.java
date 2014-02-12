@@ -2,7 +2,6 @@ package com.novelbio.nbcgui.controltest;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -12,34 +11,39 @@ import java.util.Set;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.google.common.collect.HashMultimap;
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
+import com.novelbio.analysis.annotation.functiontest.StatisticTestResult;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.plot.ImageUtils;
 import com.novelbio.base.word.NBCWordImage;
 import com.novelbio.database.domain.geneanno.GOtype;
-import com.novelbio.nbcReport.XdocTmpltExcel;
-import com.novelbio.nbcReport.XdocTmpltPic;
+import com.novelbio.database.model.species.Species;
 import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportGO;
+import com.novelbio.nbcReport.Params.ReportGOAll;
+import com.novelbio.nbcReport.Params.ReportGOCluster;
+import com.novelbio.nbcReport.Params.ReportGOClusterType;
+import com.novelbio.nbcReport.Params.ReportGOUpDown;
+import com.novelbio.nbcReport.report.GOReport;
 
 /** 同时把BP、MF、CC三个类型都做了 */
 @Component
 @Scope("prototype")
 public class CtrlGOall implements CtrlTestGOInt {
 	
-	Map<GOtype, CtrlGO> mapGOtype2CtrlGO = new LinkedHashMap<GOtype, CtrlGO>();
-	/** 结果文件列表 */
-	Map<GOtype, List<String>> mapGoType2File = new HashMap<>();
-	List<String> lsResultPic = new ArrayList<>();
+	public Map<GOtype, CtrlGO> mapGOtype2CtrlGO = new LinkedHashMap<GOtype, CtrlGO>();
+	public Map<String, String> mapPrefix2ResultPic = new LinkedHashMap<>();
 
 	GoAlgorithm goAlgorithm;
 	int taxID = 0;
 	List<Integer> lsBlastTaxID = new ArrayList<Integer>();
 	boolean isCluster = false;
-	ReportGO reportGO = new ReportGO();
+	boolean isJustAll = true;
+	
+	GOReport goReport;
+	
 	String savePathPrefix;
 	String savePrefix = "";
 	
@@ -52,20 +56,18 @@ public class CtrlGOall implements CtrlTestGOInt {
 	}
 	
 	public ReportGO getReportGO() {
-		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
-			if (ctrlGO.getMapResult_Prefix2FunTest().size() == 0) {
-				continue;
-			}
-			reportGO.setFinderCondition(ctrlGO.getFinderCondition());
-			reportGO.setUpRegulation(ctrlGO.getUpAndDownRegulation()[0]);
-			reportGO.setDownRegulation(ctrlGO.getUpAndDownRegulation()[1]);
-			reportGO.setTestMethod(ctrlGO.getTestMethod());
-		}
-		return reportGO;
+		return goReport.getReportGO();
+	}
+	/** 是否仅检测全体基因，不检测updown等 */
+	public boolean isJustAll() {
+		return isJustAll;
 	}
 	
 	@Override
 	public void setLsAccID2Value(ArrayList<String[]> lsAccID2Value) {
+		if (lsAccID2Value != null && lsAccID2Value.size() > 0 && lsAccID2Value.get(0).length > 1) {
+			isJustAll = false;
+		}
 		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
 			ctrlGO.setLsAccID2Value(lsAccID2Value);
 		}
@@ -164,8 +166,7 @@ public class CtrlGOall implements CtrlTestGOInt {
 	}
 	
 	@Override
-	public void saveExce(String excelPath) {
-		mapGoType2File.clear();
+	public void saveExcel(String excelPath) {
 		savePathPrefix = FoldeCreate.createAndInFold(excelPath, EnumReport.GOAnalysis.getResultFolder());
 		if (!savePathPrefix.endsWith("\\") && !savePathPrefix.endsWith("/")) {
 			savePrefix = FileOperate.getFileName(savePathPrefix);
@@ -178,14 +179,14 @@ public class CtrlGOall implements CtrlTestGOInt {
 			} else {
 				saveName = FileOperate.changeFilePrefix(savePathPrefix, ctrlGO.getResultBaseTitle() + "_", "xls");
 			}
-			for(XdocTmpltExcel xdocTmpltExcel : ctrlGO.saveExcel(saveName)){
-				for (String excelFile : xdocTmpltExcel.getAllExcelFileName()) {
-					reportGO.addResultFile(excelFile);
-				}
-			}
-			mapGoType2File.put(ctrlGO.getGOType(), ctrlGO.getLsResultExcel());
+			ctrlGO.saveExcel(saveName);
 		}
+
 		savePic();
+		
+		goReport = new GOReport();
+		goReport.setCtrlGOall(this);
+		goReport.generateReport();
 	}
 	
 	/** 获得保存到文件夹的前缀，譬如保存到/home/zong0jie/stage10，那么前缀就是stage10 */
@@ -195,7 +196,7 @@ public class CtrlGOall implements CtrlTestGOInt {
 	}
 
 	private void savePic() {
-		lsResultPic.clear();
+		mapPrefix2ResultPic.clear();
 		for (String prefix : getPrefix()) {
 			List<BufferedImage> lsGOimage = new ArrayList<BufferedImage>();
 			String excelSavePath = "";
@@ -208,13 +209,8 @@ public class CtrlGOall implements CtrlTestGOInt {
 			String picNameLog2P = excelSavePath +  "GO-Analysis-Log2P_" + prefix + "_" + getSavePrefix() + ".png";
 			
 			String picName = ImageUtils.saveBufferedImage(bfImageCombine, picNameLog2P);
-			if (picName != null) {
-				reportGO.addResultFile(picName);
-				NBCWordImage image = new NBCWordImage();
-				image.addPicPath(picName);
-				reportGO.addNBCWordImage(image);
-				lsResultPic.add( picName);
-			}
+			if (picName == null) continue;//存储图片失败
+			mapPrefix2ResultPic.put(prefix, picName);
 		}
 	}
 	
@@ -250,17 +246,13 @@ public class CtrlGOall implements CtrlTestGOInt {
 		return "GO-Analysis";
 	}
 	
-	public void setTeamName(String teamName){
-		reportGO.setTeamName(teamName);
+	public void setTeamName(String teamName) {
+		
 	}
 	
 	@Override
-	public Map<GOtype, List<String>> getMapGoType2File() {
-		return mapGoType2File;
-	}
-	@Override
 	public List<String> getLsResultPic() {
-		return lsResultPic;
+		return new ArrayList<>(mapPrefix2ResultPic.values());
 	}
 	
 }

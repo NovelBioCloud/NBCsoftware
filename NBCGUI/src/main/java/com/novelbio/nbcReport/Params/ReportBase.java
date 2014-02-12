@@ -76,9 +76,7 @@ public abstract class ReportBase  implements Cloneable, Serializable {
 		}
 	}
 	
-	/**
-	 * 取得克隆的对象
-	 */
+	/** 取得克隆的对象 */
 	public ReportBase getClone() {
 		try {
 			return (ReportBase) this.clone();

@@ -347,7 +347,7 @@ public class GuiGoJPanel extends JPanel{
 				public void actionPerformed(ActionEvent evt) {
 					String savefilename = guiFileOpen.saveFileNameAndPath("excel2007", "");
 					if (ctrlGO != null) {
-						ctrlGO.saveExce(savefilename);
+						ctrlGO.saveExcel(savefilename);
 					}
 				}
 			});

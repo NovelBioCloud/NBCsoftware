@@ -420,7 +420,7 @@ public class GuiGoMultiJPanel extends JPanel{
 		ctrlGO.setLsBG(backGroundFile);
 		ctrlGO.setLsAccID2Value(lsAccID);
 		ctrlGO.run();
-		ctrlGO.saveExce(outFile);
+		ctrlGO.saveExcel(outFile);
 	}
 	
 	/**
