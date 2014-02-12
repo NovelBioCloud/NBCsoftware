@@ -5,7 +5,7 @@ import com.novelbio.database.domain.geneanno.GOtype;
 
 public class ReportGOClusterType extends ReportBase {
 	private static final long serialVersionUID = 4313797841531882560L;
-
+	int geneNum;
 	/**
 	 * 添加图片模板
 	 * @param nbcWordImage
@@ -13,7 +13,12 @@ public class ReportGOClusterType extends ReportBase {
 	public void addNBCWordImage(NBCWordImage nbcWordImage) {
 		mapKey2Param.put("clusterTypeImage", nbcWordImage);
 	}
-
+	public void setGeneNum(int geneNum) {
+		this.geneNum = geneNum;
+	}
+	public int getGeneNum() {
+		return geneNum;
+	}
 	/**
 	 * @param goType
 	 * @param termRank 第几个显著的go
