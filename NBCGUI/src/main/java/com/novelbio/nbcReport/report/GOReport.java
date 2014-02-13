@@ -83,6 +83,7 @@ public class GOReport {
 			reportGOUpDown.setBlastToSpecies(lsBlastTo);
 			reportGO.addChildReport(reportGOUpDown);
 		}
+		//看是否放入gocluster
 		if (!mapPrefix2ReportCluster.isEmpty()) {
 			List<ReportGOClusterType> lsClusterTypes = new ArrayList<>(mapPrefix2ReportCluster.values());
 			Collections.sort(lsClusterTypes, new Comparator<ReportGOClusterType>() {
