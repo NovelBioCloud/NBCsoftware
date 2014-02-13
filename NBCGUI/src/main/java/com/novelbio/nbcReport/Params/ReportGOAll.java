@@ -116,6 +116,6 @@ public class ReportGOAll extends ReportBase  {
 
 	@Override
 	public EnumReport getEnumReport() {
-		return EnumReport.GOAnalysis;
+		return EnumReport.GO_All;
 	}
 }

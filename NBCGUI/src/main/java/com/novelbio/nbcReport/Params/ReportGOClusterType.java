@@ -86,7 +86,7 @@ public class ReportGOClusterType extends ReportBase {
 
 	@Override
 	public EnumReport getEnumReport() {
-		return EnumReport.GOAnalysis;
+		return EnumReport.GO_Cluster_Type;
 	}
 
 	
