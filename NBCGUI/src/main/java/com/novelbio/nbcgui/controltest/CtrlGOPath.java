@@ -303,7 +303,6 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	
 	/** 返回保存的文件名 */
 	protected List<String> saveExcelNorm(String excelPath) {
-		List<String> lsSaveFileName = new ArrayList<>();
 		ExcelOperate excelResult = new ExcelOperate();
 		excelResult.openExcel(excelPath);
 		lsResultExcel.add(excelPath);
@@ -313,6 +312,17 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		lsResultExcel.add(excelAllPath);
 
 		for (String prefix : mapPrefix2FunTest.keySet()) {
+			FunctionTest functionTest = mapPrefix2FunTest.get(prefix);
+			Map<String,   List<String[]>> mapSheetName2LsInfo = functionTest.getMapWriteToExcel();
+			if (mapPrefix2FunTest.size() > 1 && prefix.equals("All")) {
+				for (String sheetName : mapSheetName2LsInfo.keySet()) {
+					excelResultAll.WriteExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName));
+				}
+			} else {
+				for (String sheetName : mapSheetName2LsInfo.keySet()) {
+					excelResult.WriteExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName));
+				}
+			}
 			copeFile(prefix, excelPath);
 		}
 		return lsResultExcel;
@@ -358,9 +368,12 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			String excelPathOut = FileOperate.changeFileSuffix(excelPath, "_" + prefix, null);
 			excelResult.openExcel(excelPathOut);
 			lsResultExcel.add(excelPathOut);
+			Map<String, List<String[]>> mapSheetName2LsInfo = mapPrefix2FunTest.get(prefix).getMapWriteToExcel();
+			for (String sheetName : mapSheetName2LsInfo.keySet()) {
+				excelResult.WriteExcel(sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName));
+			}
 			copeFile(prefix, excelPath);
 		}
-		
 		return lsResultExcel;
 	}
 	public List<String> getLsResultExcel() {

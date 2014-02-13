@@ -3,6 +3,7 @@ package com.novelbio.nbcReport.report;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +29,7 @@ public class GOReport {
 	ReportGOAll reportGOAll;
 	ReportGOUpDown reportGOUpDown;
 	ReportGOCluster reportGOCluster;
-	Map<String, ReportGOClusterType> mapPrefix2ReportCluster;
+	Map<String, ReportGOClusterType> mapPrefix2ReportCluster = new HashMap<>();
 	
 	public void setCtrlGOall(CtrlGOall ctrlGOall) {
 		this.ctrlGOall = ctrlGOall;
