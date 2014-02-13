@@ -25,6 +25,12 @@ public class NBCWordImage implements Serializable{
 	private boolean withEnter = false;
 	// 存在时的文本内容
 	private String existText;
+	/** 图片对齐方式 null则默认居中 0-左对齐, 1-居中, 2-右对齐, 3-两端对齐, 4-分散对齐*/
+	private Integer align = null;
+	/** 图片宽度 ,null则使用原始宽度*/
+	private Integer width = null;
+	/** 图片高度 ,null则使用原始高度*/
+	private Integer height = null;
 	/** 图片所在路径 */
 	List<String> lsPicPaths = new ArrayList<>();
 	
@@ -76,7 +82,7 @@ public class NBCWordImage implements Serializable{
 			selection.nextRow();
 		}
 		selection.defaultParagraphStyle();
-		selection.insertPicture(lsPicPaths,title,2);
+		selection.insertPicture(lsPicPaths,title,align,width,height);
 		selection.nextRow();
 		if(!note.equals("")){
 			selection.setParagraphsProperties(0,0,0,0,2);
@@ -146,6 +152,30 @@ public class NBCWordImage implements Serializable{
 	public List<String> addPicPath(String picPath){
 		lsPicPaths.add(picPath);
 		return lsPicPaths;
+	}
+	/** 图片对齐方式 null则默认居中 0-左对齐, 1-居中, 2-右对齐, 3-两端对齐, 4-分散对齐*/
+	public Integer getAlign() {
+		return align;
+	}
+	/** 图片对齐方式 null则默认居中 0-左对齐, 1-居中, 2-右对齐, 3-两端对齐, 4-分散对齐*/
+	public void setAlign(Integer align) {
+		this.align = align;
+	}
+	/** 图片宽度 ,null则使用原始宽度*/
+	public Integer getWidth() {
+		return width;
+	}
+	/** 图片宽度 ,null则使用原始宽度*/
+	public void setWidth(Integer width) {
+		this.width = width;
+	}
+	/** 图片高度 ,null则使用原始高度*/
+	public Integer getHeight() {
+		return height;
+	}
+	/** 图片高度 ,null则使用原始高度*/
+	public void setHeight(Integer height) {
+		this.height = height;
 	}
 	
 }
