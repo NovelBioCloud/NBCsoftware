@@ -160,7 +160,6 @@ public class CtrlFastQfilter {
 			if (fastQCbefore.length <= 1 || fastQCbefore[1] == null) {
 				lsPic = fastQCbefore[0].saveToPathPic(fileName + "_BeforeFilter");
 				lsTable = fastQCbefore[0].saveToPathTable(fileName + "_BeforeFilter");
-
 			} else {
 				lsPic = fastQCbefore[0].saveToPathPic(30, fastQCbefore[1], fileName + "_BeforeFilter");
 				lsTable = fastQCbefore[0].saveToPathTable(fastQCbefore[1], fileName + "_BeforeFilter");
