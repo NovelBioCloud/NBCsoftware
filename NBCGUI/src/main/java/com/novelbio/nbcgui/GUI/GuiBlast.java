@@ -23,6 +23,7 @@ import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.base.gui.JTextFieldData;
 import com.novelbio.database.model.species.Species;
+import com.novelbio.database.model.species.Species.EnumSpeciesType;
 import com.novelbio.database.updatedb.database.BlastUp2DB;
 import com.novelbio.nbcgui.controlquery.CtrlBlast;
 
@@ -230,10 +231,10 @@ public class GuiBlast extends JPanel implements GuiNeedOpenFile {
 	
 	private void initial() {
 		JComboBoxData<Species> cmbSpeciesQ  = new JComboBoxData<Species>();
-		cmbSpeciesQ.setMapItem(Species.getSpeciesName2Species(Species.ALL_SPECIES));
+		cmbSpeciesQ.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.All));
 		cmbSpeciesQ.setEditable(true);
 		JComboBoxData<Species> cmbSpeciesS  = new JComboBoxData<Species>();
-		cmbSpeciesS.setMapItem(Species.getSpeciesName2Species(Species.ALL_SPECIES));
+		cmbSpeciesS.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.All));
 		cmbSpeciesS.setEditable(false);
 		
 		sclPaneBlastFile.setTitle(new String[]{"BlastFile","QueryTaxID", "SubTaxID"});
@@ -242,7 +243,7 @@ public class GuiBlast extends JPanel implements GuiNeedOpenFile {
 	}
 	
 	private void addBlastInfo() {
-		Map<String, Species> mapComName2Species = Species.getSpeciesName2Species(Species.ALL_SPECIES);
+		Map<String, Species> mapComName2Species = Species.getSpeciesName2Species(EnumSpeciesType.All);
 		for (String[] content : sclPaneBlastFile.getLsDataInfo()) {
 			BlastUp2DB blast = new BlastUp2DB();
 			blast.setUpdate(chckbxSavetodb.isSelected());

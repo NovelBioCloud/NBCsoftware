@@ -28,6 +28,7 @@ import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.database.model.species.Species;
+import com.novelbio.database.model.species.Species.EnumSpeciesType;
 
 public class GuiMiRNASeq extends JPanel{
 	private static final long serialVersionUID = -5940420720636777182L;
@@ -203,7 +204,7 @@ public class GuiMiRNASeq extends JPanel{
 		
 		sclAnnoMiRNA = new JScrollPaneData();
 		JComboBoxData<Species> cmbSpeciesBlast = new JComboBoxData<Species>();
-		cmbSpeciesBlast.setMapItem(Species.getSpeciesName2Species(Species.SEQINFO_SPECIES));
+		cmbSpeciesBlast.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.Genome));
 		sclAnnoMiRNA.setTitle(new String[]{"BlastSpecies"});
 		sclAnnoMiRNA.setItem(0, cmbSpeciesBlast);
 		sclAnnoMiRNA.setBounds(441, 366, 233, 95);
@@ -353,7 +354,7 @@ public class GuiMiRNASeq extends JPanel{
 		List<String[]> lsBlastTo = sclAnnoMiRNA.getLsDataInfo();
 		List<Species> lsSpeciesBlastTo = new ArrayList<>();
 		for (String[] strings : lsBlastTo) {
-			Species speciesBlastTo = Species.getSpeciesName2Species(Species.SEQINFO_SPECIES).get(strings[0]);
+			Species speciesBlastTo = Species.getSpeciesName2Species(EnumSpeciesType.Genome).get(strings[0]);
 			lsSpeciesBlastTo.add(speciesBlastTo);
 		}
 		ctrlMiRNApipeline.setLsSpeciesBlastTo(lsSpeciesBlastTo);

@@ -30,6 +30,7 @@ import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.base.gui.JTextFieldData;
 import com.novelbio.database.domain.geneanno.GOtype;
 import com.novelbio.database.model.species.Species;
+import com.novelbio.database.model.species.Species.EnumSpeciesType;
 import com.novelbio.database.service.SpringFactory;
 import com.novelbio.nbcgui.controltest.CtrlGO;
 import com.novelbio.nbcgui.controltest.CtrlTestGOInt;
@@ -169,7 +170,7 @@ public class GuiGoJPanel extends JPanel{
 		
 		sclBlast = new JScrollPaneData();
 		JComboBoxData<Species> cmbSpeciesBlast = new JComboBoxData<Species>();
-		cmbSpeciesBlast.setMapItem(Species.getSpeciesName2Species(Species.ALL_SPECIES));
+		cmbSpeciesBlast.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.All));
 		sclBlast.setTitle(new String[]{"BlastSpecies"});
 		sclBlast.setItem(0, cmbSpeciesBlast);
 		sclBlast.setBounds(12, 426, 215, 118);
@@ -382,7 +383,7 @@ public class GuiGoJPanel extends JPanel{
 		{
 			cmbSelSpeGo = new JComboBoxData<Species>();
 			cmbSelSpeGo.setBounds(131, 77, 173, 23);
-			cmbSelSpeGo.setMapItem(Species.getSpeciesName2Species(Species.ALL_SPECIES, true, null));
+			cmbSelSpeGo.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.All, true, null));
 //			cmbSelSpeGo.setEditable(true);
 		}
 	}
@@ -445,7 +446,7 @@ public class GuiGoJPanel extends JPanel{
 
 		ctrlGO.setTaxID(taxID);
 		List<Integer> lsStaxID = new ArrayList<Integer>();
-		Map<String, Species> mapComName2Species = Species.getSpeciesName2Species(Species.ALL_SPECIES);
+		Map<String, Species> mapComName2Species = Species.getSpeciesName2Species(EnumSpeciesType.All);
 		for (String[] strings : sclBlast.getLsDataInfo()) {
 			Species speciesS = mapComName2Species.get(strings[0]);
 			if (speciesS == null) {

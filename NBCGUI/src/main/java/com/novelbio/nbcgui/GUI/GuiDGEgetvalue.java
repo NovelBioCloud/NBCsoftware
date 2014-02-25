@@ -18,6 +18,7 @@ import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.database.model.species.Species;
+import com.novelbio.database.model.species.Species.EnumSpeciesType;
 import com.novelbio.nbcgui.controlseq.CtrlDGEgetvalue;
 
 import java.awt.event.ActionListener;
@@ -168,7 +169,7 @@ public class GuiDGEgetvalue extends JPanel {
 		buttonGroup.add(rdBedFile);
 		buttonGroup.add(rdSamBamFile);
 		rdBedFile.setSelected(true);
-		cmbSpecies.setMapItem(Species.getSpeciesName2Species(Species.SEQINFO_SPECIES));
+		cmbSpecies.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.Genome));
 		selectCmbSpecies();
 	}
 	

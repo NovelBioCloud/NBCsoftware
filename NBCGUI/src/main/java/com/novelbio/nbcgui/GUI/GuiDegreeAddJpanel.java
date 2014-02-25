@@ -24,6 +24,7 @@ import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.database.model.species.Species;
+import com.novelbio.database.model.species.Species.EnumSpeciesType;
 
 
 /**
@@ -154,7 +155,7 @@ public class GuiDegreeAddJpanel extends JPanel{
 		}
 		{
 			jCombSelSpePath = new JComboBoxData<Species>();
-			jCombSelSpePath.setMapItem(Species.getSpeciesName2Species(Species.ALL_SPECIES));
+			jCombSelSpePath.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.All));
 		}
 	}
 	

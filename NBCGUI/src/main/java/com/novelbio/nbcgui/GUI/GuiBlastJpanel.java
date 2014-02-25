@@ -32,6 +32,7 @@ import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.database.domain.geneanno.GOtype;
 import com.novelbio.database.model.modgeneid.GeneID;
 import com.novelbio.database.model.species.Species;
+import com.novelbio.database.model.species.Species.EnumSpeciesType;
 import com.novelbio.nbcgui.controlquery.CtrlBlastAnno;
 import com.novelbio.nbcgui.controlquery.CtrlBlastGo;
 import com.novelbio.nbcgui.controlquery.CtrlBlastPath;
@@ -515,7 +516,7 @@ public class GuiBlastJpanel extends JPanel {
 		if(jCobTaxSelect == null) {
 			jCobTaxSelect = new JComboBoxData<Species>();
 			jCobTaxSelect.setBounds(800, 2, 228, 23);
-			jCobTaxSelect.setMapItem(Species.getSpeciesName2Species(Species.ALL_SPECIES, true, null));
+			jCobTaxSelect.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.All, true, null));
 			jCobTaxSelect.setEditable(true);
 		}
 		return jCobTaxSelect;
@@ -568,7 +569,7 @@ public class GuiBlastJpanel extends JPanel {
 		if(jCmbSpeciesBlast == null) {
 			jCmbSpeciesBlast = new JComboBoxData<Species>();
 			jCmbSpeciesBlast.setBounds(283, 269, 229, 23);
-			jCmbSpeciesBlast.setMapItem(Species.getSpeciesName2Species(Species.KEGGNAME_SPECIES));
+			jCmbSpeciesBlast.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.KeggName));
 		}
 		return jCmbSpeciesBlast;
 	}

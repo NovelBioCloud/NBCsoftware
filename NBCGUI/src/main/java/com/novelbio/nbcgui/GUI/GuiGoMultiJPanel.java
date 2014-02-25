@@ -22,6 +22,7 @@ import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.base.gui.JTextFieldData;
 import com.novelbio.database.model.species.Species;
+import com.novelbio.database.model.species.Species.EnumSpeciesType;
 import com.novelbio.database.service.SpringFactory;
 import com.novelbio.nbcgui.controltest.CtrlTestGOInt;
 import com.novelbio.nbcgui.controltest.CtrlTestPathInt;
@@ -133,7 +134,7 @@ public class GuiGoMultiJPanel extends JPanel{
 		
 		sclBlast = new JScrollPaneData();
 		JComboBoxData<Species> cmbSpeciesBlast = new JComboBoxData<Species>();
-		cmbSpeciesBlast.setMapItem(Species.getSpeciesName2Species(Species.ALL_SPECIES));
+		cmbSpeciesBlast.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.All));
 		sclBlast.setTitle(new String[]{"BlastSpecies"});
 		sclBlast.setItem(0, cmbSpeciesBlast);
 		sclBlast.setBounds(12, 435, 215, 118);
@@ -343,7 +344,7 @@ public class GuiGoMultiJPanel extends JPanel{
 		jTxtBGGo.setBounds(104, 58, 200, 18);
 		cmbSpecies = new JComboBoxData<Species>();
 		cmbSpecies.setBounds(131, 28, 173, 23);
-		cmbSpecies.setMapItem(Species.getSpeciesName2Species(Species.ALL_SPECIES, true, null));
+		cmbSpecies.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.All, true, null));
 		cmbSpecies.setEditable(false);
 	}
 	
@@ -383,7 +384,7 @@ public class GuiGoMultiJPanel extends JPanel{
 		}
 		double evalue = 1e-10;
 		List<Integer> lsStaxID = new ArrayList<Integer>();
-		Map<String, Species> mapComName2Species = Species.getSpeciesName2Species(Species.ALL_SPECIES);
+		Map<String, Species> mapComName2Species = Species.getSpeciesName2Species(EnumSpeciesType.All);
 		for (String[] strings : sclBlast.getLsDataInfo()) {
 			Species speciesS = mapComName2Species.get(strings[0]);
 			if (speciesS == null) {
@@ -448,7 +449,7 @@ public class GuiGoMultiJPanel extends JPanel{
 		}
 		double evalue = 1e-10;
 		List<Integer> lsStaxID = new ArrayList<Integer>();
-		Map<String, Species> mapComName2Species = Species.getSpeciesName2Species(Species.ALL_SPECIES);
+		Map<String, Species> mapComName2Species = Species.getSpeciesName2Species(EnumSpeciesType.All);
 		for (String[] strings : sclBlast.getLsDataInfo()) {
 			Species speciesS = mapComName2Species.get(strings[0]);
 			if (speciesS == null) {
