@@ -329,7 +329,12 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 				continue;
 			}
 			AlignSeqReading alignSeqReading = new AlignSeqReading(alignSeq);
-			
+			if (alignSeq.getFileName().endsWith("tophat_sorted.bam")) {
+				String unmapFileName = alignSeq.getFileName().replace("tophat_sorted.bam", "tophat.bam");
+				unmapFileName = FileOperate.changeFilePrefix(unmapFileName, "unmapped_", null);
+				alignSeqReading.addSeq(new SamFile(unmapFileName));
+			}
+		
 			mapPrefix2AlignSeqReadings.put(fileName2Prefix[1], alignSeqReading);
 		}
 		return mapPrefix2AlignSeqReadings;
@@ -533,8 +538,14 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	
 	@Override
 	public void setRunningInfo(GuiAnnoInfo info) {
-		guiSamStatistics.getProcessBar().setValue((int)( info.getNumDouble()/1024));
-		guiSamStatistics.getLabel().setText(info.getInfo());
+		if (guiSamStatistics != null) {
+			try {
+				guiSamStatistics.getProcessBar().setValue((int)( info.getNumDouble()/1024));
+				guiSamStatistics.getLabel().setText(info.getInfo());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	@Override

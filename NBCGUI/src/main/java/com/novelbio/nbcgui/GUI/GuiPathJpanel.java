@@ -27,6 +27,7 @@ import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.base.gui.JTextFieldData;
 import com.novelbio.database.model.species.Species;
+import com.novelbio.database.model.species.Species.EnumSpeciesType;
 import com.novelbio.database.service.SpringFactory;
 import com.novelbio.nbcgui.controltest.CtrlTestPathInt;
 
@@ -108,7 +109,7 @@ public class GuiPathJpanel extends JPanel{
 		scrollPaneBlast = new JScrollPaneData();
 		scrollPaneBlast.setBounds(12, 385, 174, 138);
 		JComboBoxData<Species> cmbSpeciesBlast = new JComboBoxData<Species>();
-		cmbSpeciesBlast.setMapItem(Species.getSpeciesName2Species(Species.ALL_SPECIES));
+		cmbSpeciesBlast.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.All));
 		scrollPaneBlast.setTitle(new String[]{"BlastSpecies"});
 		scrollPaneBlast.setItem(0, cmbSpeciesBlast);
 		add(scrollPaneBlast);
@@ -311,7 +312,7 @@ public class GuiPathJpanel extends JPanel{
 			jCombSelSpePath = new JComboBoxData<Species>();
 			jCombSelSpePath.setBounds(12, 112, 174, 23);
 			jCombSelSpePath.setEditable(false);
-			jCombSelSpePath.setMapItem(Species.getSpeciesName2Species(Species.ALL_SPECIES, true, null));
+			jCombSelSpePath.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.All, true, null));
 		}
 	}
 	
@@ -368,7 +369,7 @@ public class GuiPathJpanel extends JPanel{
 		ctrlPath.setTaxID(taxID);
 		
 		List<Integer> lsStaxID = new ArrayList<Integer>();
-		Map<String, Species> mapComName2Species = Species.getSpeciesName2Species(Species.ALL_SPECIES);
+		Map<String, Species> mapComName2Species = Species.getSpeciesName2Species(EnumSpeciesType.All);
 		for (String[] strings : scrollPaneBlast.getLsDataInfo()) {
 			Species speciesS = mapComName2Species.get(strings[0]);
 			if (speciesS == null) {

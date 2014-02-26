@@ -27,6 +27,7 @@ import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.database.domain.geneanno.SpeciesFile.ExtractSmallRNASeq;
 import com.novelbio.database.model.species.Species;
+import com.novelbio.database.model.species.Species.EnumSpeciesType;
 import com.novelbio.generalConf.PathDetailNBC;
 import com.novelbio.nbcgui.controlquery.CtrlPeakStatistics;
 import com.novelbio.nbcgui.controlseq.CtrlGetSeq;
@@ -254,7 +255,7 @@ public class GuiGetSeq extends JPanel {
 	}
 	
 	private void initial() {
-		cmbSpecies.setMapItem(Species.getSpeciesName2Species(Species.SEQINFO_SPECIES));
+		cmbSpecies.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.Genome));
 		Species species = cmbSpecies.getSelectedValue();
 		cmbSpeciesVersion.setMapItem(species.getMapVersion());
 		cmbGeneStructure.setMapItem(GeneStructure.getMapInfo2GeneStr());
@@ -449,7 +450,7 @@ public class GuiGetSeq extends JPanel {
 		ExtractSmallRNASeq extractSmallRNASeq = new ExtractSmallRNASeq();
 		extractSmallRNASeq.setLsMiRNAname(lsMiRNAname);
 		extractSmallRNASeq.setOutMatureRNA(txtSavePath.getText());
-		extractSmallRNASeq.setMiRNAdata(PathDetailNBC.getMiRNADat(), cmbSpecies.getSelectedValue().getNameLatin());
+		extractSmallRNASeq.setMiRNAdata(PathDetailNBC.getMiRNADat(), cmbSpecies.getSelectedValue().getNameLatin_2Word());
 		if (chckbxGenomwide.isSelected()) {
 			extractSmallRNASeq.setOutHairpinRNA(FileOperate.changeFileSuffix(txtSavePath.getText(), "_pre", null));
 		}

@@ -22,6 +22,7 @@ import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.database.domain.geneanno.GOtype;
 import com.novelbio.database.model.species.Species;
+import com.novelbio.database.model.species.Species.EnumSpeciesType;
 import com.novelbio.nbcgui.controlquery.CtrlBatchAnnoGene;
 /**
  * 批量注释，各种注释
@@ -187,8 +188,8 @@ public class GuiAnnoGene extends JPanel implements GuiNeedOpenFile {
 	
 	private void initial() {
 		selectRadAnno();
-		cmbBlastSpecies.setMapItem(Species.getSpeciesName2Species(Species.KEGGNAME_SPECIES));
-		cmbSpecies.setMapItem(Species.getSpeciesName2Species(Species.KEGGNAME_SPECIES));
+		cmbBlastSpecies.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.KeggName));
+		cmbSpecies.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.KeggName));
 		btnDel.setEnabled(true);
 		scrollPaneData.setTitle(new String[]{"InFile", "OutFile"});
 		cmbAnnoType.setMapItem(AnnoAbs.getMapAnnoType());

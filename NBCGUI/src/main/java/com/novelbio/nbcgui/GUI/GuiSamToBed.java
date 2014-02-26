@@ -31,6 +31,7 @@ import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.database.model.species.Species;
+import com.novelbio.database.model.species.Species.EnumSpeciesType;
 
 public class GuiSamToBed extends JPanel {
 	private static final long serialVersionUID = 2596513239050914728L;
@@ -412,7 +413,7 @@ public class GuiSamToBed extends JPanel {
 		
 		radGenome.setSelected(true);
 		
-		cmbSpecies.setMapItem(Species.getSpeciesName2Species(Species.SEQINFO_SPECIES));
+		cmbSpecies.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.Genome));
 		
 		selectCombSpecies();
 	}

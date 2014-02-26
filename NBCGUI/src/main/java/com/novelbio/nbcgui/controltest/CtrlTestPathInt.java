@@ -29,7 +29,7 @@ public interface CtrlTestPathInt {
 	
 	public void setIsCluster(boolean isCluster);
 
-	public List<XdocTmpltExcel> saveExcel(String excelPath);
+	public List<String> saveExcel(String excelPath);
 	
 	public boolean isCluster();
 	

@@ -48,6 +48,15 @@ public class NBCWord {
 		}
 	}
 	
+	public void render(Map<String,Object> map){
+		try {
+			render(nowDoc,map);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * 开始渲染参数
 	 * @param param

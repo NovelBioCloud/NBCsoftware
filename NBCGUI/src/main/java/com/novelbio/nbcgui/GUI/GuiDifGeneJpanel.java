@@ -166,6 +166,7 @@ public class GuiDifGeneJpanel extends JPanel {
 				diffExpAbs.calculateResult();
 				diffExpAbs.getResultFileName();
 				JOptionPane.showMessageDialog(null, "Your Diff Expressed Gene Is Already Finding", "Info",JOptionPane.INFORMATION_MESSAGE);
+				diffExpAbs.clean();
 			}
 		});
 		btnRun.setBounds(863, 563, 118, 24);

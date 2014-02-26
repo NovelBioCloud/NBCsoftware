@@ -36,6 +36,7 @@ import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.base.gui.JTextFieldData;
 import com.novelbio.database.model.modgeneid.GeneID;
 import com.novelbio.database.model.species.Species;
+import com.novelbio.database.model.species.Species.EnumSpeciesType;
 
 
 /**
@@ -184,7 +185,7 @@ public class GuiSrcToTrgJpanel extends JPanel{
 		}
 		{
 			jCombSelSpePath = new JComboBoxData<Species>();
-			jCombSelSpePath.setMapItem(Species.getSpeciesName2Species(Species.KEGGNAME_SPECIES));
+			jCombSelSpePath.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.KeggName));
 		}
 		{
 			jChkBlastPath = new JCheckBox();
@@ -192,7 +193,7 @@ public class GuiSrcToTrgJpanel extends JPanel{
 		}
 		{
 			jCombBlastTaxPath = new JComboBoxData<Species>();
-			jCombBlastTaxPath.setMapItem(Species.getSpeciesName2Species(Species.KEGGNAME_SPECIES));
+			jCombBlastTaxPath.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.KeggName));
 		}
 	}
 	

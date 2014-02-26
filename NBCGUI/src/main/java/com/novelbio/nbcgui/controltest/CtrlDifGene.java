@@ -19,7 +19,7 @@ import com.novelbio.nbcReport.Params.ReportDifGene;
 
 public class CtrlDifGene implements IntCmdSoft {
 	DiffExpAbs diffExpAbs;
-	
+	String outPath;
 	
 	/**
 	 * @param diffGeneID {@link DiffExpAbs#DEGSEQ} 等
@@ -33,8 +33,9 @@ public class CtrlDifGene implements IntCmdSoft {
 	}
 
 	public void addFileName2Compare(String fileName, String[] comparePair) {
-		fileName = FoldeCreate.createAndInFold(fileName, EnumReport.DiffExp.getResultFolder());
-		diffExpAbs.addFileName2Compare(fileName, comparePair);
+		String fileNameFinal = FoldeCreate.createAndInFold(fileName, EnumReport.DiffExp.getResultFolder());
+		outPath = FileOperate.getPathName(fileNameFinal);
+		diffExpAbs.addFileName2Compare(fileNameFinal, comparePair);
 	}
 
 	public void setGeneInfo(ArrayList<String[]> lsGeneInfo) {
@@ -48,12 +49,22 @@ public class CtrlDifGene implements IntCmdSoft {
 	public List<String> getResultFileName() {
 		return diffExpAbs.getResultFileName();
 	}
-
+	
+	/** 计算差异 */
 	public void calculateResult() {
 		diffExpAbs.calculateResult();
 		getDiffReport();
 	}
 	
+	/** 将计算差异分为两个步骤，这是第一步，产生数据和脚本 */
+	public void generateGeneAndScript() {
+		diffExpAbs.generateGeneAndScript();
+	}
+	/** 将计算差异分为两个步骤，这是第二步，进行计算 */
+	public void runAndModifyResult() {
+		diffExpAbs.runAndModifyResult();
+		getDiffReport();
+	}
 	/** 将输入的表达值取log */
 	public void setLogTheValue(boolean logTheValue) {
 		diffExpAbs.setLogValue(logTheValue);
@@ -83,7 +94,11 @@ public class CtrlDifGene implements IntCmdSoft {
 	public void clean() {
 		diffExpAbs.clean();
 	}
-	
+	public void copyTmpFileToResultPath() {
+		String outRawData = FileOperate.addSep(outPath) + "Script/";
+		FileOperate.createFolders(outRawData);
+ 		diffExpAbs.copyTmpFileToPath(outRawData);
+	}
 	public ReportDifGene getDiffReport() {
 		double logFC =  diffExpAbs.getLogFC();
 		double pValueOrFDR = diffExpAbs.getpValueOrFDR();

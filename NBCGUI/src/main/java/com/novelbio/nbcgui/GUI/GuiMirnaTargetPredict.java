@@ -15,6 +15,7 @@ import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JTextFieldData;
 import com.novelbio.database.model.species.Species;
+import com.novelbio.database.model.species.Species.EnumSpeciesType;
 import com.novelbio.nbcgui.controlseq.CtrlMiRNAtargetPredict;
 
 public class GuiMirnaTargetPredict  extends JPanel {
@@ -167,7 +168,7 @@ public class GuiMirnaTargetPredict  extends JPanel {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		cmbSpecies.setMapItem(Species.getSpeciesName2Species(Species.SEQINFO_SPECIES));
+		cmbSpecies.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.Genome));
 		txtEnergy.setNumOnly();
 		txtScore.setNumOnly();
 		txtPvalue.setNumOnly(5);

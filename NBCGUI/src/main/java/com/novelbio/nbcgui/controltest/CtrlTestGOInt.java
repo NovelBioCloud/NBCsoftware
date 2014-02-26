@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.database.domain.geneanno.GOtype;
 import com.novelbio.nbcReport.Params.ReportGO;
@@ -32,7 +31,7 @@ public interface CtrlTestGOInt {
 	 * 保存图片并返回保存的前缀和文件名
 	 * @return
 	 */
-	public void saveExce(String excelPath);
+	public void saveExcel(String excelPath);
 	
 	
 	public ReportGO getReportGO();
@@ -83,6 +82,5 @@ public interface CtrlTestGOInt {
 	/**设置对比组名*/
 	public void setTeamName(String teamName);
 	
-	Map<GOtype, List<String>> getMapGoType2File();
 	List<String> getLsResultPic();
 }

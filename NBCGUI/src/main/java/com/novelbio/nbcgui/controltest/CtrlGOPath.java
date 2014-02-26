@@ -28,6 +28,9 @@ import com.novelbio.nbcReport.XdocTmpltExcel;
 
 public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	private static final Logger logger = Logger.getLogger(CtrlGOPath.class);
+	public static final String All = "All";
+	public static final String Up = "Up";
+	public static final String Down = "Down";
 	
 	FunctionTest functionTest = null;
 	
@@ -148,7 +151,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	 * 获得上下调数
 	 * @return 0 上调数 1 下调数 2 总和
 	 */
-	protected int[] getUpAndDownRegulation() {
+	public int[] getUpAndDownRegulation() {
 		return new int[]{upGeneNum,downGeneNum,allGeneNum};
 	}
 	
@@ -181,13 +184,13 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			}
 			try {
 				if (strings.length == 1) {
-					mapPrefix2AccID.put("All", strings[0]);
+					mapPrefix2AccID.put(All, strings[0]);
 				} else if (strings.length > 1 && getDoubleValue(strings[1]) >= up) {
-					mapPrefix2AccID.put("Up", strings[0]);
-					mapPrefix2AccID.put("All", strings[0]);
+					mapPrefix2AccID.put(Up, strings[0]);
+					mapPrefix2AccID.put(All, strings[0]);
 				} else if (strings.length > 1 && getDoubleValue(strings[1]) <= down) {
-					mapPrefix2AccID.put("Down", strings[0]);
-					mapPrefix2AccID.put("All", strings[0]);
+					mapPrefix2AccID.put(Down, strings[0]);
+					mapPrefix2AccID.put(All, strings[0]);
 				}
 			} catch (Exception e) { }
 		}
@@ -216,12 +219,12 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	
 	private<T> void setGeneNum(HashMultimap<String, T> mapPrefix2Gene) {
 		for (String type : mapPrefix2Gene.keySet()) {
-			if (type.equalsIgnoreCase("All")) {
-				allGeneNum = mapPrefix2Gene.get("All").size();
-			} else if (type.equalsIgnoreCase("Up") ) {
-				upGeneNum = mapPrefix2Gene.get("Up").size();
-			} else if (type.equalsIgnoreCase("Down")) {
-				downGeneNum = mapPrefix2Gene.get("Down").size();
+			if (type.equalsIgnoreCase(All)) {
+				allGeneNum = mapPrefix2Gene.get(All).size();
+			} else if (type.equalsIgnoreCase(Up) ) {
+				upGeneNum = mapPrefix2Gene.get(Up).size();
+			} else if (type.equalsIgnoreCase(Down)) {
+				downGeneNum = mapPrefix2Gene.get(Down).size();
 			}
 		}
 	}
@@ -283,7 +286,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		mapPrefix2FunTest.put(prix, functionTest.clone());
 	}
 
-	public List<XdocTmpltExcel> saveExcel(String excelPath) {
+	public List<String> saveExcel(String excelPath) {
 		saveExcelPrefix = excelPath;
 		lsResultExcel.clear();
 		if (isCluster) {
@@ -298,8 +301,8 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		return saveExcelPrefix;
 	}
 	
-	protected List<XdocTmpltExcel> saveExcelNorm(String excelPath) {
-		List<XdocTmpltExcel> lsXdocTmpltExcels = new ArrayList<>();
+	/** 返回保存的文件名 */
+	protected List<String> saveExcelNorm(String excelPath) {
 		ExcelOperate excelResult = new ExcelOperate();
 		excelResult.openExcel(excelPath);
 		lsResultExcel.add(excelPath);
@@ -314,19 +317,15 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			if (mapPrefix2FunTest.size() > 1 && prefix.equals("All")) {
 				for (String sheetName : mapSheetName2LsInfo.keySet()) {
 					excelResultAll.WriteExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName));
-					XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(excelAllPath, prefix + sheetName,CtrlGOPath.getXdocGoPath(prefix + sheetName).getXdocTable());
-					lsXdocTmpltExcels.add(xdocTmpltExcel);
 				}
 			} else {
 				for (String sheetName : mapSheetName2LsInfo.keySet()) {
 					excelResult.WriteExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName));
-					XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(excelPath, prefix + sheetName, CtrlGOPath.getXdocGoPath(prefix + sheetName).getXdocTable());
-					lsXdocTmpltExcels.add(xdocTmpltExcel);
 				}
 			}
 			copeFile(prefix, excelPath);
 		}
-		return lsXdocTmpltExcels;
+		return lsResultExcel;
 	}
 	
 	/**
@@ -363,24 +362,19 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		return result[currentConditionNum];
 	}
 	
-	protected List<XdocTmpltExcel> saveExcelCluster(String excelPath) {
-		List<XdocTmpltExcel> lsXdocTmpltExcels = new ArrayList<>();
+	protected List<String> saveExcelCluster(String excelPath) {
 		for (String prefix : mapPrefix2FunTest.keySet()) {
 			ExcelOperate excelResult = new ExcelOperate();
 			String excelPathOut = FileOperate.changeFileSuffix(excelPath, "_" + prefix, null);
 			excelResult.openExcel(excelPathOut);
 			lsResultExcel.add(excelPathOut);
-
 			Map<String, List<String[]>> mapSheetName2LsInfo = mapPrefix2FunTest.get(prefix).getMapWriteToExcel();
 			for (String sheetName : mapSheetName2LsInfo.keySet()) {
 				excelResult.WriteExcel(sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName));
-				XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(excelPathOut, sheetName, CtrlGOPath.getXdocGoPath(sheetName).getXdocTable());
-				lsXdocTmpltExcels.add(xdocTmpltExcel);
 			}
 			copeFile(prefix, excelPath);
 		}
-		
-		return lsXdocTmpltExcels;
+		return lsResultExcel;
 	}
 	public List<String> getLsResultExcel() {
 		return lsResultExcel;

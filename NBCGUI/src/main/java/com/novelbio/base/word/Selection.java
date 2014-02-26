@@ -8,6 +8,8 @@ import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
+import com.novelbio.base.fileOperate.FileHadoop;
+import com.novelbio.base.fileOperate.FileOperate;
 
 /**
  * 代表窗口或窗格中的当前所选内容。所选内容代表文档中选定（或突出显示）的区域， 如果文档中没有选定任何内容，则代表插入点。 每个文档窗格只能有一个
@@ -54,7 +56,8 @@ public class Selection extends BaseWord {
 	public void replace(String oldText, String newText) throws Exception {
 		while (find(oldText, false)) {
 			Dispatch.put(instance, "Text", newText);
-			Dispatch.call(instance, "MoveRight");
+			if(newText != "")
+				Dispatch.call(instance, "MoveRight");
 		}
 	}
 
@@ -66,7 +69,8 @@ public class Selection extends BaseWord {
 	 */
 	public void replaceSelected(String newText) throws Exception {
 		Dispatch.put(instance, "Text", newText);
-		Dispatch.call(instance, "MoveRight");
+		if(newText != "")
+			Dispatch.call(instance, "MoveRight");
 	}
 
 	/**
@@ -105,35 +109,35 @@ public class Selection extends BaseWord {
 	 * 
 	 * 说明：
 	 * 
-	 * @param imagePath
-	 *            图片路径
+	 * @param lsPicPaths
+	 *            图片路径集合
 	 * @param title
 	 *            图片标题
-	 * @param picNumInOneRow
-	 *            几张图片并列 创建时间：2011-6-4 下午07:17:18
+	 *            
+	 * @param alignment 不指定请使用null ，默认 1<br>
+	 * 			 0-左对齐, 1-居中, 2-右对齐, 3-两端对齐, 4-分散对齐	
+	 * @param width 不指定请使用null
+	 * @param height 不指定请使用null
 	 */
-	public void insertPicture(List<String> lsPicPaths, String title,
-			int picNumInOneRow) {
-		double rate = 1;
-		if (picNumInOneRow == 0) {
-			picNumInOneRow = 1;
-		} else if (lsPicPaths.size() < picNumInOneRow) {
-			rate = Math.floor(0.92 / lsPicPaths.size() * 100) / 100;
-		} else {
-			rate = Math.floor(0.92 / picNumInOneRow * 100) / 100;
-		}
+	public void insertPicture(List<String> lsPicPaths, String title,Integer alignment,Integer width,Integer height) {
+		if(alignment == null)
+			alignment = 1;
 		Dispatch inLineShapes = Dispatch.get(instance, "InLineShapes")
 				.toDispatch();
 		for (String imagePath : lsPicPaths) {
 			Dispatch shape = Dispatch.call(inLineShapes, "AddPicture",
-					imagePath).toDispatch();
-			Dispatch.put(shape, "Width", Dispatch.get(shape, "Width")
-					.getFloat() * rate);
-			Dispatch.put(shape, "Height", Dispatch.get(shape, "Height")
-					.getFloat() * rate);
+					FileHadoop.convertToLocalPath(imagePath)).toDispatch();
+			Dispatch.put(shape, "Width", width == null ? Dispatch.get(shape, "Width")
+					.getFloat() : width);
+			Dispatch.put(shape, "Height", height == null ? Dispatch.get(shape, "Height")
+					.getFloat() : height);
+			Dispatch.call(shape, "Select");
+			Dispatch paragraphFormat = Dispatch.get(instance, "ParagraphFormat")
+					.toDispatch();
+			Dispatch.put(paragraphFormat, "Alignment", new Variant(alignment));
+			Dispatch.call(instance, "MoveRight");
 		}
-		if (lsPicPaths.size() % picNumInOneRow < picNumInOneRow)
-			nextRow();
+		nextRow();
 		Dispatch.call(instance, "InsertCaption", "Figure", " : " + title);
 		// ,/**Label*/"-1",/**Title*/title
 		// ,/**TitleAutoText"123",*//**Position*/"1",/**ExcludeLabel*/"False").toDispatch();

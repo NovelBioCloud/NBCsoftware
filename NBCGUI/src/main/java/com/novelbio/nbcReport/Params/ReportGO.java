@@ -1,10 +1,6 @@
 package com.novelbio.nbcReport.Params;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Map;
-
-import com.novelbio.base.word.NBCWordImage;
+import com.novelbio.database.model.species.Species;
 
 /**
  * GOAnalysis参数对象类，记录结果报告所需要的参数
@@ -12,74 +8,29 @@ import com.novelbio.base.word.NBCWordImage;
  * @author novelbio
  * 
  */
-public class ReportGO extends ReportBase{
+public class ReportGO extends ReportBase {
 	private static final long serialVersionUID = 5362772692510596256L;
-	/**　测试方法　*/
-	private String testMethod;
-	/**　筛选条件　*/
-	private String finderCondition;
-	/**　组名　*/
-	private String teamName;
-	/**　上调数　*/
-	private int upRegulation;
-	/**　下调数　*/
-	private int downRegulation;
-	/**　结果文件路径集合　*/
-	private HashSet<String> setResultFiles = new LinkedHashSet<>();
-	/**　结果图片集合　*/
-	private HashSet<NBCWordImage> setNBCWordImages = new LinkedHashSet<>();
 	
-	
-	public ReportGO() {
-	}
-	
-	/**
-	 * 添加图片模板
-	 * @param xdocTmpltPic
-	 */
-	public void addNBCWordImage(NBCWordImage nbcWordImage) {
-		setNBCWordImages.add(nbcWordImage);
-	}
-	
-	@Override
-	public Map<String, Object> buildFinalParamMap() {
-		mapKey2Param.put("testMethod", testMethod);
-		mapKey2Param.put("setResultFiles", setResultFiles);
-		mapKey2Param.put("finderCondition", finderCondition);
-		mapKey2Param.put("teamName", teamName);
-		mapKey2Param.put("upRegulation", upRegulation);
-		mapKey2Param.put("downRegulation", downRegulation);
-		mapKey2Param.putAll(mapTempName2setReportBase);
-		return mapKey2Param;
-	}
 	/**　测试方法　*/
 	public void setTestMethod(String testMethod) {
-		this.testMethod = testMethod;
-	}
-	/**　筛选条件　*/
-	public void setFinderCondition(String finderCondition) {
-		this.finderCondition = finderCondition;
+		mapKey2Param.put("testMethod", testMethod);
 	}
 	
 	/** 实验组名 */
 	public void setTeamName(String teamName) {
-		this.teamName = teamName;
+		mapKey2Param.put("teamName", teamName);
 	}
-
-	/**　上调数　*/
-	public void setUpRegulation(int upRegulation) {
-		this.upRegulation = upRegulation;
+	
+	/** 设定物种 */
+	public void setSpeciesName(Species species) {
+		String name = species.getNameLatin();
+		String[] ss = name.split(" ");
+		if (ss.length > 2) {
+			name = ss[0] + " " + ss[1];
+		}
+		mapKey2Param.put("SpeciesName", name);
 	}
-
-	/**　下调数　*/
-	public void setDownRegulation(int downRegulation) {
-		this.downRegulation = downRegulation;
-	}
-	/**　结果文件路径集合　*/
-	public void addResultFile(String resultFile) {
-		setResultFiles.add(resultFile);
-	}
-
+	
 	@Override
 	public EnumReport getEnumReport() {
 		return EnumReport.GOAnalysis;

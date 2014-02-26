@@ -9,6 +9,7 @@ import javax.swing.JLayeredPane;
 
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.database.model.species.Species;
+import com.novelbio.database.model.species.Species.EnumSpeciesType;
 
 public class GuiLayeredPaneSpeciesVersionGff extends JLayeredPane {
 	Species species;
@@ -67,7 +68,7 @@ public class GuiLayeredPaneSpeciesVersionGff extends JLayeredPane {
 	}
 	
 	private void initial() {
-		cmbSpecies.setMapItem(Species.getSpeciesName2Species(Species.SEQINFO_SPECIES));
+		cmbSpecies.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.Genome));
 		selectSpecies();
 	}
 	
