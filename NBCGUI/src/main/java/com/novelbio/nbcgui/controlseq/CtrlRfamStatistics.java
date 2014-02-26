@@ -34,9 +34,11 @@ public class CtrlRfamStatistics implements IntCmdSoft {
 	RfamStatistic rfamStatistic = new RfamStatistic();
 	String rfamFile;
 	boolean isUseOldResult = true;
-
+	
 	List<String[]> lsPrefix2Fq;
 	String outPath;
+	
+	List<String> lsFileTobeDelete = new ArrayList<>();
 	
 	List<String> lsCmd = new ArrayList<>();
 	/** 只看前1百万条序列 */
@@ -69,12 +71,13 @@ public class CtrlRfamStatistics implements IntCmdSoft {
 	
 	public void calculate() {
 		initial();
+		lsFileTobeDelete.clear();
 		for (String[] prefix2Fq : lsPrefix2Fq) {
 			String fastq = getSampleFq(prefix2Fq[1]);
 			String out = FileOperate.changeFileSuffix(fastq, "", "bam");
 			expRfamClass.setCurrentCondition(prefix2Fq[0]);
 			expRfamID.setCurrentCondition(prefix2Fq[0]);
-			mapping(fastq, out);
+			out = mapping(fastq, out);
 			expRfamClass.addGeneExp(rfamStatistic.getMapRfamClass2Counts());
 			expRfamID.addGeneExp(rfamStatistic.getMapRfamID2Counts());
 			expRfamClass.addAllReads(rfamStatistic.getAllReadsNum());
@@ -82,6 +85,8 @@ public class CtrlRfamStatistics implements IntCmdSoft {
 			
 			expRfamID.writeFile(false, outPath + TitleFormatNBC.Samples.toString() + prefix2Fq[0] + "_RfamID.txt", EnumExpression.Ratio);
 			expRfamClass.writeFile(false, outPath + TitleFormatNBC.Samples.toString() + prefix2Fq[0] + "_RfamClass.txt", EnumExpression.Ratio);
+			lsFileTobeDelete.add(fastq);
+			lsFileTobeDelete.add(out);
 		}
 		expRfamID.writeFile(true, outPath + "Rfam_ID_Statistics.txt", EnumExpression.Ratio);
 		expRfamClass.writeFile(true, outPath + "Rfam_Class_Statistics.txt.txt", EnumExpression.Ratio);
@@ -108,7 +113,7 @@ public class CtrlRfamStatistics implements IntCmdSoft {
 		return samplingFq;
 	}
 	
-	private void mapping(String fastqFile, String outFile) {
+	private String mapping(String fastqFile, String outFile) {
 		MapBowtie mapBowtie = new MapBowtie();
 		mapBowtie.setFqFile(new FastQ(fastqFile), null);
 		mapBowtie.setOutFileName(outFile);
@@ -118,18 +123,24 @@ public class CtrlRfamStatistics implements IntCmdSoft {
 		mapBowtie.setThreadNum(threadNum);
 		rfamStatistic.initial();
 		mapBowtie.addAlignmentRecorder(rfamStatistic);
-		if (isUseOldResult && FileOperate.isFileExistAndBigThanSize(mapBowtie.getOutNameCope(), 0)) {
-			SamFile samFile = new SamFile(mapBowtie.getOutNameCope());
-			rfamStatistic.setSamFile(samFile);
-			rfamStatistic.countRfamBam();
-		} else {
+		if (!isUseOldResult || !FileOperate.isFileExistAndBigThanSize(mapBowtie.getOutNameCope(), 0)) {
 			mapBowtie.mapReads();
 		}
+		SamFile samFile = new SamFile(mapBowtie.getOutNameCope());
+		rfamStatistic.setSamFile(samFile);
+		rfamStatistic.countRfamBam();
 		logger.info("finish mapping miRNA");
 		lsCmd.addAll(mapBowtie.getCmdExeStr());
-
+		return samFile.getFileName();
 	}
-
+	
+	/** 删除临时文件 */
+	public void clean() {
+		for (String tmpFile : lsFileTobeDelete) {
+			FileOperate.DeleteFileFolder(tmpFile);
+		}
+	}
+	
 	@Override
 	public List<String> getCmdExeStr() {
 		return lsCmd;
