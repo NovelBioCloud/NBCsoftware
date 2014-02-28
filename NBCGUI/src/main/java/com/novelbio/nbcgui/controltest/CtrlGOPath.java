@@ -304,11 +304,11 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	/** 返回保存的文件名 */
 	protected List<String> saveExcelNorm(String excelPath) {
 		ExcelOperate excelResult = new ExcelOperate();
-		excelResult.openExcel(excelPath);
+		excelResult.newExcelOpen(excelPath);
 		lsResultExcel.add(excelPath);
 		ExcelOperate excelResultAll = new ExcelOperate();
 		String excelAllPath = FileOperate.changeFileSuffix(excelPath, "_All",null);
-		excelResultAll.openExcel(excelAllPath);
+		excelResultAll.newExcelOpen(excelAllPath);
 		lsResultExcel.add(excelAllPath);
 
 		for (String prefix : mapPrefix2FunTest.keySet()) {
@@ -366,7 +366,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		for (String prefix : mapPrefix2FunTest.keySet()) {
 			ExcelOperate excelResult = new ExcelOperate();
 			String excelPathOut = FileOperate.changeFileSuffix(excelPath, "_" + prefix, null);
-			excelResult.openExcel(excelPathOut);
+			excelResult.newExcelOpen(excelPathOut);
 			lsResultExcel.add(excelPathOut);
 			Map<String, List<String[]>> mapSheetName2LsInfo = mapPrefix2FunTest.get(prefix).getMapWriteToExcel();
 			for (String sheetName : mapSheetName2LsInfo.keySet()) {

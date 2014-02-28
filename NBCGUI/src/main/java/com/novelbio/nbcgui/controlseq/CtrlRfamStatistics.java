@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.seq.GeneExpTable;
@@ -14,7 +16,10 @@ import com.novelbio.analysis.seq.mapping.MapBowtie;
 import com.novelbio.analysis.seq.mirna.RfamStatistic;
 import com.novelbio.analysis.seq.rnaseq.RPKMcomput.EnumExpression;
 import com.novelbio.analysis.seq.sam.SamFile;
+import com.novelbio.analysis.seq.sam.SamFileStatistics;
+import com.novelbio.analysis.seq.sam.SamMapRate;
 import com.novelbio.base.FoldeCreate;
+import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.information.SoftWareInfo;
 import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
@@ -24,6 +29,8 @@ import com.novelbio.generalConf.TitleFormatNBC;
 import com.novelbio.nbcReport.Params.EnumReport;
 
 /** 检测RNAseq样本的rrna污染情况以及ncRNA的情况 */
+@Component
+@Scope("prototype")
 public class CtrlRfamStatistics implements IntCmdSoft {
 	private static final Logger logger = Logger.getLogger(CtrlRfamStatistics.class);
 	
@@ -32,6 +39,7 @@ public class CtrlRfamStatistics implements IntCmdSoft {
 	GeneExpTable expRfamClass = new GeneExpTable(TitleFormatNBC.RfamClass);
 	int threadNum = 5;
 	RfamStatistic rfamStatistic = new RfamStatistic();
+	SamMapRate samMapRate = new SamMapRate();
 	String rfamFile;
 	boolean isUseOldResult = true;
 	
@@ -74,7 +82,8 @@ public class CtrlRfamStatistics implements IntCmdSoft {
 		lsFileTobeDelete.clear();
 		for (String[] prefix2Fq : lsPrefix2Fq) {
 			String fastq = getSampleFq(prefix2Fq[1]);
-			String out = FileOperate.changeFileSuffix(fastq, "", "bam");
+			String outTmp = outPath + TitleFormatNBC.TmpMapping.toString() + FileOperate.getSepPath();
+			String out = outTmp + FileOperate.changeFileSuffix(FileOperate.getFileName(fastq), "", "bam");
 			expRfamClass.setCurrentCondition(prefix2Fq[0]);
 			expRfamID.setCurrentCondition(prefix2Fq[0]);
 			out = mapping(fastq, out);
@@ -83,11 +92,17 @@ public class CtrlRfamStatistics implements IntCmdSoft {
 			expRfamClass.addAllReads(rfamStatistic.getAllReadsNum());
 			expRfamID.addAllReads(rfamStatistic.getAllReadsNum());
 			
-			expRfamID.writeFile(false, outPath + TitleFormatNBC.Samples.toString() + prefix2Fq[0] + "_RfamID.txt", EnumExpression.Ratio);
-			expRfamClass.writeFile(false, outPath + TitleFormatNBC.Samples.toString() + prefix2Fq[0] + "_RfamClass.txt", EnumExpression.Ratio);
-			lsFileTobeDelete.add(fastq);
+			expRfamID.writeFile(false, outTmp + TitleFormatNBC.Samples.toString() + prefix2Fq[0] + "_RfamID.txt", EnumExpression.Ratio);
+			expRfamClass.writeFile(false, outTmp + TitleFormatNBC.Samples.toString() + prefix2Fq[0] + "_RfamClass.txt", EnumExpression.Ratio);
+			if (testReadsNum > 0) {
+				lsFileTobeDelete.add(fastq);
+			}
 			lsFileTobeDelete.add(out);
 		}
+		List<String[]> lsResult = samMapRate.getLsResult();
+		TxtReadandWrite txtWrite = new TxtReadandWrite(outPath + "Rfam_Map_Statistics.txt", true);
+		txtWrite.ExcelWrite(lsResult);
+		txtWrite.close();
 		expRfamID.writeFile(true, outPath + "Rfam_ID_Statistics.txt", EnumExpression.Ratio);
 		expRfamClass.writeFile(true, outPath + "Rfam_Class_Statistics.txt.txt", EnumExpression.Ratio);
 	}
@@ -99,21 +114,27 @@ public class CtrlRfamStatistics implements IntCmdSoft {
 		if (isUseOldResult && FileOperate.isFileExistAndBigThanSize(samplingFq, 0)) {
 			return samplingFq;
 		}
-		FastQ fastQSampling = new FastQ(samplingFq, true);
+		FastQ fastQSampling = null;
 		FastQ fastQ = new FastQ(fastqFile);
 		int i = 0;
-		for (FastQRecord fastQRecord : fastQ.readlines()) {
-			if (i++ > testReadsNum) {
-				break;
+		if (testReadsNum <= 0) {
+			samplingFq = fastqFile;
+		} else {
+			fastQSampling = new FastQ(samplingFq, true);
+			for (FastQRecord fastQRecord : fastQ.readlines()) {
+				if (i++ > testReadsNum) {
+					break;
+				}
+				fastQSampling.writeFastQRecord(fastQRecord);
 			}
-			fastQSampling.writeFastQRecord(fastQRecord);
+			fastQ.close();
+			fastQSampling.close();
 		}
-		fastQ.close();
-		fastQSampling.close();
 		return samplingFq;
 	}
 	
 	private String mapping(String fastqFile, String outFile) {
+		SamFileStatistics samFileStatistics = new SamFileStatistics(FileOperate.getFileNameSep(fastqFile)[0]);
 		MapBowtie mapBowtie = new MapBowtie();
 		mapBowtie.setFqFile(new FastQ(fastqFile), null);
 		mapBowtie.setOutFileName(outFile);
@@ -123,9 +144,12 @@ public class CtrlRfamStatistics implements IntCmdSoft {
 		mapBowtie.setThreadNum(threadNum);
 		rfamStatistic.initial();
 		mapBowtie.addAlignmentRecorder(rfamStatistic);
+		mapBowtie.addAlignmentRecorder(samFileStatistics);
+
 		if (!isUseOldResult || !FileOperate.isFileExistAndBigThanSize(mapBowtie.getOutNameCope(), 0)) {
 			mapBowtie.mapReads();
 		}
+		samMapRate.addMapInfo("Rfam", samFileStatistics);
 		SamFile samFile = new SamFile(mapBowtie.getOutNameCope());
 		rfamStatistic.setSamFile(samFile);
 		rfamStatistic.countRfamBam();

@@ -63,7 +63,7 @@ public class CtrlMedian {
 	public void saveFile(String excelFile)
 	{
 		ExcelOperate excel = new ExcelOperate();
-		excel.openExcel(excelFile);
+		excel.newExcelOpen(excelFile);
 		excel.WriteExcel(1, 1, lsResult);
 		excel.Close();
 	}

@@ -201,7 +201,11 @@ public class CtrlGOall implements CtrlTestGOInt {
 			List<BufferedImage> lsGOimage = new ArrayList<BufferedImage>();
 			String excelSavePath = "";
 			for (CtrlGO ctrlGO : getMapResult_Prefix2FunTest().values()) {
-				BufferedImage bufferedImage = ctrlGO.getMapResult_Prefix2FunTest().get(prefix).getImagePvalue();
+				FunctionTest functionTest = ctrlGO.getMapResult_Prefix2FunTest().get(prefix);
+				if (functionTest == null) {
+					continue;
+				}
+				BufferedImage bufferedImage = functionTest.getImagePvalue();
 				lsGOimage.add(bufferedImage);
 				excelSavePath = FileOperate.getParentPathName(ctrlGO.getSaveExcelPrefix());
 			}
