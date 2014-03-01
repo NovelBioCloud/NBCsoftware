@@ -156,10 +156,16 @@ public class GuiTranscriptomeCufflinks extends JPanel {
 
 		
 		btnRefgtf = new JButton("RefGTF");
+		btnRefgtf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String gtfFile = guiFileOpen.openFileName("", "");
+				txtRefGTF.setText(gtfFile);
+			}
+		});
 		btnRefgtf.setBounds(809, 429, 102, 28);
 		add(btnRefgtf);
 		
-		chckbxModifythisRefGtf = new JCheckBox("ModifyThis Ref Gtf instead of Database GFF");
+		chckbxModifythisRefGtf = new JCheckBox("Use Third Part GTF");
 		chckbxModifythisRefGtf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (chckbxModifythisRefGtf.isSelected()) {

@@ -6,7 +6,7 @@ import java.util.List;
 import com.google.common.collect.HashMultimap;
 import com.novelbio.analysis.seq.fasta.SeqHash;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
-import com.novelbio.analysis.seq.genome.GffHashModifyORF;
+import com.novelbio.analysis.seq.genome.GffHashModifyNewGffORF;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.genome.gffOperate.GffType;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
@@ -151,7 +151,7 @@ public class CtrlCufflinksTranscriptome {
 		}
 		
 		GffHashGene gffHashGeneThis = new GffHashGene(GffType.GTF, resultGtf);
-		GffHashModifyORF gffHashModifyORF = new GffHashModifyORF();
+		GffHashModifyNewGffORF gffHashModifyORF = new GffHashModifyNewGffORF();
 		gffHashModifyORF.setGffHashGeneRaw(gffHashGeneThis);
 		gffHashModifyORF.setGffHashGeneRef(gffChrAbs.getGffHashGene());
 		gffHashModifyORF.setRenameGene(true);
