@@ -161,23 +161,20 @@ public class CtrlRNAmap implements IntCmdSoft {
 		}
 	}
 	private void setRefFile() {
+		SoftWareInfo softBowtie = new SoftWareInfo(mapRNA.getBowtieVersion());
+		SoftWareInfo softMap = new SoftWareInfo(softWare);
+		mapRNA.setExePath(softMap.getExePath(), softBowtie.getExePath());
+		
 		if (gffChrAbs == null || FileOperate.isFileExist(indexFile)) {
 			mapRNA.setRefIndex(indexFile);
 			return;
 		}
-		SoftWareInfo softBowtie = new SoftWareInfo(mapRNA.getBowtieVersion());
 		if (softWare == SoftWare.tophat) {
 			mapRNA.setRefIndex(gffChrAbs.getSpecies().getIndexChr(mapRNA.getBowtieVersion()));
-			SoftWareInfo softTophat = new SoftWareInfo(SoftWare.tophat);
-			mapRNA.setExePath(softTophat.getExePath(), softBowtie.getExePath());
 		} else if (softWare == SoftWare.rsem) {
 			mapRNA.setRefIndex(gffChrAbs.getSpecies().getIndexRef(SoftWare.rsem, true));
-			SoftWareInfo softRsem = new SoftWareInfo(SoftWare.rsem);
-			mapRNA.setExePath(softRsem.getExePath(), softBowtie.getExePath());
 		} else if (softWare == SoftWare.mapsplice) {
 			mapRNA.setRefIndex(gffChrAbs.getSpecies().getIndexChr(mapRNA.getBowtieVersion()));
-			SoftWareInfo softMapSplice = new SoftWareInfo(SoftWare.mapsplice);
-			mapRNA.setExePath(softMapSplice.getExePath(), softBowtie.getExePath());
 		}
 	}
 	private void setMapLibrary(MapLibrary mapLibrary) {
