@@ -130,7 +130,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			exonJunction.setSeqHash(seqHash);
 			exonJunction.setCombine(isCombine);
 			if (isReconstruceIso) {
-				exonJunction.setgenerateNewIso();
+				exonJunction.setgenerateNewIso(true);
 			}
 			long fileLength = exonJunction.getFileLength();
 			ArrayList<Double> lsLevels = new ArrayList<Double>();
