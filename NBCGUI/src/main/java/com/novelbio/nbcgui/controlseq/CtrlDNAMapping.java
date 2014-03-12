@@ -153,10 +153,12 @@ public class CtrlDNAMapping implements IntCmdSoft {
 			} else {
 				continue;
 			}
-			String excel = SamFileStatistics.saveExcel(outFilePrefix + prefix, samFileStatistics);
-			String pic = SamFileStatistics.savePic(outFilePrefix + prefix, samFileStatistics);
-			mapPrefix2Statistics.put(prefix, excel);
-			mapPrefix2Pic.put(prefix, pic);
+			if (samFileStatistics != null) {
+				String excel = SamFileStatistics.saveExcel(outFilePrefix + prefix, samFileStatistics);
+				String pic = SamFileStatistics.savePic(outFilePrefix + prefix, samFileStatistics);
+				mapPrefix2Statistics.put(prefix, excel);
+				mapPrefix2Pic.put(prefix, pic);
+			}
 		}
 	}
 	
@@ -187,19 +189,25 @@ public class CtrlDNAMapping implements IntCmdSoft {
 				mapSoftware.setChrIndex(species.getIndexRef(softMapping, false));
 			}
 		}
+		mapSoftware.setOutFileName(outFilePrefix + prefix);
+		if (FileOperate.isFileExistAndBigThanSize(mapSoftware.getOutNameCope(), 0)) {
+			return new SamFile(mapSoftware.getOutNameCope());
+		}
+		
 		mapSoftware.setLeftFq(CopeFastq.convertFastqFile(fastQsFile.get(0)));
 		mapSoftware.setRightFq(CopeFastq.convertFastqFile(fastQsFile.get(1)));
 		if (mapSoftware instanceof MapBowtie) {
 			((MapBowtie)mapSoftware).setSensitive(sensitive);
 		}
 		mapSoftware.setPrefix(prefix);
-		mapSoftware.setOutFileName(outFilePrefix + prefix);
+
 		mapSoftware.setGapLength(gapLen);
 		mapSoftware.setMismatch(mismatch);
 		mapSoftware.setSampleGroup(prefix, prefix, prefix, null);
 		mapSoftware.setMapLibrary(libraryType);
 		mapSoftware.setSortNeed(isNeedSort);
 		mapSoftware.setThreadNum(thread);
+
 		lsCmd.addAll(mapSoftware.getCmdExeStr());
 		SamFile samFile = mapSoftware.mapReads();
 		samFileStatistics = new SamFileStatistics(prefix);

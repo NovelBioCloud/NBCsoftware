@@ -122,19 +122,22 @@ public class CtrlRNAmap implements IntCmdSoft {
 		rsemExpFPKM = new GeneExpTable(TitleFormatNBC.AccID);
 		for (Entry<String, List<List<String>>> entry : mapPrefix2LsFastq.entrySet()) {
 			creatMapRNA();
-
+			
 			mapRNA.setGffChrAbs(gffChrAbs);
 			setRefFile();
 			String prefix = entry.getKey();
 			List<List<String>> lsFastqFR = entry.getValue();
-		
-			mapRNA.setLeftFq(CopeFastq.convertFastqFile(lsFastqFR.get(0)));
-			mapRNA.setRightFq(CopeFastq.convertFastqFile(lsFastqFR.get(1)));
+
 			setMapLibrary(mapLibrary);
-			
 			mapRNA.setStrandSpecifictype(strandSpecific);
 			mapRNA.setThreadNum(threadNum);
 			mapRNA.setOutPathPrefix(outPrefix + prefix);
+			if (FileOperate.isFileExistAndBigThanSize(mapRNA.getFinishName(), 0)) {
+				continue;
+			}
+			
+			mapRNA.setLeftFq(CopeFastq.convertFastqFile(lsFastqFR.get(0)));
+			mapRNA.setRightFq(CopeFastq.convertFastqFile(lsFastqFR.get(1)));
 			
 			if (softWare == SoftWare.tophat && !useGTF) {
 				mapRNA.setGtf_Gene2Iso(null);
@@ -145,6 +148,7 @@ public class CtrlRNAmap implements IntCmdSoft {
 				}
 				mapRNA.setGtf_Gene2Iso(gtfAndGene2Iso);
 			}
+	
 			lsCmd.addAll(mapRNA.getCmdExeStr());
 			mapRNA.mapReads();
 			setExpResult(prefix, mapRNA);
