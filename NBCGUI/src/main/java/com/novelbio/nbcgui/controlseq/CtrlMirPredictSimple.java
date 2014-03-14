@@ -37,14 +37,14 @@ public class CtrlMirPredictSimple {
 	public void setMapPrefix2Fastq(Map<String, String> mapPrefix2File) {
 		this.mapPrefix2File = mapPrefix2File;
 	}
-	
+	/** 不需要展示 */
 	public void setIsUseOldResult(boolean isUseOldResult) {
 		this.isUseOldResult = isUseOldResult;
 	}
 	public void setSpecies(Species species) {
 		this.species = species;
 	}
-	
+	/** 不需要展示 */
 	public void setNovelMiRNAmrd(String novelMiRNAmrd) {
 		this.novelMiRNAmrd = novelMiRNAmrd;
 	}
