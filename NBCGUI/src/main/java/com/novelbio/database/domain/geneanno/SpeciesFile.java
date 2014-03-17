@@ -1,4 +1,4 @@
-
+package com.novelbio.database.domain.geneanno;
 
 import java.util.ArrayList;
 import java.util.Collection;

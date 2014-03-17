@@ -1,4 +1,4 @@
-
+package com.novelbio.database.model.species;
 
 import java.util.ArrayList;
 import java.util.Comparator;
