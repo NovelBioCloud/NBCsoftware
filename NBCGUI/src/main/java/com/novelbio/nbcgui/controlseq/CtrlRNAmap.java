@@ -47,6 +47,10 @@ public class CtrlRNAmap implements IntCmdSoft {
 	/** tophat是否用GTF文件进行校正，默认为true，如果出错就要考虑不用GTF */
 	boolean useGTF = true;
 	String outPrefix;
+	
+	/** 将没有比对上的reads用bowtie2再次比对上去 */
+	boolean mapUnmapedReads = true;
+	
 	/** 保存最终结果，只有rsem才会有
 	 * 第一行为标题
 	 * 之后每一行为基因表达情况
@@ -79,7 +83,9 @@ public class CtrlRNAmap implements IntCmdSoft {
 	public void setSpecies(Species species) {
 		this.species = species;
 	}
-	
+	public void setMapUnmapedReads(boolean mapUnmapedReads) {
+		this.mapUnmapedReads = mapUnmapedReads;
+	}
 	public void setOutPathPrefix(String outPathPrefix) {
 		outPrefix = FoldeCreate.createAndInFold(outPathPrefix, EnumReport.RNASeqMap.getResultFolder());
 	}
@@ -148,7 +154,7 @@ public class CtrlRNAmap implements IntCmdSoft {
 				}
 				mapRNA.setGtf_Gene2Iso(gtfAndGene2Iso);
 			}
-	
+			
 			lsCmd.addAll(mapRNA.getCmdExeStr());
 			mapRNA.mapReads();
 			setExpResult(prefix, mapRNA);
@@ -168,17 +174,27 @@ public class CtrlRNAmap implements IntCmdSoft {
 		SoftWareInfo softBowtie = new SoftWareInfo(mapRNA.getBowtieVersion());
 		SoftWareInfo softMap = new SoftWareInfo(softWare);
 		mapRNA.setExePath(softMap.getExePath(), softBowtie.getExePath());
-		
+		boolean isThrdPartIndex = false;
 		if (gffChrAbs == null || FileOperate.isFileExist(indexFile)) {
+			isThrdPartIndex = true;
 			mapRNA.setRefIndex(indexFile);
 			return;
 		}
+		String indexUnmap = null;
+		if (isThrdPartIndex) {
+			indexUnmap = indexFile;
+		} else {
+			indexUnmap = gffChrAbs.getSpecies().getIndexChr(SoftWare.bowtie2);
+		}
+		
 		if (softWare == SoftWare.tophat) {
 			mapRNA.setRefIndex(gffChrAbs.getSpecies().getIndexChr(mapRNA.getBowtieVersion()));
+			((MapTophat)mapRNA).setMapUnmapedReads(mapUnmapedReads, indexUnmap);
 		} else if (softWare == SoftWare.rsem) {
 			mapRNA.setRefIndex(gffChrAbs.getSpecies().getIndexRef(SoftWare.rsem, true));
 		} else if (softWare == SoftWare.mapsplice) {
 			mapRNA.setRefIndex(gffChrAbs.getSpecies().getIndexChr(mapRNA.getBowtieVersion()));
+			((MapSplice)mapRNA).setMapUnmapedReads(mapUnmapedReads, indexUnmap);
 		}
 	}
 	private void setMapLibrary(MapLibrary mapLibrary) {
