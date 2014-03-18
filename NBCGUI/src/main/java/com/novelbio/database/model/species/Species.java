@@ -107,11 +107,11 @@ public class Species implements Cloneable {
 		if (version == null) {
 			return;
 		}
+		this.version = version;
 		version = version.split(sepVersionAndYear)[0].toLowerCase();
 		if (!mapVersion2Species.containsKey(version)) {
 			return;
 		}
-		this.version = version;
 		this.gffDB = null;
 	}
 	/**

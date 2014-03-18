@@ -251,7 +251,7 @@ public class SpeciesFile {
 		if (chromSeq == null || chromSeq.equals("")) {
 			return null;
 		}
-		String chromeSeq = EnumSpeciesFile.chromSeqFile.getSavePath(this) + chromSeq;
+		String chromeSeq = pathParent + chromSeq;
 		if (FileOperate.isFileExistAndBigThanSize(chromeSeq, 0)) {
 			SamIndexRefsequence samIndexRefsequence = new SamIndexRefsequence();
 			samIndexRefsequence.setRefsequence(chromeSeq);
