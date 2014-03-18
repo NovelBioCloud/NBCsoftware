@@ -15,6 +15,8 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -31,6 +33,7 @@ import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.genome.gffOperate.GffType;
 import com.novelbio.analysis.seq.mirna.ListMiRNAdat;
 import com.novelbio.analysis.seq.sam.SamIndexRefsequence;
+import com.novelbio.base.StringOperate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.dataStructure.ArrayOperate;
 import com.novelbio.base.fileOperate.FileOperate;
@@ -51,6 +54,8 @@ import com.novelbio.generalConf.PathDetailNBC;
  })
 public class SpeciesFile {
 	private static final Logger logger = Logger.getLogger(SpeciesFile.class);
+	/** 物种文件夹名称 */
+	public static final String SPECIES_FOLDER = "species";
 	@Id
 	String id;
 	@Indexed
@@ -173,7 +178,70 @@ public class SpeciesFile {
 		return mapChrID2ChrLen;
 	}
 	
+	/**
+	 * 数据库操作类
+	 * @return
+	 */
+	private static IManageSpecies repo(){
+		return ManageSpecies.getInstance();
+	}
 	
+	/**
+	 * 保存，保存之前验证version是否改变，如果改变了，那么就不能保存成功
+	 * @return
+	 */
+	public boolean save(){
+		try {
+			if(!StringOperate.isRealNull(this.id)){
+				SpeciesFile speciesFileOld = SpeciesFile.findById(id);
+				if(speciesFileOld == null)
+					return false;
+				if(!speciesFileOld.getVersion().equals(this.version))
+					return false;
+			}
+			repo().saveSpeciesFile(this);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * 查询物种的所有版本
+	 * @param pageable
+	 * @return
+	 */
+	public static List<SpeciesFile> queryLsSpeciesFile(int taxID){
+		return repo().queryLsSpeciesFile(taxID);
+	}
+	
+	/**
+	 * 根据物种的版本的id删除对应的版本
+	 * @param speciesFileId
+	 * @return
+	 */
+	public static boolean deleteById(String speciesFileId) {
+		SpeciesFile speciesFileOld = SpeciesFile.findById(speciesFileId);
+		try {
+			repo().deleteSpeciesFile(speciesFileId);
+			FileOperate.delFolder(speciesFileOld.speciesVersionPath());
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * 物种版本对应的文件夹
+	 * @return
+	 */
+	public String speciesVersionPath(){
+		if(taxID == 0 || StringOperate.isRealNull(version))
+			return null;
+		String basePath = FileOperate.addSep(pathParent) + SpeciesFile.SPECIES_FOLDER + FileOperate.getSepPath()
+				+ taxID + FileOperate.getSepPath() + version + FileOperate.getSepPath();
+		return basePath;
+	}
 	
 	public void setChromSeq(String chromSeq) {
 		this.chromSeq = chromSeq;
@@ -183,7 +251,7 @@ public class SpeciesFile {
 		if (chromSeq == null || chromSeq.equals("")) {
 			return null;
 		}
-		String chromeSeq = pathParent + chromSeq;
+		String chromeSeq = EnumSpeciesFile.chromSeqFile.getSavePath(this) + chromSeq;
 		if (FileOperate.isFileExistAndBigThanSize(chromeSeq, 0)) {
 			SamIndexRefsequence samIndexRefsequence = new SamIndexRefsequence();
 			samIndexRefsequence.setRefsequence(chromeSeq);
@@ -191,6 +259,7 @@ public class SpeciesFile {
 		}
 		return chromeSeq;
 	}
+	
 	/** 获得分割的文件夹 */
 	public String getChromSeqFileSep() {
 		String chromeSeq = FileOperate.addSep(pathParent + "Chrom_Sep/" + getSpeciesPathWithoutRoot());
@@ -262,7 +331,7 @@ public class SpeciesFile {
 	 */
 	public String getGffFile() {
 		String[] gffInfo = getGffDB2GffTypeFile();
-		return pathParent + gffInfo[2];
+		return EnumSpeciesFile.gffGeneFile.getSavePath(this) + gffInfo[2];
 	}
 	/**
 	 * 按照优先级返回gff类型，优先级由GffDB来决定
@@ -292,6 +361,14 @@ public class SpeciesFile {
 		return new String[]{gffDB, gffType2File[0], gffType2File[1]};
 	}
 	
+	/**
+	 * 返回gffGene的map
+	 * @return
+	 */
+	public Map<String, String[]> getGffDB2GffTypeFileMap(){
+		return mapDB2GffTypeAndFile;
+	}
+	
 	public void setGffRepeatFile(String gffRepeatFile) {
 		this.gffRepeatFile = gffRepeatFile;
 	}
@@ -300,8 +377,9 @@ public class SpeciesFile {
 		if (gffRepeatFile == null || gffRepeatFile.equals("")) {
 			return "";
 		}
-		return pathParent + gffRepeatFile;
+		return EnumSpeciesFile.gffRepeatFile.getSavePath(this) + gffRepeatFile;
 	}
+	
 	
 	/**
 	 * 添加相对路径
@@ -446,7 +524,7 @@ public class SpeciesFile {
 	 * @return
 	 */
 	public String getRefSeqFile(boolean isAllIso, boolean isProtein) {
-		return pathParent + getRefSeqFileRlt(isAllIso, isProtein);
+		return EnumSpeciesFile.refseqFileAllIso.getSavePath(this) + getRefSeqFileRlt(isAllIso, isProtein);
 	}
 	
 	/**
@@ -455,7 +533,7 @@ public class SpeciesFile {
 	 */
 	private String getRefSeqFileRlt(boolean isAllIso, boolean isProtein) {
 		String refseq = set_And_GetRefSeqName(isAllIso, isProtein);
-		if (FileOperate.isFileExistAndBigThanSize(pathParent + refseq, 0.2)) {
+		if (FileOperate.isFileExistAndBigThanSize(EnumSpeciesFile.refseqFileAllIso.getSavePath(this) + refseq, 0.2)) {
 			return refseq;
 		}
 		//说明没有序列
@@ -463,7 +541,7 @@ public class SpeciesFile {
 			return "";
 		}
 		try {
-			FileOperate.createFolders(FileOperate.getParentPathName(pathParent + refseq));
+			FileOperate.createFolders(FileOperate.getParentPathName(EnumSpeciesFile.refseqFileAllIso.getSavePath(this) + refseq));
 			GffChrAbs gffChrAbs = new GffChrAbs();
 			gffChrAbs.setGffHash(new GffHashGene(getGffType(), getGffFile()));
 			gffChrAbs.setSeqHash(new SeqHash(getChromSeqFile(), " "));
@@ -479,7 +557,7 @@ public class SpeciesFile {
 			gffChrSeq.setGetAllIso(isAllIso);
 			gffChrSeq.setGetIntron(false);
 			gffChrSeq.setGetSeqGenomWide();
-			gffChrSeq.setOutPutFile(pathParent + refseq);
+			gffChrSeq.setOutPutFile(EnumSpeciesFile.refseqFileAllIso.getSavePath(this) + refseq);
 			gffChrSeq.run();
 			save();
 			gffChrAbs.close();
@@ -497,37 +575,37 @@ public class SpeciesFile {
 		String refseq;
 		if (!isProtein) {
 			if (isAllIso) {
-				if (refseqFileAllIso == null || refseqFileAllIso.trim().equals("")) {
+				if (StringOperate.isRealNull(refseqFileAllIso)) {
 					if (getChromSeqFile() == null) {
 						return null;
 					}
-					refseqFileAllIso = getSpeciesPath() + "refrna/rnaAllIso_" + version + ".fa";
+					refseqFileAllIso = "rnaAllIso_" + version + ".fa";
 				}
 				refseq = refseqFileAllIso;
 			} else {
-				if (refseqFileOneIso == null || refseqFileOneIso.trim().equals("")) {
+				if (StringOperate.isRealNull(refseqFileOneIso)) {
 					if (getChromSeqFile() == null) {
 						return null;
 					}
-					refseqFileOneIso = getSpeciesPath() + "refrna/rnaOneIso_" + version + ".fa";
+					refseqFileOneIso = "rnaOneIso_" + version + ".fa";
 				}
 				refseq = refseqFileOneIso;
 			}
 		} else {
 			if (isAllIso) {
-				if (refProFileAllIso == null || refProFileAllIso.trim().equals("")) {
+				if (StringOperate.isRealNull(refProFileAllIso)) {
 					if (getChromSeqFile() == null) {
 						return null;
 					}
-					refProFileAllIso = getSpeciesPath() + "refprotein/proteinAllIso_" + version + ".fa";
+					refProFileAllIso = "proteinAllIso_" + version + ".fa";
 				}
 				refseq = refProFileAllIso;
 			} else {
-				if (refProFileOneIso == null || refProFileOneIso.trim().equals("")) {
+				if (StringOperate.isRealNull(refProFileAllIso)) {
 					if (getChromSeqFile() == null) {
 						return null;
 					}
-					refProFileOneIso = getSpeciesPath() + "refprotein/proteinOneIso_" + version + ".fa";
+					refProFileOneIso = "proteinOneIso_" + version + ".fa";
 				}
 				refseq = refProFileOneIso;
 			}
@@ -540,12 +618,11 @@ public class SpeciesFile {
 		this.refseqNCfile = refseqNCfile;
 	}
 	public String getRefseqNCfile() {
-		if (refseqNCfile == null || refseqNCfile.equals("")) {
+		if (StringOperate.isRealNull(refseqNCfile)) {
 			return null;
 		}
-		return pathParent + refseqNCfile;
+		return EnumSpeciesFile.refseqNCfile.getSavePath(this) + refseqNCfile;
 	}
-	
 	/**
 	 * 是否物种特异性的提取
 	 * @param speciesSpecific
@@ -574,10 +651,6 @@ public class SpeciesFile {
 			extractSmallRNASeq.getSeq();
 		}
 		return rfamFile;
-	}
-	
-	public void save() {
-		ManageSpecies.getInstance().saveSpeciesFile(this);
 	}
 	
 	/**
@@ -667,13 +740,14 @@ public class SpeciesFile {
         return true;
 	}
 	
+	/**
+	 * 
+	 * @param taxID
+	 * @return
+	 */
 	public static List<SpeciesFile> findByTaxID(int taxID) {
 		IManageSpecies manageSpecies = ManageSpecies.getInstance();
 		return manageSpecies.queryLsSpeciesFile(taxID);
-	}
-	public static SpeciesFile findByTaxIDVersion(int taxID, String version) {
-		IManageSpecies manageSpecies = ManageSpecies.getInstance();
-		return manageSpecies.querySpeciesFile(taxID, version);
 	}
 	/** 提取小RNA的一系列序列 */
 	static public class ExtractSmallRNASeq {
@@ -756,6 +830,7 @@ public class SpeciesFile {
 			this.rfamFile = rfamFile;
 			this.taxIDfram = taxIDrfam;//TODO 看这里是物种的什么名字
 		}
+		
 		/**
 		 * 提取序列
 		 */
@@ -891,6 +966,56 @@ public class SpeciesFile {
 			txtWrite.close();
 		}
 		
+	}
+	/**
+	 * 根据物种编号以及版本号查找物种
+	 * @param taxId
+	 * @param version
+	 * @return
+	 */
+	public static SpeciesFile findByTaxIDVersion(int taxId,String version) {
+		return repo().querySpeciesFile(taxId, version);
+	}
+	public static SpeciesFile findById(String speciesFileId) {
+		return repo().findOne(speciesFileId);
+	}
+	
+	/**
+	 * 添加需要保存的路径信息并保存
+	 * @param fileType 物种文件类型
+	 * @param fileName 文件名
+	 * @param gffType 只有当文件类型是gffGeneFile时，才有用
+	 * @param gffDB 只有当文件类型是gffGeneFile时，才有用
+	 */
+	public void addPathInfo(EnumSpeciesFile fileType, String fileName,GffType gffType,String gffDB) {
+		switch (fileType) {
+		case chromSeqFile:{
+			setChromSeq(fileName);
+			break;
+		}
+		case gffGeneFile:{
+			addGffDB2TypeFile(gffDB, gffType, fileName);
+			break;
+		}
+		case gffRepeatFile:{
+			setGffRepeatFile(fileName);
+			break;
+		}
+		case refseqFileAllIso:{
+			setRefseqFileAllIso(fileName);
+			break;
+		}
+		case refseqFileOneIso:{
+			setRefseqFileOneIso(fileName);
+			break;
+		}
+		case refseqNCfile:{
+			setRefseqNCfile(fileName);
+			break;
+		}
+		default:
+			break;
+		}
 	}
 	
 }

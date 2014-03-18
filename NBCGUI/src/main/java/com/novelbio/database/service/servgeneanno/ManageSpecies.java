@@ -266,4 +266,10 @@ public class ManageSpecies implements IManageSpecies {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public SpeciesFile findOne(String speciesFileId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

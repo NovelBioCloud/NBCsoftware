@@ -3,9 +3,12 @@ package com.novelbio.database.domain.geneanno;
 import java.util.Map;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.novelbio.database.service.SpringFactory;
 import com.novelbio.database.service.servgeneanno.IManageSpecies;
 import com.novelbio.database.service.servgeneanno.ManageSpecies;
 
@@ -120,10 +123,6 @@ public class TaxInfo implements Cloneable {
 	public boolean isHaveMiRNA() {
 		return isHaveMiRNA;
 	}
-	public void save() {
-		IManageSpecies servTaxID = ManageSpecies.getInstance();
-		servTaxID.saveTaxInfo(this);
-	}
 
 	/**
 	 * 返回taxID对常用名
@@ -164,6 +163,32 @@ public class TaxInfo implements Cloneable {
 		return false;
 	}
 	
+	/**
+	 * 数据库操作类
+	 * @return
+	 */
+	private static IManageSpecies repo(){
+		return ManageSpecies.getInstance();
+	}
+	
+	public boolean save(){
+		try {
+			repo().saveTaxInfo(this);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * 查询物种分页
+	 * @param pageable
+	 * @return
+	 */
+	public static Page<TaxInfo> queryLsTaxInfo(Pageable pageable){
+		return repo().queryLsTaxInfo(pageable);
+	}
+	
 	public TaxInfo clone() {
 		try {
 			return (TaxInfo) super.clone();
@@ -172,6 +197,18 @@ public class TaxInfo implements Cloneable {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	/**
+	 * 根据物种编号删除物种
+	 * @param taxId2
+	 */
+	public static boolean deleteByTaxId(int taxId2) {
+		try {
+			repo().deleteByTaxId(taxId2);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
 	}
 	
 }

@@ -244,4 +244,9 @@ public class ManageSpeciesDB implements IManageSpecies {
 		protected static ManageSpeciesDB manageSpecies = new ManageSpeciesDB();
 	}
 
+	@Override
+	public SpeciesFile findOne(String speciesFileId) {
+		return repoSpeciesFile.findOne(speciesFileId);
+	}
+
 }

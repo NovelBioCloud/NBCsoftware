@@ -69,5 +69,7 @@ public interface IManageSpecies {
 	public void deleteSpeciesFile(String speciesFileId);
 	
 	public void readSpeciesFile(String speciesFileInput);
+	
+	public SpeciesFile findOne(String speciesFileId);
 
 }
