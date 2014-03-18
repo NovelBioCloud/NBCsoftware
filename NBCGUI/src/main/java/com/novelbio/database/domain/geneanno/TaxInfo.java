@@ -8,9 +8,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.novelbio.database.service.SpringFactory;
+import com.novelbio.analysis.seq.mirna.ListMiRNAdat;
 import com.novelbio.database.service.servgeneanno.IManageSpecies;
 import com.novelbio.database.service.servgeneanno.ManageSpecies;
+import com.novelbio.generalConf.PathDetailNBC;
 
 /**
  * 有关taxID的表格
@@ -32,7 +33,7 @@ public class TaxInfo implements Cloneable {
 	@Indexed
 	private String chnName;
 	/** 是否有miRNA */
-	private boolean isHaveMiRNA;
+	private Boolean isHaveMiRNA;
 	/**
 	 * NCBI的物种ID
 	 * @param taxID
@@ -117,10 +118,15 @@ public class TaxInfo implements Cloneable {
 		}
 		return this.chnName;
 	}
-	public void setHaveMiRNA(boolean isHaveMiRNA) {
+	
+	public void setIsHaveMiRNA(Boolean isHaveMiRNA) {
 		this.isHaveMiRNA = isHaveMiRNA;
 	}
+	
 	public boolean isHaveMiRNA() {
+		if (isHaveMiRNA == null) {
+			isHaveMiRNA = ListMiRNAdat.isContainMiRNA(getLatinName_2Word(), PathDetailNBC.getMiRNADat());
+		}
 		return isHaveMiRNA;
 	}
 

@@ -13,13 +13,26 @@ public enum EnumSpeciesFile {
 	refseqNCfile("refrna"),
 	gffGeneFile("gff"),
 	refseqFileAllIso("refrna"),
-	refseqFileOneIso("refrna");
+	refseqFileOneIso("refrna"),
+	
+	ChromSepPath("Chrom_Sep") {
+		public String getSavePath(SpeciesFile speciesFile) {
+			String basePath = SpeciesFile.getPathParent();
+			String pathToVersion = speciesFile.getPathToVersion();
+			if(StringOperate.isRealNull(pathToVersion))
+				return null;
+			return basePath + folder + FileOperate.getSepPath() + pathToVersion;
+		}
+	},
+	
+	
+	;
 	/**
 	 * 对应保存的文件夹
 	 */
-	private String folder;
+	protected String folder;
 	
-	EnumSpeciesFile(String folder){
+	EnumSpeciesFile(String folder) {
 		this.folder = folder;
 	}
 	
@@ -28,7 +41,7 @@ public enum EnumSpeciesFile {
 	 * @param speciesFile
 	 * @return
 	 */
-	public String getSavePath(SpeciesFile speciesFile){
+	public String getSavePath(SpeciesFile speciesFile) {
 		String basePath = speciesFile.speciesVersionPath();
 		if(StringOperate.isRealNull(basePath))
 			return null;

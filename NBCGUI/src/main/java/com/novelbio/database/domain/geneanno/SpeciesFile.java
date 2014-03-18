@@ -15,8 +15,6 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -38,6 +36,7 @@ import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.dataStructure.ArrayOperate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
+import com.novelbio.database.model.species.Species;
 import com.novelbio.database.service.servgeneanno.IManageSpecies;
 import com.novelbio.database.service.servgeneanno.ManageSpecies;
 import com.novelbio.generalConf.PathDetailNBC;
@@ -53,27 +52,37 @@ import com.novelbio.generalConf.PathDetailNBC;
     @CompoundIndex(unique = true, name = "species_version_idx", def = "{'taxID': 1, 'version': -1}"),
  })
 public class SpeciesFile {
+	public static void main(String[] args) {
+		Species species = new Species(9606);
+		System.out.println(species.getRefseqFile(true));
+	}
 	private static final Logger logger = Logger.getLogger(SpeciesFile.class);
 	/** 物种文件夹名称 */
 	public static final String SPECIES_FOLDER = "species";
+	/** 相对路径，类似 /media/hdfs/nbCloud/public/nbcplatform/ ，注意不要把genome写进去<br>
+	 * 然后以后把speciesFile写在 /media/hdfs/nbCloud/public/nbcplatform/这个文件夹下就行
+	 */
+	@Transient
+	static String pathParent = PathDetailNBC.getGenomePath();
+	
 	@Id
 	String id;
 	@Indexed
-	int taxID = 0;
+	int taxID;
 	/** 文件版本 */
-	String version = "";
+	String version;
 	/** 该版本的年代，大概年代就行 */
-	int publishYear = 0;
+	int publishYear;
 	/** 染色体的单文件序列 */
-	String chromSeq = "";
+	String chromSeq;
 	/** 相对路径 gff的repeat文件，从ucsc下载 */
-	String gffRepeatFile = "";
+	String gffRepeatFile;
 	/** 相对路径 refseq文件，全体Iso */
 	String refseqFileAllIso;
 	/** 相对路径 refseq文件，一个gene一个Iso */
 	String refseqFileOneIso;
 	/** refseq中的NCRNA文件 */
-	String refseqNCfile = "";
+	String refseqNCfile;
 	
 	/**
 	 * key: DBname, 为小写<br>
@@ -106,12 +115,6 @@ public class SpeciesFile {
 	@Transient
 	private Map<String, Long> mapChrID2ChrLen = new LinkedHashMap<String, Long>();
 
-	
-	/** 相对路径，类似 /media/hdfs/nbCloud/public/nbcplatform/ ，注意不要把genome写进去<br>
-	 * 然后以后把speciesFile写在 /media/hdfs/nbCloud/public/nbcplatform/这个文件夹下就行
-	 */
-	@Transient
-	String pathParent = PathDetailNBC.getGenomePath();
 	
 	/** mongodb的ID */
 	public void setId(String id) {
@@ -170,7 +173,7 @@ public class SpeciesFile {
 			}
 			txtRead.close();
 		} else if (FileOperate.isFileExistAndBigThanSize(chrFile, 0)) {
-			SeqHash seqHash = new SeqHash(getChromSeqFile(), " ");
+			SeqHash seqHash = new SeqHash(chrFile, " ");
 			mapChrID2ChrLen = seqHash.getMapChrLength();
 			seqHash.close();
 		}
@@ -182,7 +185,7 @@ public class SpeciesFile {
 	 * 数据库操作类
 	 * @return
 	 */
-	private static IManageSpecies repo(){
+	private static IManageSpecies repo() {
 		return ManageSpecies.getInstance();
 	}
 	
@@ -190,9 +193,9 @@ public class SpeciesFile {
 	 * 保存，保存之前验证version是否改变，如果改变了，那么就不能保存成功
 	 * @return
 	 */
-	public boolean save(){
+	public boolean save() {
 		try {
-			if(!StringOperate.isRealNull(this.id)){
+			if(!StringOperate.isRealNull(this.id)) {
 				SpeciesFile speciesFileOld = SpeciesFile.findById(id);
 				if(speciesFileOld == null)
 					return false;
@@ -235,23 +238,37 @@ public class SpeciesFile {
 	 * 物种版本对应的文件夹
 	 * @return
 	 */
-	public String speciesVersionPath(){
+	public String speciesVersionPath() {
 		if(taxID == 0 || StringOperate.isRealNull(version))
 			return null;
 		String basePath = FileOperate.addSep(pathParent) + SpeciesFile.SPECIES_FOLDER + FileOperate.getSepPath()
 				+ taxID + FileOperate.getSepPath() + version + FileOperate.getSepPath();
 		return basePath;
 	}
+	/** 物种版本的上层文件夹 */
+	public static String getPathParent() {
+		return FileOperate.addSep(pathParent);
+	}
+	/** 物种版本的相对路径，到版本为止
+	 * 如 9606/GRCh38/<br>
+	 * 包含最后的"/"
+	 */
+	public String getPathToVersion() {
+		if(taxID == 0 || StringOperate.isRealNull(version))
+			return null;
+		return taxID + FileOperate.getSepPath() + version + FileOperate.getSepPath();
+	}
 	
+	/** 相对路径，或者说文件名 */
 	public void setChromSeq(String chromSeq) {
 		this.chromSeq = chromSeq;
 	}
 	/** 获得总体的文件 */
 	public String getChromSeqFile() {
-		if (chromSeq == null || chromSeq.equals("")) {
+		if (StringOperate.isRealNull(chromSeq)) {
 			return null;
 		}
-		String chromeSeq = pathParent + chromSeq;
+		String chromeSeq = EnumSpeciesFile.chromSeqFile.getSavePath(this) + chromSeq;
 		if (FileOperate.isFileExistAndBigThanSize(chromeSeq, 0)) {
 			SamIndexRefsequence samIndexRefsequence = new SamIndexRefsequence();
 			samIndexRefsequence.setRefsequence(chromeSeq);
@@ -262,7 +279,7 @@ public class SpeciesFile {
 	
 	/** 获得分割的文件夹 */
 	public String getChromSeqFileSep() {
-		String chromeSeq = FileOperate.addSep(pathParent + "Chrom_Sep/" + getSpeciesPathWithoutRoot());
+		String chromeSeq = EnumSpeciesFile.ChromSepPath.getSavePath(this);
 		if (!FileOperate.isFileFoldExist(chromeSeq)) {
 			FileOperate.createFolders(chromeSeq);
 			NCBIchromFaChangeFormat ncbIchromFaChangeFormat = new NCBIchromFaChangeFormat();
@@ -287,22 +304,16 @@ public class SpeciesFile {
 		return mapStringDB;
 	}
 	
+	/** 
+	 * @param gffDB
+	 * @param gffType
+	 * @param gffFile 输入相对路径，不能包含文件名
+	 */
 	public void addGffDB2TypeFile(String gffDB, GffType gffType, String gffFile) {
 		mapDB2GffTypeAndFile.put(gffDB.toLowerCase(), new String[]{gffType.toString(), gffFile});
 		mapGffDBLowCase2DBNormal.put(gffDB.toLowerCase(), gffDB);
 	}
 	
-	/**
-	 * 获得某个Type的Gff文件，如果没有则返回null
-	 * @param gffDB 指定gffDB 如果为null，表示不指定，则返回默认
-	 * @return
-	 */
-	public String getGffFile(String gffDB) {
-		if (gffDB == null) {
-			return getGffFile();
-		}
-		return pathParent + mapDB2GffTypeAndFile.get(gffDB.toLowerCase())[1];
-	}
 	/**
 	 * 获得某个Type的GffType，如果没有则返回null
 	 * @param GFFtype 指定gfftype 如果为null，表示不指定，则返回默认
@@ -333,6 +344,19 @@ public class SpeciesFile {
 		String[] gffInfo = getGffDB2GffTypeFile();
 		return EnumSpeciesFile.gffGeneFile.getSavePath(this) + gffInfo[2];
 	}
+	
+	/**
+	 * 获得某个Type的Gff文件，如果没有则返回null
+	 * @param gffDB 指定gffDB 如果为null，表示不指定，则返回默认
+	 * @return
+	 */
+	public String getGffFile(String gffDB) {
+		if (gffDB == null) {
+			return getGffFile();
+		}
+		return EnumSpeciesFile.gffGeneFile.getSavePath(this) + mapDB2GffTypeAndFile.get(gffDB.toLowerCase())[1];
+	}
+	
 	/**
 	 * 按照优先级返回gff类型，优先级由GffDB来决定
 	 * 公返回枚举
@@ -348,7 +372,7 @@ public class SpeciesFile {
 	 * @return string[2]<br>
 	 * 0: gffDB<br>
 	 * 1: GffType<br>
-	 * 2: GffFile 相对路径
+	 * 2: GffFile 相对文件名
 	 */
 	private String[] getGffDB2GffTypeFile() {
 		if (mapDB2GffTypeAndFile.size() == 0) {
@@ -363,41 +387,35 @@ public class SpeciesFile {
 	
 	/**
 	 * 返回gffGene的map
+	 * 里面都是相对路径
 	 * @return
 	 */
 	public Map<String, String[]> getGffDB2GffTypeFileMap(){
 		return mapDB2GffTypeAndFile;
 	}
 	
+	/** 输入相对路径 */
 	public void setGffRepeatFile(String gffRepeatFile) {
 		this.gffRepeatFile = gffRepeatFile;
 	}
 	
 	public String getGffRepeatFile() {
-		if (gffRepeatFile == null || gffRepeatFile.equals("")) {
+		if (StringOperate.isRealNull(gffRepeatFile)) {
 			return "";
 		}
 		return EnumSpeciesFile.gffRepeatFile.getSavePath(this) + gffRepeatFile;
 	}
-	
-	
-	/**
-	 * 添加相对路径
-	 * @param softWare
-	 * @param indexChrom
-	 */
-	public void addIndexChrom(SoftWare softWare, String indexChrom) {
-		mapSoftware2IndexChrom.put(softWare, indexChrom);
-	}
+
 	/** 返回该mapping软件所对应的index的文件
 	 * 没有就新建一个
 	 * 格式如下：
 	 * softMapping.toString() + "_Chr_Index/"
 	 */
 	public String getIndexChromFa(SoftWare softMapping) {
-		String indexChromFa = pathParent + mapSoftware2IndexChrom.get(softMapping);
+		String parentIndexPath = getParentPathIndex(false, softMapping);
+		String indexChromFa = parentIndexPath + mapSoftware2IndexChrom.get(softMapping);
 		if (!FileOperate.isFileExist(indexChromFa)) {
-			indexChromFa = creatAndGetSeqIndex(false, softMapping, getChromSeqFile(), mapSoftware2IndexChrom);
+			indexChromFa = parentIndexPath + creatAndGetSeqIndex(false, softMapping, getChromSeqFile(), mapSoftware2IndexChrom);
 		}
 		return indexChromFa;
 	}
@@ -408,11 +426,13 @@ public class SpeciesFile {
 	 */
 	public String getIndexRefseq(SoftWare softMapping, boolean isAllIso) {
 		String indexRefseqThis = null;
+		String parentIndexPath = getParentPathIndex(true, softMapping);
 		if (isAllIso) {
 			indexRefseqThis = mapSoftware2IndexRefAllIso.get(softMapping);
 		} else {
 			indexRefseqThis = mapSoftware2IndexRefOneIso.get(softMapping);
 		}
+		indexRefseqThis = parentIndexPath + indexRefseqThis;
 		if (!FileOperate.isFileExist(indexRefseqThis)) {
 			Map<SoftWare, String> mapSoft2Seq = null;
 			if (isAllIso) {
@@ -422,7 +442,7 @@ public class SpeciesFile {
 			}
 			indexRefseqThis = creatAndGetSeqIndex(true, softMapping, getRefSeqFile(isAllIso, false), mapSoft2Seq);
 		}
-		return indexRefseqThis;
+		return parentIndexPath + indexRefseqThis;
 	}
 	
 	/**
@@ -433,31 +453,12 @@ public class SpeciesFile {
 	 * @param seqIndex 该index所对应的保存在数据库中的值，譬如indexChr
 	 * @param seqFile 该index所对应的序列，用getChromSeq()获得
 	 * @param mapSoftware2ChrIndexPath 该index所对应的hash表，如 mapSoftware2ChrIndexPath
-	 * @return softMapping.toString() + "_Ref_Index/" 或 softMapping.toString() + "_Chr_Index/"
+	 * @return 相对路径
 	 */
 	private String creatAndGetSeqIndex(Boolean refseq, SoftWare softMapping, String seqFile, Map<SoftWare, String> mapSoftware2ChrIndexPath) {
-		String indexChromFinal = null;
-		String IndexPath = null;
-		String seqName = null;
-		String indexFinalPath = null;
-		if (mapSoftware2ChrIndexPath.size() > 0) {
-			//media/winE/Bioinformatics/GenomeData/mouse/ucsc_mm9/Index/bwa_Index/mm9.fasta
-			String indexChromFaOther = mapSoftware2ChrIndexPath.entrySet().iterator().next().getValue();
-			seqName = FileOperate.getFileName(indexChromFaOther);
-			IndexPath = FileOperate.getParentPathName(FileOperate.getParentPathName(indexChromFaOther));
-		}
-		else {
-			///media/winE/Bioinformatics/GenomeData/mouse/ucsc_mm9/ChromFa/all/mm9.fasta
-			seqName = FileOperate.getFileName(seqFile);
-			IndexPath = FileOperate.addSep(pathParent + "index/" +softMapping.toString() + "/" + getSpeciesPathWithoutRoot());
-		}
+		String seqName = FileOperate.getFileName(seqFile);
 		
-		if (refseq)
-			indexFinalPath = IndexPath + "Ref_Index/";
-		else
-			indexFinalPath = IndexPath + "Chr_Index/";
-		
-		indexChromFinal = indexFinalPath + seqName;
+		String indexChromFinal = getParentPathIndex(refseq, softMapping) + seqName;
 		if (FileOperate.isFileExist(indexChromFinal)) {
 			return indexChromFinal;
 		}
@@ -468,38 +469,24 @@ public class SpeciesFile {
 		}
 		mapSoftware2ChrIndexPath.put(softMapping, indexChromFinal);
 		
-		return indexChromFinal;
+		return seqName;
 	}
 	
 	/**
-	 * 返回本version的物种的目录，类似cangshu_hamsters/CriGri_1.0
-	 * 没有genome
-	 *  是相对路径<p>
-	 *  结尾带"/"
+	 * 返回索引所在的文件夹，绝对路径
+	 * @param refseq
+	 * @param softMapping
+	 * @return
 	 */
-	private String getSpeciesPathWithoutRoot() {
-		String path = getSpeciesPath();
-		StringBuilder start = new StringBuilder();
-		String beginSep = "";//Path开头的反斜杠，一般只有1-2个
-		String name = null;
-		char[] pathChar = path.toCharArray();
-		
-		for (char c : pathChar) {
-			if (c == '/' || c == '\\') {
-				if (start.length() == 0) {
-					beginSep = beginSep + c;
-					continue;
-				} else {
-					start.append(c);
-					name = start.toString();
-					break;
-				}
-			}
-			start.append(c);
+	private String getParentPathIndex(Boolean refseq, SoftWare softMapping) {
+		String parentPath = getPathParent() + "index/" + softMapping.toString() + getPathToVersion();
+		String indexFinalPath = null;
+		if (refseq) {
+			indexFinalPath = parentPath + "Ref_Index/";
+		} else {
+			indexFinalPath = parentPath + "Chr_Index/";
 		}
-		String root = beginSep + name;
-		String result = path.replace(root, "");
-		return FileOperate.addSep(result);
+		return indexFinalPath;
 	}
 
 	public void setPublishYear(int publishYear) {
@@ -533,7 +520,9 @@ public class SpeciesFile {
 	 */
 	private String getRefSeqFileRlt(boolean isAllIso, boolean isProtein) {
 		String refseq = set_And_GetRefSeqName(isAllIso, isProtein);
-		if (FileOperate.isFileExistAndBigThanSize(EnumSpeciesFile.refseqFileAllIso.getSavePath(this) + refseq, 0.2)) {
+		String refseqPath = EnumSpeciesFile.refseqFileAllIso.getSavePath(this);
+		String refseqFile = EnumSpeciesFile.refseqFileAllIso.getSavePath(this) + refseq;
+		if (FileOperate.isFileExistAndBigThanSize(refseqFile, 0.2)) {
 			return refseq;
 		}
 		//说明没有序列
@@ -541,7 +530,7 @@ public class SpeciesFile {
 			return "";
 		}
 		try {
-			FileOperate.createFolders(FileOperate.getParentPathName(EnumSpeciesFile.refseqFileAllIso.getSavePath(this) + refseq));
+			FileOperate.createFolders(refseqPath);
 			GffChrAbs gffChrAbs = new GffChrAbs();
 			gffChrAbs.setGffHash(new GffHashGene(getGffType(), getGffFile()));
 			gffChrAbs.setSeqHash(new SeqHash(getChromSeqFile(), " "));
@@ -557,7 +546,7 @@ public class SpeciesFile {
 			gffChrSeq.setGetAllIso(isAllIso);
 			gffChrSeq.setGetIntron(false);
 			gffChrSeq.setGetSeqGenomWide();
-			gffChrSeq.setOutPutFile(EnumSpeciesFile.refseqFileAllIso.getSavePath(this) + refseq);
+			gffChrSeq.setOutPutFile(refseqFile);
 			gffChrSeq.run();
 			save();
 			gffChrAbs.close();
@@ -566,7 +555,6 @@ public class SpeciesFile {
 		} catch (Exception e) {
 			logger.error("生成 RefRNA序列出错");
 		}
-	
 		return refseq;
 	}
 	
@@ -624,14 +612,14 @@ public class SpeciesFile {
 		return EnumSpeciesFile.refseqNCfile.getSavePath(this) + refseqNCfile;
 	}
 	/**
-	 * 是否物种特异性的提取
+	 * 是否物种特异性的提取，获取绝对路径
 	 * @param speciesSpecific
 	 * @return
 	 */
 	public String getRfamFile(boolean speciesSpecific) {
 		String node = "rfam/";
-		String speciesPath = pathParent + node + getSpeciesPathWithoutRoot();
-		String rfamFile = null;
+		String speciesPath = pathParent + node + getPathToVersion();
+		String rfamFile = null;//TODO
 		if (speciesSpecific) {
 			rfamFile = speciesPath + "rfamFile";
 		} else {
@@ -684,23 +672,7 @@ public class SpeciesFile {
 		}
 		return false;
 	}
-	
-	/** 返回本version的物种的目录，类似genome/cangshu_hamsters/CriGri_1.0/
-	 * 结尾带"/"
-	 * 是相对路径
-	 * @return
-	 */
-	private String getSpeciesPath() {
-		String file = chromSeq;
-		if (file == null || file.equals("")) file = getGffDB2GffTypeFile()[2];
-		if (file == null || file.equals("")) file = refseqFileAllIso;
-		if (file == null || file.equals("")) file = refseqFileOneIso;
-		if (file == null || file.equals("")) return null;
-		
-		return FileOperate.getParentPathName(FileOperate.getParentPathName(file));
-		
-	}
-	
+
 	private<T, K> boolean compareMapStrArray(Map<T, K[]> map1, Map<T, K[]> map2) {
 		if (map1 == null && map2 != null || map1 != null && map2 == null) {
 			return false;
@@ -741,7 +713,6 @@ public class SpeciesFile {
 	}
 	
 	/**
-	 * 
 	 * @param taxID
 	 * @return
 	 */
@@ -831,9 +802,7 @@ public class SpeciesFile {
 			this.taxIDfram = taxIDrfam;//TODO 看这里是物种的什么名字
 		}
 		
-		/**
-		 * 提取序列
-		 */
+		/** 提取序列 */
 		public void getSeq() {
 			if (FileOperate.isFileExist(refseqFile)) {
 				if (outNcRNA == null)

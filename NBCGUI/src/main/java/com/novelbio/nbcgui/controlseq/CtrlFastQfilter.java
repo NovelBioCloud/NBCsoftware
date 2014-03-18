@@ -137,13 +137,17 @@ public class CtrlFastQfilter {
 			// QC after Filter
 			fastQReadingChannel.setFastQC(fastQCafter[0], fastQCafter[1]);
 			fastQReadingChannel.setFastQWrite(fastQLRfiltered[0], fastQLRfiltered[1]);
-		
 		}
-
+		
 		fastQReadingChannel.setThreadNum(8);
 		fastQReadingChannel.run();
 	}
 	
+	public static String getFastQCPicName(String savePathAndPrefix) {
+		String fileName = FileOperate.getParentPathName(savePathAndPrefix) + FOLDER_NAME + FileOperate.getFileName(savePathAndPrefix);
+		fileName = FastQC.getQualityScoreFileName(fileName + "_BeforeFilter");
+		return fileName;
+	}
 	/**
 	 * 读取fastQC并生成excel表格，并遍历图片,以及对应的参数
 	 * @param fastQCs

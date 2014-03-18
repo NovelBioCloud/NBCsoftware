@@ -23,7 +23,6 @@ import com.novelbio.database.domain.geneanno.TaxInfo;
 import com.novelbio.database.mongorepo.geneanno.RepoSpeciesFile;
 import com.novelbio.database.mongorepo.geneanno.RepoTaxInfo;
 import com.novelbio.database.service.SpringFactory;
-import com.novelbio.generalConf.PathDetailNBC;
 
 public class ManageSpeciesDB implements IManageSpecies {
 	private static final Logger logger = Logger.getLogger(ManageSpeciesDB.class);
@@ -82,7 +81,7 @@ public class ManageSpeciesDB implements IManageSpecies {
 			
 			m = hashName2ColNum.get("chromseq");
 			if (m < info.length) {
-				speciesFile.setChromSeq(info[m]);
+				speciesFile.setChromSeq(FileOperate.getFileName(info[m]));
 			}
 									
 			m = hashName2ColNum.get("gffgenefile");
@@ -90,28 +89,28 @@ public class ManageSpeciesDB implements IManageSpecies {
 				String[] gffUnit = info[m].split(SepSign.SEP_ID);
 				for (String gffInfo : gffUnit) {
 					String[] gffDB2TypeFile = gffInfo.split(SepSign.SEP_INFO);
-					speciesFile.addGffDB2TypeFile(gffDB2TypeFile[0], GffType.getType(gffDB2TypeFile[1]), gffDB2TypeFile[2]);
+					speciesFile.addGffDB2TypeFile(gffDB2TypeFile[0], GffType.getType(gffDB2TypeFile[1]), FileOperate.getFileName(gffDB2TypeFile[2]));
 				}
 			}
 			
 			m = hashName2ColNum.get("gffrepeatfile");
 			if (m < info.length) {
-				speciesFile.setGffRepeatFile(info[m]);
+				speciesFile.setGffRepeatFile(FileOperate.getFileName(info[m]));
 			}
 			
 			m = hashName2ColNum.get("refseq_all_iso");
 			if (m < info.length) {
-				speciesFile.setRefseqFileAllIso(info[m]);
+				speciesFile.setRefseqFileAllIso(FileOperate.getFileName(info[m]));
 			}
 			
 			m = hashName2ColNum.get("refseq_one_iso");
 			if (m < info.length) {
-				speciesFile.setRefseqFileOneIso(info[m]);
+				speciesFile.setRefseqFileOneIso(FileOperate.getFileName(info[m]));
 			}
 		
 			m = hashName2ColNum.get("refseqncfile");
 			if (m < info.length) {
-				speciesFile.setRefseqNCfile(info[m]);
+				speciesFile.setRefseqNCfile(FileOperate.getFileName(info[m]));
 			}
 			//升级
 			saveSpeciesFile(speciesFile);

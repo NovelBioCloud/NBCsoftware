@@ -180,6 +180,23 @@ public class CtrlFastQ {
 				continue;
 			}
 			CtrlFastQfilter ctrlFastQfilter = (CtrlFastQfilter)SpringFactory.getFactory().getBean("ctrlFastQfilter");
+
+			if (!isJustFastqc) {
+				ctrlFastQfilter.setFastQfilterParam(fastQfilter);
+				String[] fileName = createCombineFQname(fastQfilter.isFiltered(), outFilePrefix, prefix, lsFastQLR, false);
+				//文件存在则跳过
+				if (FileOperate.isFileExistAndBigThanSize(fileName[0], 1_000_000)) {
+					continue;
+				}
+				ctrlFastQfilter.setFastQLRfilteredOut(createCombineFastq(fastQfilter.isFiltered(), outFilePrefix, prefix, lsFastQLR));
+			} else {
+				String filePic = CtrlFastQfilter.getFastQCPicName(outFilePrefix + prefix);
+				//文件存在则跳过
+				if (FileOperate.isFileExistAndBigThanSize(filePic, 10)) {
+					continue;
+				}
+			}
+			
 			ctrlFastQfilter.setOutFilePrefix(outFilePrefix);
 			ctrlFastQfilter.setPrefix(prefix);
 			ctrlFastQfilter.setLsFastQLR(lsFastQLR);
@@ -191,13 +208,18 @@ public class CtrlFastQ {
 			mapCond2FastQCAfter.put(prefix, fastQCsAfter);
 			ctrlFastQfilter.setFastQCafter(fastQCsAfter);
 			ctrlFastQfilter.setJustFastqc(isJustFastqc);
-			if (!isJustFastqc) {
-				ctrlFastQfilter.setFastQfilterParam(fastQfilter);
-				ctrlFastQfilter.setFastQLRfilteredOut(createCombineFastq(fastQfilter.isFiltered(), outFilePrefix, prefix, lsFastQLR));
-			}
-			ctrlFastQfilter.filteredAndCombineReads();
 			
-			ctrlFastQfilter.saveFastQC(outFilePrefix + prefix);			
+			ctrlFastQfilter.filteredAndCombineReads();
+			if (!isJustFastqc) {
+				String[] fileNameTmp = createCombineFQname(fastQfilter.isFiltered(), outFilePrefix, prefix, lsFastQLR, true);
+				String[] fileNameFinal = createCombineFQname(fastQfilter.isFiltered(), outFilePrefix, prefix, lsFastQLR, false);
+				FileOperate.moveFile(true, fileNameTmp[0], fileNameFinal[0]);
+				if (FileOperate.isFileExistAndBigThanSize(fileNameTmp[1], 1_000_000)) {
+					FileOperate.moveFile(true, fileNameTmp[1], fileNameFinal[1]);
+				}
+			}
+			ctrlFastQfilter.saveFastQC(outFilePrefix + prefix);
+			
 			lsReportQCs.add(ctrlFastQfilter.getReportQC());
 			if (!isJustFastqc) {
 				mapCondition2LRFiltered.put(prefix, ctrlFastQfilter.getLsFastQLRfiltered());
@@ -299,7 +321,7 @@ public class CtrlFastQ {
 	
 	private static FastQ[] createCombineFastq(boolean filtered, String outFilePrefix, String condition, List<String[]> lsFastq) {
 		FastQ[] fastQs = new FastQ[2];
-		String[] fileName = createCombineFQname(filtered, outFilePrefix, condition, lsFastq);
+		String[] fileName = createCombineFQname(filtered, outFilePrefix, condition, lsFastq, true);
 		fastQs[0] = new FastQ(fileName[0], true);
 		if (fileName[1] != null) {
 			fastQs[1] = new FastQ(fileName[1], true);
@@ -307,16 +329,23 @@ public class CtrlFastQ {
 		return fastQs;
 	}
 	
-	private static String[] createCombineFQname(boolean filtered, String outFilePrefix, String condition, List<String[]> lsFastq) {
+	private static String[] createCombineFQname(boolean filtered, String outFilePrefix, String condition, List<String[]> lsFastq, boolean isTmp) {
 		String[] fastQs = new String[2];
 		if (filtered) condition = condition + "_filtered";
 		if (lsFastq.size() > 1) condition = condition + "_Combine";
 		
 		if (lsFastq.get(0).length == 1 || lsFastq.get(0)[1] == null) {
 			fastQs[0] = outFilePrefix + condition + ".fq.gz";
+			if (isTmp) {
+				fastQs[0] = FileOperate.changeFileSuffix(fastQs[0], "_tmpFilter", null);	
+			}
 		} else {
 			fastQs[0] = outFilePrefix + condition + "_1.fq.gz";
 			fastQs[1] = outFilePrefix + condition + "_2.fq.gz";
+			if (isTmp) {
+				fastQs[0] = FileOperate.changeFileSuffix(fastQs[0], "_tmpFilter", null);
+				fastQs[1] = FileOperate.changeFileSuffix(fastQs[1], "_tmpFilter", null);
+			}
 		}
 		return fastQs;
 	}
@@ -343,7 +372,7 @@ public class CtrlFastQ {
 				}
 				continue;
 			}
-			String[] fastqName = createCombineFQname(isFilter, outPrefix, prefix, lsFastQLR);
+			String[] fastqName = createCombineFQname(isFilter, outPrefix, prefix, lsFastQLR, false);
 			mapPrefix2LsFilteredFile.put(prefix, fastqName[0]);
 			if (fastqName != null) {
 				mapPrefix2LsFilteredFile.put(prefix, fastqName[1]);
