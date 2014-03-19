@@ -42,7 +42,10 @@ public enum EnumReport {
 	Picture("Picture",null),
 	@Deprecated 
 	Excel("Excel",null),
+	
 	MiRNASeqAnalysis("MiRNASeqAnalysis_result",null),
+	MiRNAPredict("MiRNAPredict_result",null),
+	
 	SamConvert("SamConvert_result", null);
 	
 	/** 模板名称 也可以是结果文件夹名*/

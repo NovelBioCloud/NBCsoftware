@@ -43,6 +43,7 @@ public class CtrlDNAMapping implements IntCmdSoft {
 	int gapLen = 5;
 	double mismatch = 2;
 	int sensitive = MapBowtie.Sensitive_Sensitive;
+	boolean isLocal = true;
 	int thread = 4;
 	boolean isNeedSort = false;
 	String chrIndexFile;
@@ -119,6 +120,10 @@ public class CtrlDNAMapping implements IntCmdSoft {
 	}
 	public void setSensitive(int sensitive) {
 		this.sensitive = sensitive;
+	}
+	/** 仅用于bowtie2 */
+	public void setIsLocal(boolean isLocal) {
+		this.isLocal = isLocal;
 	}
 	public int getSensitive() {
 		return sensitive;
@@ -198,6 +203,7 @@ public class CtrlDNAMapping implements IntCmdSoft {
 		mapSoftware.setRightFq(CopeFastq.convertFastqFile(fastQsFile.get(1)));
 		if (mapSoftware instanceof MapBowtie) {
 			((MapBowtie)mapSoftware).setSensitive(sensitive);
+			((MapBowtie)mapSoftware).setLocal(isLocal);
 		}
 		mapSoftware.setPrefix(prefix);
 
