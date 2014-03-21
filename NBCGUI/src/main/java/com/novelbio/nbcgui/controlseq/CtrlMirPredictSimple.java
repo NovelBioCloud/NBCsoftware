@@ -57,8 +57,8 @@ public class CtrlMirPredictSimple {
 	 * @param samStatisticsPath 统计报告文件夹
 	 */
 	public void setOutPath(String outPath, String outPathSample) {
-		this.outPath = outPath;
-		this.outPathSample = outPathSample;
+		this.outPath = FileOperate.addSep(outPath);
+		this.outPathSample = FileOperate.addSep(outPathSample);
 	}
 	
 	public void runMiRNApredict() {
@@ -75,6 +75,7 @@ public class CtrlMirPredictSimple {
 			throw new RuntimeException("cannot create fold: " + novelMiRNAPathDeep);
 		}
 		predict(fastIn, novelMiRNAPathDeep);
+		FileOperate.moveFile(true, novelMiRNAPathDeep + "run/output.mrd", outPath + prefix + "_align.txt");
 	}
 	
 	private void predict(String fastIn, String novelMiRNAPathDeep) {

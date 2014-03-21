@@ -37,9 +37,15 @@ public class CopeFastq {
 		this.lsCondition = lsCondition;
 	}
 	public void setLsFastQfileLeft(List<String> lsFastQfileLeft) {
+		if (lsFastQfileLeft == null) {
+			return;
+		}
 		this.lsFastQfileLeft = lsFastQfileLeft;
 	}
 	public void setLsFastQfileRight(List<String> lsFastQfileRight) {
+		if (lsFastQfileRight == null) {
+			return;
+		}
 		this.lsFastQfileRight = lsFastQfileRight;
 	}
 	/** 是否校验输入的文件，默认为true */

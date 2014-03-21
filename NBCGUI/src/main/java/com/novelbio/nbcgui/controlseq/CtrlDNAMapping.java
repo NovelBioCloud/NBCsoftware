@@ -194,6 +194,13 @@ public class CtrlDNAMapping implements IntCmdSoft {
 				mapSoftware.setChrIndex(species.getIndexRef(softMapping, false));
 			}
 		}
+		mapSoftware.setPrefix(prefix);
+		mapSoftware.setGapLength(gapLen);
+		mapSoftware.setMismatch(mismatch);
+		mapSoftware.setSampleGroup(prefix, prefix, prefix, null);
+		mapSoftware.setMapLibrary(libraryType);
+		mapSoftware.setSortNeed(isNeedSort);
+		mapSoftware.setThreadNum(thread);
 		mapSoftware.setOutFileName(outFilePrefix + prefix);
 		if (FileOperate.isFileExistAndBigThanSize(mapSoftware.getOutNameCope(), 0)) {
 			return new SamFile(mapSoftware.getOutNameCope());
@@ -205,14 +212,7 @@ public class CtrlDNAMapping implements IntCmdSoft {
 			((MapBowtie)mapSoftware).setSensitive(sensitive);
 			((MapBowtie)mapSoftware).setLocal(isLocal);
 		}
-		mapSoftware.setPrefix(prefix);
 
-		mapSoftware.setGapLength(gapLen);
-		mapSoftware.setMismatch(mismatch);
-		mapSoftware.setSampleGroup(prefix, prefix, prefix, null);
-		mapSoftware.setMapLibrary(libraryType);
-		mapSoftware.setSortNeed(isNeedSort);
-		mapSoftware.setThreadNum(thread);
 
 		lsCmd.addAll(mapSoftware.getCmdExeStr());
 		SamFile samFile = mapSoftware.mapReads();
