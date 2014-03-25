@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
+import com.novelbio.base.StringOperate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.database.domain.geneanno.BlastFileInfo;
 import com.novelbio.database.domain.geneanno.BlastInfo;
@@ -33,6 +34,7 @@ public class ManageBlastInfo {
 	
 	private ManageBlastInfo() {
 		repoBlastInfo = (RepoBlastInfo)SpringFactory.getFactory().getBean("repoBlastInfo");
+		repoBlastFileInfo = (RepoBlastFileInfo)SpringFactory.getFactory().getBean("repoBlastFileInfo");
 		mongoTemplate = (MongoTemplate)SpringFactory.getFactory().getBean("mongoTemplate");
 	}
 	
@@ -120,6 +122,10 @@ public class ManageBlastInfo {
 	
 	public boolean saveBlastFile(BlastFileInfo blastFileInfo) {		
 		if (blastFileInfo != null) {
+			if(!StringOperate.isRealNull(blastFileInfo.getId())){
+				mongoTemplate.save(blastFileInfo);
+				return true;
+			}
 			try {
 				List<BlastFileInfo> lsFileInfo = mongoTemplate.find(new Query(Criteria.where("fileName").is(blastFileInfo.getFileName())), BlastFileInfo.class);
 				if (lsFileInfo.size() == 0) {

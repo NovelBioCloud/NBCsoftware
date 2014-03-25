@@ -10,9 +10,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.novelbio.analysis.annotation.blast.BlastType;
 import com.novelbio.base.PageModel;
+import com.novelbio.base.PathDetail;
 import com.novelbio.base.dataOperate.DateUtil;
 import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.database.model.species.Species;
 
 /**
  * 记录blast信息是否为
@@ -27,9 +27,11 @@ public class BlastFileInfo {
 	String fileName;
 	@Indexed
 	boolean isTmp;
-	String usrid;
+//	String usrid;
 	String userId;
 	String userName;
+	/**随机文件夹*/
+	String randomFolder = DateUtil.getDateAndRandom();
 	@Indexed
 	String queryTaxID;
 	/** query物种的俗名 */
@@ -41,17 +43,20 @@ public class BlastFileInfo {
 	
 	/** blast类型 */
 	BlastType blastType = BlastType.blastn;
-	
-	/** 文件的日期 */
-	String dateBlastFile;
-	long blastFileModifyDate = -1L;
-	long impotDate = new Date().getTime();
 	/** 导入日期 */
-	String dateImport = DateUtil.getDateDetail();
+	long impotDate = new Date().getTime();
+	
+//	String dateImport = DateUtil.getDateDetail();
 	
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
-		blastFileModifyDate = FileOperate.getTimeLastModify(fileName);
+	}
+	/**
+	 * 真正保存blast文件的路径
+	 * @return
+	 */
+	public String realFileAndName(){
+		return FileOperate.addSep(PathDetail.getBlastFolder()) + randomFolder + FileOperate.getSepPath() + fileName;
 	}
 	
 	public void setId(String id) {
@@ -61,24 +66,33 @@ public class BlastFileInfo {
 		return id;
 	}
 	/** 上传人 */
-	public void setUserID(String userid) {
-		if (userid == null || userid.equals("")) return;
-		
-		this.usrid = userid;
-	}
+//	public void setUserID(String userid) {
+//		if (userid == null || userid.equals("")) return;
+//		
+//		this.usrid = userid;
+//	}
 	public void setTmp(boolean isTmp) {
 		this.isTmp = isTmp;
 	}
 	
-	public String getDateBlastFile() {
-		return dateBlastFile;
-	}
+//	public String getDateBlastFile() {
+//		return dateBlastFile;
+//	}
+//	
+//	public String getDateImport() {
+//		return dateImport;
+//	}
 	
-	public String getDateImport() {
-		return dateImport;
-	}
 	public void setQueryTaxID(String queryTaxID) {
 		this.queryTaxID = queryTaxID;
+	}
+	/**随机文件夹*/
+	public String getRandomFolder() {
+		return randomFolder;
+	}
+	/**随机文件夹*/
+	public void setRandomFolder(String randomFolder) {
+		this.randomFolder = randomFolder;
 	}
 	/** query物种的俗名 */
 	public String getQueryTaxName() {
@@ -157,12 +171,12 @@ public class BlastFileInfo {
 		return subjectTaxID;
 	}
 	
-	public String getUsrid() {
-		return usrid;
-	}
-	public void setUsrid(String usrid) {
-		this.usrid = usrid;
-	}
+//	public String getUsrid() {
+//		return usrid;
+//	}
+//	public void setUsrid(String usrid) {
+//		this.usrid = usrid;
+//	}
 	public BlastType getBlastType() {
 		return blastType;
 	}
@@ -182,24 +196,18 @@ public class BlastFileInfo {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public long getBlastFileModifyDate() {
-		return blastFileModifyDate;
-	}
-	public void setBlastFileModifyDate(long blastFileModifyDate) {
-		this.blastFileModifyDate = blastFileModifyDate;
-	}
 	public long getImpotDate() {
 		return impotDate;
 	}
 	public void setImpotDate(long impotDate) {
 		this.impotDate = impotDate;
 	}
-	public void setDateBlastFile(String dateBlastFile) {
-		this.dateBlastFile = dateBlastFile;
-	}
-	public void setDateImport(String dateImport) {
-		this.dateImport = dateImport;
-	}
+//	public void setDateBlastFile(String dateBlastFile) {
+//		this.dateBlastFile = dateBlastFile;
+//	}
+//	public void setDateImport(String dateImport) {
+//		this.dateImport = dateImport;
+//	}
 //	public String getSubjectLatinName() {
 //		Species species = new Species(subjectTaxID);
 //		String name = species.getNameLatin();
@@ -209,5 +217,21 @@ public class BlastFileInfo {
 //		}
 //		return name;
 //	}
+	/**
+	 * 导入blast文件并保存blast信息,不成功的话，请删除blast文件和随机文件夹
+	 * @return
+	 */
+	public boolean importAndSave() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	/**
+	 * 删除blastFileInfo和blastInfo
+	 * @return
+	 */
+	public boolean delete() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }
