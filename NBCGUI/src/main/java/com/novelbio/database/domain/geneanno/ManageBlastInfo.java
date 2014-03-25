@@ -15,6 +15,7 @@ import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.database.domain.geneanno.BlastFileInfo;
 import com.novelbio.database.domain.geneanno.BlastInfo;
 import com.novelbio.database.model.species.Species;
+import com.novelbio.database.mongorepo.geneanno.RepoBlastFileInfo;
 import com.novelbio.database.mongorepo.geneanno.RepoBlastInfo;
 import com.novelbio.database.service.SpringFactory;
 
@@ -27,6 +28,8 @@ public class ManageBlastInfo {
 	MongoTemplate mongoTemplate;
 	@Autowired
 	RepoBlastInfo repoBlastInfo;
+	@Autowired
+	RepoBlastFileInfo repoBlastFileInfo;
 	
 	private ManageBlastInfo() {
 		repoBlastInfo = (RepoBlastInfo)SpringFactory.getFactory().getBean("repoBlastInfo");
@@ -50,7 +53,7 @@ public class ManageBlastInfo {
 		BlastFileInfo blastFileInfo = new BlastFileInfo();
 		blastFileInfo.setFileName(blastFile);
 		blastFileInfo.setTmp(true);
-		blastFileInfo.setQueryTaxID(taxIDQ);
+		blastFileInfo.setQueryTaxID(taxIDQ+"");
 		blastFileInfo.setSubjectTaxID(taxIDS);
 		manageBlastInfo.saveBlastFile(blastFileInfo);
 		txtRead.close();
@@ -115,15 +118,20 @@ public class ManageBlastInfo {
 		}
 	}
 	
-	public void saveBlastFile(BlastFileInfo blastFileInfo) {		
+	public boolean saveBlastFile(BlastFileInfo blastFileInfo) {		
 		if (blastFileInfo != null) {
-			List<BlastFileInfo> lsFileInfo = mongoTemplate.find(new Query(Criteria.where("fileName").is(blastFileInfo.getFileName())), BlastFileInfo.class);
-			if (lsFileInfo.size() == 0) {
-				mongoTemplate.save(blastFileInfo);
-			} else {
-				blastFileInfo.setId(lsFileInfo.get(0).getId());
+			try {
+				List<BlastFileInfo> lsFileInfo = mongoTemplate.find(new Query(Criteria.where("fileName").is(blastFileInfo.getFileName())), BlastFileInfo.class);
+				if (lsFileInfo.size() == 0) {
+					mongoTemplate.save(blastFileInfo);
+				} else {
+					blastFileInfo.setId(lsFileInfo.get(0).getId());
+				}
+			} catch (Exception e) {
+				return false;
 			}
 		}
+		return true;
 	}
 	
 	public List<BlastFileInfo> getFileInfoAll() {
@@ -231,5 +239,18 @@ public class ManageBlastInfo {
 	
 	public static ManageBlastInfo getInstance() {
 		return ManageHolder.manageBlastInfo;
+	}
+	
+	/**
+	 * 根据分页对象查找分页
+	 * @param pageable
+	 * @return
+	 */
+	public Page<BlastFileInfo> findAll(Pageable pageable) {
+		return repoBlastFileInfo.findAll(pageable);
+	}
+	
+	public List<BlastFileInfo> findAll() {
+		return repoBlastFileInfo.findAll();
 	}
 }
