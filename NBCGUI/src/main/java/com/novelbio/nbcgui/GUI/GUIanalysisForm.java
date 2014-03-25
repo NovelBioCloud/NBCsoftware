@@ -7,6 +7,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
+import com.novelbio.database.domain.geneanno.SpeciesFile;
+import com.novelbio.database.model.species.Species;
 import com.novelbio.nbcgui.GUI.volcanoPlot.GuiVolcanoPlot;
 
 /**
@@ -64,6 +66,7 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 	private GuiGoMultiJPanel guiGoMultiJPanel;
 	private GuiMotif guiMotif;
 	private GuiRNAAssembly guiRNAAssembly;
+
 	/**
 	* Auto-generated main method to display this JFrame
 	*/
