@@ -22,6 +22,8 @@ import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.base.gui.JTextFieldData;
+import com.novelbio.database.domain.geneanno.BlastFileInfo;
+import com.novelbio.database.model.modgeneid.GeneID;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.database.model.species.Species.EnumSpeciesType;
 import com.novelbio.database.updatedb.database.BlastUp2DB;
@@ -245,38 +247,22 @@ public class GuiBlast extends JPanel implements GuiNeedOpenFile {
 	private void addBlastInfo() {
 		Map<String, Species> mapComName2Species = Species.getSpeciesName2Species(EnumSpeciesType.All);
 		for (String[] content : sclPaneBlastFile.getLsDataInfo()) {
-			BlastUp2DB blast = new BlastUp2DB();
-			blast.setUpdate(chckbxSavetodb.isSelected());
-			
-			//设定一个默认参数
-			int taxIDQ = 0;
-			String taxName = null;
+			BlastFileInfo blastFileInfo = new BlastFileInfo();
+			blastFileInfo.setTmp(chckbxSavetodb.isSelected());
 			Species speciesQ = mapComName2Species.get(content[1]);
-			if (speciesQ == null) {
-				try {
-					taxIDQ = Integer.parseInt(content[1].trim());
-				} catch (Exception e) {
-					taxName = content[1];
-				}
-			} else {
-				taxIDQ = speciesQ.getTaxID();
+			Species speciesS = mapComName2Species.get(content[2]);
+			
+			blastFileInfo.setQueryTaxID(speciesQ.getTaxID());
+			blastFileInfo.setSubjectTaxID(speciesS.getTaxID());
+			blastFileInfo.setBlastType(BlastType.blastp);
+			blastFileInfo.setFileName(content[0]);
+			
+			try {
+				blastFileInfo.importAndSave(GeneID.IDTYPE_ACCID, GeneID.IDTYPE_ACCID);
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null,content[0].trim() + "cannot update\n" + e.getMessage(), "error", JOptionPane.ERROR_MESSAGE);
 			}
-			int taxIDS = mapComName2Species.get(content[2]).getTaxID();
-			if (taxIDQ > 0) {
-				blast.setTaxID(taxIDQ);
-			} else if (taxName != null && !taxName.equals("")) {
-				blast.setTaxName(taxName);
-			}
-			blast.setSubTaxID(taxIDS);
-			if (chckbxSavetodb.isSelected()) {
-				blast.setTxtWriteExcep(FileOperate.changeFileSuffix(content[0].trim(), "_cannotUpDate", null));
-			}
-			String info = blast.checkFile(content[0]);
-			if (info != null) {
-				JOptionPane.showMessageDialog(null,content[0].trim() + "cannot update\n" + info, "error", JOptionPane.ERROR_MESSAGE);
-				break;
-			}
-			blast.updateFile(content[0]);
+			BlastUp2DB blast = new BlastUp2DB();
 		}
 	}
 	
