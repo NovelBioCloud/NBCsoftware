@@ -10,6 +10,7 @@ import com.novelbio.analysis.seq.fasta.SeqHash;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.rnaseq.ExonJunction;
+import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.nbcgui.GUIinfo;
@@ -53,6 +54,10 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	}
 	
 	public void setStrandSpecific(StrandSpecific strandSpecific) {
+		if (strandSpecific == null) {
+			throw new ExceptionNullParam("No Param StrandSpecific");
+		}
+		
 		this.strandSpecific = strandSpecific;
 	}
 	@Override

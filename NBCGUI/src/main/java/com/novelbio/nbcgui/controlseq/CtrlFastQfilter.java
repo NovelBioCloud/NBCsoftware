@@ -12,6 +12,7 @@ import com.novelbio.analysis.seq.fastq.FastQ;
 import com.novelbio.analysis.seq.fastq.FastQC;
 import com.novelbio.analysis.seq.fastq.FastQReadingChannel;
 import com.novelbio.analysis.seq.fastq.FastQFilter;
+import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.nbcReport.XdocTmpltPic;
 import com.novelbio.nbcReport.Params.ReportQC;
@@ -50,6 +51,9 @@ public class CtrlFastQfilter {
 	
 	/** 设定过滤参数 */
 	public void setFastQfilterParam(FastQFilter fastQfilterRecord) {
+		if (fastQfilterRecord == null) {
+			throw new ExceptionNullParam("No Param fastQfilterRecord");
+		}
 		this.fastQfilterRecord = fastQfilterRecord;
 	}
 	/** 是否只进行fastqc工作 */

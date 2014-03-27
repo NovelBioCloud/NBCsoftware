@@ -6,6 +6,7 @@ import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.mirna.MirTargetMammal;
 import com.novelbio.analysis.seq.rnahybrid.RNAhybrid.RNAhybridClass;
 import com.novelbio.analysis.tools.compare.CombineTab;
+import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.model.species.Species;
 
@@ -59,6 +60,9 @@ public class CtrlMiRNAtargetPredict {
 	}
 	/** RNAhybrid的物种类型 */
 	public void setSpeciesType(RNAhybridClass rAhybridClass) {
+		if (rAhybridClass == null) {
+			throw new ExceptionNullParam("No Param RNAhybridClass");
+		}
 		mirTargetMammal.setSpeciesType(rAhybridClass);
 	}
 	/** 默认0.01 */

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.analysis.annotation.functiontest.StatisticTestResult;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
+import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.plot.ImageUtils;
@@ -111,6 +112,10 @@ public class CtrlGOall implements CtrlTestGOInt {
 	
 	@Override
 	public void setGoAlgorithm(GoAlgorithm goAlgorithm) {
+		if (goAlgorithm == null) {
+			throw new ExceptionNullParam("No GoAlgorithm Exist");
+		}
+		
 		CtrlGO ctrlGO = new CtrlGO();
 		ctrlGO.setGoAlgorithm(goAlgorithm);
 		ctrlGO.setGOType(GOtype.BP);

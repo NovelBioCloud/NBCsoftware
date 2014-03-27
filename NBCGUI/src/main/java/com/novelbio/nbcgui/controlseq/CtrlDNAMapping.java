@@ -19,6 +19,7 @@ import com.novelbio.analysis.seq.mapping.MapLibrary;
 import com.novelbio.analysis.seq.sam.AlignSeqReading;
 import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.analysis.seq.sam.SamFileStatistics;
+import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.information.SoftWareInfo;
@@ -129,6 +130,9 @@ public class CtrlDNAMapping implements IntCmdSoft {
 		return sensitive;
 	}
 	public void setSoftMapping(SoftWare softMapping) {
+		if (softMapping == null) {
+			throw new ExceptionNullParam("No Param of Software");
+		}
 		this.softMapping = softMapping;
 	}
 	public SoftWare getSoftMapping() {

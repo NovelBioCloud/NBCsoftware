@@ -175,8 +175,8 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 				guiRNAautoSplice = new GuiRNAautoSplice();
 				jTabbedPane1.addTab("RNAautoSplice", guiRNAautoSplice);
 				
-				guiBlast = new GuiBlast();
-				jTabbedPane1.addTab("Blast", null, guiBlast, null);
+//				guiBlast = new GuiBlast();
+//				jTabbedPane1.addTab("Blast", null, guiBlast, null);
 				
 				guiMiRNASeq = new GuiMiRNASeq();
 				jTabbedPane1.addTab("miRNA", null, guiMiRNASeq, null);

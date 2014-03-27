@@ -14,6 +14,7 @@ import com.novelbio.analysis.seq.rnaseq.CuffMerge;
 import com.novelbio.analysis.seq.rnaseq.CufflinksGTF;
 import com.novelbio.analysis.seq.rnaseq.GffHashMerge;
 import com.novelbio.analysis.seq.rnaseq.TranscriptomStatistics;
+import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.DateUtil;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
@@ -84,6 +85,9 @@ public class CtrlCufflinksTranscriptome {
 		cufflinksGTF.setThreadNum(threadNum);
 	}
 	public void setStrandSpecifictype(StrandSpecific strandSpecific) {
+		if (strandSpecific == null) {
+			throw new ExceptionNullParam("StrandSpecific is null");
+		}
 		cufflinksGTF.setStrandSpecifictype(strandSpecific);
 	}
 

@@ -18,6 +18,7 @@ import com.novelbio.analysis.seq.mapping.MapSplice;
 import com.novelbio.analysis.seq.mapping.MapTophat;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.rnaseq.RPKMcomput.EnumExpression;
+import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
@@ -95,9 +96,15 @@ public class CtrlRNAmap implements IntCmdSoft {
 	}
 	/** MapTop里面的参数 */
 	public void setStrandSpecifictype(StrandSpecific strandSpecifictype) {
+		if (strandSpecifictype == null) {
+			throw new ExceptionNullParam("No Param StrandSpecific");
+		}
 		this.strandSpecific = strandSpecifictype;
 	}
 	public void setLibrary(MapLibrary mapLibrary) {
+		if (mapLibrary == null) {
+			throw new ExceptionNullParam("No Param MapLibrary");
+		}
 		this.mapLibrary = mapLibrary;
 	}
 	public void setThreadNum(int threadNum) {
@@ -107,7 +114,10 @@ public class CtrlRNAmap implements IntCmdSoft {
 	public void setIsUseGTF(boolean useGTF) {
 		this.useGTF = useGTF;
 	}
-	public void setSensitive(int sensitive) {
+	public void setSensitive(Integer sensitive) {
+		if (sensitive == null) {
+			throw new ExceptionNullParam("No Param Sensitive");
+		}
 		this.sensitive= sensitive;
 	}
 	/**

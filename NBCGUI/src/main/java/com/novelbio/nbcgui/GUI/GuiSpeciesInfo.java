@@ -91,6 +91,9 @@ public class GuiSpeciesInfo extends JPanel {
 				} else if (selectType.equals("GTFfile")) {
 					String gtfFile = specieInformation.getGffChrAbs().getGtfFile();
 					FileOperate.copyFile(gtfFile, outpath + species.getAbbrName() + "_GTFfile.gtf", true);
+				} else if (selectType.equals("BEDfile")) {
+					String gtfFile = specieInformation.getGffChrAbs().getBedFile();
+					FileOperate.copyFile(gtfFile, outpath + species.getAbbrName() + "_BEDfile.bed", true);
 				}
 			}
 		});
@@ -107,6 +110,7 @@ public class GuiSpeciesInfo extends JPanel {
 		mapselectType.put("GeneBG", "GeneBG");
 		mapselectType.put("GeneDescription", "GeneDescription");
 		mapselectType.put("GTFfile", "GTFfile");
+		mapselectType.put("BEDfile", "BEDfile");
 		comboBoxData = new JComboBoxData<String>();
 		comboBoxData.setBounds(344, 48, 189, 31);
 		comboBoxData.setMapItem(mapselectType);
