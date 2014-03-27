@@ -209,8 +209,9 @@ public class BlastFileInfo {
 	 * @return
 	 * @throws BlastFileException
 	 *             如果文件不对会抛出异常，可以在前台返回
+	 * @throws IOException 
 	 */
-	public boolean importAndSave() throws BlastFileException {
+	public boolean importAndSave() throws BlastFileException, IOException {
 		BlastUp2DB blastUp2DB = new BlastUp2DB();
 		blastUp2DB.setBlastFileInfo(this, GeneID.IDTYPE_ACCID,
 				GeneID.IDTYPE_ACCID);
