@@ -7,8 +7,8 @@ import com.novelbio.analysis.seq.denovo.N50AndSeqLen;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.rnaseq.Trinity;
 import com.novelbio.analysis.seq.rnaseq.TrinityCopeIso;
-import com.novelbio.base.dataStructure.listOperate.HistList;
 import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.listOperate.HistList;
 
 public class CtrlTrinity {
 	CopeFastq copeFastq;

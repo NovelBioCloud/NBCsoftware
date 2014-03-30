@@ -26,7 +26,6 @@ public class CtrlMirPredictSimple {
 	SoftWareInfo softWareInfo = new SoftWareInfo();
 	
 	boolean isUseOldResult = true;
-	String novelMiRNAmrd;
 	List<String> lsCmd = new ArrayList<>();
 	boolean isFastq = false;
 
@@ -43,10 +42,6 @@ public class CtrlMirPredictSimple {
 	}
 	public void setSpecies(Species species) {
 		this.species = species;
-	}
-	/** 不需要展示 */
-	public void setNovelMiRNAmrd(String novelMiRNAmrd) {
-		this.novelMiRNAmrd = novelMiRNAmrd;
 	}
 
 	/**
@@ -74,11 +69,11 @@ public class CtrlMirPredictSimple {
 		if (!FileOperate.createFolders(novelMiRNAPathDeep)) {
 			throw new RuntimeException("cannot create fold: " + novelMiRNAPathDeep);
 		}
-		predict(fastIn, novelMiRNAPathDeep);
-		FileOperate.moveFile(true, novelMiRNAPathDeep + "run/output.mrd", outPath + prefix + "_align.txt");
+		String outFile = outPath + prefix + "_align.txt";
+		predict(fastIn, outFile, novelMiRNAPathDeep);
 	}
 	
-	private void predict(String fastIn, String novelMiRNAPathDeep) {
+	private void predict(String fastIn, String novelMiRNAmrd, String novelMiRNAPathDeep) {
 		novelMiRNADeep.setFastaInput(fastIn);
 		softWareInfo.setName(SoftWare.mirDeep);
 		novelMiRNADeep.setExePath(softWareInfo.getExePath(), species.getIndexChr(SoftWare.bowtie));
@@ -88,7 +83,7 @@ public class CtrlMirPredictSimple {
 		novelMiRNADeep.setOutPath(novelMiRNAPathDeep);
 		novelMiRNADeep.setNovelMiRNAdeepMrdFile(novelMiRNAmrd);
 		novelMiRNADeep.predict();
-		lsCmd.addAll(novelMiRNADeep.getCmdExeStr());
+		lsCmd.addAll(novelMiRNADeep.getCmdExeStr());		
 	}
 	
 }

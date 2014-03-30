@@ -21,14 +21,19 @@ import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.genome.GffChrStatistics;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGeneAbs;
+import com.novelbio.analysis.seq.mapping.MapLibrary;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.rnaseq.RPKMcomput;
 import com.novelbio.analysis.seq.sam.AlignSeqReading;
 import com.novelbio.analysis.seq.sam.AlignmentRecorder;
+import com.novelbio.analysis.seq.sam.BamReadsInfo;
+import com.novelbio.analysis.seq.sam.SamErrorException;
 import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.analysis.seq.sam.SamFileStatistics;
+import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
+import com.novelbio.base.dataStructure.ArrayOperate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.database.model.species.Species;
@@ -53,9 +58,6 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	ReportSamAndRPKM reportSamAndRPKM;
 	
 	List<String[]> lsReadFile;
-
-	
-	StrandSpecific strandSpecific = StrandSpecific.NONE;
 	
 	String RPKMFileName;
 	String fragmentsFileName;
@@ -80,8 +82,11 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	String resultSamPrefix;
 	String resultExpPrefix;
 	String resultGeneStructure;
+	String resultPath;
 	
 	List<String[]> lsCounts = null;
+	
+	StrandSpecific strandSpecific;
 	
 	/**
 	 * 由于非unique mapped reads的存在，为了精确统计reads在染色体上的分布，每个染色体上的reads数量用double来记数<br>
@@ -129,9 +134,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	
 	@Override
 	public void clear() {
-		lsReadFile = null;
-		strandSpecific = StrandSpecific.NONE;
-		
+		lsReadFile = null;		
 		
 		/** 是否统计Sam结果 */
 		isSamStatistics = true;
@@ -159,6 +162,9 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	@Override
 	public void setIsCountRPKM(boolean isCountExpression, StrandSpecific strandSpecific, boolean isCountFPKM, boolean isCountNCRNA) {
 		this.isCountExpression = isCountExpression;
+		if (strandSpecific == null) {
+			throw new ExceptionNullParam("No Param StrandSpecific");
+		}
 		this.strandSpecific = strandSpecific;
 		this.isCalculateFPKM = isCountFPKM;
 		this.isCountNCrna = isCountNCRNA;
@@ -174,6 +180,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		this.resultSamPrefix = FoldeCreate.getInFold(resultPrefix, EnumReport.SamStatistics.getResultFolder());
 		this.resultExpPrefix = FoldeCreate.getInFold(resultPrefix, EnumReport.GeneExp.getResultFolder());
 		this.resultGeneStructure = FoldeCreate.getInFold(resultPrefix, EnumReport.GeneStructure.getResultFolder());
+		this.resultPath = resultPrefix;
 	}
 	
 	public void run() {
@@ -182,10 +189,10 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			return;
 		}
 		FileOperate.createFolders(FileOperate.getPathName(resultSamPrefix));
-		if (isCountExpression) {
+		if (isCalculateExp()) {
 			FileOperate.createFolders(FileOperate.getPathName(resultExpPrefix));
 		}
-		if (isGeneStructureStatistics && gffChrAbs.getGffHashGene() != null) {
+		if (isCalculateGeneStructure()) {
 			FileOperate.createFolders(FileOperate.getPathName(resultGeneStructure));
 		}
 		try {
@@ -211,18 +218,17 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	private void calculate() {
 		ArrayListMultimap<String, AlignSeqReading> mapPrefix2AlignSeqReadings = getMapPrefix2LsAlignSeqReadings();
 		double readByte = 0;
-		
+
 		for (String prefix : mapPrefix2AlignSeqReadings.keySet()) {
 			List<AlignSeqReading> lsAlignSeqReadings = mapPrefix2AlignSeqReadings.get(prefix);
 			List<AlignmentRecorder> lsAlignmentRecorders = new ArrayList<AlignmentRecorder>();
 			if (isCountExpression && gffChrAbs.getGffHashGene() != null) {
 				rpkMcomput.setAndAddCurrentCondition(prefix);
-				rpkMcomput.setConsiderStrand(strandSpecific);
 				rpkMcomput.setCalculateFPKM(isCalculateFPKM);
 				
 				lsAlignmentRecorders.add(rpkMcomput);
 			}
-			if (isGeneStructureStatistics && gffChrAbs.getGffHashGene() != null) {
+			if (isCalculateGeneStructure()) {
 				setGeneStructure(prefix, lsAlignmentRecorders, gffChrAbs);
 			}
 			if (isSamStatistics) {
@@ -235,9 +241,6 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			for (AlignSeqReading alignSeqReading : lsAlignSeqReadings) {
 				alignSeqReading.setReadInfo(0L, readByte);
 				alignSeqReading.addColAlignmentRecorder(lsAlignmentRecorders);
-				if (alignSeqReading.getFirstSamFile() instanceof SamFile) {
-					rpkMcomput.setIsPairend(((SamFile)alignSeqReading.getFirstSamFile()).isPairend());
-				}
 				alignSeqReading.setRunGetInfo(this);
 				alignSeqReading.run();
 				logger.info("finish reading " + alignSeqReading.getFirstSamFile().getFileName());
@@ -257,6 +260,12 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		}
 	}
 	
+	private boolean isCalculateExp() {
+		return isCountExpression && gffChrAbs.getGffHashGene() != null;
+	}
+	private boolean isCalculateGeneStructure() {
+		return isGeneStructureStatistics && gffChrAbs.getGffHashGene() != null;
+	}
 	/** 统计geneStructure的模块 */
 	private void setGeneStructure(String prefix, List<AlignmentRecorder> lsAlignmentRecorders, GffChrAbs gffChrAbs) {
 		if (gffChrAbs.getGffHashGene() != null) {
@@ -308,9 +317,11 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	private ArrayListMultimap<String, AlignSeqReading> getMapPrefix2LsAlignSeqReadings() {
 		mapPrefix2LocStatistics = new HashMap<String, GffChrStatistics>();
 		mapPrefix2Statistics = new HashMap<String, SamFileStatistics>();
-		
-		if (gffChrAbs.getGffHashGene() != null) {
+		TxtReadandWrite txtWrite = null;
+		if (isCalculateExp()) {
 			rpkMcomput.setGffChrAbs(gffChrAbs);
+			txtWrite = new TxtReadandWrite(resultGeneStructure + "SamLibraryInfo.txt", true);
+			txtWrite.writefileln("SampleName\t" + ArrayOperate.cmbString(BamReadsInfo.getTitle(), "\t"));
 		}
 		
 		setPrefix = new LinkedHashSet<String>();
@@ -323,6 +334,23 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			AlignSeq alignSeq = null;
 			if (formatSeq == FormatSeq.SAM || formatSeq == FormatSeq.BAM) {
 				alignSeq = new SamFile(fileName2Prefix[0]);
+				if (isCalculateExp()) {
+					BamReadsInfo bamReadsInfo = new BamReadsInfo();
+					bamReadsInfo.setGffHashGene(gffChrAbs.getGffHashGene());
+					bamReadsInfo.setSamFile((SamFile) alignSeq);
+					bamReadsInfo.calculate();
+					rpkMcomput.setIsPairend(bamReadsInfo.getMapLibrary() != MapLibrary.SingleEnd);
+					if (strandSpecific == StrandSpecific.UNKNOWN) {
+						if (bamReadsInfo.getStrandSpecific() == StrandSpecific.UNKNOWN) {
+							throw new SamErrorException("unknown strand type:\n" + alignSeq.getFileName() + "\t" + bamReadsInfo.toString());
+						}
+						rpkMcomput.setConsiderStrand(bamReadsInfo.getStrandSpecific());
+					} else {
+						rpkMcomput.setConsiderStrand(strandSpecific);
+					}
+					txtWrite.writefileln(FileOperate.getFileName(alignSeq.getFileName()) + "\t" + bamReadsInfo.toString());
+					txtWrite.flush();
+				}				
 			} else if (formatSeq == FormatSeq.BED) {
 				alignSeq = new BedSeq(fileName2Prefix[0]);
 			} else {
@@ -336,6 +364,10 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			}
 		
 			mapPrefix2AlignSeqReadings.put(fileName2Prefix[1], alignSeqReading);
+		}
+		
+		if (isCalculateExp()) {
+			txtWrite.close();
 		}
 		return mapPrefix2AlignSeqReadings;
 	}

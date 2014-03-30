@@ -3,8 +3,8 @@ package com.novelbio.nbcgui.controlquery;
 import com.novelbio.analysis.annotation.blast.BlastNBC;
 import com.novelbio.analysis.annotation.blast.BlastStatistics;
 import com.novelbio.analysis.annotation.blast.BlastType;
-import com.novelbio.base.dataStructure.listOperate.HistList;
 import com.novelbio.database.domain.geneanno.BlastInfo;
+import com.novelbio.listOperate.HistList;
 
 public class CtrlBlast {
 	BlastNBC blastNBC = new BlastNBC();
