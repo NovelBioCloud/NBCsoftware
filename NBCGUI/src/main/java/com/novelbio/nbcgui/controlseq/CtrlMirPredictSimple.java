@@ -70,10 +70,13 @@ public class CtrlMirPredictSimple {
 			throw new RuntimeException("cannot create fold: " + novelMiRNAPathDeep);
 		}
 		String outFile = outPath + prefix + "_align.txt";
+		if (FileOperate.isFileExistAndBigThanSize(outFile, 0)) {
+			return;
+		}
 		predict(fastIn, outFile, novelMiRNAPathDeep);
 	}
 	
-	private void predict(String fastIn, String novelMiRNAmrd, String novelMiRNAPathDeep) {
+	private void predict(String fastIn, String resultFile, String novelMiRNAPathDeep) {
 		novelMiRNADeep.setFastaInput(fastIn);
 		softWareInfo.setName(SoftWare.mirDeep);
 		novelMiRNADeep.setExePath(softWareInfo.getExePath(), species.getIndexChr(SoftWare.bowtie));
@@ -81,9 +84,9 @@ public class CtrlMirPredictSimple {
 		novelMiRNADeep.setSpecies(species.getCommonName());
 		novelMiRNADeep.setFastq(isFastq);
 		novelMiRNADeep.setOutPath(novelMiRNAPathDeep);
-		novelMiRNADeep.setNovelMiRNAdeepMrdFile(novelMiRNAmrd);
 		novelMiRNADeep.predict();
-		lsCmd.addAll(novelMiRNADeep.getCmdExeStr());		
+		lsCmd.addAll(novelMiRNADeep.getCmdExeStr());
+		FileOperate.copyFile(novelMiRNADeep.getNovelMiRNAdeepMrdFile(), resultFile, true);
 	}
 	
 }
