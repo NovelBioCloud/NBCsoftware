@@ -165,8 +165,12 @@ public class CtrlRNAmap implements IntCmdSoft {
 				mapRNA.setGtf_Gene2Iso(gtfAndGene2Iso);
 			}
 			
-			lsCmd.addAll(mapRNA.getCmdExeStr());
-			mapRNA.mapReads();
+			try {
+				mapRNA.mapReads();
+			} catch (Exception e) {
+				lsCmd.addAll(mapRNA.getCmdExeStr());
+				throw e;
+			}
 			setExpResult(prefix, mapRNA);
 		}
 	}
@@ -181,9 +185,6 @@ public class CtrlRNAmap implements IntCmdSoft {
 		}
 	}
 	private void setRefFile() {
-		SoftWareInfo softBowtie = new SoftWareInfo(mapRNA.getBowtieVersion());
-		SoftWareInfo softMap = new SoftWareInfo(softWare);
-		mapRNA.setExePath(softMap.getExePath(), softBowtie.getExePath());
 		boolean isThrdPartIndex = false;
 		if (gffChrAbs == null || FileOperate.isFileExist(indexFile)) {
 			isThrdPartIndex = true;
@@ -194,7 +195,8 @@ public class CtrlRNAmap implements IntCmdSoft {
 		if (isThrdPartIndex) {
 			indexUnmap = indexFile;
 		} else {
-			indexUnmap = gffChrAbs.getSpecies().getIndexChr(SoftWare.bowtie2);
+			//用bwa的mem方法来进行二次mapping
+			indexUnmap = gffChrAbs.getSpecies().getIndexChr(SoftWare.bwa_men);
 		}
 		
 		if (softWare == SoftWare.tophat) {
@@ -207,6 +209,7 @@ public class CtrlRNAmap implements IntCmdSoft {
 			((MapSplice)mapRNA).setMapUnmapedReads(mapUnmapedReads, indexUnmap);
 		}
 	}
+	
 	private void setMapLibrary(MapLibrary mapLibrary) {
 		if (mapLibrary == MapLibrary.SingleEnd) {
 			return;
@@ -269,6 +272,7 @@ public class CtrlRNAmap implements IntCmdSoft {
 		}
 		return mapPrefix2Value;
 	}
+	
 	@Override
 	public List<String> getCmdExeStr() {
 		return lsCmd;

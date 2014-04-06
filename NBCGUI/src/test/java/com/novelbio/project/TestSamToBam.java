@@ -84,7 +84,7 @@ public class TestSamToBam {
 		} else {
 			if (CtrlDNAMapping.MAP_TO_CHROM == Integer.parseInt(mapParams.get("mappingTo")[0])) {
 				refFile = species.getChromSeq();
-			}else if (CtrlDNAMapping.MAP_TO_REFSEQ == Integer.parseInt(mapParams.get("mappingTo")[0])) {
+			}else if (CtrlDNAMapping.MAP_TO_REFSEQ_ALL_ISO == Integer.parseInt(mapParams.get("mappingTo")[0])) {
 				refFile = species.getRefseqFile(true);
 			}
 			species.setVersion(mapParams.get("speciesVersion")[0]);

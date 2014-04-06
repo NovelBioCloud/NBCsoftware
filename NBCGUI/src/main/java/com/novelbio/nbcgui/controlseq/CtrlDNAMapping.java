@@ -13,6 +13,7 @@ import com.google.common.collect.HashMultimap;
 import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.seq.FormatSeq;
 import com.novelbio.analysis.seq.mapping.MapBowtie;
+import com.novelbio.analysis.seq.mapping.MapBwaAln;
 import com.novelbio.analysis.seq.mapping.MapDNA;
 import com.novelbio.analysis.seq.mapping.MapDNAint;
 import com.novelbio.analysis.seq.mapping.MapLibrary;
@@ -33,7 +34,7 @@ import com.novelbio.nbcReport.Params.ReportDNASeqMap;
 public class CtrlDNAMapping implements IntCmdSoft {
 	private static final Logger logger = Logger.getLogger(CtrlDNAMapping.class);
 	public static final int MAP_TO_CHROM = 8;
-	public static final int MAP_TO_REFSEQ = 4;
+	public static final int MAP_TO_REFSEQ_ALL_ISO = 4;
 	public static final int MAP_TO_REFSEQ_LONGEST_ISO = 2;
 	
 	private String outFilePrefix = "";
@@ -51,7 +52,7 @@ public class CtrlDNAMapping implements IntCmdSoft {
 	Species species;
 	int map2Index = MAP_TO_CHROM;
 	
-	SoftWare softMapping = SoftWare.bwa;
+	SoftWare softMapping = SoftWare.bwa_aln;
 	
 	SoftWareInfo softWareInfo = new SoftWareInfo();
 	ReportDNASeqMap reportDNASeqMap = new ReportDNASeqMap();
@@ -183,24 +184,25 @@ public class CtrlDNAMapping implements IntCmdSoft {
 	 * @param fastQs
 	 */
 	private SamFile mapping(String prefix, List<List<String>> fastQsFile) {
-		softWareInfo.setName(softMapping);
 		MapDNAint mapSoftware = MapDNA.creatMapDNA(softMapping);		
-		mapSoftware.setExePath(softWareInfo.getExePath());
 
 		if (species.getTaxID() == 0) {
 			mapSoftware.setChrIndex(chrIndexFile);
 		} else {
 			if (map2Index == MAP_TO_CHROM) {
 				mapSoftware.setChrIndex(species.getIndexChr(softMapping));
-			} else if (map2Index == MAP_TO_REFSEQ) {
+			} else if (map2Index == MAP_TO_REFSEQ_ALL_ISO) {
 				mapSoftware.setChrIndex(species.getIndexRef(softMapping, true));
 			} else if (map2Index == MAP_TO_REFSEQ_LONGEST_ISO) {
 				mapSoftware.setChrIndex(species.getIndexRef(softMapping, false));
 			}
 		}
+		if (softMapping == SoftWare.bwa_aln) {
+			MapBwaAln mapBwaAln = (MapBwaAln)mapSoftware;
+			mapBwaAln.setGapLength(gapLen);
+			mapBwaAln.setMismatch(mismatch);
+		}
 		mapSoftware.setPrefix(prefix);
-		mapSoftware.setGapLength(gapLen);
-		mapSoftware.setMismatch(mismatch);
 		mapSoftware.setSampleGroup(prefix, prefix, prefix, null);
 		mapSoftware.setMapLibrary(libraryType);
 		mapSoftware.setSortNeed(isNeedSort);
@@ -266,7 +268,7 @@ public class CtrlDNAMapping implements IntCmdSoft {
 	public static HashMap<String, Integer> getMapStr2Index() {
 		HashMap<String, Integer> mapStr2Index = new HashMap<String, Integer>();
 		mapStr2Index.put("chromosome", MAP_TO_CHROM);
-		mapStr2Index.put("refseq", MAP_TO_REFSEQ);
+		mapStr2Index.put("refseq", MAP_TO_REFSEQ_ALL_ISO);
 		mapStr2Index.put("refseq Longest Iso", MAP_TO_REFSEQ_LONGEST_ISO);
 		return mapStr2Index;
 	}

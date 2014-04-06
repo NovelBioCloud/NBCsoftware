@@ -79,14 +79,15 @@ public class CtrlMirPredictSimple {
 	private void predict(String fastIn, String resultFile, String novelMiRNAPathDeep) {
 		novelMiRNADeep.setFastaInput(fastIn);
 		softWareInfo.setName(SoftWare.mirDeep);
-		novelMiRNADeep.setExePath(softWareInfo.getExePath(), species.getIndexChr(SoftWare.bowtie));
+		novelMiRNADeep.setSpeciesChrIndex(species);
 		novelMiRNADeep.setMiRNASeq(species.getMiRNAmatureFile(), null, species.getMiRNAhairpinFile());
-		novelMiRNADeep.setSpecies(species.getCommonName());
+		novelMiRNADeep.setSpeciesName(species.getCommonName());
 		novelMiRNADeep.setFastq(isFastq);
 		novelMiRNADeep.setOutPath(novelMiRNAPathDeep);
 		novelMiRNADeep.predict();
 		lsCmd.addAll(novelMiRNADeep.getCmdExeStr());
 		FileOperate.copyFile(novelMiRNADeep.getNovelMiRNAdeepMrdFile(), resultFile, true);
+		novelMiRNADeep.clear();
 	}
 	
 }

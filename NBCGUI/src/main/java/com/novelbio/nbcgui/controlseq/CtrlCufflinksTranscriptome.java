@@ -16,16 +16,15 @@ import com.novelbio.analysis.seq.rnaseq.GffHashMerge;
 import com.novelbio.analysis.seq.rnaseq.TranscriptomStatistics;
 import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.FoldeCreate;
+import com.novelbio.base.StringOperate;
 import com.novelbio.base.dataOperate.DateUtil;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.database.domain.information.SoftWareInfo;
-import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
 import com.novelbio.nbcReport.Params.EnumReport;
 
 public class CtrlCufflinksTranscriptome {
 	boolean reconstructTranscriptome = false;
-	SoftWareInfo softWareInfo = new SoftWareInfo(SoftWare.cufflinks);
+	
 	CufflinksGTF cufflinksGTF = new CufflinksGTF();
 	GffChrAbs gffChrAbs = new GffChrAbs();
 	String outPrefix;
@@ -124,7 +123,7 @@ public class CtrlCufflinksTranscriptome {
 		setGffHashRef();
 		setSeqHash();
 
-		cufflinksGTF.setExePath(softWareInfo.getExePath(), getChromFaFile());
+		cufflinksGTF.setChrFile(getChromFaFile());
 		cufflinksGTF.setGtfFile(getGtfFileName(), reconstructTranscriptome);
 		cufflinksGTF.setIntronLen(getIntronSmall2Big());
 		cufflinksGTF.setSkipErrorMode(true);
@@ -142,7 +141,6 @@ public class CtrlCufflinksTranscriptome {
 		if (lsResultGTF.size() > 1) {
 			CuffMerge cuffMerge = new CuffMerge();
 			cuffMerge.setIsUseOldResult(isUseOldResult);
-			cuffMerge.setExePath(softWareInfo.getExePath());
 			cuffMerge.setLsGtfTobeMerged(lsResultGTF);
 			cuffMerge.setRefGtf(cufflinksGTF.getGtfReffile());
 			cuffMerge.setOutputPrefix(outMergePrefix);
@@ -153,7 +151,7 @@ public class CtrlCufflinksTranscriptome {
 		} else if (lsResultGTF.size() == 1) {
 			resultGtf = lsResultGTF.get(0);
 		}
-		
+		//注释orf
 		GffHashGene gffHashGeneThis = new GffHashGene(GffType.GTF, resultGtf);
 		GffHashModifyNewGffORF gffHashModifyORF = new GffHashModifyNewGffORF();
 		gffHashModifyORF.setGffHashGeneRaw(gffHashGeneThis);
@@ -161,7 +159,7 @@ public class CtrlCufflinksTranscriptome {
 		gffHashModifyORF.setRenameGene(true);
 		gffHashModifyORF.setPrefixGeneName(getGenePrefix());
 		
-		gffHashModifyORF.setRenameIso(true);//TODO 可以考虑不换iso的名字
+		gffHashModifyORF.setRenameIso(false);//TODO 可以考虑不换iso的名字
 		gffHashModifyORF.modifyGff();
 		
 		List<String> lsChrName = (gffChrAbs.getSeqHash() != null)? gffChrAbs.getSeqHash().getLsSeqName() : null;
@@ -181,8 +179,8 @@ public class CtrlCufflinksTranscriptome {
 		if (prefixNewGene != null && !prefixNewGene.trim().equals("")) {
 			return prefixNewGene;
 		}
-		if (gffChrAbs != null && gffChrAbs.getSpecies().getTaxID() != 0) {
-			prefixNewGene = gffChrAbs.getSpecies().getAbbrName() + "_" + (short)DateUtil.getNowTimeLong();
+		if (gffChrAbs != null && gffChrAbs.getSpecies().getTaxID() != 0 && !StringOperate.isRealNull(gffChrAbs.getSpecies().getCommonName())) {
+			prefixNewGene = gffChrAbs.getSpecies().getCommonName().replace(" ", "_") + "_" + Math.abs((short)DateUtil.getNowTimeLong());
 		} else {
 			prefixNewGene = "NBC_";
 		}

@@ -258,7 +258,7 @@ public class GuiBlast extends JPanel implements GuiNeedOpenFile {
 			blastFileInfo.setFileName(content[0]);
 			
 			try {
-				blastFileInfo.importAndSave(GeneID.IDTYPE_ACCID, GeneID.IDTYPE_ACCID);
+				blastFileInfo.importAndSave();
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null,content[0].trim() + "cannot update\n" + e.getMessage(), "error", JOptionPane.ERROR_MESSAGE);
 			}

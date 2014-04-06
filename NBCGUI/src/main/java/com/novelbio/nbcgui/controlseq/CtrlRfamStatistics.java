@@ -13,6 +13,7 @@ import com.novelbio.analysis.seq.fasta.SeqHash;
 import com.novelbio.analysis.seq.fastq.FastQ;
 import com.novelbio.analysis.seq.fastq.FastQRecord;
 import com.novelbio.analysis.seq.mapping.MapBowtie;
+import com.novelbio.analysis.seq.mapping.MapBwaAln;
 import com.novelbio.analysis.seq.mirna.RfamStatistic;
 import com.novelbio.analysis.seq.rnaseq.RPKMcomput.EnumExpression;
 import com.novelbio.analysis.seq.sam.SamFile;
@@ -34,7 +35,6 @@ import com.novelbio.nbcReport.Params.EnumReport;
 public class CtrlRfamStatistics implements IntCmdSoft {
 	private static final Logger logger = Logger.getLogger(CtrlRfamStatistics.class);
 	
-	SoftWareInfo softWareInfo = new SoftWareInfo(SoftWare.bowtie2);
 	GeneExpTable expRfamID = new GeneExpTable(TitleFormatNBC.RfamID);
 	GeneExpTable expRfamClass = new GeneExpTable(TitleFormatNBC.RfamClass);
 	int threadNum = 5;
@@ -135,11 +135,10 @@ public class CtrlRfamStatistics implements IntCmdSoft {
 	
 	private String mapping(String fastqFile, String outFile) {
 		SamFileStatistics samFileStatistics = new SamFileStatistics(FileOperate.getFileNameSep(fastqFile)[0]);
-		MapBowtie mapBowtie = new MapBowtie();
+		MapBwaAln mapBowtie = new MapBwaAln();
 		mapBowtie.setFqFile(new FastQ(fastqFile), null);
 		mapBowtie.setOutFileName(outFile);
 		mapBowtie.setChrIndex(rfamFile);
-		mapBowtie.setExePath(softWareInfo.getExePath());
 		mapBowtie.setGapLength(3);
 		mapBowtie.setThreadNum(threadNum);
 		rfamStatistic.initial();

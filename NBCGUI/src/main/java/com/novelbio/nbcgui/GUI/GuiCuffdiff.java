@@ -208,8 +208,6 @@ public class GuiCuffdiff extends JPanel {
 	
 	private void runCuffdiff(String outFile) {
 		ArrayList<String[]> lsFileName2Prefix = sclFileName.getLsDataInfo();
-		SoftWareInfo softWareInfo = new SoftWareInfo(SoftWare.cufflinks);
-		cuffdiff.setExePath(softWareInfo.getExePath());
 		cuffdiff.setOutPath(outFile);
 		String gtfFile = txtGtfCuffdiff.getText();
 		Species species = guiLayeredPaneSpeciesVersionGff.getSelectSpecies();
@@ -223,7 +221,6 @@ public class GuiCuffdiff extends JPanel {
 		}
 		
 		//生成能给cuffdiff识别的gtf文件
-		cuffcompare.setExePath(softWareInfo.getExePath());
 		cuffcompare.setRefGtfFile(gtfFile);
 		cuffcompare.setOutPath(outFile);
 		cuffcompare.setSeqFasta(species.getChromSeq());
@@ -242,7 +239,6 @@ public class GuiCuffdiff extends JPanel {
 	private void runCuffcompare(String outFile) {
 		Species species = guiLayeredPaneSpeciesVersionGff.getSelectSpecies();
 		SoftWareInfo softWareInfo = new SoftWareInfo(SoftWare.cufflinks);
-		cuffcompare.setExePath(softWareInfo.getExePath());
 		cuffcompare.setOutPath(outFile);
 		
 		if (species.getTaxID() != 0) {
