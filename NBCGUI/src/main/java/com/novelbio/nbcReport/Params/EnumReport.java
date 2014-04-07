@@ -28,6 +28,8 @@ public enum EnumReport {
 	FastQC("QualityControl_result",new ReportQC()),
 	DNASeqMap("DNASeqMap_result",new ReportDNASeqMap()),
 	RNASeqMap("RNASeqMap_result",new ReportRNASeqMap()),
+	RSeQC("RSeQC_result",null),
+	
 	DiffExp("DifferenceExpression_result",new ReportDifGene()),
 	RfamStatistics("RfamStatistics_result", null),
 	ReconstructTranscriptome("ReconstructTranscriptome_result", null),
