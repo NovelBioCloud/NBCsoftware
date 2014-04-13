@@ -39,6 +39,8 @@ public enum EnumReport {
 	MiRNATargetNetwork("MiRNATargetNetwork_result",null),
 	PathwayActNetwork("PathwayActNetwork_result",null),
 	CoExpNetLncRNA("CoExpNetLncRNA_result",null),
+	CoExpNet("CoExpNetWork",null),
+	
 	ReportAll("Novelbio_result",new ReportAll()),
 	@Deprecated 
 	Picture("Picture",null),

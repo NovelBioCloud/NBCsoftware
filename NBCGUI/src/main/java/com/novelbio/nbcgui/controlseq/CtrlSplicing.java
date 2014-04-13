@@ -1,7 +1,9 @@
 package com.novelbio.nbcgui.controlseq;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.novelbio.GuiAnnoInfo;
@@ -29,6 +31,103 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	boolean isReconstruceIso = false;
 	/** 是否合并文件--也就是不考虑重复，默认为true，也就是合并文件 **/
 	boolean isCombine = true;
+	
+	
+	/**
+	 * --Case:aaa file1.bam,file2.bam
+	 * --Control:bbb file1.bam,file2.bam
+	 * --Combine true  可选
+	 * --DisplayAllEvent true 可选
+	 * --StrandSpecific F R
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		//将输入的参数放到这个map里面
+		Map<String, String> mapParam2Value = new LinkedHashMap<>();
+		String param = null, value = null;
+		if (args == null || (args.length == 1 && (args[0].equals("-h") || args[0].equals("--help")))) {
+			
+		}
+		
+		for (int i = 0; i < args.length; i++) {
+			if (args[i].startsWith("--")) {
+				if (i > 0) {
+					mapParam2Value.put(param, value);
+				}
+				param = args[i].substring(2);
+				value = null;
+			} else {
+				value = args[i];
+			}
+		}
+		String paramCase = null, paramControl = null;
+		for (String paramInfo : mapParam2Value.keySet()) {
+			if (paramInfo.startsWith("Case")) {
+				paramCase = paramInfo;
+			} else if (paramInfo.startsWith("Control")) {
+				paramControl = paramInfo;
+			}
+		}
+		List<String[]> lsBam2Prefix = new ArrayList<>();
+		String prefixCase = paramCase.split(":")[1];
+		String caseFiles = mapParam2Value.get(paramCase);
+		String prefixControl = paramControl.split(":")[1];
+		String controlFiles = mapParam2Value.get(paramControl);
+		
+		for (String string : caseFiles.split(",")) {
+			lsBam2Prefix.add(new String[]{string, prefixCase});
+		}
+		for (String string : controlFiles.split(",")) {
+			lsBam2Prefix.add(new String[]{string, prefixControl});
+		}
+		
+		List<String[]> lsCompare = new ArrayList<>();
+		lsCompare.add(new String[]{prefixCase, prefixControl});
+		
+		CtrlSplicing ctrlSplicing = new CtrlSplicing();
+		ctrlSplicing.setLsBam2Prefix(lsBam2Prefix);
+		ctrlSplicing.setLsCompareGroup(lsCompare);
+		
+		if (mapParam2Value.containsKey("Combine")) {
+			String combine = mapParam2Value.get("Combine").toLowerCase();
+			if (combine.equals("true") || combine.equals("t")) {
+				ctrlSplicing.setCombine(true);
+			} else if (combine.equals("false") || combine.equals("f")) {
+				ctrlSplicing.setCombine(false);
+			}
+		}
+
+		if (mapParam2Value.containsKey("DisplayAllEvent")) {
+			String combine = mapParam2Value.get("DisplayAllEvent").toLowerCase();
+			if (combine.equals("true") || combine.equals("t")) {
+				ctrlSplicing.setDisplayAllEvent(true);
+			} else if (combine.equals("false") || combine.equals("f")) {
+				ctrlSplicing.setDisplayAllEvent(false);
+			}
+		}
+
+		ctrlSplicing.setReconstructIso(true);
+		if (mapParam2Value.containsKey("StrandSpecific")) {
+			String strand = mapParam2Value.get("StrandSpecific").toLowerCase();
+			if (strand.equals("f")) {
+				ctrlSplicing.setStrandSpecific(StrandSpecific.FIRST_READ_TRANSCRIPTION_STRAND);
+			} else if (strand.equals("r")) {
+				ctrlSplicing.setStrandSpecific(StrandSpecific.SECOND_READ_TRANSCRIPTION_STRAND);
+			}
+		}
+		
+		ctrlSplicing.setOutFile(mapParam2Value.get("Output"));
+		ctrlSplicing.run();
+	}
+	
+	private List<String> getHelp() {
+		List<String> lsHelp = new ArrayList<>();
+		lsHelp.add("Usage: java -jar -Xmx10000m <--options> --Case:prefixCase file1.bam,file2.bam --Control:prefixControl file3.bam,file4.bam --Output outPath");
+		lsHelp.add("Example: java -jar -Xmx10000m --DisplayAllEvent True --StrandSpecific F  --Case:prefixCase file1.bam,file2.bam --Control:prefixControl file3.bam,file4.bam --Output outPath");
+		lsHelp.add("Input:");
+		lsHelp.add("--Case:prefixCase  case bam files, using comma to seperate files. prefixCase");
+		return lsHelp;
+	}
 	
 	public void setGuiRNAautoSplice(GUIinfo guiRNAautoSplice) {
 		this.guiRNAautoSplice = guiRNAautoSplice;

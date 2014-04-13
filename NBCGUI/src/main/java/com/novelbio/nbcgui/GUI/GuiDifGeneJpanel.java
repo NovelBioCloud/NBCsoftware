@@ -124,7 +124,7 @@ public class GuiDifGeneJpanel extends JPanel {
 		cmbMethod.setBounds(635, 463, 271, 23);
 		add(cmbMethod);
 		
-		final JCheckBox chckbxIslogvalueOnlyforlimma = new JCheckBox("isAlreadyLogValue OnlyForLimma");
+		final JCheckBox chckbxIslogvalueOnlyforlimma = new JCheckBox("To Log The Value, OnlyForLimma");
 		chckbxIslogvalueOnlyforlimma.setBounds(218, 552, 258, 26);
 		add(chckbxIslogvalueOnlyforlimma);
 		

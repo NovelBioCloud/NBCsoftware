@@ -17,6 +17,7 @@ import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.base.multithread.RunProcess.RunThreadStat;
 import com.novelbio.base.plot.ImageUtils;
 import com.novelbio.base.word.NBCWordImage;
 import com.novelbio.database.domain.geneanno.GOtype;
@@ -166,6 +167,17 @@ public class CtrlGOall implements CtrlTestGOInt {
 				thread.join();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+			}
+		}
+		//程序是否顺利结束
+		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
+			if (ctrlGO.getRunThreadStat() == RunThreadStat.finishAbnormal) {
+				Throwable throwable = ctrlGO.getException();
+				if (throwable != null) {
+					throw new RuntimeException(throwable);
+				} else {
+					throw new RuntimeException("unknown error:" + ctrlGO.getGOType().toString());
+				}
 			}
 		}
 	}
