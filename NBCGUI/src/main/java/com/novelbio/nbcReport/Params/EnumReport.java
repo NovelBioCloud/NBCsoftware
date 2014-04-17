@@ -29,6 +29,8 @@ public enum EnumReport {
 	DNASeqMap("DNASeqMap_result",new ReportDNASeqMap()),
 	RNASeqMap("RNASeqMap_result",new ReportRNASeqMap()),
 	RSeQC("RSeQC_result",null),
+	RemoveRrna("RemoveRrna_result",null),
+	SamToFastq("SamToFastq_result",null),
 	
 	DiffExp("DifferenceExpression_result",new ReportDifGene()),
 	RfamStatistics("RfamStatistics_result", null),

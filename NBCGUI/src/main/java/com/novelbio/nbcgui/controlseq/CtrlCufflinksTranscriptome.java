@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.HashMultimap;
+import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.seq.fasta.SeqHash;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.genome.GffHashModifyNewGffORF;
+import com.novelbio.analysis.seq.genome.GffHashModifyOldGffUTR;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.genome.gffOperate.GffType;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
@@ -16,13 +18,11 @@ import com.novelbio.analysis.seq.rnaseq.GffHashMerge;
 import com.novelbio.analysis.seq.rnaseq.TranscriptomStatistics;
 import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.FoldeCreate;
-import com.novelbio.base.StringOperate;
-import com.novelbio.base.dataOperate.DateUtil;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.nbcReport.Params.EnumReport;
 
-public class CtrlCufflinksTranscriptome {
+public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 	boolean reconstructTranscriptome = false;
 	
 	CufflinksGTF cufflinksGTF = new CufflinksGTF();
@@ -36,6 +36,11 @@ public class CtrlCufflinksTranscriptome {
 	String prefixNewGene;
 	
 	boolean isUseOldResult = true;
+	
+	/** 是否修正新的Gtf文件 */
+	boolean isModifyNewGTF = true;
+	
+	List<String> lsCmd = new ArrayList<>();
 	
 	/** 新基因的前缀 */
 	public void setGenePrefixNew(String prefixNewGene) {
@@ -53,6 +58,14 @@ public class CtrlCufflinksTranscriptome {
 	 *  */
 	public void setIsUseOldResult(boolean isUseOldResult) {
 		this.isUseOldResult = isUseOldResult;
+	}
+	/** 是否修正新的GTF文件
+	 * true修正cufflinks产生的gtf文件
+	 * false修正原来的gtf文件，主要是加上utr区域，一般用于低等生物
+	 * @param isModifyNewGTF
+	 */
+	public void setModifyNewGTF(boolean isModifyNewGTF) {
+		this.isModifyNewGTF = isModifyNewGTF;
 	}
 	/** 输入已有的物种信息<br>
 	 * 和{@link #setGTFfile(String)} 两者选一
@@ -115,6 +128,7 @@ public class CtrlCufflinksTranscriptome {
 	}
 	
 	public void run() {
+		lsCmd.clear();
 		reconstruct();
 		close();
 	}
@@ -128,8 +142,15 @@ public class CtrlCufflinksTranscriptome {
 		cufflinksGTF.setIntronLen(getIntronSmall2Big());
 		cufflinksGTF.setSkipErrorMode(true);
 		cufflinksGTF.setIsUseOldResult(isUseOldResult);
-		cufflinksGTF.runCufflinks();
+		try {
+			cufflinksGTF.runCufflinks();
+		} catch (Throwable e) {
+			lsCmd.addAll(cufflinksGTF.getCmdExeStr());
+			throw e;
+		}
+		lsCmd.addAll(cufflinksGTF.getCmdExeStr());
 		List<String> lsResultGTF = cufflinksGTF.getLsCufflinksResult();
+
 		if (!reconstructTranscriptome) {
 			return;
 		}
@@ -146,18 +167,31 @@ public class CtrlCufflinksTranscriptome {
 			cuffMerge.setOutputPrefix(outMergePrefix);
 			try { cuffMerge.setRefChrFa(gffChrAbs.getSpecies().getChromSeq()); } catch (Exception e) { }
 			cuffMerge.setThreadNum(thread);
-			resultGtf = cuffMerge.runCuffmerge();
-			
+			try {
+				resultGtf = cuffMerge.runCuffmerge();
+			} catch (Throwable e) {
+				lsCmd.addAll(cuffMerge.getCmdExeStr());
+				throw e;
+			}
+			lsCmd.addAll(cuffMerge.getCmdExeStr());
 		} else if (lsResultGTF.size() == 1) {
 			resultGtf = lsResultGTF.get(0);
 		}
+		
+		if (isModifyNewGTF) {
+			modifyCufflinksGtf(resultGtf);
+		} else {
+			modifyOldGtf(resultGtf);
+		}
+	}
+	
+	private void modifyCufflinksGtf(String resultGtf) {
 		//注释orf
 		GffHashGene gffHashGeneThis = new GffHashGene(GffType.GTF, resultGtf);
 		GffHashModifyNewGffORF gffHashModifyORF = new GffHashModifyNewGffORF();
 		gffHashModifyORF.setGffHashGeneRaw(gffHashGeneThis);
 		gffHashModifyORF.setGffHashGeneRef(gffChrAbs.getGffHashGene());
 		gffHashModifyORF.setRenameGene(true);
-		gffHashModifyORF.setPrefixGeneName(getGenePrefix());
 		
 		gffHashModifyORF.setRenameIso(false);//TODO 可以考虑不换iso的名字
 		gffHashModifyORF.modifyGff();
@@ -175,17 +209,17 @@ public class CtrlCufflinksTranscriptome {
 		txtOut.close();
 	}
 	
-	private String getGenePrefix() {
-		if (prefixNewGene != null && !prefixNewGene.trim().equals("")) {
-			return prefixNewGene;
-		}
-		if (gffChrAbs != null && gffChrAbs.getSpecies().getTaxID() != 0 && !StringOperate.isRealNull(gffChrAbs.getSpecies().getCommonName())) {
-			prefixNewGene = gffChrAbs.getSpecies().getCommonName().replace(" ", "_") + "_" + Math.abs((short)DateUtil.getNowTimeLong());
-		} else {
-			prefixNewGene = "NBC_";
-		}
-		return prefixNewGene;
+	private void modifyOldGtf(String resultGtf) {
+		GffHashModifyOldGffUTR gffHashModifyOldGffUTR = new GffHashModifyOldGffUTR();
+		GffHashGene gffHashGeneThis = new GffHashGene(GffType.GTF, resultGtf);
+		gffHashModifyOldGffUTR.setGffHashGeneRaw(gffHashGeneThis);
+		gffHashModifyOldGffUTR.setGffHashGeneRef(gffChrAbs.getGffHashGene());
+		gffHashModifyOldGffUTR.modifyGff();
+		
+		List<String> lsChrName = (gffChrAbs.getSeqHash() != null)? gffChrAbs.getSeqHash().getLsSeqName() : null;
+		gffChrAbs.getGffHashGene().writeToGTF(lsChrName, outGtf);
 	}
+	
 	
 	/** 根据gff文件，返回最小和最大intron的长度
 	 * 如果gff不存在，则返回null
@@ -256,6 +290,11 @@ public class CtrlCufflinksTranscriptome {
 		mapPrefix2File.put("reconstruct_gtf", outGtf);
 		mapPrefix2File.put("reconstruct_statistics", outStatistics);
 		return mapPrefix2File;
+	}
+	@Override
+	public List<String> getCmdExeStr() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

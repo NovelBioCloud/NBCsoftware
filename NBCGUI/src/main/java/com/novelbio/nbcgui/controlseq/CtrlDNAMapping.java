@@ -186,7 +186,7 @@ public class CtrlDNAMapping implements IntCmdSoft {
 	private SamFile mapping(String prefix, List<List<String>> fastQsFile) {
 		MapDNAint mapSoftware = MapDNA.creatMapDNA(softMapping);		
 
-		if (species.getTaxID() == 0) {
+		if (species == null || species.getTaxID() == 0) {
 			mapSoftware.setChrIndex(chrIndexFile);
 		} else {
 			if (map2Index == MAP_TO_CHROM) {
@@ -218,7 +218,6 @@ public class CtrlDNAMapping implements IntCmdSoft {
 			((MapBowtie)mapSoftware).setSensitive(sensitive);
 			((MapBowtie)mapSoftware).setLocal(isLocal);
 		}
-
 
 		lsCmd.addAll(mapSoftware.getCmdExeStr());
 		SamFile samFile = mapSoftware.mapReads();

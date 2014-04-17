@@ -138,7 +138,8 @@ public class GuiAnnoPeak extends JPanel implements GuiNeedOpenFile {
 				scrollPaneDataResult.setTitle(ctrlBatchAnno.getTitle());
 				try {
 					ctrlBatchAnno.setColPeakStartEnd(Integer.parseInt(txtColPeakStartMid.getText()), Integer.parseInt(txtColPeakEnd.getText()));
-				} catch (Exception e2) { }
+				} catch (Exception e2) { 
+				}
 				try {
 					ctrlBatchAnno.setColPeakSummit(Integer.parseInt(txtColPeakStartMid.getText()));
 				} catch (Exception e2) {

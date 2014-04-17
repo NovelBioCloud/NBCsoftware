@@ -7,8 +7,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
-import com.novelbio.database.domain.geneanno.SpeciesFile;
-import com.novelbio.database.model.species.Species;
 import com.novelbio.nbcgui.GUI.volcanoPlot.GuiVolcanoPlot;
 
 /**
