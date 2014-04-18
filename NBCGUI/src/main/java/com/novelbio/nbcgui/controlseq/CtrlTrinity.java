@@ -17,6 +17,8 @@ public class CtrlTrinity {
 	int threadNum = 20;
 	StrandSpecific strandSpecific = StrandSpecific.NONE;
 	boolean jaccard_clip = false;
+	/** 默认为1，设置为2时可以大大降低内存占用 */
+	Integer min_kmer_cov;
 	int insertSize = 500;
 	String outPrefix;
 	
@@ -50,7 +52,10 @@ public class CtrlTrinity {
 	public void setOutPrefix(String outPrefix) {
 		this.outPrefix = outPrefix;
 	}
-
+	/** 默认为1，设置为2时可以大大降低内存占用 */
+	public void setMin_kmer_cov(Integer min_kmer_cov) {
+		this.min_kmer_cov = min_kmer_cov;
+	}
 	/**
 	 * option, set if you have paired reads and you expect high gene density with
 	 *  UTR overlap (use FASTQ input file format for reads). (note: jaccard_clip is an
@@ -80,6 +85,11 @@ public class CtrlTrinity {
 			trinity.setThreadNum(threadNum);
 			trinity.setSS_lib_type(strandSpecific);
 			trinity.setIsJaccard_clip(jaccard_clip);
+			
+			if (min_kmer_cov != null && min_kmer_cov > 0) {
+				trinity.setMin_kmer_cov(min_kmer_cov);
+			}
+			
 			trinity.setPairs_distance(insertSize);
 			trinity.setOutputPath(outPrefix + prefix);
 			trinity.setLsLeftFq(lsFqLeft);
