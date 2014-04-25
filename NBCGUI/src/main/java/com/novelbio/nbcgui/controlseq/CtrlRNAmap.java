@@ -169,7 +169,9 @@ public class CtrlRNAmap implements IntCmdSoft {
 				mapRNA.mapReads();
 			} catch (Exception e) {
 				e.printStackTrace();
-				lsCmd.addAll(mapRNA.getCmdExeStr());
+				try {
+					lsCmd.addAll(mapRNA.getCmdExeStr());
+				} catch (Exception e2) {}
 				throw e;
 			}
 			lsCmd.addAll(mapRNA.getCmdExeStr());

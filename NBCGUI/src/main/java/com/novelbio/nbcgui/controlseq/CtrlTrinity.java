@@ -16,6 +16,23 @@ public class CtrlTrinity {
 	int heapSpaceMax = 50;
 	int threadNum = 20;
 	StrandSpecific strandSpecific = StrandSpecific.NONE;
+	
+	String genome;
+	String genomeSortedBam;
+	/** maximum allowed intron length (also maximum fragment span on genome) */
+	int intronMaxLen = 50000;
+	
+	/**
+	 * If you have especially large RNA-Seq data sets involving many hundreds of
+	 * millions of reads to billions of reads, consider performing an in silico
+	 * normalization of the full data set using Trinity --normalize_reads. The
+	 * default normalization process should work well for most data sets. If you
+	 * prefer to manually set normalization-related parameters, you can find the
+	 * options under the full Trinity usage info:
+	 */
+	boolean isNormalizeReads = false;
+	
+	
 	boolean jaccard_clip = false;
 	/** 默认为1，设置为2时可以大大降低内存占用 */
 	Integer min_kmer_cov;
@@ -56,6 +73,29 @@ public class CtrlTrinity {
 	public void setMin_kmer_cov(Integer min_kmer_cov) {
 		this.min_kmer_cov = min_kmer_cov;
 	}
+	public void setGenome(String genome) {
+		this.genome = genome;
+	}
+	/** 有的话就用该bam文件指导拼接，没有就自己做mapping */
+	public void setGenomeSortedBam(String genomeSortedBam) {
+		this.genomeSortedBam = genomeSortedBam;
+	}
+	/**
+	 * If you have especially large RNA-Seq data sets involving many hundreds of
+	 * millions of reads to billions of reads, consider performing an in silico
+	 * normalization of the full data set using Trinity --normalize_reads. The
+	 * default normalization process should work well for most data sets. If you
+	 * prefer to manually set normalization-related parameters, you can find the
+	 * options under the full Trinity usage info:
+	 */
+	public void setNormalizeReads(boolean isNormalizeReads) {
+		this.isNormalizeReads = isNormalizeReads;
+	}
+	/** 最长intron的长度，也是用于指导拼接的，默认50000bp */
+	public void setIntronMaxLen(int intronMaxLen) {
+		this.intronMaxLen = intronMaxLen;
+	}
+	
 	/**
 	 * option, set if you have paired reads and you expect high gene density with
 	 *  UTR overlap (use FASTQ input file format for reads). (note: jaccard_clip is an
@@ -85,6 +125,10 @@ public class CtrlTrinity {
 			trinity.setThreadNum(threadNum);
 			trinity.setSS_lib_type(strandSpecific);
 			trinity.setIsJaccard_clip(jaccard_clip);
+			trinity.setGenome(genome);
+			trinity.setGenomeSortedBam(genomeSortedBam);
+			trinity.setIntronMaxLen(intronMaxLen);
+			trinity.setNormalizeReads(isNormalizeReads);
 			
 			if (min_kmer_cov != null && min_kmer_cov > 0) {
 				trinity.setMin_kmer_cov(min_kmer_cov);
