@@ -1,14 +1,11 @@
 package com.novelbio.nbcgui.controlseq;
 
-import java.util.ArrayList;
-
 import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.mirna.MirTargetMammal;
 import com.novelbio.analysis.seq.rnahybrid.RNAhybrid.RNAhybridClass;
 import com.novelbio.analysis.tools.compare.CombineTab;
 import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.database.model.species.Species;
 
 /**
  * 同时用miranda和RNAhybrid分析，结果取并集

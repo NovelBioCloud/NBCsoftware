@@ -1,5 +1,8 @@
 package com.novelbio.nbcReport.Params;
 
+import net.sf.picard.annotation.GeneAnnotationReader;
+
+import com.novelbio.analysis.coexp.simpCoExp.DegreeAnnotation;
 import com.novelbio.base.PathDetail;
 
 
@@ -42,6 +45,10 @@ public enum EnumReport {
 	PathwayActNetwork("PathwayActNetwork_result",null),
 	CoExpNetLncRNA("CoExpNetLncRNA_result",null),
 	CoExpNet("CoExpNetWork_result",null),
+	
+	GeneAnno("GeneAnno_result",null),
+	
+	Degree("Degree_result", null),
 	
 	ReportAll("Novelbio_result",new ReportAll()),
 	@Deprecated 

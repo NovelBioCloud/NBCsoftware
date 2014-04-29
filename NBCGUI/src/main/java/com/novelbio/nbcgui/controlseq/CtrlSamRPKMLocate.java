@@ -360,7 +360,9 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			if (alignSeq.getFileName().endsWith("tophat_sorted.bam")) {
 				String unmapFileName = alignSeq.getFileName().replace("tophat_sorted.bam", "tophat.bam");
 				unmapFileName = FileOperate.changeFilePrefix(unmapFileName, "unmapped_", null);
-				alignSeqReading.addSeq(new SamFile(unmapFileName));
+				if (FileOperate.isFileExistAndBigThanSize(unmapFileName, 0)) {
+					alignSeqReading.addSeq(new SamFile(unmapFileName));
+				}
 			}
 		
 			mapPrefix2AlignSeqReadings.put(fileName2Prefix[1], alignSeqReading);
