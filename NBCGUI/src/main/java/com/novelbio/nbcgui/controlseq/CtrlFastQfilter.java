@@ -14,6 +14,7 @@ import com.novelbio.analysis.seq.fastq.FastQReadingChannel;
 import com.novelbio.analysis.seq.fastq.FastQFilter;
 import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.base.multithread.RunProcess.RunThreadStat;
 import com.novelbio.nbcReport.XdocTmpltPic;
 import com.novelbio.nbcReport.Params.ReportQC;
 
@@ -145,6 +146,9 @@ public class CtrlFastQfilter {
 		
 		fastQReadingChannel.setThreadNum(8);
 		fastQReadingChannel.run();
+		if (fastQReadingChannel.getRunThreadStat() == RunThreadStat.finishAbnormal) {
+			throw new RuntimeException(fastQReadingChannel.getException());
+		}
 	}
 	
 	public static String getFastQCPicName(String savePathAndPrefix) {
