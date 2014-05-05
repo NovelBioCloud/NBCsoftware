@@ -151,6 +151,7 @@ public class CtrlTrinity {
 			return;
 		}
 		N50AndSeqLen n50AndSeqLen = new N50AndSeqLen(trinityFile);
+		n50AndSeqLen.doStatistics();
 		//TODＯ 这里需要自动化生成图表
 		HistList histList = n50AndSeqLen.gethListLength();
 		n50AndSeqLen.getLsNinfo();
