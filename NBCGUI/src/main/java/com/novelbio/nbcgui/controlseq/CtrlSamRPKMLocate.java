@@ -320,8 +320,11 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		TxtReadandWrite txtWrite = null;
 		if (isCalculateExp()) {
 			rpkMcomput.setGffChrAbs(gffChrAbs);
-			txtWrite = new TxtReadandWrite(resultGeneStructure + "SamLibraryInfo.txt", true);
-			txtWrite.writefileln("SampleName\t" + ArrayOperate.cmbString(BamReadsInfo.getTitle(), "\t"));
+			if (strandSpecific == StrandSpecific.UNKNOWN) {
+				txtWrite = new TxtReadandWrite(resultGeneStructure + "SamLibraryInfo.txt", true);
+				txtWrite.writefileln("SampleName\t" + ArrayOperate.cmbString(BamReadsInfo.getTitle(), "\t"));
+			}
+
 		}
 		
 		setPrefix = new LinkedHashSet<String>();
@@ -335,21 +338,22 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			if (formatSeq == FormatSeq.SAM || formatSeq == FormatSeq.BAM) {
 				alignSeq = new SamFile(fileName2Prefix[0]);
 				if (isCalculateExp()) {
-					BamReadsInfo bamReadsInfo = new BamReadsInfo();
-					bamReadsInfo.setGffHashGene(gffChrAbs.getGffHashGene());
-					bamReadsInfo.setSamFile((SamFile) alignSeq);
-					bamReadsInfo.calculate();
-					rpkMcomput.setIsPairend(bamReadsInfo.getMapLibrary() != MapLibrary.SingleEnd);
+		
+					rpkMcomput.setIsPairend(((SamFile) alignSeq).isPairend());
 					if (strandSpecific == StrandSpecific.UNKNOWN) {
+						BamReadsInfo bamReadsInfo = new BamReadsInfo();
+						bamReadsInfo.setGffHashGene(gffChrAbs.getGffHashGene());
+						bamReadsInfo.setSamFile((SamFile) alignSeq);
+						bamReadsInfo.calculate();
 						if (bamReadsInfo.getStrandSpecific() == StrandSpecific.UNKNOWN) {
 							throw new SamErrorException("unknown strand type:\n" + alignSeq.getFileName() + "\t" + bamReadsInfo.toString());
 						}
+						txtWrite.writefileln(FileOperate.getFileName(alignSeq.getFileName()) + "\t" + bamReadsInfo.toString());
+						txtWrite.flush();
 						rpkMcomput.setConsiderStrand(bamReadsInfo.getStrandSpecific());
 					} else {
 						rpkMcomput.setConsiderStrand(strandSpecific);
 					}
-					txtWrite.writefileln(FileOperate.getFileName(alignSeq.getFileName()) + "\t" + bamReadsInfo.toString());
-					txtWrite.flush();
 				}				
 			} else if (formatSeq == FormatSeq.BED) {
 				alignSeq = new BedSeq(fileName2Prefix[0]);
@@ -368,7 +372,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			mapPrefix2AlignSeqReadings.put(fileName2Prefix[1], alignSeqReading);
 		}
 		
-		if (isCalculateExp()) {
+		if (txtWrite != null) {
 			txtWrite.close();
 		}
 		return mapPrefix2AlignSeqReadings;

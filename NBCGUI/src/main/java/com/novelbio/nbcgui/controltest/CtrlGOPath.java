@@ -32,6 +32,8 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	public static final String Up = "Up";
 	public static final String Down = "Down";
 	
+	int limitGeneNum = 0;
+	
 	FunctionTest functionTest = null;
 	
 	double up = -1;
@@ -278,7 +280,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	 * 没有就返回null   
 	 */
 	private void getResult(String prix, Collection<GeneID>lsCopedIDs) {
-		if (lsCopedIDs.size() > 7000) {
+		if (limitGeneNum > 100 && lsCopedIDs.size() > limitGeneNum) {
 			throw new RuntimeException("GOPath condition: " + prix + " contains " + lsCopedIDs.size() + " genes, GO Pathway Error, cannot calculate so much gene");
 		}
 		functionTest.setLsTestGeneID(lsCopedIDs);

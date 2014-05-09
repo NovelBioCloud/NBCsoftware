@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.HashMultimap;
+import com.hg.doc.fa;
 import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.seq.fasta.SeqHash;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
@@ -31,7 +32,7 @@ public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 	int thread = 4;
 	String gtfRefFile;
 	String chrSeq;
-	String outGtf;
+//	String outGtf;
 	String outStatistics;
 	String prefixNewGene;
 	
@@ -39,6 +40,7 @@ public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 	
 	/** 是否修正新的Gtf文件 */
 	boolean isModifyNewGTF = true;
+	boolean isAddUtrToRefGtf = true;
 	
 	List<String> lsCmd = new ArrayList<>();
 	
@@ -66,6 +68,14 @@ public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 	 */
 	public void setModifyNewGTF(boolean isModifyNewGTF) {
 		this.isModifyNewGTF = isModifyNewGTF;
+	}
+	/** 是否修正新的GTF文件
+	 * true修正cufflinks产生的gtf文件
+	 * false修正原来的gtf文件，主要是加上utr区域，一般用于低等生物
+	 * @param isModifyNewGTF
+	 */
+	public void setAddUtrToRefGtf(boolean isAddUtrToRefGtf) {
+		this.isAddUtrToRefGtf = isAddUtrToRefGtf;
 	}
 	/** 输入已有的物种信息<br>
 	 * 和{@link #setGTFfile(String)} 两者选一
@@ -155,7 +165,6 @@ public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 			return;
 		}
 		
-		outGtf = outPrefix + "novelTranscriptom.gtf";
 		outStatistics =  outPrefix + "novelTranscriptomStatistics.txt";
 		String resultGtf = null;
 		String outMergePrefix = outPrefix + "tmpMerge";
@@ -179,13 +188,18 @@ public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 		}
 		
 		if (isModifyNewGTF) {
-			modifyCufflinksGtf(resultGtf);
-		} else {
-			modifyOldGtf(resultGtf);
+			modifyCufflinksGtf(resultGtf, outPrefix + "novelTranscriptom.gtf");
+		}
+		if (isAddUtrToRefGtf) {
+			modifyOldGtf(resultGtf, outPrefix + "RefAddUtrTranscriptom.gtf");
 		}
 	}
 	
-	private void modifyCufflinksGtf(String resultGtf) {
+	/** 
+	 * @param resultGtf 重建完转录本的gtf文件
+	 * @param outGtf 输出结果文件
+	 */
+	private void modifyCufflinksGtf(String resultGtf, String outGtf) {
 		//注释orf
 		GffHashGene gffHashGeneThis = new GffHashGene(GffType.GTF, resultGtf);
 		GffHashModifyNewGffORF gffHashModifyORF = new GffHashModifyNewGffORF();
@@ -209,7 +223,11 @@ public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 		txtOut.close();
 	}
 	
-	private void modifyOldGtf(String resultGtf) {
+	/** 
+	 * @param resultGtf 重建完转录本的gtf文件
+	 * @param outGtf 输出结果文件
+	 */
+	private void modifyOldGtf(String resultGtf, String outGtf) {
 		GffHashModifyOldGffUTR gffHashModifyOldGffUTR = new GffHashModifyOldGffUTR();
 		GffHashGene gffHashGeneThis = new GffHashGene(GffType.GTF, resultGtf);
 		gffHashModifyOldGffUTR.setGffHashGeneRaw(gffHashGeneThis);

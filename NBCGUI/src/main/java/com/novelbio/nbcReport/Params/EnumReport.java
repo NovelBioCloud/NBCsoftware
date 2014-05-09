@@ -35,6 +35,8 @@ public enum EnumReport {
 	RemoveRrna("RemoveRrna_result",null),
 	SamToFastq("SamToFastq_result",null),
 	
+	RNAassembly("RNAassembly_result",null),
+	
 	DiffExp("DifferenceExpression_result",new ReportDifGene()),
 	RfamStatistics("RfamStatistics_result", null),
 	ReconstructTranscriptome("ReconstructTranscriptome_result", null),
@@ -45,6 +47,7 @@ public enum EnumReport {
 	PathwayActNetwork("PathwayActNetwork_result",null),
 	CoExpNetLncRNA("CoExpNetLncRNA_result",null),
 	CoExpNet("CoExpNetWork_result",null),
+	GetSeq("GetSeq_result",null),
 	
 	GeneAnno("GeneAnno_result",null),
 	

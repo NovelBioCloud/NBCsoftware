@@ -8,6 +8,7 @@ import java.util.Set;
 import com.google.common.collect.HashMultimap;
 import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.diffexpress.DiffExpAbs;
+import com.novelbio.analysis.diffexpress.DiffExpDESeq;
 import com.novelbio.analysis.diffexpress.EnumDifGene;
 import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
@@ -27,7 +28,7 @@ public class CtrlDifGene implements IntCmdSoft {
 	public CtrlDifGene(EnumDifGene diffGeneID) {
 		diffExpAbs = (DiffExpAbs) DiffExpAbs.createDiffExp(diffGeneID);
 	}
-
+	
 	public void setCol2Sample(List<String[]> lsSampleColumn2GroupName) {
 		diffExpAbs.setCol2Sample(lsSampleColumn2GroupName);
 	}
@@ -68,6 +69,12 @@ public class CtrlDifGene implements IntCmdSoft {
 	/** 将输入的表达值取log */
 	public void setLogTheValue(boolean logTheValue) {
 		diffExpAbs.setLogValue(logTheValue);
+	}
+	
+	public void setFitType(boolean fitTypeParametric) {
+		if (diffExpAbs instanceof DiffExpDESeq) {
+			((DiffExpDESeq)diffExpAbs).setFitType(fitTypeParametric);
+		}
 	}
 	/** 
 	 * 设定用pvalue还是fdr卡，以及卡的阈值

@@ -3,6 +3,7 @@ package com.novelbio.nbcgui.controlseq;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.seq.denovo.N50AndSeqLen;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.rnaseq.Trinity;
@@ -10,8 +11,9 @@ import com.novelbio.analysis.seq.rnaseq.TrinityCopeIso;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.listOperate.HistList;
 
-public class CtrlTrinity {
+public class CtrlTrinity implements IntCmdSoft {
 	CopeFastq copeFastq;
+	List<String> lsCmd = new ArrayList<>();
 	
 	int heapSpaceMax = 50;
 	int threadNum = 20;
@@ -107,6 +109,7 @@ public class CtrlTrinity {
 		this.jaccard_clip = jaccard_clip;
 	}
 	public void runTrinity() {
+		lsCmd.clear();
 		copeFastq.setMapCondition2LsFastQLR();
 		for (String prefix : copeFastq.getLsPrefix()) {
 			List<String[]> lsFastQs = copeFastq.getMapCondition2LsFastQLR().get(prefix);
@@ -140,6 +143,7 @@ public class CtrlTrinity {
 			if (lsFqRight.size() > 0) {
 				trinity.setLsRightFq(lsFqRight);
 			}
+			lsCmd.addAll(trinity.getCmdExeStr());
 			trinity.runTrinity();
 			String outFile = trinity.getResultPath();
 			copeAfterAssembly(outFile);
@@ -162,6 +166,10 @@ public class CtrlTrinity {
 		trinityCopeIso.setOutTrinityIsoFile(FileOperate.changeFileSuffix(trinityFile, "_Iso", "fa"));
 		trinityCopeIso.removeTmpFile();
 		trinityCopeIso.cope();
+	}
+	@Override
+	public List<String> getCmdExeStr() {
+		return lsCmd;
 	}
 	
 }
