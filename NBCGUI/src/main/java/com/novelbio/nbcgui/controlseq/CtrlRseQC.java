@@ -9,10 +9,10 @@ import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.genome.gffOperate.GffType;
 import com.novelbio.analysis.seq.mapping.MapLibrary;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
+import com.novelbio.analysis.seq.rnaseq.JunctionSaturationJava;
 import com.novelbio.analysis.seq.rnaseq.RseQC.GeneBodyCoverage;
 import com.novelbio.analysis.seq.rnaseq.RseQC.InnerDistance;
 import com.novelbio.analysis.seq.rnaseq.RseQC.JunctionAnnotation;
-import com.novelbio.analysis.seq.rnaseq.RseQC.JunctionSaturation;
 import com.novelbio.analysis.seq.rnaseq.RseQC.RPKMSaturation;
 import com.novelbio.analysis.seq.rnaseq.RseQC.ReadDuplication;
 import com.novelbio.analysis.seq.sam.BamReadsInfo;
@@ -217,14 +217,14 @@ public class CtrlRseQC implements IntCmdSoft {
 		}
 		
 		if (runJunctionSaturation) {
-			JunctionSaturation junctionSaturation = new JunctionSaturation(inFile, outPath, bedFile);
-			junctionSaturation.setIntronLength(junc_intronLength);
+			JunctionSaturationJava junctionSaturation = new JunctionSaturationJava();
+			junctionSaturation.setGffHashGene(gffHashGene);
+			junctionSaturation.setNodeNum(20);
+			junctionSaturation.setSavePath(outPath + "JunctionSaturation.png");
+			junctionSaturation.setIntronLen(junc_intronLength, 0);
 			junctionSaturation.setLeastReadNum(juncSat_leastReadNum);
-			junctionSaturation.setSampleLowerBound(juncSat_sampleLowerBound);
-			junctionSaturation.setSampleUpBound(juncSat_sampleUpBound);
-			junctionSaturation.setSampleStepLenght(juncSat_sampleStepLenght);
-			lsCmd.addAll(junctionSaturation.getCmdExeStr());
-			junctionSaturation.run();
+			junctionSaturation.setNodeNum(20);
+			junctionSaturation.plot();
 		}
 		
 		if (runReadDuplication) {
