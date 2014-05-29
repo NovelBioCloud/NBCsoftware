@@ -161,6 +161,8 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	}
 	@Override
 	public void setRunningInfo(GuiAnnoInfo info) {
+		if (guiRNAautoSplice == null) return;
+		
 		guiRNAautoSplice.setRunningInfo(info);
 		if (info.getLsNumInfo() != null && info.getLsNumInfo().size() > 0) {
 			setProcessBarStartEndBarNum(info.getLsNumInfo().get(0).intValue(), 
@@ -170,6 +172,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 
 	@Override
 	public void done(RunProcess<GuiAnnoInfo> runProcess) {
+		if (guiRNAautoSplice == null) return;
 		guiRNAautoSplice.done(runProcess);
 	}
 
@@ -249,14 +252,16 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 				throw new ExceptionNBCsoft("Autonative Splicing Error:" + comparePrefix[0] + " vs " + comparePrefix[1]);
 			}
 		}
-		guiRNAautoSplice.setMessage("Congratulations! Enjoy your PASH.");
-		guiRNAautoSplice.done(null);
+		if (guiRNAautoSplice != null) {
+			guiRNAautoSplice.setMessage("Congratulations! Enjoy your PASH.");
+			guiRNAautoSplice.done(null);
+		}
+	
 	}
 
 	public void setProgressBarLevelLs(ArrayList<Double> lsLevels) {
-		if (guiRNAautoSplice == null) {
-			return;
-		}
+		if (guiRNAautoSplice == null) return;
+		
 		guiRNAautoSplice.setProgressBarLevelLs(lsLevels);
 	}
 	
@@ -269,9 +274,8 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	 * @param endBarNum 本步骤终点
 	 */
 	public void setProcessBarStartEndBarNum(int level, long startBarNum, long endBarNum) {
-		if (guiRNAautoSplice == null) {
-			return;
-		}
+		if (guiRNAautoSplice == null) return;
+		
 		guiRNAautoSplice.setProcessBarStartEndBarNum(level, startBarNum, endBarNum);
 	}
 

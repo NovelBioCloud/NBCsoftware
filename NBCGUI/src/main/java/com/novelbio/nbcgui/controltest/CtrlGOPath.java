@@ -205,9 +205,9 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	
 	private Double getDoubleValue(String valueStr) {
 		Double value = null;
-		if (valueStr.equalsIgnoreCase("inf")) {
+		if (valueStr.toLowerCase().startsWith("inf")) {
 			return Double.MAX_VALUE;
-		} else if (valueStr.equalsIgnoreCase("-inf")) {
+		} else if (valueStr.toLowerCase().startsWith("-inf")) {
 			return Double.MIN_VALUE;
 		} else {
 			try {

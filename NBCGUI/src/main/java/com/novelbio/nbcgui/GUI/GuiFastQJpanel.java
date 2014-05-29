@@ -63,6 +63,7 @@ public class GuiFastQJpanel extends JPanel {
 	ButtonGroup buttonGroupMappingTo = new ButtonGroup();
 	
 	JCheckBox chckbxLowcaseAdaptor;
+	JCheckBox chkJustQC;
 //	CtrlFastQMapping ctrlFastQMapping = new CtrlFastQMapping();
 	CtrlFastQ ctrlFastQ;
 	CtrlDNAMapping ctrlDNAMapping;
@@ -240,6 +241,9 @@ public class GuiFastQJpanel extends JPanel {
 				ctrlFastQ.setLsFastQfileRight(lsRightFq);
 				ctrlFastQ.setLsPrefix(lsPrefix);
 				ctrlFastQ.setFilter(false);
+				ctrlFastQ.setCheckFormat(true);
+				ctrlFastQ.setJustFastqc(chkJustQC.isSelected());
+				
 				if (chckbxFilterreads.isSelected()) {
 					ctrlFastQ.setFilter(true);
 					ctrlFastQ.setAdaptorLeft(txtLeftAdaptor.getText());
@@ -406,6 +410,10 @@ public class GuiFastQJpanel extends JPanel {
 		spnTrimNNNcutoff.setBounds(450, 226, 66, 22);
 		spnTrimNNNcutoff.setValue(15);
 		add(spnTrimNNNcutoff);
+		
+		chkJustQC = new JCheckBox("JustQC");
+		chkJustQC.setBounds(327, 306, 115, 26);
+		add(chkJustQC);
 		
 		
 		btnOpenFastqLeft.addActionListener(new ActionListener() {

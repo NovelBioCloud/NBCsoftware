@@ -264,7 +264,7 @@ public class GuiSnpFilterSimple extends JPanel {
 		}
 		if (lsSnpFile.size() == 0) {
 			for (String[] strings : lsSnpPileup) {
-				snpSomaticFilter.addSnpFromPileUpFile(strings[1], SnpLevel.HetoMid, strings[0]);
+				snpSomaticFilter.addSnpFromPileUpFile(strings[1], SnpLevel.HeteroMid, strings[0]);
 			}
 		}
 		for (String[] strings : lsSnpPileup) {

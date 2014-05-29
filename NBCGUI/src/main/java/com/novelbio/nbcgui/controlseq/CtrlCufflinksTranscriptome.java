@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.HashMultimap;
-import com.hg.doc.fa;
 import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.seq.fasta.SeqHash;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
@@ -78,10 +77,14 @@ public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 		this.isAddUtrToRefGtf = isAddUtrToRefGtf;
 	}
 	/** 输入已有的物种信息<br>
+	 * 注意如果还输入了gff文件和chr文件，本类会修改该gffChrAbs
 	 * 和{@link #setGTFfile(String)} 两者选一
 	 * @param gffChrAbs 注意结束后会关闭流
 	 */
 	public void setGffChrAbs(GffChrAbs gffChrAbs) {
+		if (gffChrAbs == null) {
+			return;
+		}
 		this.gffChrAbs = gffChrAbs;
 	}
 	/**
@@ -186,7 +189,9 @@ public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 		} else if (lsResultGTF.size() == 1) {
 			resultGtf = lsResultGTF.get(0);
 		}
-		
+		if (gffChrAbs.getGffHashGene() == null) {
+			FileOperate.copyFile(resultGtf, outPrefix + "novelTranscriptom.gtf", true);
+		}
 		if (isModifyNewGTF) {
 			modifyCufflinksGtf(resultGtf, outPrefix + "novelTranscriptom.gtf");
 		}
@@ -200,10 +205,16 @@ public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 	 * @param outGtf 输出结果文件
 	 */
 	private void modifyCufflinksGtf(String resultGtf, String outGtf) {
+		//TODO 需要增加预测ncRNA和orf的模块
+		if (gffChrAbs == null || gffChrAbs.getGffHashGene() == null) {
+			return;
+		}
+		
 		//注释orf
 		GffHashGene gffHashGeneThis = new GffHashGene(GffType.GTF, resultGtf);
 		GffHashModifyNewGffORF gffHashModifyORF = new GffHashModifyNewGffORF();
 		gffHashModifyORF.setGffHashGeneRaw(gffHashGeneThis);
+
 		gffHashModifyORF.setGffHashGeneRef(gffChrAbs.getGffHashGene());
 		gffHashModifyORF.setRenameGene(true);
 		
@@ -228,6 +239,10 @@ public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 	 * @param outGtf 输出结果文件
 	 */
 	private void modifyOldGtf(String resultGtf, String outGtf) {
+		if (gffChrAbs == null || gffChrAbs.getGffHashGene() == null) {
+			return;
+		}
+		
 		GffHashModifyOldGffUTR gffHashModifyOldGffUTR = new GffHashModifyOldGffUTR();
 		GffHashGene gffHashGeneThis = new GffHashGene(GffType.GTF, resultGtf);
 		gffHashModifyOldGffUTR.setGffHashGeneRaw(gffHashGeneThis);

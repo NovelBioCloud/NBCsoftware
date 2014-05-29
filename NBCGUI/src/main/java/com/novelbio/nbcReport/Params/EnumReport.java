@@ -36,7 +36,8 @@ public enum EnumReport {
 	SamToFastq("SamToFastq_result",null),
 	
 	RNAassembly("RNAassembly_result",null),
-	
+	RNAAlternativeSplicing("RNAAlternativeSplicing_result",null),
+
 	DiffExp("DifferenceExpression_result",new ReportDifGene()),
 	RfamStatistics("RfamStatistics_result", null),
 	ReconstructTranscriptome("ReconstructTranscriptome_result", null),

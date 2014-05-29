@@ -89,11 +89,22 @@ public class CtrlDifGene implements IntCmdSoft {
 	public void setLogFCcutoff(double logFCcutoff) {
 		diffExpAbs.setLogFCcutoff(logFCcutoff);
 	}
-	
+	/** 做差异基因的时候各个样本表达量的值之和不能小于等于该数值
+	 * 譬如如果多个样本表达量都为0，那就不考虑了
+	 * @param addAllLine 默认为0，意思就是多个样本表达量之和为0 就不考虑
+	 * 是小于等于的关系
+	 */
 	public void setMinSampleSumNum(double minSampleSumNum) {
 		diffExpAbs.setMinSampleSumNum(minSampleSumNum);
 	}
-	
+	/** 做差异基因的时候每个样本表达量的值不能都小于该数值
+	 * 意思如果为 2, 3, 2, 1.3, 3
+	 * 则当值设定为3时，上述基因删除
+	 * @param minSampleSepNum 是小于的关系，不包括等于
+	 */
+	public void setMinSampleSepNum(double minSampleSepNum) {
+		diffExpAbs.setMinSampleSepNum(minSampleSepNum);
+	}
 	public void setSensitive(boolean isSensitive) {
 		diffExpAbs.setSensitive(isSensitive);
 	}
