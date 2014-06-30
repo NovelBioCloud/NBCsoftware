@@ -68,7 +68,7 @@ public class CtrlFastQ {
 		fastQfilter.setFilterParamAdaptorLowercase(adaptorLowercase);
 	}
 
-	public void setFastqQuality(int fastqQuality) {
+	public void setFastqQuality(String fastqQuality) {
 		fastQfilter.setQualityFilter(fastqQuality);
 	}
 	/** 是否过滤，如果不过滤则直接合并 */

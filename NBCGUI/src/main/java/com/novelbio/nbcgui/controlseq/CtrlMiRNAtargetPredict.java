@@ -1,5 +1,8 @@
 package com.novelbio.nbcgui.controlseq;
 
+import java.util.List;
+
+import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.mirna.MirTargetMammal;
 import com.novelbio.analysis.seq.rnahybrid.RNAhybrid.RNAhybridClass;
@@ -12,7 +15,7 @@ import com.novelbio.base.fileOperate.FileOperate;
  * @author zong0jie
  *
  */
-public class CtrlMiRNAtargetPredict {
+public class CtrlMiRNAtargetPredict implements IntCmdSoft {
 	public static void main(String[] args) {
 		CtrlMiRNAtargetPredict ctrlMiRNAtargetPredict = new CtrlMiRNAtargetPredict();
 //		Species species = new Species();
@@ -77,6 +80,10 @@ public class CtrlMiRNAtargetPredict {
 	
 	public void predict() {
 		mirTargetMammal.predict();
+	}
+	@Override
+	public List<String> getCmdExeStr() {
+		return mirTargetMammal.getCmdExeStr();
 	}
 
 }

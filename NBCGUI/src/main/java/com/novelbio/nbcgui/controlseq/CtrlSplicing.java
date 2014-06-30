@@ -13,6 +13,7 @@ import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.rnaseq.ExonJunction;
 import com.novelbio.base.ExceptionNullParam;
+import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.nbcgui.GUIinfo;
@@ -138,7 +139,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	public void setLsBam2Prefix(List<String[]> lsBam2Prefix) {
 		mapPrefix2LsBam = ArrayListMultimap.create();
 		for (String[] bam2Prefix : lsBam2Prefix) {
-			mapPrefix2LsBam.put(bam2Prefix[2], bam2Prefix[0]);
+			mapPrefix2LsBam.put(bam2Prefix[1], bam2Prefix[0]);
 		}
 	}
 	public void setLsCompareGroup(List<String[]> lsCompareGroup) {
@@ -210,6 +211,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	}
 	
 	public void setOutFile(String outFile) {
+		FileOperate.createFolders(FileOperate.getPathName(outFile));
 		this.outFile = outFile;
 	}
 	
@@ -248,7 +250,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			setProgressBarLevelLs(lsLevels);
 			setProcessBarStartEndBarNum(0, 0, fileLength);
 			exonJunction.run();
-			if (!exonJunction.isFinished()) {
+			if (!exonJunction.isFinishedNormal()) {
 				throw new ExceptionNBCsoft("Autonative Splicing Error:" + comparePrefix[0] + " vs " + comparePrefix[1]);
 			}
 		}
