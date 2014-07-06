@@ -59,7 +59,7 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 	
 	ButtonGroup buttonGroupSnpCallingFinding;
 	JRadioButton rdbtnSnpcalling;
-	JRadioButton rdbtnGetSnpDetail;
+//	JRadioButton rdbtnGetSnpDetail;
 	JRadioButton rdbtnSnpAnnotation;
 	
 	JSpinner spinColChrID;
@@ -166,8 +166,8 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 //						runSnpCallingNBC();
 //					}
 					runSnpCallingNBC();
-				} else if (rdbtnGetSnpDetail.isSelected()) {
-					runSnpGetInfo();
+//				} else if (rdbtnGetSnpDetail.isSelected()) {
+//					runSnpGetInfo();
 				} else if (rdbtnSnpAnnotation.isSelected()) {
 					runSnpAnnotation();
 				}
@@ -215,14 +215,14 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 		rdbtnSnpcalling.setBounds(14, 8, 118, 22);
 		add(rdbtnSnpcalling);
 		
-		rdbtnGetSnpDetail = new JRadioButton("get snp detail");
-		rdbtnGetSnpDetail.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setSnpGetInfo();
-			}
-		});
-		rdbtnGetSnpDetail.setBounds(130, 8, 151, 22);
-		add(rdbtnGetSnpDetail);
+//		rdbtnGetSnpDetail = new JRadioButton("get snp detail");
+//		rdbtnGetSnpDetail.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				setSnpGetInfo();
+//			}
+//		});
+//		rdbtnGetSnpDetail.setBounds(130, 8, 151, 22);
+//		add(rdbtnGetSnpDetail);
 		
 		txtOutput = new JTextField();
 		txtOutput.setBounds(19, 456, 565, 18);
@@ -377,7 +377,7 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 	private void initial() {
 		combSnpLevel.setMapItem(SnpLevel.getMapStr2SnpLevel());
 		buttonGroupSnpCallingFinding = new ButtonGroup();
-		buttonGroupSnpCallingFinding.add(rdbtnGetSnpDetail);
+//		buttonGroupSnpCallingFinding.add(rdbtnGetSnpDetail);
 		buttonGroupSnpCallingFinding.add(rdbtnSnpcalling);
 		buttonGroupSnpCallingFinding.add(rdbtnSnpAnnotation);
 		rdbtnSnpcalling.setSelected(true);
@@ -525,9 +525,7 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 			}
 			
 			samFile.setReferenceFileName(refSeq);
-			if (samFile.snpCalling(null, strings[1]) == null) {
-				logger.error("GATK call snp error:" + strings[1]);
-			}
+			//TODO 整合GATK
 		}
 	}
 	

@@ -49,6 +49,7 @@ public enum EnumReport {
 	CoExpNetLncRNA("CoExpNetLncRNA_result",null),
 	CoExpNet("CoExpNetWork_result",null),
 	GetSeq("GetSeq_result",null),
+	GATK("GATK_result",null),
 	
 	GeneAnno("GeneAnno_result",null),
 	

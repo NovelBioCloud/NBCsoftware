@@ -42,7 +42,7 @@ public class CtrlMedian {
 		this.accID = accID;
 	}
 	/**
-	 * 设定要对哪几列取中位数，不取的列都会用第一次出现的信息填充
+	 * 设定要对哪几列取中位数，实际列。不取的列都会用第一次出现的信息填充
 	 * 譬如我比较accID，取了3-6列的中位数。但是还会出现symbol和description列等，那么就用第一个出现的symbol和description填充
 	 */
 	public void setMedianID(ArrayList<Integer> lsCol)

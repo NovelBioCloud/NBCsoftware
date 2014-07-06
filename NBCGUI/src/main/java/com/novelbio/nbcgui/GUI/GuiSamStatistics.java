@@ -21,6 +21,7 @@ import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.database.service.SpringFactory;
 import com.novelbio.nbcgui.controlseq.CtrlSamPPKMint;
+import com.novelbio.nbcgui.controlseq.CtrlSamRPKMLocate;
 
 /**
  * 批量注释，各种注释
@@ -286,7 +287,7 @@ public class GuiSamStatistics extends JPanel {
 	}
 	
 	private void initial() {
-		ctrlSamRPKMLocate = (CtrlSamPPKMint)SpringFactory.getFactory().getBean("ctrlSamRPKMLocate");
+		ctrlSamRPKMLocate = new CtrlSamRPKMLocate();
 		ctrlSamRPKMLocate.setGUI(this);
 		scrollPaneData.setTitle(new String[]{"FileName", "Prefix"});
 	}

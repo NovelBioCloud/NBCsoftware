@@ -88,7 +88,7 @@ public class GuiRNAautoSplice extends JPanel implements GUIinfo {
 					//0: fileName   1: sampleName 2:group
 					String[] tmResult = new String[3];
 					tmResult[0] = string; tmResult[1] = FileOperate.getFileNameSep(string)[0].split("_")[0];
-					tmResult[2] = tmResult[1];
+//					tmResult[2] = tmResult[1];
 					lsInfo.add(tmResult);
 				}
 				scrlBam.addItemLs(lsInfo);
@@ -229,7 +229,7 @@ public class GuiRNAautoSplice extends JPanel implements GUIinfo {
 	private void initial() {
 //		combSpecies.setMapItem(Species.getSpeciesName2Species(Species.SEQINFO_SPECIES));
 		selectSpecies();
-		scrlBam.setTitle(new String[]{"BamFile", "Prefix", "group"});
+		scrlBam.setTitle(new String[]{"BamFile", "group"});
 
 		cmbGroup.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {

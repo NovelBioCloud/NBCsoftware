@@ -143,7 +143,7 @@ public class CtrlDifGene implements IntCmdSoft {
 		return reportDifGene;
 	}
 	
-	/** 
+	/**
 	 * 输入比较的文件名和组后，
 	 * 返回预测的文件名
 	 * @param copeFastq
