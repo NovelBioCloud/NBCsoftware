@@ -66,7 +66,7 @@ public class CtrlDNAMapping implements IntCmdSoft {
 	
 	/** 
 	 * @param species
-	 * @param map2Index mapping到什么上面去，有chrom，refseq和refseqLongestIso三种
+	 * @param map2Index mapping到什么上面去，有CtrlDNAMapping.MAP_TO_CHROM，refseq和refseqLongestIso三种
 	 */
 	public void setSpecies(Species species, int map2Index) {
 		this.species = species;
