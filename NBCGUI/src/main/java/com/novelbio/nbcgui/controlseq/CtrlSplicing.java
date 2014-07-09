@@ -219,6 +219,12 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	public void run() {
 		for (String[] comparePrefix : lsCompareGroup) {
 			String treat = comparePrefix[0], ctrl = comparePrefix[1];
+			if (!mapPrefix2LsBam.containsKey(treat)) {
+				throw new ExceptionNullParam("No Group Name: " + treat);
+			}
+			if (!mapPrefix2LsBam.containsKey(ctrl)) {
+				throw new ExceptionNullParam("No Group Name: " + ctrl);
+			}
 			List<String> lsTreatBam = mapPrefix2LsBam.get(treat);
 			List<String> lsCtrlBam = mapPrefix2LsBam.get(ctrl);
 			ExonJunction exonJunction = new ExonJunction();

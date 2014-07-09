@@ -29,7 +29,7 @@ import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.nbcgui.GUIinfo;
 import com.novelbio.nbcgui.controlseq.CtrlSplicing;
 
-public class GuiRNAautoSpliceSimple extends JPanel implements GUIinfo {
+public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 	static final int progressLength = 10000;
 	private JTextField txtGff;
 	JScrollPaneData scrlBam;
@@ -69,7 +69,7 @@ public class GuiRNAautoSpliceSimple extends JPanel implements GUIinfo {
 	/**
 	 * Create the panel.
 	 */
-	public GuiRNAautoSpliceSimple() {
+	public GuiRNAalterSpliceSimple() {
 		setLayout(null);
 
 		scrlBam = new JScrollPaneData();
@@ -108,7 +108,7 @@ public class GuiRNAautoSpliceSimple extends JPanel implements GUIinfo {
 		add(txtGff);
 		txtGff.setColumns(10);
 		
-		btnRun = new JButton("runPASH");
+		btnRun = new JButton("runCASH");
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				run();
@@ -155,7 +155,7 @@ public class GuiRNAautoSpliceSimple extends JPanel implements GUIinfo {
 		JButton btnAddCompare = new JButton("AddCmp");
 		btnAddCompare.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				scrlCompare.addItem(new String[]{"",""});
+				scrlCompare.addItem(new String[]{"EnterGroup","EnterGroup"});
 			}
 		});
 		btnAddCompare.setBounds(642, 306, 115, 24);
@@ -226,7 +226,7 @@ public class GuiRNAautoSpliceSimple extends JPanel implements GUIinfo {
 //		combSpecies.setMapItem(Species.getSpeciesName2Species(Species.SEQINFO_SPECIES));
 		selectSpecies();
 		scrlBam.setTitle(new String[]{"BamFile", "group"});
-
+		cmbGroup.setEditable(true);
 		cmbGroup.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				changeSclCompareGroup();
