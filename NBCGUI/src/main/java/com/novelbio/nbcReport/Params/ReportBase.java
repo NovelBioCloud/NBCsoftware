@@ -90,7 +90,7 @@ public abstract class ReportBase  implements Cloneable, Serializable {
 	 * 得到word模板的全路径
 	 * @return
 	 */
-	public String getTempPathAndName(){
+	public String getTempPathAndName() {
 		String pathAndName = FileOperate.addSep(getEnumReport().getTempPath())+getEnumReport().getTempName();
 		if(!FileOperate.isFileExist(pathAndName))
 			return null;

@@ -90,7 +90,7 @@ public enum EnumReport {
 	/**
 	 * 得到word模板路径
 	 */
-	public String getTempPath(){
+	public String getTempPath() {
 		return PathDetail.getReportTempPath();
 	}
 	

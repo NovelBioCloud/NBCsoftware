@@ -58,7 +58,7 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 	private GuiSamStatistics guiSamStatistics;
 	private GuiSnpFiltering guiSnpFiltering;
 	private GuiSnpFilterSimple guiSnpFilterSimple;
-	private GuiRNAautoSpliceSimple guiRNAautoSpliceSimple;
+	private GuiRNAalterSpliceSimple guiRNAautoSpliceSimple;
 	private GuiUpdateDB guiUpdateDB;
 	private GuiVolcanoPlot guiVolcanoPlot;
 	private GuiGeneNetWork guiGeneNetWork;
@@ -126,13 +126,9 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 //				
 //				guiVolcanoPlot = new GuiVolcanoPlot();
 //				jTabbedPane1.addTab("Volcano", guiVolcanoPlot);
-//			
 //				
 //				guilncLocation = new GuilncLocation();
 //				jTabbedPane1.addTab("LncLocation", guilncLocation);
-//				
-				guiPeakStatistics = new GuiPeakStatistics();
-				jTabbedPane1.addTab("PeakStatistics", guiPeakStatistics);
 //				
 //				guiSrcToTrg = new GuiSrcToTrgJpanel();
 //				jTabbedPane1.addTab("GeneAct", null, guiSrcToTrg, null);
@@ -148,13 +144,9 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 //				
 //				guiFastQ = new GuiFastQJpanel();
 //				jTabbedPane1.addTab("FilterAndMapping", null, guiFastQ, null);
-				
-				guiFastQFanwei = new GuiFastQFanwei();
-				jTabbedPane1.addTab("FilterAndMapping", null, guiFastQFanwei, null);
-				
-				guiSamToBam = new GuiSamToBam();
-				jTabbedPane1.addTab("SamConvert", null, guiSamToBam, null);
-				
+//				
+//
+//				
 //				guiSamToBed = new GuiSamToBed();
 //				jTabbedPane1.addTab("SamToBed", null, guiSamToBed, null);
 //				
@@ -196,9 +188,8 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 //				guiBedTssAndChrome = new GuiBedTssAndChrome();
 //				jTabbedPane1.add("Tss", guiBedTssAndChrome);
 //				
-//				guiSnpCalling = new GuiSnpCalling();
-//				jTabbedPane1.add("VariantDetection", guiSnpCalling);
-				
+//
+//				
 //				guiTools = new GuiToolsJpanel();
 //				jTabbedPane1.addTab("Tools", null, guiTools, null);
 //				
@@ -216,18 +207,37 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 //				
 //				guiSnpFiltering = new GuiSnpFiltering();
 //				jTabbedPane1.addTab("snpFilter", guiSnpFiltering);
-				
-				guiSnpFilterSimple = new GuiSnpFilterSimple();
-				jTabbedPane1.addTab("DiferentialVariation", guiSnpFilterSimple);
-				
-				guiAnnoPeak = new GuiAnnoPeak();
-				jTabbedPane1.addTab("VariationAnnotation", null, guiAnnoPeak, null);
-				
-//				guiRNAautoSpliceSimple = new GuiRNAautoSpliceSimple();
-//				jTabbedPane1.addTab("ASD", guiRNAautoSpliceSimple);
+//				
+//
+//				
+				guiRNAautoSpliceSimple = new GuiRNAalterSpliceSimple();
+				jTabbedPane1.addTab("ASD", guiRNAautoSpliceSimple);
 				
 //				guiUpdateDB = new GuiUpdateDB();
 //				jTabbedPane1.addTab("UpdateDB", guiUpdateDB);
+				
+				
+				
+				
+				
+				
+//				guiFastQFanwei = new GuiFastQFanwei();
+//				jTabbedPane1.addTab("FilterAndMapping", null, guiFastQFanwei, null);
+//				
+//				guiSamToBam = new GuiSamToBam();
+//				jTabbedPane1.addTab("SamConvert", null, guiSamToBam, null);
+//				
+//				guiSnpCalling = new GuiSnpCalling();
+//				jTabbedPane1.add("VariantDetection", guiSnpCalling);
+//				
+//				guiSnpFilterSimple = new GuiSnpFilterSimple();
+//				jTabbedPane1.addTab("DiferentialVariation", guiSnpFilterSimple);
+//				
+//				guiAnnoPeak = new GuiAnnoPeak();
+//				jTabbedPane1.addTab("VariationAnnotation", null, guiAnnoPeak, null);
+//				
+//				guiPeakStatistics = new GuiPeakStatistics();
+//				jTabbedPane1.addTab("PeakStatistics", guiPeakStatistics);
 			}
 			pack();
 			this.setSize(1150, 750);
