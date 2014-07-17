@@ -52,6 +52,7 @@ public enum EnumReport {
 	GATK("GATK_result",null),
 	
 	GeneAnno("GeneAnno_result",null),
+	Blast("Blast_result", null),
 	
 	Degree("Degree_result", null),
 	

@@ -261,7 +261,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			}
 		}
 		if (guiRNAautoSplice != null) {
-			guiRNAautoSplice.setMessage("Congratulations! Enjoy your PASH.");
+			guiRNAautoSplice.setMessage("Congratulations! Enjoy your CASH.");
 			guiRNAautoSplice.done(null);
 		}
 	

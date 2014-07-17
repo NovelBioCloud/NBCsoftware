@@ -1,12 +1,14 @@
 package com.novelbio.nbcgui.controlquery;
 
+import java.util.List;
+
+import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.annotation.blast.BlastNBC;
 import com.novelbio.analysis.annotation.blast.BlastStatistics;
 import com.novelbio.analysis.annotation.blast.BlastType;
-import com.novelbio.database.domain.geneanno.BlastInfo;
 import com.novelbio.listOperate.HistList;
 
-public class CtrlBlast {
+public class CtrlBlast implements IntCmdSoft {
 	BlastNBC blastNBC = new BlastNBC();
 	
 	/**
@@ -82,7 +84,10 @@ public class CtrlBlast {
 			blastStatistics.setBlastResultFile( blastNBC.getResultFile());
 			HistList histEvalue = blastStatistics.getHistEvalue();
 			HistList histIdentity = blastStatistics.getHistIdentity();
-			//TODO
 		}
+	}
+	@Override
+	public List<String> getCmdExeStr() {
+		return blastNBC.getCmdExeStr();
 	}
 }
