@@ -47,7 +47,7 @@ public class CtrlFastQfilter {
 	HashMultimap<String, String> mapPrefix2QCresult = HashMultimap.create();
 	
 	/** 是否检查文件格式 */
-	boolean isCheckFormat;
+	boolean isCheckFormat = true;
 	boolean isJustFastqc = false;
 	
 	/** 设定过滤参数 */

@@ -47,7 +47,7 @@ public class CtrlFastQ {
 	HashMultimap<String, String> mapPrefix2ResultQC = HashMultimap.create();
 	
 	boolean isJustFastqc = false;
-	boolean isCheckFormat = false;
+	boolean isCheckFormat = true;
 	/**
 	 * 得到所有的报告
 	 * @return
