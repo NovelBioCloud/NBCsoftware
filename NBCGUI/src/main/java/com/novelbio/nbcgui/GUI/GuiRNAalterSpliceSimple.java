@@ -20,7 +20,6 @@ import javax.swing.JTextField;
 import com.novelbio.GuiAnnoInfo;
 import com.novelbio.analysis.seq.fasta.SeqHash;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
-import com.novelbio.analysis.seq.genome.gffOperate.GffType;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
@@ -63,7 +62,6 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 	
 	JComboBoxData<String> cmbGroup = new JComboBoxData<String>();
 	private JTextField txtChromFaPath;
-	private JCheckBox chckbxLowMemoryUse;
 	private JLabel lblNewLabel;
 	
 	/**
@@ -117,7 +115,7 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 		btnRun.setBounds(771, 409, 129, 63);
 		add(btnRun);
 		
-		btnOpengtf = new JButton("OpenGTF");
+		btnOpengtf = new JButton("Open(GFF3/GTF)");
 		btnOpengtf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				txtGff.setText(guiFileOpen.openFileName("GTFfile", ""));
@@ -171,6 +169,7 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 		add(btnDeleteCompare);
 		
 		chckbxDisplayAllSplicing = new JCheckBox("Display All Splicing Events");
+		chckbxDisplayAllSplicing.setSelected(true);
 		chckbxDisplayAllSplicing.setBounds(20, 379, 229, 22);
 		add(chckbxDisplayAllSplicing);
 		
@@ -191,7 +190,7 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 		add(txtChromFaPath);
 		txtChromFaPath.setColumns(10);
 		
-		JButton btnOpenSeqPath = new JButton("OpenSeqPath");
+		JButton btnOpenSeqPath = new JButton("GenomeSeq");
 		btnOpenSeqPath.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				txtChromFaPath.setText(guiFileOpen.openFilePathName("", ""));
@@ -199,10 +198,6 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 		});
 		btnOpenSeqPath.setBounds(583, 451, 140, 24);
 		add(btnOpenSeqPath);
-		
-		chckbxLowMemoryUse = new JCheckBox("Low Memory (Note: spend more time)");
-		chckbxLowMemoryUse.setBounds(253, 379, 429, 22);
-		add(chckbxLowMemoryUse);
 		
 		JLabel lblOptiontoFetchSeq = new JLabel("Option:To Fetch Seq");
 		lblOptiontoFetchSeq.setBounds(20, 439, 164, 14);
@@ -212,11 +207,12 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 		lblNewLabel.setBounds(642, 35, 115, 14);
 		add(lblNewLabel);
 		
-		chckbxReconstructIso = new JCheckBox("reconstructISO--slow");
-		chckbxReconstructIso.setBounds(180, 341, 185, 26);
+		chckbxReconstructIso = new JCheckBox("SpliceCons(needs about 8g for humans)");
+		chckbxReconstructIso.setSelected(true);
+		chckbxReconstructIso.setBounds(153, 341, 335, 26);
 		add(chckbxReconstructIso);
 		
-		chckConsiderRepeat = new JCheckBox("Consider Repeat");
+		chckConsiderRepeat = new JCheckBox("Consider Replications");
 		chckConsiderRepeat.setBounds(638, 341, 185, 26);
 		add(chckConsiderRepeat);
 		
@@ -232,7 +228,11 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 				changeSclCompareGroup();
 			}
 		});
-		
+		cmbGroup.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				changeSclCompareGroup();
+			}
+		});
 		scrlCompare.setTitle(new String[] {"group1", "group2"});
 		scrlCompare.setItem(0, cmbGroup);
 		scrlCompare.setItem(1, cmbGroup);
@@ -247,7 +247,7 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 	/** 如果txt存在，优先获得txt对应的gtf文件*/
 	private GffHashGene getGffhashGene() {
 		GffHashGene gffHashGeneResult = new GffHashGene();
-		gffHashGeneResult.setGffInfo(GffType.GTF, txtGff.getText());
+		gffHashGeneResult.setGffInfo(txtGff.getText());
 		gffHashGeneResult.run();
 		return gffHashGeneResult;
 	}
@@ -259,22 +259,27 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 		if (!gffHashGene.isRunning()) {
 			setInfo("Finished Reading GTF File");
 		} else {
-			setInfo(" PASH Is Interrupted Because Reading GTF File Encounters Error");
+			setInfo(" CASH Is Interrupted Because Reading GTF File Encounters Error");
 			return;
 		}
 			
 		ctrlSplicing.setGffHashGene(getGffhashGene());
-		try {
-			SeqHash seqHash = new SeqHash(txtChromFaPath.getText(), "");
-			ctrlSplicing.setSeqHash(seqHash);
-		} catch (Exception e) { }
+		String seqFile = txtChromFaPath.getText();
+		if (FileOperate.isFileOrDirectoryExist(seqFile)) {
+			try {
+				SeqHash seqHash = new SeqHash(seqFile, "");
+				ctrlSplicing.setSeqHash(seqHash);
+			} catch (Exception e) { }
+
+		}
+
 
 		ctrlSplicing.setDisplayAllEvent(chckbxDisplayAllSplicing.isSelected());
 		String outFile = txtSaveTo.getText();
 		ctrlSplicing.setOutFile(outFile);
 		ctrlSplicing.setLsBam2Prefix(scrlBam.getLsDataInfo());
 		ctrlSplicing.setLsCompareGroup(scrlCompare.getLsDataInfo());
-		ctrlSplicing.setMemoryLow(chckbxLowMemoryUse.isSelected());
+//		ctrlSplicing.setMemoryLow(chckbxLowMemoryUse.isSelected());
 		ctrlSplicing.setReconstructIso(chckbxReconstructIso.isSelected());
 		ctrlSplicing.setCombine(!chckConsiderRepeat.isSelected());
 		//TODO
@@ -348,14 +353,14 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 		btnRun.setEnabled(true);
 	}
 	public void setMessage(String string) {
-		JOptionPane.showMessageDialog(null, string, "Thanks using ASD", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, string, "Thanks using CASH", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	private void changeSclCompareGroup() {
 		ArrayList<String[]> lsSnp2Prefix = scrlBam.getLsDataInfo();
 		Map<String, String> mapString2Value = new HashMap<String, String>();
 		for (String[] snp2prefix : lsSnp2Prefix) {
-			mapString2Value.put(snp2prefix[2], snp2prefix[2]);
+			mapString2Value.put(snp2prefix[1], snp2prefix[1]);
 		}
 		cmbGroup.setMapItem(mapString2Value);
 	}

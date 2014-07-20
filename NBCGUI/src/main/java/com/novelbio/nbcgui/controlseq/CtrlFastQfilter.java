@@ -102,18 +102,6 @@ public class CtrlFastQfilter {
 	public FastQ[] getFastQLRfiltered() {
 		return fastQLRfiltered;
 	}
-	/** 返回过滤好的文件，并组装成适当的格式 */
-	public List<List<String>>getLsFastQLRfiltered() {
-		List<List<String>> lslsFastq = new ArrayList<>();
-		List<String> lsFastqLeft = new ArrayList<>();
-		List<String> lsFastqRight = new ArrayList<>();
-		lslsFastq.add(lsFastqLeft); lslsFastq.add(lsFastqRight);
-		lsFastqLeft.add(fastQLRfiltered[0].getReadFileName());
-		if (fastQLRfiltered[1] != null) {
-			lsFastqRight.add(fastQLRfiltered[1].getReadFileName());
-		}
-		return lslsFastq;
-	}
 	public void setFastQCbefore(FastQC[] fastQCbefore) {
 		this.fastQCbefore = fastQCbefore;
 	}

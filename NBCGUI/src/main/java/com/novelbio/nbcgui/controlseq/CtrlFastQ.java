@@ -180,23 +180,37 @@ public class CtrlFastQ {
 				continue;
 			}
 			CtrlFastQfilter ctrlFastQfilter = (CtrlFastQfilter)SpringFactory.getFactory().getBean("ctrlFastQfilter");
-
+			boolean isRunFilter = false;
 			if (!isJustFastqc) {
 				ctrlFastQfilter.setFastQfilterParam(fastQfilter);
 				String[] fileName = createCombineFQname(fastQfilter.isFiltered(), outFilePrefix, prefix, lsFastQLR, false);
 				//文件存在则跳过
-				if (FileOperate.isFileExistAndBigThanSize(fileName[0], 1_000_000)) {
-					continue;
+				if (!FileOperate.isFileExistAndBigThanSize(fileName[0], 10)) {
+					isRunFilter = true;
 				}
 				ctrlFastQfilter.setFastQLRfilteredOut(createCombineFastq(fastQfilter.isFiltered(), outFilePrefix, prefix, lsFastQLR));
 			} else {
 				String filePic = CtrlFastQfilter.getFastQCPicName(outFilePrefix + prefix);
 				//文件存在则跳过
-				if (FileOperate.isFileExistAndBigThanSize(filePic, 10)) {
-					continue;
+				if (!FileOperate.isFileExistAndBigThanSize(filePic, 10)) {
+					isRunFilter = true;
 				}
 			}
 			
+			if (!isRunFilter) {
+				String[] fileNameFinal = createCombineFQname(fastQfilter.isFiltered(), outFilePrefix, prefix, lsFastQLR, false);
+				List<List<String>> lsLR = new ArrayList<>();
+				List<String> lsLeft = new ArrayList<>();
+				lsLeft.add(fileNameFinal[0]);
+				lsLR.add(lsLeft);
+				if (FileOperate.isFileExistAndBigThanSize(fileNameFinal[1], 0)) {
+					List<String> lsRight = new ArrayList<>();
+					lsRight.add(fileNameFinal[1]);
+					lsLR.add(lsRight);
+				}
+				mapCondition2LRFiltered.put(prefix, lsLR);
+				continue;
+			}
 			ctrlFastQfilter.setOutFilePrefix(outFilePrefix);
 			ctrlFastQfilter.setPrefix(prefix);
 			ctrlFastQfilter.setLsFastQLR(lsFastQLR);
@@ -210,19 +224,26 @@ public class CtrlFastQ {
 			ctrlFastQfilter.setJustFastqc(isJustFastqc);
 			
 			ctrlFastQfilter.filteredAndCombineReads();
+			List<List<String>> lsLR = new ArrayList<>();
 			if (!isJustFastqc) {
 				String[] fileNameTmp = createCombineFQname(fastQfilter.isFiltered(), outFilePrefix, prefix, lsFastQLR, true);
 				String[] fileNameFinal = createCombineFQname(fastQfilter.isFiltered(), outFilePrefix, prefix, lsFastQLR, false);
 				FileOperate.moveFile(true, fileNameTmp[0], fileNameFinal[0]);
-				if (FileOperate.isFileExistAndBigThanSize(fileNameTmp[1], 1_000_000)) {
+				List<String> lsLeft = new ArrayList<>();
+				lsLeft.add(fileNameFinal[0]);
+				lsLR.add(lsLeft);
+				if (FileOperate.isFileExistAndBigThanSize(fileNameTmp[1], 0)) {
 					FileOperate.moveFile(true, fileNameTmp[1], fileNameFinal[1]);
+					List<String> lsRight = new ArrayList<>();
+					lsRight.add(fileNameFinal[1]);
+					lsLR.add(lsRight);
 				}
 			}
 			ctrlFastQfilter.saveFastQC(outFilePrefix + prefix);
 			
 			lsReportQCs.add(ctrlFastQfilter.getReportQC());
 			if (!isJustFastqc) {
-				mapCondition2LRFiltered.put(prefix, ctrlFastQfilter.getLsFastQLRfiltered());
+				mapCondition2LRFiltered.put(prefix, lsLR);
 			}
 			
 			addSupQCresult(prefix, ctrlFastQfilter.getMapPrefix2QCresult());
