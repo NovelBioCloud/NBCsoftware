@@ -254,7 +254,7 @@ public class CtrlFastQ {
 		if (FileOperate.isFileExist(totalExcelPath)) {
 			lsSummary.remove(0);
 		}else{
-			FileOperate.createFolders(FileOperate.getParentPathName(totalExcelPath));
+			FileOperate.createFolders(FileOperate.getParentPathNameWithSep(totalExcelPath));
 		}
 		txtWrite = new TxtReadandWrite(totalExcelPath, true);
 		txtWrite.ExcelWrite(lsSummary);

@@ -312,7 +312,7 @@ public class GuiGoMultiJPanel extends JPanel{
 				for (String[] fileIn2Out : jScrollPaneInput.getLsDataInfo()) {
 					String saveTo = txtSaveToPathAndPrefix.getText();
 					if (saveTo == null || saveTo.equals("")) {
-						saveTo = FileOperate.getParentPathName(fileIn2Out[0]);
+						saveTo = FileOperate.getParentPathNameWithSep(fileIn2Out[0]);
 					}
 					saveTo = saveTo + fileIn2Out[1];
 					if (chckbxGoAnalysis.isSelected()) {

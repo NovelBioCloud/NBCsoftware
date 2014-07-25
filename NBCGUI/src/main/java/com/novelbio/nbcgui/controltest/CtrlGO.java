@@ -67,7 +67,7 @@ public class CtrlGO extends CtrlGOPath {
 		if (goAlgorithm != GoAlgorithm.novelgo) {
 			String goMapFileSource = FileOperate.changeFileSuffix(PathDetail.getRworkspace() + "topGO/tGOall_elim_10_def.pdf", "_"+prix, null);
 			String goMapFileTargetName = FileOperate.getFileNameSep(excelPath)[0] + prix + "GoMap.pdf";
-			FileOperate.moveFile(goMapFileSource, FileOperate.getParentPathName(excelPath), goMapFileTargetName, true);
+			FileOperate.moveFile(goMapFileSource, FileOperate.getParentPathNameWithSep(excelPath), goMapFileTargetName, true);
 		}
 	}
 	

@@ -137,7 +137,7 @@ public class CtrlDifGene implements IntCmdSoft {
 			xdocTmpltExcel.addExcel(string, 1);
 			lsTmpltExcels.add(xdocTmpltExcel);
 		}
-		String outFolder = FileOperate.getParentPathName(lsResult.get(0));
+		String outFolder = FileOperate.getParentPathNameWithSep(lsResult.get(0));
 		reportDifGene.setLsTmpltExcels(lsTmpltExcels);
 		reportDifGene.writeAsFile(outFolder);
 		return reportDifGene;

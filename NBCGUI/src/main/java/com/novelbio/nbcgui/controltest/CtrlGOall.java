@@ -224,7 +224,7 @@ public class CtrlGOall implements CtrlTestGOInt {
 				}
 				BufferedImage bufferedImage = functionTest.getImagePvalue();
 				lsGOimage.add(bufferedImage);
-				excelSavePath = FileOperate.getParentPathName(ctrlGO.getSaveExcelPrefix());
+				excelSavePath = FileOperate.getParentPathNameWithSep(ctrlGO.getSaveExcelPrefix());
 			}
 			BufferedImage bfImageCombine = ImageUtils.combineBfImage(true, 30, lsGOimage);
 			String picNameLog2P = excelSavePath +  "GO-Analysis-Log2P_" + prefix + "_" + getSavePrefix() + ".png";

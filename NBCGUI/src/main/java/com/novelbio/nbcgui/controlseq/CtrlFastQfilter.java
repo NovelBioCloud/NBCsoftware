@@ -140,7 +140,7 @@ public class CtrlFastQfilter {
 	}
 	
 	public static String getFastQCPicName(String savePathAndPrefix) {
-		String fileName = FileOperate.getParentPathName(savePathAndPrefix) + FOLDER_NAME + FileOperate.getFileName(savePathAndPrefix);
+		String fileName = FileOperate.getParentPathNameWithSep(savePathAndPrefix) + FOLDER_NAME + FileOperate.getFileName(savePathAndPrefix);
 		fileName = FastQC.getQualityScoreFileName(fileName + "_BeforeFilter");
 		return fileName;
 	}
@@ -152,8 +152,8 @@ public class CtrlFastQfilter {
 	 */
 	public HashMultimap<String, String> saveFastQC(String savePathAndPrefix) {
 		mapPrefix2QCresult.clear();
-		String fileName = FileOperate.getParentPathName(savePathAndPrefix) + FOLDER_NAME + FileOperate.getFileName(savePathAndPrefix);
-		FileOperate.createFolders(FileOperate.getParentPathName(fileName) );
+		String fileName = FileOperate.getParentPathNameWithSep(savePathAndPrefix) + FOLDER_NAME + FileOperate.getFileName(savePathAndPrefix);
+		FileOperate.createFolders(FileOperate.getParentPathNameWithSep(fileName) );
 		HashMultimap<String, String> mapParam = HashMultimap.create();
 		try {
 			List<String> lsPic = null, lsTable = null;

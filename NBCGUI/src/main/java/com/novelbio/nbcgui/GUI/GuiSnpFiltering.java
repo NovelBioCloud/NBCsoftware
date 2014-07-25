@@ -290,7 +290,7 @@ public class GuiSnpFiltering extends JPanel {
 		if (fileName.endsWith("/") || fileName.endsWith("\\")) {
 			fileName = fileName + "filteredsnp.txt";
 		}
-		FileOperate.createFolders(FileOperate.getParentPathName(fileName));
+		FileOperate.createFolders(FileOperate.getParentPathNameWithSep(fileName));
 		snpSomaticFinder.writeToFile(fileName);
 	}
 }
