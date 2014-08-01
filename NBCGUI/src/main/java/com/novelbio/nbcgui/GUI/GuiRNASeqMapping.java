@@ -187,7 +187,9 @@ public class GuiRNASeqMapping extends JPanel {
 				ctrlRNAmap = new CtrlRNAmap(cmbRNAsoftware.getSelectedValue());
 
 				Species species = cmbSpecies.getSelectedValue();
-				species.setVersion(cmbSpeciesVersion.getSelectedValue());
+				if (species != null && species.getTaxID() != 0) {
+					species.setVersion(cmbSpeciesVersion.getSelectedValue());
+				}
 				
 				int threadNum = 4;
 				try { threadNum = Integer.parseInt(txtThreadNum.getText()); } catch (Exception e1) { }
