@@ -78,8 +78,8 @@ public class CtrlBlast implements IntCmdSoft {
 	}
 	
 	public void blast() {
-		boolean isSucess = blastNBC.blast();
-		if (isSucess && blastNBC.getResultType() == BlastNBC.ResultType_Simple) {
+		blastNBC.blast();
+		if (blastNBC.getResultType() == BlastNBC.ResultType_Simple) {
 			BlastStatistics blastStatistics = new BlastStatistics();
 			blastStatistics.setBlastResultFile( blastNBC.getResultFile());
 			HistList histEvalue = blastStatistics.getHistEvalue();

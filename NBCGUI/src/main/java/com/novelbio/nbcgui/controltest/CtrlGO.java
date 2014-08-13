@@ -37,7 +37,7 @@ public class CtrlGO extends CtrlGOPath {
 		}
 	}
 	
-	public String getTestMethod(){
+	public String getTestMethod() {
 		if (goAlgorithm != GoAlgorithm.novelgo) {
 			return goAlgorithm.name();
 		} else {

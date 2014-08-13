@@ -24,9 +24,7 @@ public interface CtrlTestPathInt {
 	 * @param fileName
 	 */
 	public void setLsBG(String fileName);
-	
-	public ReportPathWay getReportPathWay();
-	
+		
 	public void setIsCluster(boolean isCluster);
 
 	public List<String> saveExcel(String excelPath);

@@ -51,7 +51,7 @@ public abstract class ReportBase  implements Cloneable, Serializable {
 	 * @param savePath 保存的路径，会添加.report目录
 	 * @return
 	 */
-	public String writeAsFile(String savePath){
+	public String writeAsFile(String savePath) {
 		this.savePath = savePath;
 		String reportPath = FileOperate.addSep(savePath) + ".report";
 		FileOperate.createFolders(reportPath);

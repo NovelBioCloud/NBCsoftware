@@ -78,7 +78,8 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 				GUIanalysisForm inst = new GUIanalysisForm();
 				inst.setLocationRelativeTo(null);
 				inst.setVisible(true);
-				inst.setTitle("CASH v 1.0.12");
+//				inst.setTitle("CASH v 1.0.12");
+				inst.setTitle("AgroMarker Finder");
 				Image im = Toolkit.getDefaultToolkit().getImage("/home/zong0jie/desktop/logo.png");
 				inst.setIconImage(im);
 				inst.setResizable(false); 
@@ -207,30 +208,30 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 //				
 //				guiSnpFiltering = new GuiSnpFiltering();
 //				jTabbedPane1.addTab("snpFilter", guiSnpFiltering);
-				
-				guiRNAautoSpliceSimple = new GuiRNAalterSpliceSimple();
-				jTabbedPane1.addTab("CASH", guiRNAautoSpliceSimple);
+//				
+//				guiRNAautoSpliceSimple = new GuiRNAalterSpliceSimple();
+//				jTabbedPane1.addTab("CASH", guiRNAautoSpliceSimple);
 				
 //				guiUpdateDB = new GuiUpdateDB();
 //				jTabbedPane1.addTab("UpdateDB", guiUpdateDB);
 //				
-//				guiFastQFanwei = new GuiFastQFanwei();
-//				jTabbedPane1.addTab("FilterAndMapping", null, guiFastQFanwei, null);
-//				
-//				guiSamToBam = new GuiSamToBam();
-//				jTabbedPane1.addTab("SamConvert", null, guiSamToBam, null);
-//				
-//				guiSnpCalling = new GuiSnpCalling();
-//				jTabbedPane1.add("VariantDetection", guiSnpCalling);
-//				
-//				guiSnpFilterSimple = new GuiSnpFilterSimple();
-//				jTabbedPane1.addTab("DiferentialVariation", guiSnpFilterSimple);
-//				
-//				guiAnnoPeak = new GuiAnnoPeak();
-//				jTabbedPane1.addTab("VariationAnnotation", null, guiAnnoPeak, null);
-//				
-//				guiPeakStatistics = new GuiPeakStatistics();
-//				jTabbedPane1.addTab("PeakStatistics", guiPeakStatistics);
+				guiFastQFanwei = new GuiFastQFanwei();
+				jTabbedPane1.addTab("FilterAndMapping", null, guiFastQFanwei, null);
+				
+				guiSamToBam = new GuiSamToBam();
+				jTabbedPane1.addTab("SamConvert", null, guiSamToBam, null);
+				
+				guiSnpCalling = new GuiSnpCalling();
+				jTabbedPane1.add("VariantDetection", guiSnpCalling);
+				
+				guiSnpFilterSimple = new GuiSnpFilterSimple();
+				jTabbedPane1.addTab("DiferentialVariation", guiSnpFilterSimple);
+				
+				guiAnnoPeak = new GuiAnnoPeak();
+				jTabbedPane1.addTab("VariationAnnotation", null, guiAnnoPeak, null);
+				
+				guiPeakStatistics = new GuiPeakStatistics();
+				jTabbedPane1.addTab("PeakStatistics", guiPeakStatistics);
 			}
 			pack();
 			this.setSize(1150, 750);

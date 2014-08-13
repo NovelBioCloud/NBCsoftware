@@ -1,11 +1,6 @@
 package com.novelbio.nbcReport.Params;
 
-import net.sf.picard.annotation.GeneAnnotationReader;
-
-import com.novelbio.analysis.coexp.simpCoExp.DegreeAnnotation;
 import com.novelbio.base.PathDetail;
-
-
 
 
 /**
@@ -26,6 +21,8 @@ public enum EnumReport {
 	GO_Cluster_Type("GO_Cluster_Type",new ReportGOClusterType()),
 	
 	PathWay("PathWayAnalysis_result",new ReportPathWay()),
+	COG("COGAnalysis_result",null),
+	
 	SamStatistics("SamStatistic_result",new ReportSamAndRPKM()),
 	NCRNAstatistics("ncrnaStatistic_result",null),
 	FastQC("QualityControl_result",new ReportQC()),

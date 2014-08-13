@@ -20,7 +20,6 @@ import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.database.model.modgeneid.GeneID;
 import com.novelbio.nbcReport.EnumTableType;
-import com.novelbio.nbcReport.XdocTmpltExcel;
 /**
  * 考虑添加进度条
  * @author zong0jie
