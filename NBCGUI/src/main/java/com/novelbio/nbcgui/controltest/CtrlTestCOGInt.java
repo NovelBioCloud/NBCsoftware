@@ -8,7 +8,7 @@ import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.nbcReport.XdocTmpltExcel;
 import com.novelbio.nbcReport.Params.ReportPathWay;
 
-public interface CtrlTestPathInt {
+public interface CtrlTestCOGInt {
 	public void setTaxID(int taxID);
 	/** lsAccID2Value  arraylist-string[] 若为string[2],则第二个为上下调关系，判断上下调
 	 * 若为string[1] 则跑全部基因作分析
@@ -24,9 +24,7 @@ public interface CtrlTestPathInt {
 	 * @param fileName
 	 */
 	public void setLsBG(String fileName);
-	
-	public ReportPathWay getReportPathWay();
-	
+		
 	public void setIsCluster(boolean isCluster);
 
 	public List<String> saveExcel(String excelPath);

@@ -204,7 +204,7 @@ public class CtrlRseQC implements IntCmdSoft {
 			InnerDistance innerDistance = new InnerDistance(inFile, outPath, bedFile);
 			innerDistance.setImageLowerBound(innerDis_imageLowerBound);
 			innerDistance.setImageUpBound(innerDis_imageUpBound);
-			innerDistance.setImageStepLenght(innerDis_imageStepLenght);
+			innerDistance.setImageStepLength(innerDis_imageStepLenght);
 			lsCmd.addAll(innerDistance.getCmdExeStr());
 			innerDistance.run();
 		}
@@ -240,7 +240,7 @@ public class CtrlRseQC implements IntCmdSoft {
 			rPKMsaSaturation.setStrandSpecific(rpkmSat_strandSpecific);
 			rPKMsaSaturation.setSampleLowerBound(juncSat_sampleLowerBound);
 			rPKMsaSaturation.setSampleUpBound(juncSat_sampleUpBound);
-			rPKMsaSaturation.setSampleStepLenght(juncSat_sampleStepLenght);
+			rPKMsaSaturation.setSampleStepLength(juncSat_sampleStepLenght);
 			lsCmd.addAll(rPKMsaSaturation.getCmdExeStr());
 			rPKMsaSaturation.run();
 		}

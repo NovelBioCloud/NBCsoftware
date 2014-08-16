@@ -101,116 +101,116 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 				getContentPane().add(jTabbedPane1, BorderLayout.CENTER);
 				jTabbedPane1.setPreferredSize(new java.awt.Dimension(1035, 682));
 				
-//				guiBlastJpanel = new GuiBlastJpanel();
-//				jTabbedPane1.addTab("Query", null, guiBlastJpanel, null);
-//				
-//				guiAnnoGene = new GuiAnnoGene();
-//				jTabbedPane1.addTab("GeneAnno", null, guiAnnoGene, null);
-//				
-//				guiGoJPanel= new GuiGoJPanel();
-//				jTabbedPane1.addTab("GO", null, guiGoJPanel, null);
-//				
-//				guiPathJpanel = new GuiPathJpanel();
-//				jTabbedPane1.addTab("Path", null, guiPathJpanel, null);
-//				
-//				guiGoMultiJPanel = new GuiGoMultiJPanel();
-//				jTabbedPane1.addTab("GO_Path", guiGoMultiJPanel);
-//				
-//				guiKegArrayDownload = new GuiKegArrayDownload();
-//				jTabbedPane1.addTab("KegArrayDownload", guiKegArrayDownload);
-//				
-//				guiCelNormJpanel = new GuiAffyCelNormJpanel();
-//				jTabbedPane1.addTab("AffyCelNormalization", null, guiCelNormJpanel, null);
-//				
-//				guiDifGene = new GuiDifGeneJpanel();
-//				jTabbedPane1.addTab("DifGene", null, guiDifGene, null);
-//				
-//				guiVolcanoPlot = new GuiVolcanoPlot();
-//				jTabbedPane1.addTab("Volcano", guiVolcanoPlot);
-//				
-//				guilncLocation = new GuilncLocation();
-//				jTabbedPane1.addTab("LncLocation", guilncLocation);
-//				
-//				guiSrcToTrg = new GuiSrcToTrgJpanel();
-//				jTabbedPane1.addTab("GeneAct", null, guiSrcToTrg, null);
-//			
-//				guiGeneNetWork = new GuiGeneNetWork();
-//				jTabbedPane1.addTab("NCBIinteract", null, guiGeneNetWork, null);
-//
-//				guiPearson = new GuiPearsonJpanel();
-//				jTabbedPane1.addTab("CoExp", null, guiPearson, null);
-//				
-//				guiDegreeAdd = new GuiDegreeAddJpanel();
-//				jTabbedPane1.addTab("Degree", null, guiDegreeAdd, null);
-//				
-//				guiFastQ = new GuiFastQJpanel();
-//				jTabbedPane1.addTab("FilterAndMapping", null, guiFastQ, null);
-//				
-//
-//				
-//				guiSamToBed = new GuiSamToBed();
-//				jTabbedPane1.addTab("SamToBed", null, guiSamToBed, null);
-//				
-//				
-//				
-//				guiDGEgetvalue = new GuiDGEgetvalue();
-//				jTabbedPane1.addTab("DGEgetValue", null, guiDGEgetvalue, null);
-//				
-//				guiRNASeqMapping = new GuiRNASeqMapping();
-//				jTabbedPane1.addTab("RNAseqMap", guiRNASeqMapping);
-//				
-//				guiRNAAssembly = new GuiRNAAssembly();
-//				jTabbedPane1.addTab("RNAassembly", guiRNAAssembly);
-//				
-//				guiTranscriptomeCufflinks = new GuiTranscriptomeCufflinks();
-//				jTabbedPane1.addTab("cufflinks", guiTranscriptomeCufflinks);
-//				
-//				guiCuffdiff = new GuiCuffdiff();
-//				jTabbedPane1.addTab("CuffDiff", null, guiCuffdiff, null);
-//				
-//				guiSamStatistics = new GuiSamStatistics();
-//				jTabbedPane1.addTab("SamStatisticsAndRPKM", guiSamStatistics);
-//				
-//				guiRNAautoSplice = new GuiRNAautoSplice();
-//				jTabbedPane1.addTab("RNAalterSplice", guiRNAautoSplice);
-//				
-//				guiBlast = new GuiBlast();
-//				jTabbedPane1.addTab("Blast", null, guiBlast, null);
-//				
-//				guiMiRNASeq = new GuiMiRNASeq();
-//				jTabbedPane1.addTab("miRNA", null, guiMiRNASeq, null);
-//				
-//				guiMirnaTargetPredict = new GuiMirnaTargetPredict();
-//				jTabbedPane1.addTab("miRNAtarget", null, guiMirnaTargetPredict, null);
-//				
-//				guiGetSeq = new GuiGetSeq();
-//				jTabbedPane1.add("GetSeq", guiGetSeq);
-//				
-//				guiBedTssAndChrome = new GuiBedTssAndChrome();
-//				jTabbedPane1.add("Tss", guiBedTssAndChrome);
-//				
-//
-//				
-//				guiTools = new GuiToolsJpanel();
-//				jTabbedPane1.addTab("Tools", null, guiTools, null);
-//				
-//				guiFilterDifGene = new GuiFilterDifGene();
-//				jTabbedPane1.addTab("filterGene", null, guiFilterDifGene, null);
-//				
-//				guiPeakCalling = new GuiPeakCalling();
-//				jTabbedPane1.addTab("PeakCalling", guiPeakCalling);
-//				
-//				guiMotif = new GuiMotif();
-//				jTabbedPane1.addTab("MotifScan", guiMotif);
-//				
-//				guiSpeciesInfo = new GuiSpeciesInfo();
-//				jTabbedPane1.addTab("SpeciesInfo", guiSpeciesInfo);
-//				
-//				guiSnpFiltering = new GuiSnpFiltering();
-//				jTabbedPane1.addTab("snpFilter", guiSnpFiltering);
-//				
-//				guiRNAautoSpliceSimple = new GuiRNAalterSpliceSimple();
-//				jTabbedPane1.addTab("CASH", guiRNAautoSpliceSimple);
+				guiBlastJpanel = new GuiBlastJpanel();
+				jTabbedPane1.addTab("Query", null, guiBlastJpanel, null);
+				
+				guiAnnoGene = new GuiAnnoGene();
+				jTabbedPane1.addTab("GeneAnno", null, guiAnnoGene, null);
+				
+				guiGoJPanel= new GuiGoJPanel();
+				jTabbedPane1.addTab("GO", null, guiGoJPanel, null);
+				
+				guiPathJpanel = new GuiPathJpanel();
+				jTabbedPane1.addTab("Path", null, guiPathJpanel, null);
+				
+				guiGoMultiJPanel = new GuiGoMultiJPanel();
+				jTabbedPane1.addTab("GO_Path", guiGoMultiJPanel);
+				
+				guiKegArrayDownload = new GuiKegArrayDownload();
+				jTabbedPane1.addTab("KegArrayDownload", guiKegArrayDownload);
+				
+				guiCelNormJpanel = new GuiAffyCelNormJpanel();
+				jTabbedPane1.addTab("AffyCelNormalization", null, guiCelNormJpanel, null);
+				
+				guiDifGene = new GuiDifGeneJpanel();
+				jTabbedPane1.addTab("DifGene", null, guiDifGene, null);
+				
+				guiVolcanoPlot = new GuiVolcanoPlot();
+				jTabbedPane1.addTab("Volcano", guiVolcanoPlot);
+				
+				guilncLocation = new GuilncLocation();
+				jTabbedPane1.addTab("LncLocation", guilncLocation);
+				
+				guiSrcToTrg = new GuiSrcToTrgJpanel();
+				jTabbedPane1.addTab("GeneAct", null, guiSrcToTrg, null);
+			
+				guiGeneNetWork = new GuiGeneNetWork();
+				jTabbedPane1.addTab("NCBIinteract", null, guiGeneNetWork, null);
+
+				guiPearson = new GuiPearsonJpanel();
+				jTabbedPane1.addTab("CoExp", null, guiPearson, null);
+				
+				guiDegreeAdd = new GuiDegreeAddJpanel();
+				jTabbedPane1.addTab("Degree", null, guiDegreeAdd, null);
+				
+				guiFastQ = new GuiFastQJpanel();
+				jTabbedPane1.addTab("FilterAndMapping", null, guiFastQ, null);
+				
+
+				
+				guiSamToBed = new GuiSamToBed();
+				jTabbedPane1.addTab("SamToBed", null, guiSamToBed, null);
+				
+				
+				
+				guiDGEgetvalue = new GuiDGEgetvalue();
+				jTabbedPane1.addTab("DGEgetValue", null, guiDGEgetvalue, null);
+				
+				guiRNASeqMapping = new GuiRNASeqMapping();
+				jTabbedPane1.addTab("RNAseqMap", guiRNASeqMapping);
+				
+				guiRNAAssembly = new GuiRNAAssembly();
+				jTabbedPane1.addTab("RNAassembly", guiRNAAssembly);
+				
+				guiTranscriptomeCufflinks = new GuiTranscriptomeCufflinks();
+				jTabbedPane1.addTab("cufflinks", guiTranscriptomeCufflinks);
+				
+				guiCuffdiff = new GuiCuffdiff();
+				jTabbedPane1.addTab("CuffDiff", null, guiCuffdiff, null);
+				
+				guiSamStatistics = new GuiSamStatistics();
+				jTabbedPane1.addTab("SamStatisticsAndRPKM", guiSamStatistics);
+				
+				guiRNAautoSplice = new GuiRNAautoSplice();
+				jTabbedPane1.addTab("RNAalterSplice", guiRNAautoSplice);
+				
+				guiBlast = new GuiBlast();
+				jTabbedPane1.addTab("Blast", null, guiBlast, null);
+				
+				guiMiRNASeq = new GuiMiRNASeq();
+				jTabbedPane1.addTab("miRNA", null, guiMiRNASeq, null);
+				
+				guiMirnaTargetPredict = new GuiMirnaTargetPredict();
+				jTabbedPane1.addTab("miRNAtarget", null, guiMirnaTargetPredict, null);
+				
+				guiGetSeq = new GuiGetSeq();
+				jTabbedPane1.add("GetSeq", guiGetSeq);
+				
+				guiBedTssAndChrome = new GuiBedTssAndChrome();
+				jTabbedPane1.add("Tss", guiBedTssAndChrome);
+				
+
+				
+				guiTools = new GuiToolsJpanel();
+				jTabbedPane1.addTab("Tools", null, guiTools, null);
+				
+				guiFilterDifGene = new GuiFilterDifGene();
+				jTabbedPane1.addTab("filterGene", null, guiFilterDifGene, null);
+				
+				guiPeakCalling = new GuiPeakCalling();
+				jTabbedPane1.addTab("PeakCalling", guiPeakCalling);
+				
+				guiMotif = new GuiMotif();
+				jTabbedPane1.addTab("MotifScan", guiMotif);
+				
+				guiSpeciesInfo = new GuiSpeciesInfo();
+				jTabbedPane1.addTab("SpeciesInfo", guiSpeciesInfo);
+				
+				guiSnpFiltering = new GuiSnpFiltering();
+				jTabbedPane1.addTab("snpFilter", guiSnpFiltering);
+				
+				guiRNAautoSpliceSimple = new GuiRNAalterSpliceSimple();
+				jTabbedPane1.addTab("CASH", guiRNAautoSpliceSimple);
 				
 //				guiUpdateDB = new GuiUpdateDB();
 //				jTabbedPane1.addTab("UpdateDB", guiUpdateDB);

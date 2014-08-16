@@ -21,9 +21,10 @@ import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.genome.GffChrStatistics;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGeneAbs;
-import com.novelbio.analysis.seq.mapping.MapLibrary;
+import com.novelbio.analysis.seq.mapping.Align;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.rnaseq.RPKMcomput;
+import com.novelbio.analysis.seq.sam.AlignSamReading;
 import com.novelbio.analysis.seq.sam.AlignSeqReading;
 import com.novelbio.analysis.seq.sam.AlignmentRecorder;
 import com.novelbio.analysis.seq.sam.BamReadsInfo;
@@ -33,6 +34,7 @@ import com.novelbio.analysis.seq.sam.SamFileStatistics;
 import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
+import com.novelbio.base.dataStructure.Alignment;
 import com.novelbio.base.dataStructure.ArrayOperate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunProcess;
@@ -335,10 +337,11 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			FormatSeq formatSeq = getFileFormat(fileName2Prefix[0]);
 
 			AlignSeq alignSeq = null;
+			AlignSeqReading alignSeqReading = null;
 			if (formatSeq == FormatSeq.SAM || formatSeq == FormatSeq.BAM) {
 				alignSeq = new SamFile(fileName2Prefix[0]);
+				alignSeqReading = new AlignSamReading((SamFile)alignSeq);
 				if (isCalculateExp()) {
-		
 					rpkMcomput.setIsPairend(((SamFile) alignSeq).isPairend());
 					if (strandSpecific == StrandSpecific.UNKNOWN) {
 						BamReadsInfo bamReadsInfo = new BamReadsInfo();
@@ -357,10 +360,10 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 				}				
 			} else if (formatSeq == FormatSeq.BED) {
 				alignSeq = new BedSeq(fileName2Prefix[0]);
+				alignSeqReading = new AlignSeqReading(alignSeq);
 			} else {
 				continue;
 			}
-			AlignSeqReading alignSeqReading = new AlignSeqReading(alignSeq);
 			if (alignSeq.getFileName().endsWith("tophat_sorted.bam")) {
 				String unmapFileName = alignSeq.getFileName().replace("tophat_sorted.bam", "tophat.bam");
 				unmapFileName = FileOperate.changeFilePrefix(unmapFileName, "unmapped_", null);
@@ -368,7 +371,9 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 					alignSeqReading.addSeq(new SamFile(unmapFileName));
 				}
 			}
-		
+//			List<Alignment> lsAlignments = new ArrayList<Alignment>();
+//			lsAlignments.add(new Align("chr3l", 13020716, 13037150));
+//			((AlignSamReading)alignSeqReading).setLsAlignments(lsAlignments);
 			mapPrefix2AlignSeqReadings.put(fileName2Prefix[1], alignSeqReading);
 		}
 		
