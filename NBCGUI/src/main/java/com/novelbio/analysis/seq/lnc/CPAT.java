@@ -1,16 +1,14 @@
 package com.novelbio.analysis.seq.lnc;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-
-
+import java.util.Set;
 
 import com.novelbio.analysis.IntCmdSoft;
-import com.novelbio.analysis.seq.fastq.FastQ;
-import com.novelbio.analysis.seq.fasta.SeqFasta;
-import com.novelbio.analysis.seq.mapping.StrandSpecific;
+import com.novelbio.analysis.seq.genome.GffChrAbs;
+import com.novelbio.analysis.seq.genome.GffChrSeq;
+import com.novelbio.analysis.seq.genome.gffOperate.GffDetailGene.GeneStructure;
 import com.novelbio.base.StringOperate;
 import com.novelbio.base.cmd.CmdOperate;
 import com.novelbio.base.cmd.ExceptionCmd;
@@ -20,249 +18,384 @@ import com.novelbio.base.dataStructure.ArrayOperate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.information.SoftWareInfo;
 import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
+import com.novelbio.database.model.modgeneid.GeneType;
+import com.novelbio.database.model.species.Species;
 
 /**
  * simple script : cpat.py -g lncRNA_candiate.fa -x *_hexamer.table -d *_logit.RData -o  *.result.xls
  * @author bll
- *
  */
-public class CPAT implements IntCmdSoft {  //implements IntCmdSoft
-	String exePath = "";
-	
-	
-	
-	/** 需要预测的序列文件，fasta格式文件 */
-	String lncRNACanFa;
-
-	/** 预先构建的六聚体频率表，格式表头：hexamer conding noncoding；例如：AAAAAAA 0.000647111 0.002072893 */
-	String hexTab;
-	
-	/** 预先构建的训练对数模型，该文件为二进制文件 */
-	String logRData;
-	
-	/** 被分析物种名称，用于给生成的训练集名称 */
-	String species;
-	/** 被分析物种的CDS区域序列文件，fasta格式文件，如果没有, 则用同源物种的代替*/
-	
-	String speCDSFa;
-	
-	/** 被分析物种的non-coding区域序列文件，fasta格式文件，如果没有，则用同源物种的代替 */
-	String speNONCODFa;
-
-	/** 输出文件路径及名称 */
-	String outDir;
-	
-	/** 编码阈值设置  */
-	Double codProb;
-	
-	public static void main(String[] args) {
-		CPAT cpat = new CPAT();
-		
-		//
-	}
-
-	public CPAT() {
-//		SoftWareInfo softWareInfo = new SoftWareInfo(SoftWare.cpat); 
-		//com.novelbio.database.domain.information.SoftWareInfo.SoftWare.cpat
-		
-		CPATDB c = new CPATDB();
-//		this.exePath = softWareInfo.getExePathRun();
+public class CPAT implements IntCmdSoft {
+	static Set<Integer> setModelSpecies = new HashSet<>();
+	static {
+		// 先写在这里把，不方便写入配置文件
+		setModelSpecies.add(9606);
+		setModelSpecies.add(10090);
+		setModelSpecies.add(7227);
+		setModelSpecies.add(7955);
 	}
 	
-	/** 设置CPAT所在路径 */
-	public void setExePath(String exePath) {
-		if (exePath == null || exePath.equals("")) {
+	List<String> lsCmd = new ArrayList<String>();
+	Species species;
+	String speciesName;
+	String fastaNeedPredict;
+	String mRNAseq;
+	String ncRNAseq;
+	String outFile;
+	
+	boolean isModelSpecies;
+	
+	/** 最后设定，设定后如果speciesName、mRNAseq、ncRNAseq等不存在，就会设定这些参数 */
+	public void setSpecies(Species species) {
+		if (species == null || species.getTaxID() == 0) return;
+		this.species = species;
+		setSpeciesInfo(species);
+	}
+	
+	/** 设定mRNAseq、ncRNAseq，如果mRNAseq或ncRNAseq有不存在，并且不是模式生物，则抛出异常 */
+	private void setSpeciesInfo(Species species) {
+		if (StringOperate.isRealNull(speciesName)) {
+			speciesName = species.getCommonName();
+		}
+		if (setModelSpecies.contains(species.getTaxID())) {
+			this.isModelSpecies = true;
 			return;
 		}
-		this.exePath = FileOperate.addSep(exePath);
-	}
-		
-	private String[] getLncRNACanFa() {
-		if (lncRNACanFa == null) {
-			return null;
+		GffChrAbs gffChrAbs = new GffChrAbs(species);
+		checkGffHash(gffChrAbs);
+		mRNAseq = getmRNAFile(gffChrAbs);
+		ncRNAseq = getNcRNAFile(gffChrAbs);
+		if (!FileOperate.isFileExistAndBigThanSize(mRNAseq, 0) || !FileOperate.isFileExistAndBigThanSize(ncRNAseq, 0)) {
+			throw new ExceptionCmd("no mRNAseq or ncRNAseq exist, please check!\nmRNAseq: " + mRNAseq + "\tncRNAseq: " + ncRNAseq);
 		}
-		return new String[]{"-g", lncRNACanFa};
 	}
- 		
-// 		Map<String, String> mapStye2File = new HashMap<>();
+	
+	private void checkGffHash(GffChrAbs gffChrAbs) {
+		if (gffChrAbs.getGffHashGene() == null) {
+			gffChrAbs.close();
+			throw new ExceptionCmd("no Gff File exist in species: " + species.getNameLatin() + "\t" + species.getVersion());
+		} else if (!gffChrAbs.getGffHashGene().isContainNcRNA()) {
+			gffChrAbs.close();
+			throw new ExceptionCmd("no mRNAseq or ncRNAseq exist, please check Gff File: " + gffChrAbs.getGffHashGene().getGffFilename());
+		}
+	}
+	
+	private String getNcRNAFile(GffChrAbs gffChrAbs) {
+		String ncFile = species.getRefseqNCfileDB();
+		if (FileOperate.isFileExistAndBigThanSize(ncFile, 0)) {
+			return ncFile;
+		}
+		String ncRNAfile = getOutFileTmp() + speciesName + "ncRNA.fa";
+		getSeqFile(gffChrAbs, GeneType.ncRNA, ncRNAfile);
+		return ncRNAfile;
+	}
+	
+	private String getmRNAFile(GffChrAbs gffChrAbs) {
+		String mRNAfile = getOutFileTmp() + speciesName + "mRNA.fa";
+		getSeqFile(gffChrAbs, GeneType.mRNA, mRNAfile);
+		gffChrAbs.close();
+		return mRNAfile;
+	}
+	
+	private void getSeqFile(GffChrAbs gffChrAbs, GeneType geneType, String outFile) {
+		GffChrSeq gffChrSeq = new GffChrSeq(gffChrAbs);
+		gffChrSeq.setGeneStructure(GeneStructure.EXON);
+		gffChrSeq.setGeneType(geneType);
+		gffChrSeq.setGetAAseq(false);
+		gffChrSeq.setGeneStructure(GeneStructure.ALLLENGTH);
+		gffChrSeq.setGetAllIso(true);
+		gffChrSeq.setGetIntron(false);
+		gffChrSeq.setGetSeqGenomWide();
+		gffChrSeq.setOutPutFile(outFile);
+		gffChrSeq.run();
+		gffChrSeq = null;
+	}
+	
+	public void setSpeciesName(String speciesName) {
+		this.speciesName = speciesName;
+	}
+	public void setFastaNeedPredict(String fastaNeedPredict) {
+		this.fastaNeedPredict = fastaNeedPredict;
+	}
+	public void setmRNAseq(String mRNAseq) {
+		this.mRNAseq = mRNAseq;
+	}
+	public void setNcRNAseq(String ncRNAseq) {
+		this.ncRNAseq = ncRNAseq;
+	}
+	/** 输出文件名 */
+	public void setOutFile(String outFile) {
+		this.outFile = outFile;
+	}
+	
+	public void predict() {
+		lsCmd.clear();
+		//临时文件夹
+		String outFileTmp = getOutFileTmp();
+		String hexFile = null, rDataFile = null;
+		if (isModelSpecies) {
+			MakeHexamerTab makeHexamerTab = new MakeHexamerTab();
+			makeHexamerTab.setmRNAseq(mRNAseq);
+			makeHexamerTab.setNcRNAseq(ncRNAseq);
+			makeHexamerTab.setOutHexName(outFileTmp + getSpeciesName() + "hextable");
+			makeHexamerTab.run();
+			hexFile = makeHexamerTab.getOutHexFileName();
+			lsCmd.addAll(makeHexamerTab.getCmdExeStr());
+			
+			MakeLogitModel makeLogitModel = new MakeLogitModel();
+			makeLogitModel.setmRNAseq(mRNAseq);
+			makeLogitModel.setNcRNAseq(ncRNAseq);
+			makeLogitModel.setHexamerTable(makeHexamerTab.getOutHexFileName());
+			makeLogitModel.setOutPrefix(outFileTmp + getSpeciesName() + "RData");
+			rDataFile = makeLogitModel.getOutRDataFile();
+			lsCmd.addAll(makeLogitModel.getCmdExeStr());
+		}
+		
+		CPATmain cpaTmain = new CPATmain();
+		cpaTmain.setFastaNeedPredict(fastaNeedPredict);
+		cpaTmain.setHexTab(hexFile);
+		cpaTmain.setLogRData(rDataFile);
+		cpaTmain.setModelSpecies(isModelSpecies);
+		cpaTmain.setOutPrefix(outFileTmp + getSpeciesName() + "cpat");
+		lsCmd.addAll(cpaTmain.getCmdExeStr());
+		//TODO 还没写好输出文件
+	}
+	
+	private String getOutFileTmp() {
+		return FileOperate.getPathName(outFile) + "cpatTmp" + FileOperate.getSepPath();
+	}
+	
+	private String getSpeciesName() {
+		return StringOperate.isRealNull(speciesName) ? "" : speciesName + "_"; 
+	}
+	
+	@Override
+	public List<String> getCmdExeStr() {
+		return lsCmd;
+	}
+	
+	
+}
 
-		public String[] getHexTab() {
- 			if (hexTab == null) {
-// 				mapStye2File.put("exePath",  exePath);
-// 				mapStye2File.put("cds",  speCDSFa);
-// 				mapStye2File.put("non",  speNONCODFa);	
-// 				mapStye2File.put("hexTab",  hexTab);	
- 				CPATDB cpatDB = new CPATDB();
- 		 		cpatDB.runCPATHex( );
- 			} 
- 			return new String[]{"-x", hexTab};
- 		}
-	
-	private String[] getLogRData() {
-		if (logRData == null) {
-			CPATDB cpatDB = new CPATDB();
-	 		cpatDB.runCPATlog();
-			//return null;
-		}
-		return new String[]{"-d", logRData};
+/**
+ * cpat的预先格式化工作<br>
+ * 对于人、小鼠、斑马鱼、果蝇这四个物种不需要运行这两个程序
+ * @author novelbio
+ */
+abstract class CPATformatAbs implements IntCmdSoft {
+	String exePath;
+	String mRNAseq;
+	String ncRNAseq;
+
+	public CPATformatAbs() {
+		SoftWareInfo softWareInfo = new SoftWareInfo(SoftWare.cpat);
+		this.exePath = softWareInfo.getExePathRun();
+	}
+	public void setmRNAseq(String mRNAseq) {
+		this.mRNAseq = mRNAseq;
+	}
+	public void setNcRNAseq(String ncRNAseq) {
+		this.ncRNAseq = ncRNAseq;
 	}
 	
-	private String[] getCPATOutput() {
-		if (outDir == null) {
-			return null;
-		}
-		return new String[]{"-o", outDir};
+	protected String[] getmRNASeq() {
+		return new String[]{"-c", mRNAseq};
 	}
-		
-	public void runCPAT() {
-		List<String> lsCmd = getLsCmd();
-		CmdOperate cmdOperate = new CmdOperate(lsCmd);
-		cmdOperate.run();
-		if (!cmdOperate.isFinishedNormal()) {
-			throw new ExceptionCmd("run CPAT error:\n" + cmdOperate.getCmdExeStr() + "\n" + cmdOperate.getErrOut());
-		}
+	protected String[] getNcRNASeq() {
+		return new String[]{"-n", ncRNAseq};
 	}
 	
-	private List<String> getLsCmd() {
-		List<String> lsCmd = new ArrayList<String>();
-		lsCmd.add(exePath + "cpat.py");
-		ArrayOperate.addArrayToList(lsCmd, getLncRNACanFa());
-		ArrayOperate.addArrayToList(lsCmd, getHexTab());
-		ArrayOperate.addArrayToList(lsCmd, getLogRData());
-		ArrayOperate.addArrayToList(lsCmd, getCPATOutput());
+	public void run() {
+		CmdOperate cmdOperate = new CmdOperate(getLsCmd());
+		cmdOperate.runWithExp("cpat error:");
+	}
+	
+	protected abstract List<String> getLsCmd();
+	
+	@Override
+	public List<String> getCmdExeStr() {
+		List<String> lsResult = new ArrayList<String>();
+		CmdOperate cmdOperate = new CmdOperate(getLsCmd());
+		lsResult.add(cmdOperate.getCmdExeStr());
+		return lsResult;
+	}
+}
+	
+/**
+ * 对于人、小鼠、斑马鱼、果蝇这四个物种不需要运行这两个程序
+ * 输入protein的nr序列和ncRNA的nr序列,产生Hex文件
+ * 格式类似 python make_hexamer_tab.py  -c rna_modify.fa -n ../data/NONCODEv4_tair.fa > Rice_hexamer.table
+ * @author zongjie
+ */
+class MakeHexamerTab extends CPATformatAbs {
+	String outHexFileName;
+	
+	/** 设定输出的hax文件名,包括路径 */
+	public void setOutHexName(String outPath) {
+		this.outHexFileName = outPath;
+	}
+	/** 获得输出文件名包含全路径 */
+	public String getOutHexFileName() {
+		return outHexFileName;
+	}
+	
+	@Override
+	protected List<String> getLsCmd() {
+		List<String> lsCmd = new ArrayList<>();
+		lsCmd.add("python");
+		lsCmd.add(exePath + "make_hexamer_tab.py");
+		ArrayOperate.addArrayToList(lsCmd, getmRNASeq());
+		ArrayOperate.addArrayToList(lsCmd, getNcRNASeq());
+		lsCmd.add(">"); lsCmd.add(outHexFileName);
 		return lsCmd;
 	}
 
+
+}
+
+/** 设定回归模型 */
+class MakeLogitModel extends CPATformatAbs {
+	String hexamerTable;
+	String outPrefix;
+	
+	/** 通过{@link MakeHexamerTab}所获得的输出文件 */
+	public void setHexamerTable(String hexamerTable) {
+		this.hexamerTable = hexamerTable;
+	}
+	/** 设定输出前缀 */
+	public void setOutPrefix(String outPrefix) {
+		this.outPrefix = outPrefix;
+	}
+	/** 运行完毕后用这个方法来获得那个有用的RData文件 */
+	public String getOutRDataFile() {
+		return outPrefix + ".logit.RData";
+	}
+	@Override
+	protected List<String> getLsCmd() {
+		List<String> lsCmd = new ArrayList<>();
+		lsCmd.add("python");
+		lsCmd.add(exePath + "make_hexamer_tab.py");
+		ArrayOperate.addArrayToList(lsCmd, getHexTable());
+		ArrayOperate.addArrayToList(lsCmd, getmRNASeq());
+		ArrayOperate.addArrayToList(lsCmd, getNcRNASeq());
+		lsCmd.add("-o"); lsCmd.add(outPrefix);
+		return lsCmd;
+	}
+	
+	private String[] getHexTable() {
+		return new String[]{"-x", hexamerTable};
+	}
+}
+
+/** CPAT的主程序 */
+class CPATmain implements IntCmdSoft {
+	String exePath;
+	
+	/** 需要预测的序列文件，fasta格式文件 */
+	String fastaNeedPredict;
+	/** 预先构建的六聚体频率表，由 {@link MakeHexamerTab} 产生 */
+	String hexTab;
+	/** 预先构建的训练对数模型，该文件为二进制文件 */
+	String logRData;
+	/** 被分析物种名称，用于给生成的训练集名称 */
+	String species;
+	/** 输出文件路径及名称 */
+	String outPrefix;
+	/** 编码阈值设置  */
+	double codProb;
+	
+	/** 是否为模式物种，即为人、小鼠、斑马鱼、果蝇 */
+	boolean isModelSpecies = false;
+	
+	public CPATmain() {
+		SoftWareInfo softWareInfo = new SoftWareInfo(SoftWare.cpat);
+		this.exePath = softWareInfo.getExePathRun();
+	}
+	/** 是否为模式物种，即为人、小鼠、斑马鱼、果蝇 */
+	public void setModelSpecies(boolean isModelSpecies) {
+		this.isModelSpecies = isModelSpecies;
+	}
+	/** 需要预测的序列文件，fasta格式文件 */
+	public void setFastaNeedPredict(String fastaNeedPredict) {
+		this.fastaNeedPredict = fastaNeedPredict;
+	}
+	/** 预先构建的六聚体频率表，由 {@link MakeHexamerTab} 产生 */
+	public void setHexTab(String hexTab) {
+		this.hexTab = hexTab;
+	}
+	/** 预先构建的训练对数模型，该文件为二进制文件，由{@link MakeLogitModel} */
+	public void setLogRData(String logRData) {
+		this.logRData = logRData;
+	}
+	/** 输出文件夹 */
+	public void setOutPrefix(String outPrefix) {
+		this.outPrefix = outPrefix;
+	}
+	
+	public void run() {
+		CmdOperate cmdOperate = new CmdOperate(getLsCmd());
+		cmdOperate.runWithExp("CPAT error");
+	}
+	
+	private List<String> getLsCmd() {
+		List<String> lsCmd = new ArrayList<>();
+		lsCmd.add("python");
+		lsCmd.add(exePath + "cpat.py");
+		ArrayOperate.addArrayToList(lsCmd, getFastaNeedPredict());
+		if (!isModelSpecies) {
+			ArrayOperate.addArrayToList(lsCmd, getHexTable());
+			ArrayOperate.addArrayToList(lsCmd, getRDataFile());
+		}
+		ArrayOperate.addArrayToList(lsCmd, getOutPath());
+		return lsCmd;
+	}
+	
+	private String[] getFastaNeedPredict() {
+		return new String[]{"-g", fastaNeedPredict};
+	}
+	private String[] getHexTable() {
+		return new String[]{"-x", hexTab};
+	}
+	private String[] getRDataFile() {
+		return new String[]{"-d", logRData};
+	}
+	private String[] getOutPath() {
+		return new String[]{"-o", outPrefix};
+	}
+	@Override
 	public List<String> getCmdExeStr() {
 		List<String> lsResult = new ArrayList<String>();
-		List<String> lsCmd = getLsCmd();
-		CmdOperate cmdOperate = new CmdOperate(lsCmd);
+		CmdOperate cmdOperate = new CmdOperate(getLsCmd());
 		lsResult.add(cmdOperate.getCmdExeStr());
 		return lsResult;
 	}
 }
 
-	class CPATDB  extends CPAT {
-		
-		FileOperate fileOperate = new FileOperate();
+
+
+class filterCPATResult {
+	String excelFileName;
+	String outFileName;
 	
-		
-		/** 被分析物种名称，用于给生成的训练集名称 */
-//		String species;
-		
-//		String outDir;
-	 
-		
-		public static void CPATDB() {
-//		SoftWareInfo softWareInfo = new SoftWareInfo(SoftWare.cpat); 
-//			//com.novelbio.database.domain.information.SoftWareInfo.SoftWare.cpat
-//			
-//			//CPATDB c = new CPATDB();
-//			this.exePath = softWareInfo.getExePathRun();
-		}
-		private String[] getSpeCDSFa() {
-	 	 	if (speCDSFa == null) {
-	 	 			return null;
-	 	 		}
-	 	 		return new String[]{"-c", speCDSFa};
-	 	 }
-	 		
-	 	 	private String[] getSpeNONCODFa() {
-	 	 	if (speNONCODFa == null) {
-	 	 	
-	 	 			return null;
-	 	 		}
-	 	 	return new String[]{"-n", speNONCODFa};
-	 	 }
-	 	 	private String[] getHexOutput() {
-	 			if (outDir == null) {
-	 				return null;
-	 			}
-	 			return new String[]{">", outDir + species + "__hexamer.table"};
-	 		}
-	 		
-	 		private String[] getLogOutput() {
-	 			if (outDir == null) {
-	 				return null;
-	 			}
-	 			return new String[]{"-o",  outDir + species };
-	 		}	
-		
-	/** python make_hexamer_tab.py  -c rna_modify.fa -n ../data/NONCODEv4_tair.fa > Rice_hexamer.table */
-		public void runCPATHex() {
-			
-			if (fileOperate.isFileExist(hexTab)){
-				return;
-			} else {
-				List<String> lsHexCmd =   getLsHexCmd();
-				CmdOperate cmdOperate = new CmdOperate(lsHexCmd);
-				cmdOperate.run();
-				if (!cmdOperate.isFinishedNormal()) {
-					throw new ExceptionCmd("run CPAT error:\n" + cmdOperate.getCmdExeStr() + "\n" + cmdOperate.getErrOut());
-				}
-			}
-			
+	private void filterCPATResult(String excelFileName) {
+		this.excelFileName = excelFileName;
+		this.outFileName = FileOperate.changeFileSuffix(excelFileName, "_filter", null);
+		TxtReadandWrite txtWrite = new TxtReadandWrite(excelFileName, true);
+		List<String[]> lsAll = ExcelTxtRead.readLsExcelTxt(excelFileName,1);
+		for (String[] strings : lsAll.subList(1, lsAll.size())) {
+			filter(strings);
 		}
 		
-		private List<String> getLsHexCmd() {
-			List<String> lsHexCmd = new ArrayList<String>();
-			lsHexCmd.add(exePath + "make_hexamer_tab.py");
-			ArrayOperate.addArrayToList(lsHexCmd, getSpeCDSFa());
-			ArrayOperate.addArrayToList(lsHexCmd, getSpeNONCODFa());
-			ArrayOperate.addArrayToList(lsHexCmd, getHexOutput());   
-			return lsHexCmd;
-		}
-	
-		/** python make_logitModel.py -x Rice_hexamer.table -c rna_modify.fa -n ../data/NONCODEv4_tair.fa -o  Rice */
-		
-		public void runCPATlog( ) {
-			if (fileOperate.isFileExist(logRData)){
-				return;
-			} else {
-				List<String> lsLogCmd =   getLsLogCmd();
-				CmdOperate cmdOperate = new CmdOperate(lsLogCmd);
-				cmdOperate.run();
-				if (!cmdOperate.isFinishedNormal()) {
-					throw new ExceptionCmd("run CPAT error:\n" + cmdOperate.getCmdExeStr() + "\n" + cmdOperate.getErrOut());
-				}
-			}
+	}
+	private void filter(String[] info) {
+		for (int i = 0; i <info.length; i++) {
+			String code = info[i].split("\t")[-1];
+			//if (Double.parseDouble(code)<) {
+				
+			//}
 		}
 		
-		private List<String> getLsLogCmd() {
-			List<String> lsLogCmd = new ArrayList<String>();
-			lsLogCmd.add(exePath + "make_logitModel.py");
-			ArrayOperate.addArrayToList(lsLogCmd, getSpeCDSFa());
-			ArrayOperate.addArrayToList(lsLogCmd, getHexTab());
-			ArrayOperate.addArrayToList(lsLogCmd, getSpeNONCODFa());
-			ArrayOperate.addArrayToList(lsLogCmd, getLogOutput());   
-			return lsLogCmd;
-		}
 	}
 	
 	
-	class filterCPATResult {
-		String excelFileName;
-		String outFileName;
-		
-		private void filterCPATResult(String excelFileName) {
-			this.excelFileName = excelFileName;
-			this.outFileName = FileOperate.changeFileSuffix(excelFileName, "_filter", null);
-			TxtReadandWrite txtWrite = new TxtReadandWrite(excelFileName, true);
-			List<String[]> lsAll = ExcelTxtRead.readLsExcelTxt(excelFileName,1);
-			for (String[] strings : lsAll.subList(1, lsAll.size())) {
-				filter(strings);
-			}
-			
-		}
-		private void filter(String[] info) {
-			for (int i = 0; i <info.length; i++) {
-				String code = info[i].split("\t")[-1];
-				//if (Double.parseDouble(code)<) {
-					
-				//}
-			}
-			
-		}
-		
-		
-	}
+}
