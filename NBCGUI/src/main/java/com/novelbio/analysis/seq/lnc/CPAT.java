@@ -142,16 +142,18 @@ public class CPAT implements IntCmdSoft {
 	 * @return
 	 */
 	private String[] prepareFile() {
+		if (isModelSpecies) return new String[]{"", ""};
+		
 		if (lsmRNAseq.isEmpty()) {
 			throw new FileOperate.ExceptionFileNotExist("mRNA is not exist");
 		}
 		if (lsncRNAseq.isEmpty()) {
 			throw new FileOperate.ExceptionFileNotExist("ncRNA is not exist");
 		}
-		String mRNAfile = getOutFileTmp() + "mRNAfileRun";
+		String mRNAfile = getOutFileTmp() + getSpeciesName() + "mRNAfileRun";
 		combFile(lsmRNAseq, mRNAfile);
 		
-		String ncRNAfile = getOutFileTmp() + "ncRNAfileRun";
+		String ncRNAfile = getOutFileTmp() + getSpeciesName() + "ncRNAfileRun";
 		combFile(lsncRNAseq, ncRNAfile);
 		return new String[]{mRNAfile, ncRNAfile};
 	}
