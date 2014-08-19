@@ -71,6 +71,7 @@ public class CPAT implements IntCmdSoft {
 	
 	/** 设定需要预测的序列，fasta格式 */
 	public void setFastaNeedPredict(String fastaNeedPredict) {
+		FileOperate.checkFileExistAndBigThanSize(fastaNeedPredict, 0);
 		this.fastaNeedPredict = fastaNeedPredict;
 	}
 	/** 输出文件名 */
@@ -178,7 +179,7 @@ public class CPAT implements IntCmdSoft {
 		String hexFile = null, rDataFile = null;
 		String[] mRNA2ncRNA = prepareFile();
 		String mRNAseq = mRNA2ncRNA[0], ncRNAseq = mRNA2ncRNA[1];
-		if (isModelSpecies) {
+		if (!isModelSpecies) {
 			MakeHexamerTab makeHexamerTab = new MakeHexamerTab();
 			makeHexamerTab.setmRNAseq(mRNAseq);
 			makeHexamerTab.setNcRNAseq(ncRNAseq);
@@ -202,12 +203,15 @@ public class CPAT implements IntCmdSoft {
 		cpaTmain.setLogRData(rDataFile);
 		cpaTmain.setModelSpecies(isModelSpecies);
 		cpaTmain.setOutPrefix(outFileTmp + getSpeciesName() + "cpat");
+		cpaTmain.run();
 		lsCmd.addAll(cpaTmain.getCmdExeStr());
 		//TODO 还没写好输出文件
 	}
 	
 	private String getOutFileTmp() {
-		return FileOperate.getPathName(outFile) + "cpatTmp" + FileOperate.getSepPath();
+		String outPath = FileOperate.getPathName(outFile) + "cpatTmp" + FileOperate.getSepPath();
+		FileOperate.createFolders(outPath);
+		return outPath;
 	}
 	
 	private String getSpeciesName() {
