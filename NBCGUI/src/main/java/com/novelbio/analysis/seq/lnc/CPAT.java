@@ -11,7 +11,6 @@ import com.novelbio.analysis.seq.genome.GffChrSeq;
 import com.novelbio.analysis.seq.genome.gffOperate.GffDetailGene.GeneStructure;
 import com.novelbio.base.StringOperate;
 import com.novelbio.base.cmd.CmdOperate;
-import com.novelbio.base.cmd.ExceptionCmd;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.dataStructure.ArrayOperate;
@@ -36,62 +35,86 @@ public class CPAT implements IntCmdSoft {
 	}
 	
 	List<String> lsCmd = new ArrayList<String>();
-	Species species;
+	/** 用来做训练集的mRNA序列 */
+	List<String> lsmRNAseq;
+	/** 用来做训练集的ncRNA序列 */
+	List<String> lsncRNAseq;
+	
 	String speciesName;
 	String fastaNeedPredict;
-	String mRNAseq;
-	String ncRNAseq;
+	
 	String outFile;
 	
 	boolean isModelSpecies;
 	
-	/** 最后设定，设定后如果speciesName、mRNAseq、ncRNAseq等不存在，就会设定这些参数 */
+	/** 设定物种信息，设定后会设定speciesName、isModelSpecies这些参数 */
 	public void setSpecies(Species species) {
 		if (species == null || species.getTaxID() == 0) return;
-		this.species = species;
-		setSpeciesInfo(species);
-	}
-	
-	/** 设定mRNAseq、ncRNAseq，如果mRNAseq或ncRNAseq有不存在，并且不是模式生物，则抛出异常 */
-	private void setSpeciesInfo(Species species) {
-		if (StringOperate.isRealNull(speciesName)) {
-			speciesName = species.getCommonName();
-		}
+		speciesName = species.getCommonName();
 		if (setModelSpecies.contains(species.getTaxID())) {
 			this.isModelSpecies = true;
+		}
+	}
+	/** 添加用来作训练集的mRNA序列，可添加多条 */
+	public void addmRNAfile(String mRNAfile) {
+		FileOperate.checkFileExistAndBigThanSize(mRNAfile, 0);
+		lsmRNAseq.add(mRNAfile);
+	}
+	/** 添加用来作训练集的ncRNA序列，可添加多条 */
+	public void addncRNAfile(String ncRNAfile) {
+		FileOperate.checkFileExistAndBigThanSize(ncRNAfile, 0);
+		lsncRNAseq.add(ncRNAfile);
+	}
+	public void setSpeciesName(String speciesName) {
+		this.speciesName = speciesName;
+	}
+	
+	/** 设定需要预测的序列，fasta格式 */
+	public void setFastaNeedPredict(String fastaNeedPredict) {
+		this.fastaNeedPredict = fastaNeedPredict;
+	}
+	/** 输出文件名 */
+	public void setOutFile(String outFile) {
+		this.outFile = outFile;
+	}
+	
+	/** 添加用来做训练集的物种，<b>注意不要重复添加物种</b> */
+	public void addSpeciesInfo(Species species) {
+		GffChrAbs gffChrAbs = new GffChrAbs(species);
+		if (!checkGffHash(gffChrAbs)) {
+			gffChrAbs.close();
 			return;
 		}
-		GffChrAbs gffChrAbs = new GffChrAbs(species);
-		checkGffHash(gffChrAbs);
-		mRNAseq = getmRNAFile(gffChrAbs);
-		ncRNAseq = getNcRNAFile(gffChrAbs);
-		if (!FileOperate.isFileExistAndBigThanSize(mRNAseq, 0) || !FileOperate.isFileExistAndBigThanSize(ncRNAseq, 0)) {
-			throw new ExceptionCmd("no mRNAseq or ncRNAseq exist, please check!\nmRNAseq: " + mRNAseq + "\tncRNAseq: " + ncRNAseq);
+		
+		String mRNAseq = getmRNAFile(species, gffChrAbs);
+		String ncRNAseq = getNcRNAFile(species, gffChrAbs);
+		if (!FileOperate.isFileExistAndBigThanSize(mRNAseq, 0)) {
+			lsmRNAseq.add(mRNAseq);
+		}
+		if (!FileOperate.isFileExistAndBigThanSize(ncRNAseq, 0)) {
+			lsncRNAseq.add(ncRNAseq);
 		}
 	}
 	
-	private void checkGffHash(GffChrAbs gffChrAbs) {
-		if (gffChrAbs.getGffHashGene() == null) {
-			gffChrAbs.close();
-			throw new ExceptionCmd("no Gff File exist in species: " + species.getNameLatin() + "\t" + species.getVersion());
-		} else if (!gffChrAbs.getGffHashGene().isContainNcRNA()) {
-			gffChrAbs.close();
-			throw new ExceptionCmd("no mRNAseq or ncRNAseq exist, please check Gff File: " + gffChrAbs.getGffHashGene().getGffFilename());
+	private boolean checkGffHash(GffChrAbs gffChrAbs) {
+		if (gffChrAbs.getGffHashGene() == null || !gffChrAbs.getGffHashGene().isContainNcRNA()) {
+			return false;
 		}
+		return true;
 	}
 	
-	private String getNcRNAFile(GffChrAbs gffChrAbs) {
+	private String getNcRNAFile(Species species, GffChrAbs gffChrAbs) {
 		String ncFile = species.getRefseqNCfileDB();
 		if (FileOperate.isFileExistAndBigThanSize(ncFile, 0)) {
 			return ncFile;
 		}
-		String ncRNAfile = getOutFileTmp() + speciesName + "ncRNA.fa";
+		String ncRNAfile = getOutFileTmp() + species.getCommonName().replace(" ", "_") + "ncRNA.fa";
 		getSeqFile(gffChrAbs, GeneType.ncRNA, ncRNAfile);
 		return ncRNAfile;
 	}
 	
-	private String getmRNAFile(GffChrAbs gffChrAbs) {
-		String mRNAfile = getOutFileTmp() + speciesName + "mRNA.fa";
+	private String getmRNAFile(Species species, GffChrAbs gffChrAbs) {
+		String mRNAfile = getOutFileTmp() + species.getCommonName().replace(" ", "_") + "mRNA.fa";
 		getSeqFile(gffChrAbs, GeneType.mRNA, mRNAfile);
 		gffChrAbs.close();
 		return mRNAfile;
@@ -111,21 +134,41 @@ public class CPAT implements IntCmdSoft {
 		gffChrSeq = null;
 	}
 	
-	public void setSpeciesName(String speciesName) {
-		this.speciesName = speciesName;
+	/**
+	 * 准备序列<br>
+	 * 0: mRNA序列<br>
+	 * 1: ncRNA序列
+	 * @return
+	 */
+	private String[] prepareFile() {
+		if (lsmRNAseq.isEmpty()) {
+			throw new FileOperate.ExceptionFileNotExist("mRNA is not exist");
+		}
+		if (lsncRNAseq.isEmpty()) {
+			throw new FileOperate.ExceptionFileNotExist("ncRNA is not exist");
+		}
+		String mRNAfile = getOutFileTmp() + "mRNAfileRun";
+		combFile(lsmRNAseq, mRNAfile);
+		
+		String ncRNAfile = getOutFileTmp() + "ncRNAfileRun";
+		combFile(lsncRNAseq, ncRNAfile);
+		return new String[]{mRNAfile, ncRNAfile};
 	}
-	public void setFastaNeedPredict(String fastaNeedPredict) {
-		this.fastaNeedPredict = fastaNeedPredict;
-	}
-	public void setmRNAseq(String mRNAseq) {
-		this.mRNAseq = mRNAseq;
-	}
-	public void setNcRNAseq(String ncRNAseq) {
-		this.ncRNAseq = ncRNAseq;
-	}
-	/** 输出文件名 */
-	public void setOutFile(String outFile) {
-		this.outFile = outFile;
+	
+	private void combFile(List<String> lsNcRNAfile, String outFile) {
+		if (lsNcRNAfile.size() == 1) {
+			FileOperate.copyFile(lsNcRNAfile.get(0), outFile, true);
+		} else {
+			TxtReadandWrite txtWrite = new TxtReadandWrite(outFile, true);
+			for (String tmp : lsNcRNAfile) {
+				TxtReadandWrite txtRead = new TxtReadandWrite(tmp);
+				for (String string : txtRead.readlines()) {
+					txtWrite.writefileln(string);
+				}
+				txtRead.close();
+			}
+			txtWrite.close();
+		}
 	}
 	
 	public void predict() {
@@ -133,6 +176,8 @@ public class CPAT implements IntCmdSoft {
 		//临时文件夹
 		String outFileTmp = getOutFileTmp();
 		String hexFile = null, rDataFile = null;
+		String[] mRNA2ncRNA = prepareFile();
+		String mRNAseq = mRNA2ncRNA[0], ncRNAseq = mRNA2ncRNA[1];
 		if (isModelSpecies) {
 			MakeHexamerTab makeHexamerTab = new MakeHexamerTab();
 			makeHexamerTab.setmRNAseq(mRNAseq);
