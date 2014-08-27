@@ -11,7 +11,7 @@ import com.novelbio.database.domain.information.SoftWareInfo;
 import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
 
 /**
- * simple script : cap3 trinity.fa > trinity.cap3.result
+ * simple script : cap3 trinity.fa -f 20 -o 100 -p 90 -z 3 > trinity.cap3.result
  * @author bll
  *
  */
@@ -72,10 +72,14 @@ public class CAP3cluster implements IntCmdSoft {
 		List<String> lsCmd = new ArrayList<>();
 		lsCmd.add(exePath + "cap3");
 		ArrayOperate.addArrayToList(lsCmd, getFastaNeedCluster());
+		ArrayOperate.addArrayToList(lsCmd, getOverlapGapLen());
+		ArrayOperate.addArrayToList(lsCmd, getOverlapLenCutff());
+		ArrayOperate.addArrayToList(lsCmd, getOverlapIdePerCutff());
+		ArrayOperate.addArrayToList(lsCmd, getReadsSupportNum());
 		ArrayOperate.addArrayToList(lsCmd, getOutFile());
 		return lsCmd;
 	}
-	private String[] getFastaNeedCluster(){
+	private String[] getFastaNeedCluster() {
 		return new String[]{" ",fastaNeedCluster};
 	}
 	private String[] getOutFile() {
@@ -97,6 +101,9 @@ public class CAP3cluster implements IntCmdSoft {
 		lsCmd.clear();
 		CAP3cluster cap3cluster = new CAP3cluster();
 		cap3cluster.setFastaNeedCluster(fastaNeedCluster);
+		cap3cluster.setOverlapGapLen(overlapGapLen);
+		cap3cluster.setOverlapIdePerCutff(overlapIdePerCutff);
+		cap3cluster.setReadsSupportNum(readsSupportNum);
 		cap3cluster.setOutFile(outFile);
 		cap3cluster.run();
 		lsCmd.addAll(cap3cluster.getCmdExeStr());	
