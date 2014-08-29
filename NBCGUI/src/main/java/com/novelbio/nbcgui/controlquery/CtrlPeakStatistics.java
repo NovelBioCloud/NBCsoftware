@@ -50,7 +50,7 @@ public class CtrlPeakStatistics implements RunGetInfo<GffChrStatistics.GffChrSta
 		this.filterGeneBody = filterGeneBody;
 	}
 	public void execute() {
-		long fileSizeLong = (long) FileOperate.getFileSize(readFile);
+		long fileSizeLong = (long) FileOperate.getFileSizeLong(readFile)/1024;
 		int fileSize = (int)(fileSizeLong/1000000);
 		guiPeakStatistics.getProcessBar().setMaximum(fileSize);
 		gffChrStatistics.clean();
@@ -61,7 +61,7 @@ public class CtrlPeakStatistics implements RunGetInfo<GffChrStatistics.GffChrSta
 		thread.start();
 	}
 	public ArrayList<String[]> getResult() {
-		return gffChrStatistics.getStatisticsResult();
+		return gffChrStatistics.getStatisticsResultWithBG();
 	}
 	@Override
 	public void setRunningInfo(GffChrStatiscticsProcessInfo info) {

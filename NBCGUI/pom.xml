@@ -28,6 +28,35 @@
 					<target>1.7</target>
 				</configuration>
 			</plugin>
+            <plugin>  
+				<artifactId>maven-javadoc-plugin</artifactId>  
+				<version>2.9</version>  
+				<configuration>  
+					<charset>UTF-8</charset>  
+					<docencoding>UTF-8</docencoding>  
+				</configuration>  
+				<executions>  
+					<execution>  
+					<id>attach-javadocs</id>  
+					<goals>  
+						<goal>jar</goal>  
+					</goals>  
+					</execution>  
+				</executions>  
+			</plugin>  
+            <plugin>
+                <!-- explicitly define maven-deploy-plugin after other to force execorder -->
+                <artifactId>maven-deploy-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>deploy</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
 	<dependencies>

@@ -493,7 +493,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 				String outStatistics =tmpGeneStructure + "_GeneStructure.txt";
 				geneStructureResultFile = outStatistics;
 				TxtReadandWrite txtWrite = new TxtReadandWrite(outStatistics, true);
-				txtWrite.ExcelWrite(gffChrStatistics.getStatisticsResult());
+				txtWrite.ExcelWrite(gffChrStatistics.getStatisticsResultWithBG());
 				txtWrite.close();
 			}
 		}

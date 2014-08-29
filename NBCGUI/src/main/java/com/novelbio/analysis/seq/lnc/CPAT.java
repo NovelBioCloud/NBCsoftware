@@ -74,7 +74,7 @@ public class CPAT implements IntCmdSoft {
 		FileOperate.checkFileExistAndBigThanSize(fastaNeedPredict, 0);
 		this.fastaNeedPredict = fastaNeedPredict;
 	}
-	/** 输出文件名 */
+	/** 输出文件名<b>必须在第一时间设定</b> */
 	public void setOutFile(String outFile) {
 		this.outFile = outFile;
 	}
