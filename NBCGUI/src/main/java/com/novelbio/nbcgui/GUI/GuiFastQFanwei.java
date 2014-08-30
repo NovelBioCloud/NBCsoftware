@@ -30,7 +30,6 @@ import javax.swing.JSpinner;
 public class GuiFastQFanwei extends JPanel {
 	
 	private JTextField txtMinReadsLen;
-	private JTextField txtMappingIndex;
 	private JTextField txtSavePathAndPrefix;
 	GUIFileOpen guiFileOpen = new GUIFileOpen();
 	private final ButtonGroup groupLibrary = new ButtonGroup();
@@ -53,7 +52,6 @@ public class GuiFastQFanwei extends JPanel {
 	JButton btnSaveto;
 	JButton btnOpenFastqLeft;
 	JButton btnDelFastqLeft;
-	JButton btnMappingindex;
 	JButton btnRun;
 	JButton btnOpenFastQRight;
 	JButton btnDeleteFastQRight;
@@ -168,11 +166,6 @@ public class GuiFastQFanwei extends JPanel {
 		//初始化cmbSpeciesVersion
 		try {} catch (Exception e) { }
 		
-		txtMappingIndex = new JTextField();
-		txtMappingIndex.setBounds(10, 505, 337, 24);
-		add(txtMappingIndex);
-		txtMappingIndex.setColumns(10);
-		
 		JLabel lblExtendto = new JLabel("ExtendTo");
 		lblExtendto.setBounds(17, 450, -137, -132);
 		add(lblExtendto);
@@ -205,19 +198,6 @@ public class GuiFastQFanwei extends JPanel {
 			}
 		});
 		add(btnDelFastqLeft);
-		
-		JLabel lblMappingToFile = new JLabel("Mapping To File");
-		lblMappingToFile.setBounds(10, 485, 121, 14);
-		add(lblMappingToFile);
-		
-		btnMappingindex = new JButton("MappingIndex");
-		btnMappingindex.setBounds(387, 505, 134, 24);
-		btnMappingindex.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				txtMappingIndex.setText(guiFileOpen.openFileName("fasta file", ""));
-			}
-		});
-		add(btnMappingindex);
 		
 		btnRun = new JButton("Run");
 		btnRun.setBounds(653, 556, 118, 24);
@@ -262,7 +242,6 @@ public class GuiFastQFanwei extends JPanel {
 					try { ctrlDNAMapping.setGapLen(Integer.parseInt(txtGapLength.getText())); } catch (Exception e2) { 	}
 					try { ctrlDNAMapping.setMismatch(Double.parseDouble(txtMisMatch.getText())); } catch (Exception e2) {}
 					try { ctrlDNAMapping.setThread(Integer.parseInt(txtThreadNum.getText())); } catch (Exception e2) { 	}
-					ctrlDNAMapping.setChrIndexFile(txtMappingIndex.getText());
 					//TODO
 					ctrlDNAMapping.setLibraryType(cmbLibrary.getSelectedValue());
 					ctrlDNAMapping.setSoftMapping(cmbMappingSoftware.getSelectedValue());
@@ -340,11 +319,11 @@ public class GuiFastQFanwei extends JPanel {
 		txtGapLength.setColumns(10);
 		
 		JLabel lblThread = new JLabel("Thread");
-		lblThread.setBounds(555, 510, 69, 14);
+		lblThread.setBounds(9, 504, 69, 14);
 		add(lblThread);
 		
 		txtThreadNum = new JTextField();
-		txtThreadNum.setBounds(614, 508, 114, 18);
+		txtThreadNum.setBounds(58, 502, 114, 18);
 		add(txtThreadNum);
 		txtThreadNum.setColumns(10);
 		
@@ -370,15 +349,15 @@ public class GuiFastQFanwei extends JPanel {
 		
 		cmbLibrary = new JComboBoxData<MapLibrary>();
 		cmbLibrary.setMapItem(MapLibrary.getMapLibrary());
-		cmbLibrary.setBounds(773, 446, 134, 23);
+		cmbLibrary.setBounds(471, 404, 134, 23);
 		add(cmbLibrary);
 		
 		JLabel lblLibrary = new JLabel("Library");
-		lblLibrary.setBounds(773, 420, 69, 14);
+		lblLibrary.setBounds(471, 378, 69, 14);
 		add(lblLibrary);
 		
 		speciesLayOut = new GuiLayeredPanSpeciesVersion();
-		speciesLayOut.setSelectSpecies(new Select());
+		speciesLayOut.setSelectSpecies(null);
 		speciesLayOut.setBounds(175, 376, 232, 101);
 		add(speciesLayOut);
 		
@@ -417,19 +396,6 @@ public class GuiFastQFanwei extends JPanel {
 		initialize();
 	}
 	
-	class Select implements SpeciesSelect{
-		@Override
-		public void selectSpecies() {
-			if (speciesLayOut.getSelectSpecies().getTaxID() == 0) {
-				txtMappingIndex.setEnabled(false);
-				btnMappingindex.setEnabled(false);
-			} else {
-				txtMappingIndex.setEnabled(true);
-				btnMappingindex.setEnabled(true);
-			}
-		}
-		
-	}
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -445,17 +411,13 @@ public class GuiFastQFanwei extends JPanel {
 		lsComponentsFiltering.add(spnTrimNNNcutoff);
 		
 		lsComponentsMapping.add(txtGapLength);
-		lsComponentsMapping.add(txtMappingIndex);
 		lsComponentsMapping.add(txtMisMatch);
 		lsComponentsMapping.add(txtThreadNum);
 		lsComponentsMapping.add(txtGapLength);
-		lsComponentsMapping.add(btnMappingindex);
 		lsComponentsMapping.add(cmbLibrary);
 		
 		chckbxMapping.setSelected(true);
 		chckbxFilterreads.setSelected(true);
-		txtMappingIndex.setEnabled(false);
-		btnMappingindex.setEnabled(false);
 //		if (speciesLayOut.getSelectSpecies().getTaxID() == 0) {
 //			cmbMaptoIndex.setEnabled(false);
 //		}

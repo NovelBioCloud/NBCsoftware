@@ -211,11 +211,11 @@ public class GuiSnpFilterSimple extends JPanel {
 		btnDelsnp.setBounds(512, 178, 118, 24);
 		add(btnDelsnp);
 		
-		JLabel lblHetosnppropfilter = new JLabel("HetoSnpPropFilter");
+		JLabel lblHetosnppropfilter = new JLabel("HeteroSnpPropLevel");
 		lblHetosnppropfilter.setBounds(642, 199, 144, 14);
 		add(lblHetosnppropfilter);
 		
-		JLabel label = new JLabel("HetoMoreSnpPropFilter");
+		JLabel label = new JLabel("HeteroMoreSnpPropLevel");
 		label.setBounds(642, 222, 179, 14);
 		add(label);
 		
