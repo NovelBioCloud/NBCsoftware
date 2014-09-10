@@ -81,9 +81,6 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 	JRadioButton rdbtnSamtoolsPileup;
 	JRadioButton rdbtnGatkBamfile;
 	JRadioButton rdbtnNbcmethodPileupfile;
-	private JTextField txtRefOrGTF;
-	JButton btnOpenRefOrGFF;
-	JLabel lblRefGFF;
 	
 	/**
 	 * Create the panel.
@@ -131,11 +128,11 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 		lblSnpfilterquality.setBounds(213, 178, 123, 14);
 		add(lblSnpfilterquality);
 		
-		JLabel lblHetolessinfo = new JLabel("Heto Snp Reads Prop Min");
+		JLabel lblHetolessinfo = new JLabel("Hetero Snp Reads Prop Level");
 		lblHetolessinfo.setBounds(212, 206, 226, 14);
 		add(lblHetolessinfo);
 		
-		JLabel lblHetomorecontainreadsmin = new JLabel("Heto More Snp Reads Prop Min");
+		JLabel lblHetomorecontainreadsmin = new JLabel("Hetero More Snp Reads Prop Level");
 		lblHetomorecontainreadsmin.setBounds(212, 230, 237, 14);
 		add(lblHetomorecontainreadsmin);
 		
@@ -206,13 +203,13 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 		btnDeleteSnpFile.setBounds(795, 392, 118, 24);
 		add(btnDeleteSnpFile);
 		
-		rdbtnSnpcalling = new JRadioButton("SnpCalling");
+		rdbtnSnpcalling = new JRadioButton("Snp/InDel Calling");
 		rdbtnSnpcalling.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setSnpCalling();
 			}
 		});
-		rdbtnSnpcalling.setBounds(14, 8, 118, 22);
+		rdbtnSnpcalling.setBounds(14, 8, 170, 22);
 		add(rdbtnSnpcalling);
 		
 //		rdbtnGetSnpDetail = new JRadioButton("get snp detail");
@@ -268,13 +265,13 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 		spinColSnpStartSite.setValue(2);
 		add(spinColSnpStartSite);
 		
-		rdbtnSnpAnnotation = new JRadioButton("Snp annotation");
+		rdbtnSnpAnnotation = new JRadioButton("Snp/InDel annotation");
 		rdbtnSnpAnnotation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setSnpAnnotation();
 			}
 		});
-		rdbtnSnpAnnotation.setBounds(288, 8, 151, 22);
+		rdbtnSnpAnnotation.setBounds(288, 8, 161, 22);
 		add(rdbtnSnpAnnotation);
 		
 		JLabel lblColRefnr = new JLabel("Col RefNr");
@@ -296,20 +293,20 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 		add(spinColThisNr);
 		
 		guiLayeredPaneSpeciesVersionGff = new GuiLayeredPaneSpeciesVersionGff();
-		guiLayeredPaneSpeciesVersionGff.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (guiLayeredPaneSpeciesVersionGff.getSelectSpecies().getTaxID() == 0) {
-					txtRefOrGTF.setVisible(true);
-					btnOpenRefOrGFF.setVisible(true);
-					lblRefGFF.setVisible(true);
-				} else {
-					txtRefOrGTF.setVisible(false);
-					btnOpenRefOrGFF.setVisible(false);
-					lblRefGFF.setVisible(false);
-				}
-			}
-		});
+//		guiLayeredPaneSpeciesVersionGff.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//				if (guiLayeredPaneSpeciesVersionGff.getSelectSpecies().getTaxID() == 0) {
+//					txtRefOrGTF.setVisible(true);
+//					btnOpenRefOrGFF.setVisible(true);
+//					lblRefGFF.setVisible(true);
+//				} else {
+//					txtRefOrGTF.setVisible(false);
+//					btnOpenRefOrGFF.setVisible(false);
+//					lblRefGFF.setVisible(false);
+//				}
+//			}
+//		});
 //		guiLayeredPaneSpeciesVersionGff.addActionListener(new ActionListener() {
 //			public void actionPerformed(ActionEvent e) {
 //				if (guiLayeredPaneSpeciesVersionGff.getSelectSpecies().getTaxID() == 0) {
@@ -325,51 +322,6 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 //		});
 		guiLayeredPaneSpeciesVersionGff.setBounds(551, 170, 220, 122);
 		add(guiLayeredPaneSpeciesVersionGff);
-		
-		
-		//TODO
-//		rdbtnSamtoolsPileup = new JRadioButton("Samtools PileUpFile");
-//		rdbtnSamtoolsPileup.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				sclInputFile.setTitle(new String[]{"Input PileUp File","Output Snp File"});
-//				guiLayeredPaneSpeciesVersionGff.setVisible(false);
-//			}
-//		});
-//		rdbtnSamtoolsPileup.setBounds(13, 198, 165, 22);
-//		add(rdbtnSamtoolsPileup);
-		
-//		rdbtnGatkBamfile = new JRadioButton("GATK BamFile");
-//		rdbtnGatkBamfile.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				sclInputFile.setTitle(new String[]{"Input Bam File","Output Snp File"});
-//				guiLayeredPaneSpeciesVersionGff.setVisible(true);
-//			}
-//		});
-//		rdbtnGatkBamfile.setBounds(14, 174, 151, 22);
-//		add(rdbtnGatkBamfile);
-		
-//		rdbtnNbcmethodPileupfile = new JRadioButton("NBCtools PileupFile");
-//		rdbtnNbcmethodPileupfile.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				sclInputFile.setTitle(new String[]{"Input PileUp File","Output Snp File"});
-//				guiLayeredPaneSpeciesVersionGff.setVisible(false);
-//			}
-//		});
-//		rdbtnNbcmethodPileupfile.setBounds(13, 223, 164, 22);
-//		add(rdbtnNbcmethodPileupfile);
-		
-		txtRefOrGTF = new JTextField();
-		txtRefOrGTF.setBounds(100, 271, 349, 18);
-		add(txtRefOrGTF);
-		txtRefOrGTF.setColumns(10);
-		
-		btnOpenRefOrGFF = new JButton("Open");
-		btnOpenRefOrGFF.setBounds(457, 270, 85, 24);
-		add(btnOpenRefOrGFF);
-		
-		lblRefGFF = new JLabel("Reference");
-		lblRefGFF.setBounds(14, 273, 85, 14);
-		add(lblRefGFF);
 
 		initial();
 	}
@@ -420,14 +372,6 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 		//TODO
 		guiLayeredPaneSpeciesVersionGff.setVisible(false);
 		sclInputFile.setTitle(new String[]{"Input PileUp File","Output Snp File"});
-//		if (rdbtnGatkBamfile.isSelected()) {
-//			guiLayeredPaneSpeciesVersionGff.setVisible(true);
-//			sclInputFile.setTitle(new String[]{"Input Bam File","Output Snp File"});
-//		} else {
-//			guiLayeredPaneSpeciesVersionGff.setVisible(false);
-//			sclInputFile.setTitle(new String[]{"Input PileUp File","Output Snp File"});
-//		}
-		lblRefGFF.setText("RefSeq");
 	}
 	
 	/** 当为获得每个snp信息的时候的界面 */
@@ -487,7 +431,7 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 		txtOutput.setVisible(false);
 		
 		guiLayeredPaneSpeciesVersionGff.setVisible(true);
-		lblRefGFF.setText("GFF");
+//		lblRefGFF.setText("GFF");
 	}
 	
 	
@@ -519,7 +463,7 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 			SamFile samFile = new SamFile(strings[0]);
 			String refSeq = "";
 			if (guiLayeredPaneSpeciesVersionGff.getSelectSpecies().getTaxID() == 0) {
-				refSeq = txtRefOrGTF.getText();
+//				refSeq = txtRefOrGTF.getText();
 			} else {
 				refSeq = guiLayeredPaneSpeciesVersionGff.getSelectSpecies().getChromSeq();
 			}
@@ -574,11 +518,11 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 	}
 	private void setGffChrAbs() {
 		Species species = guiLayeredPaneSpeciesVersionGff.getSelectSpecies();
-		if (species.getTaxID() == 0 && !txtRefOrGTF.getText().equals("")) {
-			//TODO 待补充GTF的类型
-			gffChrAbs.setGffHash(new GffHashGene(GffType.NCBI, txtRefOrGTF.getText()));
-			return;
-		}
+//		if (species.getTaxID() == 0 && !txtRefOrGTF.getText().equals("")) {
+//			//TODO 待补充GTF的类型
+//			gffChrAbs.setGffHash(new GffHashGene(GffType.NCBI, txtRefOrGTF.getText()));
+//			return;
+//		}
 		gffChrAbs.setSpecies(species);
 	}
 	

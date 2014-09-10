@@ -219,19 +219,19 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 				jTabbedPane1.addTab("FilterAndMapping", null, guiFastQFanwei, null);
 				
 				guiSamToBam = new GuiSamToBam();
-				jTabbedPane1.addTab("SamConvert", null, guiSamToBam, null);
+				jTabbedPane1.addTab("BamConvert", null, guiSamToBam, null);
 				
 				guiSnpCalling = new GuiSnpCalling();
-				jTabbedPane1.add("VariantDetection", guiSnpCalling);
+				jTabbedPane1.add("SnpInDel_DetectionAndAnnotation", guiSnpCalling);
 				
 				guiSnpFilterSimple = new GuiSnpFilterSimple();
-				jTabbedPane1.addTab("DiferentialVariation", guiSnpFilterSimple);
+				jTabbedPane1.addTab("SomaticDetection", guiSnpFilterSimple);
 				
 				guiAnnoPeak = new GuiAnnoPeak();
-				jTabbedPane1.addTab("VariationAnnotation", null, guiAnnoPeak, null);
+				jTabbedPane1.addTab("VariationLocation", null, guiAnnoPeak, null);
 				
-				guiPeakStatistics = new GuiPeakStatistics();
-				jTabbedPane1.addTab("PeakStatistics", guiPeakStatistics);
+//				guiPeakStatistics = new GuiPeakStatistics();
+//				jTabbedPane1.addTab("PeakStatistics", guiPeakStatistics);
 			}
 			pack();
 			this.setSize(1150, 750);

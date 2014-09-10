@@ -49,12 +49,9 @@ public class GuiSamToBam extends JPanel {
 	ButtonGroup buttonGroupRad;
 	JScrollPaneData sclVcfFile;
 	
-	JButton btnRefseqFile;
-	
 	GUIFileOpen guiFileOpen = new GUIFileOpen();
 	private JComboBoxData<Species> cmbSpecies;
 	JComboBoxData<String> cmbVersion;
-	private JTextField txtReferenceSequence;
 	private JCheckBox chckbxGeneratepileupfile;
 	/**
 	 * Create the panel.
@@ -65,7 +62,7 @@ public class GuiSamToBam extends JPanel {
 		JButton btnNewButton = new JButton("Open Sam/Bam File");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<String> lsFileName = guiFileOpen.openLsFileName("SamBam", "");
+				ArrayList<String> lsFileName = guiFileOpen.openLsFileName("Sam/Bam", "");
 				ArrayList<String[]> lsToScrlFile = new ArrayList<String[]>();
 				for (String string : lsFileName) {
 					String prefix = FileOperate.getFileNameSep(string)[0].split("_")[0];
@@ -129,7 +126,7 @@ public class GuiSamToBam extends JPanel {
 		btnConvertSam.setBounds(776, 552, 157, 24);
 		add(btnConvertSam);
 		
-		JLabel lblSamfile = new JLabel("SamConvert");
+		JLabel lblSamfile = new JLabel("BamConvert");
 		lblSamfile.setBounds(38, 12, 121, 14);
 		add(lblSamfile);
 		
@@ -210,20 +207,6 @@ public class GuiSamToBam extends JPanel {
 		lblVersion.setBounds(397, 299, 69, 14);
 		add(lblVersion);
 		
-		txtReferenceSequence = new JTextField();
-		txtReferenceSequence.setBounds(38, 346, 304, 18);
-		add(txtReferenceSequence);
-		txtReferenceSequence.setColumns(10);
-		
-		btnRefseqFile = new JButton("RefseqFile");
-		btnRefseqFile.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				txtReferenceSequence.setText(guiFileOpen.openFileName("refseq", ""));
-			}
-		});
-		btnRefseqFile.setBounds(358, 343, 118, 24);
-		add(btnRefseqFile);
-		
 		chckbxGeneratepileupfile = new JCheckBox("GeneratePileUpFile");
 		chckbxGeneratepileupfile.setBounds(38, 250, 187, 22);
 		add(chckbxGeneratepileupfile);
@@ -265,7 +248,7 @@ public class GuiSamToBam extends JPanel {
 	private void initial() {
 		buttonGroupRad = new ButtonGroup();
 		
-		scrlSamFile.setTitle(new String[]{"SamBamFile", "prefix"});
+		scrlSamFile.setTitle(new String[]{"Sam/BamFile", "prefix"});
 		
 		cmbSpecies.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.Genome));
 		
@@ -278,8 +261,6 @@ public class GuiSamToBam extends JPanel {
 			chckbxIndex.setEnabled(false);
 			cmbSpecies.setEnabled(true);
 			cmbVersion.setEnabled(true);
-			txtReferenceSequence.setEnabled(true);
-			btnRefseqFile.setEnabled(true);
 			selectCombSpecies();
 		}
 		else {
@@ -287,8 +268,6 @@ public class GuiSamToBam extends JPanel {
 			chckbxIndex.setEnabled(true);
 			cmbSpecies.setEnabled(false);
 			cmbVersion.setEnabled(false);
-			txtReferenceSequence.setEnabled(false);
-			btnRefseqFile.setEnabled(false);		
 		}
 	}
 	
@@ -296,13 +275,9 @@ public class GuiSamToBam extends JPanel {
 		Species species = cmbSpecies.getSelectedValue();
 		if (species.getTaxID() == 0) {
 			cmbVersion.setEnabled(false);
-			txtReferenceSequence.setEnabled(true);
-			btnRefseqFile.setEnabled(true);
 		} 
 		else {
 			cmbVersion.setEnabled(true);
-			txtReferenceSequence.setEnabled(false);
-			btnRefseqFile.setEnabled(false);
 			cmbVersion.setMapItem(species.getMapVersion());
 		}
 	}
@@ -312,7 +287,7 @@ public class GuiSamToBam extends JPanel {
 		Species species = cmbSpecies.getSelectedValue();
 		
 		if (species.getTaxID() == 0) {
-			refFile = txtReferenceSequence.getText();
+			refFile = null;
 		} else {
 			refFile = species.getChromSeq();
 		}
