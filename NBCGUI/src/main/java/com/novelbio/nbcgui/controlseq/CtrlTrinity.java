@@ -1,13 +1,18 @@
 package com.novelbio.nbcgui.controlseq;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.seq.denovo.N50AndSeqLen;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
+import com.novelbio.analysis.seq.rnaseq.CAP3cluster;
 import com.novelbio.analysis.seq.rnaseq.Trinity;
 import com.novelbio.analysis.seq.rnaseq.TrinityCopeIso;
+import com.novelbio.analysis.seq.rnaseq.TrinityFaMerage;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.listOperate.HistList;
 
@@ -108,9 +113,41 @@ public class CtrlTrinity implements IntCmdSoft {
 	public void setJaccard_clip(boolean jaccard_clip) {
 		this.jaccard_clip = jaccard_clip;
 	}
-	public void runTrinity() {
+	public void assemblyRNA() {
+		Map<String, String> mapPrefix2TrinityFa = runTrinity_getMapPrefix2File();
+		if (mapPrefix2TrinityFa.size() <= 1) {
+			assemblySingleSample(mapPrefix2TrinityFa);
+		} else {
+			assemblyMultiSample(mapPrefix2TrinityFa);
+		}
+	}
+	
+	private void assemblySingleSample(Map<String, String> mapPrefix2TrinityFa) {
+		//TODO 一个文件的处理
+	}
+	
+	private void assemblyMultiSample(Map<String, String> mapPrefix2TrinityFa) {
+		String outMergeTrinityFa = outPrefix + "mergedTrinity.fa";
+		String outClusterCap3 = outPrefix + "cap3Trinity.fa";
+		
+		CAP3cluster.mergeTrinity(mapPrefix2TrinityFa, outMergeTrinityFa);
+		
+		CAP3cluster cap3cluster = new CAP3cluster();
+		cap3cluster.setFastaNeedCluster(outMergeTrinityFa);
+		cap3cluster.setOutFile(outClusterCap3);
+		cap3cluster.run();
+		
+	}
+	
+	
+	/**
+	 * 运行Trinity，运行结束后返回 prefix对应拼接结果的文件
+	 * @return
+	 */
+	private Map<String, String> runTrinity_getMapPrefix2File() {
 		lsCmd.clear();
 		copeFastq.setMapCondition2LsFastQLR();
+		Map<String, String> mapPrefix2Trinity = new LinkedHashMap<>();
 		for (String prefix : copeFastq.getLsPrefix()) {
 			List<String[]> lsFastQs = copeFastq.getMapCondition2LsFastQLR().get(prefix);
 			List<String> lsFqLeft = new ArrayList<>();
@@ -146,9 +183,12 @@ public class CtrlTrinity implements IntCmdSoft {
 			lsCmd.addAll(trinity.getCmdExeStr());
 			trinity.runTrinity();
 			String outFile = trinity.getResultPath();
-			copeAfterAssembly(outFile);
+			mapPrefix2Trinity.put(prefix, outFile);
 		}
+		return mapPrefix2Trinity;
 	}
+	
+	
 	
 	private void copeAfterAssembly(String trinityFile) {
 		if (!FileOperate.isFileExistAndBigThanSize(trinityFile, 0)) {

@@ -176,7 +176,7 @@ public class GuiRNAAssembly extends JPanel {
 		ctrlTrinity.setInsertSize((int) spnInsertSize.getValue());
 		ctrlTrinity.setStrandSpecific(cmbStrandInfo.getSelectedValue());
 		ctrlTrinity.setThreadNum((int) spnThreadNum.getValue());
-		ctrlTrinity.runTrinity();
+		ctrlTrinity.assemblyRNA();
 	}
 	
 }

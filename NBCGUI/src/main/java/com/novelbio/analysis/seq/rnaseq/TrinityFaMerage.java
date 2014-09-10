@@ -1,38 +1,30 @@
 package com.novelbio.analysis.seq.rnaseq;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.base.SepSign;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
-import com.sun.xml.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
+/**
+ * 本类主要用于合并Trinity的文件用于聚类，以及将聚类的结果做后续分析
+ * @author zomg0jie
+ *
+ */
 public class TrinityFaMerage {
-	String trinityResultDir = "D:\\11";
-	String merageResultFile = "D:\\12\\merage.txt";
-	public void changeTrinityFaId(){
-		List<String[]> LisFilePath = new ArrayList<String[]>();
-		LisFilePath = FileOperate.getFoldFileName(trinityResultDir);
-		String[] strFaID;
-		TxtReadandWrite txtWrite = new TxtReadandWrite(merageResultFile);
-		for (String[] content:LisFilePath) {
-			for (String file:content) {
-				TxtReadandWrite contentfile = new TxtReadandWrite(file);
-				System.out.println(file);
-				for (String linecontent : contentfile.readlines()) {
-					System.out.print(linecontent);
-				/*	if (linecontent.startsWith(">")) {
-						strFaID = linecontent.split(" ");
-						System.out.print(strFaID[0]);
-					}*/
-				}
-				
-			}
-		
-		}
+	Map<String, String> mapPrefix2TrinityFile = new LinkedHashMap<>();
+	
+	/**
+	 * 添加Trinity拼接好的结果，注意，一个prefix必须只有一个file对应
+	 * @param prefix 样本名
+	 * @param fileName Trinity拼接好的文件
+	 */
+	public void addTrinityFa(String prefix, String fileName) {
+		mapPrefix2TrinityFile.put(prefix, fileName);
 	}
-	public static void main (String[] args){
-		TrinityFaMerage trinityfamerage = new TrinityFaMerage();
-		trinityfamerage.changeTrinityFaId();
-	}
+	
+	
+	
+	
+	
 }

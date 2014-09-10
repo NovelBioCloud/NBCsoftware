@@ -70,8 +70,7 @@ public class NBCWord {
 			if(param.get(key) instanceof Collection){
 				if(((Collection<?>)param.get(key)).isEmpty())
 					continue;
-				List<Object> lsParam = new ArrayList<>();
-				lsParam.addAll((Collection<?>) param.get(key));
+				List<Object> lsParam = new ArrayList<>((Collection<?>) param.get(key));
 				if(lsParam.get(0) instanceof NBCWordTable){
 					writeTables(doc,key,lsParam);
 				}else if(lsParam.get(0) instanceof NBCWordImage){

@@ -1,10 +1,13 @@
 package com.novelbio.analysis.seq.rnaseq;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.novelbio.analysis.IntCmdSoft;
+import com.novelbio.base.SepSign;
 import com.novelbio.base.cmd.CmdOperate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.dataStructure.ArrayOperate;
@@ -25,8 +28,12 @@ public class CAP3cluster implements IntCmdSoft {
 	private static int READSSUPPORTNUM = 3;
 	String exePath = "";	
 	
-	/** 需要聚类的序列文件，fasta格式文件 */
-	String fastaNeedCluster;
+	/** 需要聚类的序列文件，fasta格式文件
+	 * key: 样本名
+	 * value: 文件
+	 */
+	Map<String, String> mapPrefix2TrinityFile;
+
 	/** 输出文件路径及名称 */
 	String outFile;
 	/** overlap区域允许的最大gap长度，默认 20 */
@@ -38,11 +45,18 @@ public class CAP3cluster implements IntCmdSoft {
 	/** clip 位置reads支持数，默认 3 */
 	int readsSupportNum = READSSUPPORTNUM;
 
-	/** 设定需要聚类的序列文件，fasta格式 */
-	public void setFastaNeedCluster(String fastaNeedCluster) {
-		FileOperate.checkFileExistAndBigThanSize(fastaNeedCluster, 0);
-		this.fastaNeedCluster = fastaNeedCluster;
+	/**
+	 * 设定需要聚类的序列文件
+	 * key: 样本名
+	 * value: 文件
+	 */
+	public void setFastaNeedCluster(Map<String, String> mapPrefix2TrinityFile) {
+		for (String fileFasta : mapPrefix2TrinityFile.values()) {
+			FileOperate.checkFileExistAndBigThanSize(fileFasta, 0);
+		}
+		this.mapPrefix2TrinityFile = mapPrefix2TrinityFile;
 	}
+	
 	/** 输出文件名 */
 	public void setOutFile(String outFile) {
 		this.outFile = outFile;
@@ -72,25 +86,36 @@ public class CAP3cluster implements IntCmdSoft {
 		}
 	}
 
-	public CAP3cluster(){
+	public CAP3cluster() {
 		SoftWareInfo softWareInfo = new SoftWareInfo(SoftWare.cap3);
 		this.exePath = softWareInfo.getExePathRun();
 	}
 	
 	public void run() {
-		CmdOperate cmdOperate = new CmdOperate(getLsCmd());
+		String outMergedFile = ContigId2TranId.mergeTrinity(mapPrefix2TrinityFile, getOutMergedFile());
+		
+		CmdOperate cmdOperate = new CmdOperate(getLsCmd(outMergedFile));
 		cmdOperate.runWithExp("CAP3 error:");
+		
 		ContigId2TranId contigIDToTranID = new ContigId2TranId();
 		contigIDToTranID.setCAP3ResultFile(outFile);
-		contigIDToTranID.setCAP3ResultSingletsFile(fastaNeedCluster.concat(".cap.singlets"));
+		contigIDToTranID.setCAP3ResultSingletsFile(outMergedFile.concat(".cap.singlets"));
 		contigIDToTranID.setOutContigIDToTranIDFile(FileOperate.changeFileSuffix(outFile, "_GeneId2TransId", "txt"));
 		contigIDToTranID.generateCompareTab();
 	}
 	
-	private List<String> getLsCmd() {
+	private String getOutMergedFile() {
+		String outMergedFile = outFile + "merged";
+		if (mapPrefix2TrinityFile.size() == 1) {
+			outMergedFile = mapPrefix2TrinityFile.values().iterator().next();
+		}
+		return outMergedFile;
+	}
+	
+	private List<String> getLsCmd(String fastaNeedCluster) {
 		List<String> lsCmd = new ArrayList<>();
 		lsCmd.add(exePath + "cap3");
-		ArrayOperate.addArrayToList(lsCmd, getFastaNeedCluster());
+		ArrayOperate.addArrayToList(lsCmd, getFastaNeedCluster(fastaNeedCluster));
 		ArrayOperate.addArrayToList(lsCmd, getOverlapGapLen());
 		ArrayOperate.addArrayToList(lsCmd, getOverlapLenCutff());
 		ArrayOperate.addArrayToList(lsCmd, getOverlapIdePerCutff());
@@ -98,7 +123,7 @@ public class CAP3cluster implements IntCmdSoft {
 		ArrayOperate.addArrayToList(lsCmd, getOutFile());
 		return lsCmd;
 	}
-	private String[] getFastaNeedCluster() {
+	private String[] getFastaNeedCluster(String fastaNeedCluster) {
 		return new String[]{" ",fastaNeedCluster};
 	}
 	private String[] getOutFile() {
@@ -116,20 +141,31 @@ public class CAP3cluster implements IntCmdSoft {
 	private String[] getReadsSupportNum() {
 		return new String[] {"-z", readsSupportNum + ""};
 	}
-	public void cluster(){
-		run();
 
-	}
 	public List<String> getCmdExeStr() {
 		List<String> lsResult = new ArrayList<String>();
-		CmdOperate cmdOperate = new CmdOperate(getLsCmd());
+		CmdOperate cmdOperate = new CmdOperate(getOutMergedFile());
 		lsResult.add(cmdOperate.getCmdExeStr());
 		return lsResult;
 	}
+	
+	/** 返回聚类好的文件 */
+	public String getResultClusterFa() {
+		//TODO
+		return "";
+	}
+	/** 返回基因和转录本的对照表 */
+	public String getResultGene2Trans() {
+		//TODO
+		return "";
+	}
+	//TODO 返回转录本的fasta文件
 
 }
 
-/**根据CAP3输出结果，提取Contig 对应 转录组本ID信息，存在HashMap中 */
+/**
+ * 对Cap3的输入输出文件做一系列处理，合并输入文件，以及
+ * 根据CAP3输出结果，提取Contig 对应 转录组本ID信息，存在HashMap中 */
 class ContigId2TranId {
 	/** CAP3结果文件名称*/
 	String cap3ResultFile;
@@ -226,5 +262,33 @@ c17938_Sye-12h_g1_i1+<br>
 			}
 		}
 		txtWrite.close();
+	}
+	
+	/** 合并文件，并将序列名后添加样本名，用SepSign.SEP_INFO 进行分割
+	 * 注意，一个prefix必须只有一个file对应
+	 * @param mapPrefix2TrinityFile 样本名 value: Trinity拼接好的文件
+	 * @param outMergeResult 合并的输出文件名
+	 * @return 返回输出的结果文件名
+	 */
+	protected static String mergeTrinity(Map<String, String> mapPrefix2TrinityFile, String outMergeResult) {
+		if (mapPrefix2TrinityFile.size() == 0) {
+			return null;
+		} else if (mapPrefix2TrinityFile.size() == 1) {
+			return outMergeResult;
+		}
+		TxtReadandWrite txtWrite = new TxtReadandWrite(outMergeResult, true);
+		for (String prefix : mapPrefix2TrinityFile.keySet()) {
+			String trinityFa = mapPrefix2TrinityFile.get(prefix);
+			TxtReadandWrite txtRead = new TxtReadandWrite(trinityFa);
+			for (String content : txtRead.readlines()) {
+				if (content.startsWith(">")) {
+					content = content.split(" ")[0] + SepSign.SEP_INFO + prefix;
+				}
+				txtWrite.writefileln(content);
+			}
+			txtRead.close();
+		}
+		txtWrite.close();
+		return outMergeResult;
 	}
 }

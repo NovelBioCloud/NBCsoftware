@@ -177,10 +177,10 @@ public class Selection extends BaseWord {
 	 * 
 	 * @param alignment
 	 *            0-左对齐, 1-居中, 2-右对齐, 3-两端对齐, 4-分散对齐
-	 * @param lineSpaceingRule 0
-	 * @param lineUnitBefore 0
-	 * @param lineUnitAfter 0
-	 * @param characterUnitFirstLineIndent 2
+	 * @param lineSpaceingRule 0 行距
+	 * @param lineUnitBefore 0 段前
+	 * @param lineUnitAfter 0 段后
+	 * @param characterUnitFirstLineIndent 2 首行缩进字符数
 	 */
 
 	public void setParagraphsProperties(int alignment, int lineSpaceingRule,
