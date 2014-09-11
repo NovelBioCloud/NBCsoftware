@@ -113,32 +113,6 @@ public class CtrlTrinity implements IntCmdSoft {
 	public void setJaccard_clip(boolean jaccard_clip) {
 		this.jaccard_clip = jaccard_clip;
 	}
-	public void assemblyRNA() {
-		Map<String, String> mapPrefix2TrinityFa = runTrinity_getMapPrefix2File();
-		if (mapPrefix2TrinityFa.size() <= 1) {
-			assemblySingleSample(mapPrefix2TrinityFa);
-		} else {
-			assemblyMultiSample(mapPrefix2TrinityFa);
-		}
-	}
-	
-	private void assemblySingleSample(Map<String, String> mapPrefix2TrinityFa) {
-		//TODO 一个文件的处理
-	}
-	
-	private void assemblyMultiSample(Map<String, String> mapPrefix2TrinityFa) {
-		String outMergeTrinityFa = outPrefix + "mergedTrinity.fa";
-		String outClusterCap3 = outPrefix + "cap3Trinity.fa";
-		
-		CAP3cluster.mergeTrinity(mapPrefix2TrinityFa, outMergeTrinityFa);
-		
-		CAP3cluster cap3cluster = new CAP3cluster();
-		cap3cluster.setFastaNeedCluster(outMergeTrinityFa);
-		cap3cluster.setOutFile(outClusterCap3);
-		cap3cluster.run();
-		
-	}
-	
 	
 	/**
 	 * 运行Trinity，运行结束后返回 prefix对应拼接结果的文件
@@ -187,8 +161,6 @@ public class CtrlTrinity implements IntCmdSoft {
 		}
 		return mapPrefix2Trinity;
 	}
-	
-	
 	
 	private void copeAfterAssembly(String trinityFile) {
 		if (!FileOperate.isFileExistAndBigThanSize(trinityFile, 0)) {
