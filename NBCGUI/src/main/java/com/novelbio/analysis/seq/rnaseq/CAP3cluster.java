@@ -7,6 +7,9 @@ import java.util.Map;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.novelbio.analysis.IntCmdSoft;
+import com.novelbio.analysis.seq.denovo.N50AndSeqLen;
+import com.novelbio.analysis.seq.fasta.SeqFasta;
+import com.novelbio.analysis.seq.fasta.SeqHash;
 import com.novelbio.base.SepSign;
 import com.novelbio.base.cmd.CmdOperate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
@@ -14,6 +17,7 @@ import com.novelbio.base.dataStructure.ArrayOperate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.information.SoftWareInfo;
 import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
+import com.novelbio.listOperate.HistList;
 
 /**
  * simple script : cap3 trinity.fa -f 20 -o 100 -p 90 -z 3 > trinity.cap3.result.txt
@@ -44,7 +48,8 @@ public class CAP3cluster implements IntCmdSoft {
 	int overlapIdePerCutff = OVERLAPIDEPERCUTFF;
 	/** clip 位置reads支持数，默认 3 */
 	int readsSupportNum = READSSUPPORTNUM;
-
+	
+	String outMergedFile;
 	/**
 	 * 设定需要聚类的序列文件
 	 * key: 样本名
@@ -92,7 +97,7 @@ public class CAP3cluster implements IntCmdSoft {
 	}
 	
 	public void run() {
-		String outMergedFile = ContigId2TranId.mergeTrinity(mapPrefix2TrinityFile, getOutMergedFile());
+		outMergedFile = ContigId2TranId.mergeTrinity(mapPrefix2TrinityFile, getOutMergedFile());
 		
 		CmdOperate cmdOperate = new CmdOperate(getLsCmd(outMergedFile));
 		cmdOperate.runWithExp("CAP3 error:");
@@ -102,10 +107,16 @@ public class CAP3cluster implements IntCmdSoft {
 		contigIDToTranID.setCAP3ResultSingletsFile(outMergedFile.concat(".cap.singlets"));
 		contigIDToTranID.setOutContigIDToTranIDFile(FileOperate.changeFileSuffix(outFile, "_GeneId2TransId", "txt"));
 		contigIDToTranID.generateCompareTab();
+		//统计聚类后序列N50信息
+		N50AndSeqLen n50AndSeqLen = new N50AndSeqLen(getResultClusterFa());
+		n50AndSeqLen.doStatistics();
+		//TODＯ 这里需要自动化生成图表
+		HistList histList = n50AndSeqLen.gethListLength();
+		n50AndSeqLen.getLsNinfo();
 	}
 	
 	private String getOutMergedFile() {
-		String outMergedFile = outFile + "merged";
+		String outMergedFile = outFile + "merged.fa";
 		if (mapPrefix2TrinityFile.size() == 1) {
 			outMergedFile = mapPrefix2TrinityFile.values().iterator().next();
 		}
@@ -151,16 +162,44 @@ public class CAP3cluster implements IntCmdSoft {
 	
 	/** 返回聚类好的文件 */
 	public String getResultClusterFa() {
-		//TODO
-		return "";
+		String capResultContigsFile = getOutMergedFile().concat(".cap.contigs");
+		String capResultSingletsFile = getOutMergedFile().concat(".cap.singlets");
+		String clusterFinalResultFa = getOutMergedFile().concat(".cluster.final.fa");
+		TxtReadandWrite txtContigsRead = new TxtReadandWrite(capResultContigsFile);
+		TxtReadandWrite txtSingletsRead = new TxtReadandWrite(capResultSingletsFile);
+		TxtReadandWrite txtWrite = new TxtReadandWrite(clusterFinalResultFa, true);
+		for (String content : txtContigsRead.readlines()) {
+			txtWrite.readfile();
+		}
+		txtContigsRead.close();
+		for (String content : txtSingletsRead.readlines()) {
+			txtWrite.readfile();
+		}
+		txtSingletsRead.close();
+		txtWrite.close();
+		return clusterFinalResultFa;
 	}
+	
+	ContigId2TranId contigId2TranId = new ContigId2TranId();
 	/** 返回基因和转录本的对照表 */
 	public String getResultGene2Trans() {
 		//TODO
-		return "";
+		return contigId2TranId.outContigIDToTranIDFileName;
 	}
 	//TODO 返回转录本的fasta文件
-
+	public String getResultTranscriptFasta() {
+		String transcriptFaFile = outMergedFile.concat("transcript.fa");
+		SeqHash seqHash = new SeqHash(outMergedFile);
+		TxtReadandWrite txtContigToTranIDRead = new TxtReadandWrite(contigId2TranId.outContigIDToTranIDFileName);
+		TxtReadandWrite txtWrite = new TxtReadandWrite(transcriptFaFile, true);
+		for (String content : txtContigToTranIDRead.readlines()) {
+			SeqFasta seqnameFasta =  seqHash.getSeq(content.split(" ")[1]);
+			txtWrite.writefileln(seqnameFasta.toString());
+		}
+		txtContigToTranIDRead.close();
+		txtWrite.close();
+		return transcriptFaFile;
+	}
 }
 
 /**
@@ -290,5 +329,9 @@ c17938_Sye-12h_g1_i1+<br>
 		}
 		txtWrite.close();
 		return outMergeResult;
+	}
+	/**用来输出所有 转录组本序列，Fasta格式 */
+	private void getTranscriptFa(String outMergedFile) {
+
 	}
 }
