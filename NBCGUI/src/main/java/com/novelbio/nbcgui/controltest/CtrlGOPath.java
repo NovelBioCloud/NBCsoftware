@@ -14,11 +14,15 @@ import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.analysis.annotation.functiontest.StatisticTestGene2Item;
 import com.novelbio.analysis.annotation.functiontest.StatisticTestItem2Gene;
 import com.novelbio.analysis.annotation.functiontest.StatisticTestResult;
+import com.novelbio.analysis.seq.genome.GffSpeciesInfo;
+import com.novelbio.base.StringOperate;
 import com.novelbio.base.dataOperate.ExcelOperate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunProcess;
+import com.novelbio.database.domain.geneanno.EnumSpeciesFile;
 import com.novelbio.database.model.modgeneid.GeneID;
+import com.novelbio.database.model.species.Species;
 import com.novelbio.nbcReport.EnumTableType;
 /**
  * 考虑添加进度条
@@ -50,7 +54,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	 * 若为string[1] 则跑全部基因作分析
 	 */
 	ArrayList<String[]> lsAccID2Value;
-	
+	Species species;
 	/**
 	 * 结果,key： 时期等
 	 * value：相应的结果
@@ -59,8 +63,9 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	String bgFile = "";
 	String saveExcelPrefix;
 	
-	public void setTaxID(int taxID) {
-		functionTest.setTaxID(taxID);
+	public void setTaxID(Species species) {
+		this.species = species;
+		functionTest.setTaxID(species.getTaxID());
 	}
 	
 	public int getTaxID() {
@@ -94,6 +99,14 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	 * @param fileName
 	 */
 	public void setLsBG(String fileName) {
+		if (StringOperate.isRealNull(fileName)) {
+			fileName = EnumSpeciesFile.bgGeneFile.getSavePath(species.getTaxID(), species.getSelectSpeciesFile());
+			if (!FileOperate.isFileExistAndBigThanSize(fileName, 0)) {
+				GffSpeciesInfo specieInformation = new GffSpeciesInfo();
+				specieInformation.setSpecies(species);
+				specieInformation.writeGeneBG(fileName);
+			}
+		}
 		this.bgFile = fileName;
 	}
 	private void setBG() {
@@ -122,11 +135,18 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	private boolean testBGfile(String fileName) {
 		boolean result = false;
 		TxtReadandWrite txtRead = new TxtReadandWrite(fileName);
+		int i  = 0;
 		for (String content : txtRead.readlines()) {
+			if (content.startsWith("#")) {
+				continue;
+			}
 			String[] ss = content.split("\t");
 			//TODO 判定是否为gene item,item的格式
 			if (ss.length == 2 && ss[1].contains(",") && ss[1].split(",")[0].contains(":")) {
 				result = true;
+				break;
+			}
+			if (i++ > 100) {
 				break;
 			}
 		}

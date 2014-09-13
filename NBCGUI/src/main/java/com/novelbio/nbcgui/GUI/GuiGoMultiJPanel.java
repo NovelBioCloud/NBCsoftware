@@ -14,6 +14,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
+import com.novelbio.analysis.annotation.cog.COGanno;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.fileOperate.FileOperate;
@@ -24,6 +25,8 @@ import com.novelbio.base.gui.JTextFieldData;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.database.model.species.Species.EnumSpeciesType;
 import com.novelbio.database.service.SpringFactory;
+import com.novelbio.nbcgui.controltest.CtrlCOG;
+import com.novelbio.nbcgui.controltest.CtrlTestCOGInt;
 import com.novelbio.nbcgui.controltest.CtrlTestGOInt;
 import com.novelbio.nbcgui.controltest.CtrlTestPathInt;
 
@@ -62,6 +65,7 @@ public class GuiGoMultiJPanel extends JPanel{
 	private JCheckBox jChkCluster;
 	private JLabel jLabGoQtaxID;
 	private JScrollPaneData jScrollPaneInput;
+	private JButton btnQuerySeq;
 	
 	JSpinner spnGOlevel;
 	
@@ -72,6 +76,7 @@ public class GuiGoMultiJPanel extends JPanel{
 	
 	JCheckBox chkGOLevel;
 	JCheckBox chckbxPathAnalysis;
+	JCheckBox chckbxCog;
 	
 	String GoClass = "";
 	
@@ -79,6 +84,8 @@ public class GuiGoMultiJPanel extends JPanel{
 	
 	JCheckBox chckbxGoAnalysis;
 	private JTextField txtSaveToPathAndPrefix;
+	private JTextField txtQuerySeq;
+	private JTextField txtEvalueCutoff;
 	
 	
 	public GuiGoMultiJPanel() {
@@ -192,8 +199,19 @@ public class GuiGoMultiJPanel extends JPanel{
 		chckbxPathAnalysis.setBounds(8, 270, 149, 23);
 		add(chckbxPathAnalysis);
 		
+		chckbxCog = new JCheckBox("COG");
+		chckbxCog.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				selectCog();
+			}
+		});
+		
+		chckbxCog.setSelected(false);
+		chckbxCog.setBounds(8, 297, 111, 23);
+		add(chckbxCog);
+		
 		txtSaveToPathAndPrefix = new JTextField();
-		txtSaveToPathAndPrefix.setBounds(322, 30, 506, 19);
+		txtSaveToPathAndPrefix.setBounds(316, 71, 506, 19);
 		add(txtSaveToPathAndPrefix);
 		txtSaveToPathAndPrefix.setColumns(10);
 		
@@ -204,12 +222,55 @@ public class GuiGoMultiJPanel extends JPanel{
 				txtSaveToPathAndPrefix.setText(fileName);
 			}
 		});
-		btnSavepath.setBounds(840, 27, 181, 25);
+		btnSavepath.setBounds(834, 68, 181, 25);
 		add(btnSavepath);
+		
+		txtQuerySeq = new JTextField();
+		txtQuerySeq.setBounds(420, 30, 402, 19);
+		add(txtQuerySeq);
+		txtQuerySeq.setColumns(10);
+		
+		btnQuerySeq = new JButton("QuerySequence");
+		btnQuerySeq.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String fileName = guiFileOpen.openFileName("sequence", "");
+				txtQuerySeq.setText(fileName);
+			}
+		});
+		btnQuerySeq.setBounds(834, 27, 181, 25);
+		add(btnQuerySeq);
+		
+		txtEvalueCutoff = new JTextField();
+		txtEvalueCutoff.setBounds(316, 30, 80, 19);
+		add(txtEvalueCutoff);
+		txtEvalueCutoff.setColumns(10);
+		
+		JLabel lblEvalueCutoff = new JLabel("evalue cutoff");
+		lblEvalueCutoff.setBounds(316, 12, 80, 15);
+		add(lblEvalueCutoff);
 		
 		initial();
 	}
-
+	
+	private void selectCog() {
+		if (chckbxCog.isSelected()) {
+			Species species = cmbSpecies.getSelectedValue();
+			if (species.getTaxID() == 0 || species.getGffFile() == null) {
+				txtEvalueCutoff.setEnabled(true);
+				txtQuerySeq.setEnabled(true);
+				btnQuerySeq.setEnabled(true);
+			} else {
+				txtEvalueCutoff.setEnabled(false);
+				txtQuerySeq.setEnabled(false);
+				btnQuerySeq.setEnabled(false);
+			}
+		} else {
+			txtEvalueCutoff.setEnabled(false);
+			txtQuerySeq.setEnabled(false);
+			btnQuerySeq.setEnabled(false);
+		}
+	}
+	
 	private void setComponent() {
 		jLabGoQtaxID = new JLabel();
 		jLabGoQtaxID.setBounds(12, 30, 111, 18);
@@ -278,11 +339,11 @@ public class GuiGoMultiJPanel extends JPanel{
 		jTxtValColGo.setNumOnly();
 
 		jScrollPaneInput = new JScrollPaneData();
-		jScrollPaneInput.setBounds(316, 82, 723, 437);
+		jScrollPaneInput.setBounds(316, 126, 723, 393);
 		jScrollPaneInput.setTitle(new String[]{"InputFile", "OutputPathAndPrefix"});
 		
 		jLabInputReviewGo = new JLabel();
-		jLabInputReviewGo.setBounds(322, 60, 97, 14);
+		jLabInputReviewGo.setBounds(316, 102, 97, 14);
 		jLabInputReviewGo.setText("InputReview");
 
 		jProgressBarGo = new JProgressBar();
@@ -329,6 +390,13 @@ public class GuiGoMultiJPanel extends JPanel{
 							e.printStackTrace();
 						}
 					}
+					if (chckbxCog.isSelected()) {
+						try {
+							runCOG(fileIn2Out[0], saveTo);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}	
+					}
 				}
 			}
 		});
@@ -346,6 +414,11 @@ public class GuiGoMultiJPanel extends JPanel{
 		cmbSpecies.setBounds(131, 28, 173, 23);
 		cmbSpecies.setMapItem(Species.getSpeciesName2Species(EnumSpeciesType.All, true, null));
 		cmbSpecies.setEditable(false);
+		cmbSpecies.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				selectCog();
+			}
+		});
 	}
 	
 	private void initial() {
@@ -357,6 +430,14 @@ public class GuiGoMultiJPanel extends JPanel{
 			spnGOlevel.setEnabled(false);
 		}
 		spnGOlevel.setValue(2);
+		
+		if (chckbxCog.isSelected()) {
+			txtQuerySeq.setEnabled(true);
+			btnQuerySeq.setEnabled(true);
+		} else {
+			txtQuerySeq.setEnabled(false);
+			btnQuerySeq.setEnabled(false);
+		}
 	}
 
 	/**
@@ -397,7 +478,7 @@ public class GuiGoMultiJPanel extends JPanel{
 		CtrlTestGOInt ctrlGO = (CtrlTestGOInt)SpringFactory.getFactory().getBean("ctrlGOall");
 		ctrlGO.clearParam();
 		ctrlGO.setGoAlgorithm(cmbGoAlgorithm.getSelectedValue());
-		ctrlGO.setTaxID(taxID);
+		ctrlGO.setTaxID(species);
 
 		ctrlGO.setBlastInfo(evalue, lsStaxID);
 				
@@ -461,7 +542,7 @@ public class GuiGoMultiJPanel extends JPanel{
 	
 		CtrlTestPathInt ctrlPath = (CtrlTestPathInt)SpringFactory.getFactory().getBean("ctrlPath");
 		ctrlPath.clearParam();
-		ctrlPath.setTaxID(taxID);
+		ctrlPath.setTaxID(species);
 
 		ctrlPath.setBlastInfo(evalue, lsStaxID);
 
@@ -480,6 +561,75 @@ public class GuiGoMultiJPanel extends JPanel{
 		ctrlPath.setLsAccID2Value(lsAccID);
 		ctrlPath.run();
 		ctrlPath.saveExcel(outFile);
+	}
+	/**
+	 * analysis按下去后得到结果
+	 */
+	private void runCOG(String excelFile, String outFile) {
+		int colAccID = Integer.parseInt(jTxtAccColGo.getText());
+		int colFC = Integer.parseInt(jTxtValColGo.getText());
+		int taxID = -1;
+		Species species = cmbSpecies.getSelectedValue();
+		String backGroundFile = jTxtBGGo.getText();
+		if (species == null) {
+			try {
+				taxID = Integer.parseInt(cmbSpecies.getEditor().getItem().toString());
+			} catch (Exception e) { }
+		} else {
+			taxID = species.getTaxID();
+		}
+		
+		ArrayList<String[]> lsAccID = null;
+		if (colAccID != colFC) {
+			lsAccID = ExcelTxtRead.readLsExcelTxt(excelFile, new int[]{colAccID, colFC}, 1, 0);
+		} else {
+			lsAccID = ExcelTxtRead.readLsExcelTxt(excelFile, new int[]{colAccID}, 1, 0);
+		}
+		double evalue = 1e-10;
+		List<Integer> lsStaxID = new ArrayList<Integer>();
+		Map<String, Species> mapComName2Species = Species.getSpeciesName2Species(EnumSpeciesType.All);
+		for (String[] strings : sclBlast.getLsDataInfo()) {
+			Species speciesS = mapComName2Species.get(strings[0]);
+			if (speciesS == null) {
+				continue;
+			} else {
+				lsStaxID.add(speciesS.getTaxID());
+			}
+		}
+	
+		CtrlTestCOGInt ctrlCOG = (CtrlTestCOGInt)SpringFactory.getFactory().getBean("ctrlCOG");
+		ctrlCOG.clearParam();
+		ctrlCOG.setTaxID(species);
+		
+		COGanno cogAnno = new COGanno();
+		try { cogAnno.setEvalueCutoff(Double.parseDouble(txtEvalueCutoff.getText())); 
+		} catch (Exception e) { }
+		if (chckbxCog.isSelected()) {
+			if (species.getTaxID() == 0 || species.getGffFile() == null) {
+				cogAnno.setSeqFastaFile(txtQuerySeq.getText());
+			} else {
+				cogAnno.setSpecies(species);
+			}
+		}
+		
+		((CtrlCOG)ctrlCOG).setCogAnno(cogAnno);
+		ctrlCOG.setBlastInfo(evalue, lsStaxID);
+
+		ctrlCOG.setLsBG(backGroundFile);
+		if (!jChkCluster.isSelected() || colAccID == colFC) {
+			double up = 0; double down = 0;
+			if ( colAccID != colFC) {
+				up = Double.parseDouble(jTxtUpValueGo.getText());
+				down = Double.parseDouble(jTxtDownValueGo.getText());
+			}
+			ctrlCOG.setUpDown(up, down);
+			ctrlCOG.setIsCluster(false);
+		} else {
+			ctrlCOG.setIsCluster(jChkCluster.isSelected());
+		}
+		ctrlCOG.setLsAccID2Value(lsAccID);
+		ctrlCOG.run();
+		ctrlCOG.saveExcel(outFile);
 	}
 	
 	private void selectCmbGoAlgorithm() {

@@ -319,11 +319,11 @@ public class GuiFastQFanwei extends JPanel {
 		txtGapLength.setColumns(10);
 		
 		JLabel lblThread = new JLabel("Thread");
-		lblThread.setBounds(9, 504, 69, 14);
+		lblThread.setBounds(9, 504, 85, 14);
 		add(lblThread);
 		
 		txtThreadNum = new JTextField();
-		txtThreadNum.setBounds(58, 502, 114, 18);
+		txtThreadNum.setBounds(83, 502, 114, 18);
 		add(txtThreadNum);
 		txtThreadNum.setColumns(10);
 		

@@ -444,7 +444,7 @@ public class GuiGoJPanel extends JPanel{
 		ctrlGO.setGoAlgorithm(cmbGoAlgorithm.getSelectedValue());
 //		ctrlGO.setGoAlgorithm(GoAlgorithm.novelgo);
 
-		ctrlGO.setTaxID(taxID);
+		ctrlGO.setTaxID(species);
 		List<Integer> lsStaxID = new ArrayList<Integer>();
 		Map<String, Species> mapComName2Species = Species.getSpeciesName2Species(EnumSpeciesType.All);
 		for (String[] strings : sclBlast.getLsDataInfo()) {
