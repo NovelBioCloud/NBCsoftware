@@ -366,7 +366,7 @@ public class GuiPathJpanel extends JPanel{
 		} else {
 			taxID = species.getTaxID();
 		}
-		ctrlPath.setTaxID(taxID);
+		ctrlPath.setTaxID(species);
 		
 		List<Integer> lsStaxID = new ArrayList<Integer>();
 		Map<String, Species> mapComName2Species = Species.getSpeciesName2Species(EnumSpeciesType.All);
