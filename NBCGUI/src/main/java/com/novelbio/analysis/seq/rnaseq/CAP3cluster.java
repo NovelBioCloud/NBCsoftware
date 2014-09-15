@@ -109,7 +109,6 @@ public class CAP3cluster implements IntCmdSoft {
 		contigIDToTranID.generateCompareTab();
 		
 		String resultClusterFa = getResultClusterFa();
-		getResultTranscriptFasta();
 		//统计聚类后序列N50信息
 		N50AndSeqLen n50AndSeqLen = new N50AndSeqLen(resultClusterFa);
 		n50AndSeqLen.doStatistics();
@@ -183,18 +182,11 @@ public class CAP3cluster implements IntCmdSoft {
 		return clusterFinalResultFa;
 	}
 	
-	ContigId2TranId contigId2TranId = new ContigId2TranId();
-/*	
-	/** 返回基因和转录本的对照表 *//*
-	public String getResultGene2Trans() {
-		//TODO
-		return contigId2TranId.outContigIDToTranIDFileName;
-	}
-	*/
 	//TODO 返回转录本的fasta文件
 	public String getResultTranscriptFasta() {
 		String transcriptFaFile = outMergedFile.concat("transcript.fa");
 		SeqHash seqHash = new SeqHash(outMergedFile);
+		ContigId2TranId contigId2TranId = new ContigId2TranId();
 		TxtReadandWrite txtContigToTranIDRead = new TxtReadandWrite(contigId2TranId.outContigIDToTranIDFileName);
 		TxtReadandWrite txtWrite = new TxtReadandWrite(transcriptFaFile, true);
 		for (String content : txtContigToTranIDRead.readlines()) {
