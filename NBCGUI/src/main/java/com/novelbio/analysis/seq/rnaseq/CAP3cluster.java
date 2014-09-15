@@ -107,8 +107,11 @@ public class CAP3cluster implements IntCmdSoft {
 		contigIDToTranID.setCAP3ResultSingletsFile(outMergedFile.concat(".cap.singlets"));
 		contigIDToTranID.setOutContigIDToTranIDFile(FileOperate.changeFileSuffix(outFile, "_GeneId2TransId", "txt"));
 		contigIDToTranID.generateCompareTab();
+		
+		String resultClusterFa = getResultClusterFa();
+		getResultTranscriptFasta();
 		//统计聚类后序列N50信息
-		N50AndSeqLen n50AndSeqLen = new N50AndSeqLen(getResultClusterFa());
+		N50AndSeqLen n50AndSeqLen = new N50AndSeqLen(resultClusterFa);
 		n50AndSeqLen.doStatistics();
 		//TODＯ 这里需要自动化生成图表
 		HistList histList = n50AndSeqLen.gethListLength();
@@ -181,11 +184,13 @@ public class CAP3cluster implements IntCmdSoft {
 	}
 	
 	ContigId2TranId contigId2TranId = new ContigId2TranId();
-	/** 返回基因和转录本的对照表 */
+/*	
+	/** 返回基因和转录本的对照表 *//*
 	public String getResultGene2Trans() {
 		//TODO
 		return contigId2TranId.outContigIDToTranIDFileName;
 	}
+	*/
 	//TODO 返回转录本的fasta文件
 	public String getResultTranscriptFasta() {
 		String transcriptFaFile = outMergedFile.concat("transcript.fa");
@@ -330,8 +335,5 @@ c17938_Sye-12h_g1_i1+<br>
 		txtWrite.close();
 		return outMergeResult;
 	}
-	/**用来输出所有 转录组本序列，Fasta格式 */
-	private void getTranscriptFa(String outMergedFile) {
 
-	}
 }
