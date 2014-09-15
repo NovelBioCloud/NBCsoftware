@@ -8,33 +8,28 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
-import com.novelbio.analysis.annotation.functiontest.StatisticTestResult;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunProcess.RunThreadStat;
 import com.novelbio.base.plot.ImageUtils;
-import com.novelbio.base.word.NBCWordImage;
 import com.novelbio.database.domain.geneanno.GOtype;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportGO;
-import com.novelbio.nbcReport.Params.ReportGOAll;
-import com.novelbio.nbcReport.Params.ReportGOCluster;
-import com.novelbio.nbcReport.Params.ReportGOClusterType;
-import com.novelbio.nbcReport.Params.ReportGOUpDown;
 import com.novelbio.nbcReport.report.GOReport;
 
 /** 同时把BP、MF、CC三个类型都做了 */
 @Component
 @Scope("prototype")
 public class CtrlGOall implements CtrlTestGOInt {
-	
+	private static Logger logger = Logger.getLogger(CtrlGOall.class);
 	public Map<GOtype, CtrlGO> mapGOtype2CtrlGO = new LinkedHashMap<GOtype, CtrlGO>();
 	public Map<String, String> mapPrefix2ResultPic = new LinkedHashMap<>();
 
@@ -50,11 +45,11 @@ public class CtrlGOall implements CtrlTestGOInt {
 	String savePrefix = "";
 	
 	@Override
-	public void setTaxID(int taxID) {
+	public void setTaxID(Species species) {
 		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
-			ctrlGO.setTaxID(taxID);
+			ctrlGO.setTaxID(species);
 		}
-		this.taxID = taxID;
+		this.taxID = species.getTaxID();
 	}
 	
 	public ReportGO getReportGO() {
@@ -214,6 +209,7 @@ public class CtrlGOall implements CtrlTestGOInt {
 
 	private void savePic() {
 		mapPrefix2ResultPic.clear();
+		logger.info("start draw pic");
 		for (String prefix : getPrefix()) {
 			List<BufferedImage> lsGOimage = new ArrayList<BufferedImage>();
 			String excelSavePath = "";
@@ -228,7 +224,8 @@ public class CtrlGOall implements CtrlTestGOInt {
 			}
 			BufferedImage bfImageCombine = ImageUtils.combineBfImage(true, 30, lsGOimage);
 			String picNameLog2P = excelSavePath +  "GO-Analysis-Log2P_" + prefix + "_" + getSavePrefix() + ".png";
-			
+			logger.info("draw pic:" + picNameLog2P);
+
 			String picName = ImageUtils.saveBufferedImage(bfImageCombine, picNameLog2P);
 			if (picName == null) continue;//存储图片失败
 			mapPrefix2ResultPic.put(prefix, picName);

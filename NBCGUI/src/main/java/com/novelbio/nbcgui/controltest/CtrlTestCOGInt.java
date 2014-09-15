@@ -5,11 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
+import com.novelbio.database.model.species.Species;
 import com.novelbio.nbcReport.XdocTmpltExcel;
 import com.novelbio.nbcReport.Params.ReportPathWay;
 
 public interface CtrlTestCOGInt {
-	public void setTaxID(int taxID);
+	public void setTaxID(Species taxID);
 	/** lsAccID2Value  arraylist-string[] 若为string[2],则第二个为上下调关系，判断上下调
 	 * 若为string[1] 则跑全部基因作分析
 	 */

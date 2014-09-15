@@ -22,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.analysis.annotation.functiontest.StatisticTestResult;
+import com.novelbio.analysis.annotation.functiontest.TestType;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.gui.GUIFileOpen;
@@ -444,7 +445,7 @@ public class GuiGoJPanel extends JPanel{
 		ctrlGO.setGoAlgorithm(cmbGoAlgorithm.getSelectedValue());
 //		ctrlGO.setGoAlgorithm(GoAlgorithm.novelgo);
 
-		ctrlGO.setTaxID(taxID);
+		ctrlGO.setTaxID(species);
 		List<Integer> lsStaxID = new ArrayList<Integer>();
 		Map<String, Species> mapComName2Species = Species.getSpeciesName2Species(EnumSpeciesType.All);
 		for (String[] strings : sclBlast.getLsDataInfo()) {
@@ -499,7 +500,7 @@ public class GuiGoJPanel extends JPanel{
 	private void settab(JTabbedPane jTabbedPaneGoResult, String tabName , List<StatisticTestResult> lsResultTest) {
 		//里层
 		String[][] tableValue = null;
-		List<String[]> lsStatisticTestResults = StatisticTestResult.getLsInfo(true, lsResultTest);
+		List<String[]> lsStatisticTestResults = StatisticTestResult.getLsInfo(TestType.GO, lsResultTest);
 		
 		DefaultTableModel jTabResult = new DefaultTableModel(tableValue,lsStatisticTestResults.get(0));
 		//中层

@@ -9,12 +9,13 @@ import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import com.novelbio.analysis.annotation.cog.COGanno;
+import com.novelbio.analysis.annotation.functiontest.CogFunTest;
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.plot.ImageUtils;
 import com.novelbio.nbcReport.Params.EnumReport;
-import com.novelbio.nbcReport.Params.ReportPathWay;
 @Service
 @Scope("prototype")
 public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
@@ -41,7 +42,11 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 		bgName = FileOperate.changeFilePrefix(bgName, ".", null);
 		return bgName;
 	}
-		
+	
+	public void setCogAnno(COGanno cogAnno) {
+		((CogFunTest)functionTest).setCogAnno(cogAnno);
+	}
+	
 	@Override
 	public List<String> saveExcel(String excelPath) {
 		List<String> lsResultFile = new ArrayList<>();
