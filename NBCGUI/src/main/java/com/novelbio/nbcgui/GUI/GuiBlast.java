@@ -17,13 +17,13 @@ import com.novelbio.analysis.annotation.blast.BlastNBC;
 import com.novelbio.analysis.annotation.blast.BlastType;
 import com.novelbio.analysis.seq.fasta.SeqFasta;
 import com.novelbio.analysis.seq.fasta.SeqHash;
+import com.novelbio.analysis.seq.fasta.StrandType;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.base.gui.JTextFieldData;
 import com.novelbio.database.domain.geneanno.BlastFileInfo;
-import com.novelbio.database.model.modgeneid.GeneID;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.database.model.species.Species.EnumSpeciesType;
 import com.novelbio.database.updatedb.database.BlastUp2DB;
@@ -43,6 +43,7 @@ public class GuiBlast extends JPanel implements GuiNeedOpenFile {
 
 	JComboBoxData<BlastType> combBlastType = null;
 	JComboBoxData<Integer> combResultType = null;
+	JComboBoxData<StrandType> combStrand = null;
 	
 	JCheckBox chckbxSavetodb;
 	JScrollPaneData sclPaneBlastFile;
@@ -105,11 +106,19 @@ public class GuiBlast extends JPanel implements GuiNeedOpenFile {
 		combBlastType.setBounds(10, 175, 209, 23);
 		add(combBlastType);
 		
-		combResultType = new JComboBoxData<Integer>();;
+		combResultType = new JComboBoxData<Integer>();
 		combResultType.setMapItem(BlastNBC.getHashResultType());
 		combResultType.setBounds(10, 440, 249, 23);
 		add(combResultType);
 		
+		combStrand = new JComboBoxData<>();
+		combStrand.setMapItem(BlastNBC.getMapStrandType2Value());
+		combStrand.setBounds(144, 296, 146, 24);
+		add(combStrand);
+		
+		JLabel lblStrand = new JLabel("Strand");
+		lblStrand.setBounds(144, 279, 98, 15);
+		add(lblStrand);
 		JLabel lblBlastType = new JLabel("BlastType");
 		lblBlastType.setBounds(10, 152, 91, 14);
 		add(lblBlastType);
@@ -165,6 +174,7 @@ public class GuiBlast extends JPanel implements GuiNeedOpenFile {
 				ctrlBlast.setResultFile(textResultFile.getText());
 				ctrlBlast.setShortQuerySeq(chckbxQueryseqshortthan.isSelected());
 				ctrlBlast.setResultType((Integer)combResultType.getSelectedValue());
+				ctrlBlast.setStrandType(combStrand.getSelectedValue());
 				ctrlBlast.blast();
 			}
 		});
@@ -216,17 +226,19 @@ public class GuiBlast extends JPanel implements GuiNeedOpenFile {
 		
 		txtThreadNum = new JTextField();
 		txtThreadNum.setText("4");
-		txtThreadNum.setBounds(217, 299, 42, 18);
+		txtThreadNum.setBounds(144, 240, 64, 18);
 		add(txtThreadNum);
 		txtThreadNum.setColumns(10);
 		
 		JLabel lblThreadnum = new JLabel("ThreadNum");
-		lblThreadnum.setBounds(218, 279, 98, 14);
+		lblThreadnum.setBounds(146, 216, 98, 14);
 		add(lblThreadnum);
 		
 		chckbxQueryseqshortthan = new JCheckBox("Query Seq Short Than 60Bp");
 		chckbxQueryseqshortthan.setBounds(227, 173, 209, 26);
 		add(chckbxQueryseqshortthan);
+		
+
 		
 		initial();
 	}

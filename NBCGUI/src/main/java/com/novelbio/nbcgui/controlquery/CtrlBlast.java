@@ -6,6 +6,7 @@ import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.annotation.blast.BlastNBC;
 import com.novelbio.analysis.annotation.blast.BlastStatistics;
 import com.novelbio.analysis.annotation.blast.BlastType;
+import com.novelbio.analysis.seq.fasta.StrandType;
 import com.novelbio.listOperate.HistList;
 
 public class CtrlBlast implements IntCmdSoft {
@@ -25,7 +26,7 @@ public class CtrlBlast implements IntCmdSoft {
 	 */
 	public void setQueryFastaFile(String queryFasta) {
 		blastNBC.setQueryFastaFile(queryFasta);
-	}	
+	}
 	/**
 	 * 待比对的数据库，如果是fasta文件，则会自动建索引
 	 * @param databaseSeq
@@ -33,7 +34,15 @@ public class CtrlBlast implements IntCmdSoft {
 	public void setDatabaseSeq(String databaseSeq) {
 		blastNBC.setSubjectSeq(databaseSeq);
 	}
-
+	/**
+	 * Query strand(s) to search against database/subject. Choice of both, minus, or plus.
+	 * 意思比对到reference的正链还是反链。
+	 * 所在的blast type：
+	 * blastn, blastx, tblastx
+	 */
+	public void setStrandType(StrandType strandType) {
+		blastNBC.setStrandType(strandType);
+	}	
 	/**
 	 * 输出文件
 	 * @param resultFile
