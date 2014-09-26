@@ -94,7 +94,10 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	}
 	
 	/**
-	 * <b>在这之前要先设定GOlevel</b>
+	 * 必须设定<br>
+	 * <b>在这之前要先设定GOlevel</b><br>
+	 * 如果输入的是空值，就会自动设定BG
+	 * 
 	 * 简单的判断下输入的是geneID还是geneID2Item表
 	 * @param fileName
 	 */
@@ -109,6 +112,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		}
 		this.bgFile = fileName;
 	}
+	
 	private void setBG() {
 		boolean flagGeneID = testBGfile(bgFile);
 		if (flagGeneID) {
