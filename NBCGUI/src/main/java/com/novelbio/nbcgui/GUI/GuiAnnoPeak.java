@@ -176,7 +176,7 @@ public class GuiAnnoPeak extends JPanel implements GuiNeedOpenFile {
 		txtTssDown.setColumns(10);
 		
 		JLabel lblTss = new JLabel("Tss");
-		lblTss.setBounds(719, 404, 69, 14);
+		lblTss.setBounds(719, 398, 69, 14);
 		add(lblTss);
 		
 		JLabel lblUp = new JLabel("Up");
@@ -188,25 +188,25 @@ public class GuiAnnoPeak extends JPanel implements GuiNeedOpenFile {
 		add(lblDown);
 		
 		txtTesUp = new JTextField();
-		txtTesUp.setBounds(720, 472, 52, 18);
+		txtTesUp.setBounds(719, 483, 52, 18);
 		add(txtTesUp);
 		txtTesUp.setColumns(10);
 		
 		JLabel lblUp_1 = new JLabel("Up");
-		lblUp_1.setBounds(716, 457, 69, 14);
+		lblUp_1.setBounds(719, 468, 58, 14);
 		add(lblUp_1);
 		
 		txtTesDown = new JTextField();
-		txtTesDown.setBounds(783, 472, 52, 18);
+		txtTesDown.setBounds(784, 483, 52, 18);
 		add(txtTesDown);
 		txtTesDown.setColumns(10);
 		
 		JLabel lblDown_1 = new JLabel("Down");
-		lblDown_1.setBounds(783, 457, 69, 14);
+		lblDown_1.setBounds(784, 468, 69, 14);
 		add(lblDown_1);
 		
 		JLabel lblTes = new JLabel("Tes");
-		lblTes.setBounds(716, 446, 69, 14);
+		lblTes.setBounds(717, 452, 69, 14);
 		add(lblTes);
 		
 		chckbxGenebody = new JCheckBox("GeneBody");

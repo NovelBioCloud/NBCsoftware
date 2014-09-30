@@ -130,21 +130,21 @@ public class GuiSamToBam extends JPanel {
 		lblSamfile.setBounds(38, 12, 121, 14);
 		add(lblSamfile);
 		
-		chckbxSortBam = new JCheckBox("sortBam");
-		chckbxSortBam.setBounds(385, 200, 91, 22);
+		chckbxSortBam = new JCheckBox("SortBam");
+		chckbxSortBam.setBounds(385, 200, 139, 22);
 		add(chckbxSortBam);
 		
-		chckbxIndex = new JCheckBox("index");
-		chckbxIndex.setBounds(676, 200, 69, 22);
+		chckbxIndex = new JCheckBox("Index");
+		chckbxIndex.setBounds(676, 200, 129, 22);
 		add(chckbxIndex);
 		
 		
 		chckRealign = new JCheckBox("Realign");
-		chckRealign.setBounds(385, 226, 91, 22);
+		chckRealign.setBounds(385, 226, 139, 22);
 		add(chckRealign);
 		
 		chckRemoveduplicate = new JCheckBox("RemoveDuplicate");
-		chckRemoveduplicate.setBounds(38, 225, 147, 22);
+		chckRemoveduplicate.setBounds(38, 225, 187, 22);
 		add(chckRemoveduplicate);
 		
 		
@@ -162,7 +162,7 @@ public class GuiSamToBam extends JPanel {
 				}
 			}
 		});
-		chckRecalibrate.setBounds(676, 226, 209, 22);
+		chckRecalibrate.setBounds(676, 226, 305, 22);
 		add(chckRecalibrate);
 		
 		scrlSamFile = new JScrollPaneData();
@@ -204,7 +204,7 @@ public class GuiSamToBam extends JPanel {
 		add(cmbVersion);
 		
 		JLabel lblVersion = new JLabel("Version");
-		lblVersion.setBounds(397, 299, 69, 14);
+		lblVersion.setBounds(385, 299, 69, 14);
 		add(lblVersion);
 		
 		chckbxGeneratepileupfile = new JCheckBox("GeneratePileUpFile");
@@ -213,6 +213,7 @@ public class GuiSamToBam extends JPanel {
 
 		sclVcfFile = new JScrollPaneData();
 		sclVcfFile.setBounds(38, 407, 895, 97);
+		sclVcfFile.setTitle(new String[]{"Vcf file"});
 		add(sclVcfFile);
 		
 		JLabel lblVcffile = new JLabel("VCF To Help Recalibrate");
@@ -229,7 +230,7 @@ public class GuiSamToBam extends JPanel {
 		btnAddvcf.setBounds(38, 516, 118, 24);
 		add(btnAddvcf);
 		
-		btnDelvcf = new JButton("DelVcf");
+		btnDelvcf = new JButton("DeleteVcf");
 		btnDelvcf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				sclVcfFile.deleteSelRows();
@@ -240,7 +241,7 @@ public class GuiSamToBam extends JPanel {
 		
 		chckbxMergebyprefix = new JCheckBox("MergeByPrefix");
 		chckbxMergebyprefix.setSelected(true);
-		chckbxMergebyprefix.setBounds(38, 198, 128, 23);
+		chckbxMergebyprefix.setBounds(38, 198, 187, 23);
 		add(chckbxMergebyprefix);
 		initial();
 	}

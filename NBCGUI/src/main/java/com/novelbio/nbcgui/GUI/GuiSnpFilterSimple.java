@@ -80,7 +80,7 @@ public class GuiSnpFilterSimple extends JPanel {
 		sclPileupFile.setBounds(20, 231, 610, 155);
 		add(sclPileupFile);
 		
-		btnOpeanbam = new JButton("OpeanBam");
+		btnOpeanbam = new JButton("OpenPileUp");
 		btnOpeanbam.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<String> lsFile = guiFileOpen.openLsFileName("BamFile", "");
@@ -95,25 +95,25 @@ public class GuiSnpFilterSimple extends JPanel {
 				sclPileupFile.addItemLs(lsInfo);
 			}
 		});
-		btnOpeanbam.setBounds(20, 398, 118, 24);
+		btnOpeanbam.setBounds(20, 398, 159, 24);
 		add(btnOpeanbam);
 		
-		btnDelbam = new JButton("DelBam");
+		btnDelbam = new JButton("DeletePileUp");
 		btnDelbam.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				sclPileupFile.deleteSelRows();
 			}
 		});
-		btnDelbam.setBounds(365, 398, 118, 24);
+		btnDelbam.setBounds(471, 398, 159, 24);
 		add(btnDelbam);
 		
-		btnRun = new JButton("run");
+		btnRun = new JButton("Run");
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				run();
 			}
 		});
-		btnRun.setBounds(784, 481, 118, 24);
+		btnRun.setBounds(812, 481, 118, 24);
 		add(btnRun);
 		
 		JLabel lblAddbamfile = new JLabel("AddPileUpFile");
@@ -121,7 +121,7 @@ public class GuiSnpFilterSimple extends JPanel {
 		add(lblAddbamfile);
 		
 		txtSaveTo = new JTextField();
-		txtSaveTo.setBounds(20, 484, 532, 18);
+		txtSaveTo.setBounds(20, 484, 610, 18);
 		add(txtSaveTo);
 		txtSaveTo.setColumns(10);
 		
@@ -131,33 +131,33 @@ public class GuiSnpFilterSimple extends JPanel {
 				txtSaveTo.setText(guiFileOpen.saveFileNameAndPath("Out", ""));
 			}
 		});
-		btnSaveto.setBounds(606, 481, 118, 24);
+		btnSaveto.setBounds(642, 481, 130, 24);
 		add(btnSaveto);
 		
 		scrlCompare = new JScrollPaneData();
-		scrlCompare.setBounds(642, 273, 260, 96);
+		scrlCompare.setBounds(642, 273, 288, 96);
 		add(scrlCompare);
 		
 		JLabel lblCompare = new JLabel("Compare");
 		lblCompare.setBounds(642, 248, 69, 14);
 		add(lblCompare);
 		
-		JButton btnAddCompare = new JButton("AddCompare");
+		JButton btnAddCompare = new JButton("Add");
 		btnAddCompare.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				scrlCompare.addItem(new String[]{"",""});
 			}
 		});
-		btnAddCompare.setBounds(642, 381, 115, 24);
+		btnAddCompare.setBounds(642, 381, 130, 24);
 		add(btnAddCompare);
 		
-		JButton btnDeleteCompare = new JButton("DelCompare");
+		JButton btnDeleteCompare = new JButton("Delete");
 		btnDeleteCompare.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				scrlCompare.deleteSelRows();
 			}
 		});
-		btnDeleteCompare.setBounds(784, 381, 118, 24);
+		btnDeleteCompare.setBounds(801, 381, 129, 24);
 		add(btnDeleteCompare);
 		
 		progressBar = new JProgressBar();
@@ -173,18 +173,18 @@ public class GuiSnpFilterSimple extends JPanel {
 		add(lblDetailInfo);
 		
 		guiLayeredPaneSpeciesVersionGff = new GuiLayeredPaneSpeciesVersionGff();
-		guiLayeredPaneSpeciesVersionGff.setBounds(644, 34, 258, 153);
+		guiLayeredPaneSpeciesVersionGff.setBounds(644, 34, 286, 153);
 		add(guiLayeredPaneSpeciesVersionGff);
 		
 		sclSnpFile = new JScrollPaneData();
 		sclSnpFile.setBounds(20, 41, 610, 130);
 		add(sclSnpFile);
 		
-		JLabel lblAddSnpFile = new JLabel("AddSnpFile");
+		JLabel lblAddSnpFile = new JLabel("AddSNPFile");
 		lblAddSnpFile.setBounds(20, 18, 129, 14);
 		add(lblAddSnpFile);
 		
-		JButton btnOpensnp = new JButton("OpenSnp");
+		JButton btnOpensnp = new JButton("OpenSNP");
 		btnOpensnp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<String> lsFile = guiFileOpen.openLsFileName("TxtFile", "");
@@ -199,40 +199,40 @@ public class GuiSnpFilterSimple extends JPanel {
 				sclSnpFile.addItemLs(lsInfo);
 			}
 		});
-		btnOpensnp.setBounds(20, 178, 118, 24);
+		btnOpensnp.setBounds(20, 178, 159, 24);
 		add(btnOpensnp);
 		
-		JButton btnDelsnp = new JButton("DelSnp");
+		JButton btnDelsnp = new JButton("DeleteSNP");
 		btnDelsnp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				sclSnpFile.deleteSelRows();
 			}
 		});
-		btnDelsnp.setBounds(512, 178, 118, 24);
+		btnDelsnp.setBounds(471, 178, 159, 24);
 		add(btnDelsnp);
 		
-		JLabel lblHetosnppropfilter = new JLabel("HeteroSnpPropLevel");
-		lblHetosnppropfilter.setBounds(642, 199, 144, 14);
+		JLabel lblHetosnppropfilter = new JLabel("HeteroSNPPropLevel");
+		lblHetosnppropfilter.setBounds(642, 199, 201, 14);
 		add(lblHetosnppropfilter);
 		
-		JLabel label = new JLabel("HeteroMoreSnpPropLevel");
-		label.setBounds(642, 222, 179, 14);
+		JLabel label = new JLabel("HeteroMoreSNPPropLevel");
+		label.setBounds(642, 222, 201, 14);
 		add(label);
 		
 		txtSnpHeto = new JTextField();
-		txtSnpHeto.setBounds(833, 197, 69, 18);
+		txtSnpHeto.setBounds(861, 197, 69, 18);
 		add(txtSnpHeto);
 		txtSnpHeto.setColumns(10);
 		
 		txtSnpHetoMore = new JTextField();
-		txtSnpHetoMore.setBounds(832, 220, 70, 18);
+		txtSnpHetoMore.setBounds(861, 222, 70, 18);
 		add(txtSnpHetoMore);
 		txtSnpHetoMore.setColumns(10);
 		
 		initial();
 	}
 	private void initial() {
-		sclSnpFile.setTitle(new String[]{"SnpFile", "Prefix"});
+		sclSnpFile.setTitle(new String[]{"SNPFile", "Prefix"});
 		sclPileupFile.setTitle(new String[]{"PileUpFile", "Prefix"});
 
 		cmbSnpLevel.setMapItem(SnpLevel.getMapStr2SnpLevel());

@@ -126,13 +126,13 @@ public class GuiFastQFanwei extends JPanel {
 		
 		txtMinReadsLen = new JTextField();
 		txtMinReadsLen.setText("50");
-		txtMinReadsLen.setBounds(96, 282, 76, 18);
+		txtMinReadsLen.setBounds(140, 282, 76, 18);
 		add(txtMinReadsLen);
 		txtMinReadsLen.setColumns(10);
 		
 		cmbReadsQuality = new JComboBoxData<String>();
 		cmbReadsQuality.setMapItem(FastQ.getMapReadsQuality());
-		cmbReadsQuality.setBounds(121, 252, 153, 23);
+		cmbReadsQuality.setBounds(140, 252, 153, 23);
 		add(cmbReadsQuality);
 		
 		JLabel lblReadsQuality = new JLabel("Reads Quality");
@@ -140,7 +140,7 @@ public class GuiFastQFanwei extends JPanel {
 		add(lblReadsQuality);
 		
 		JLabel lblRetainBp = new JLabel("Retain Bp");
-		lblRetainBp.setBounds(10, 284, 69, 14);
+		lblRetainBp.setBounds(10, 284, 108, 14);
 		add(lblRetainBp);
 		
 		chckbxMapping = new JCheckBox("Mapping");
@@ -157,7 +157,7 @@ public class GuiFastQFanwei extends JPanel {
 				}
 			}
 		});
-		chckbxMapping.setBounds(8, 346, 86, 22);
+		chckbxMapping.setBounds(8, 346, 164, 22);
 		add(chckbxMapping);
 		
 		JLabel lblAlgrethm = new JLabel("algrethm");
@@ -176,7 +176,7 @@ public class GuiFastQFanwei extends JPanel {
 		txtSavePathAndPrefix.setColumns(10);
 		
 		JLabel lblResultpath = new JLabel("ResultPath");
-		lblResultpath.setBounds(10, 530, 80, 14);
+		lblResultpath.setBounds(10, 532, 80, 14);
 		add(lblResultpath);
 		
 		btnSaveto = new JButton("SaveTo");
@@ -281,25 +281,25 @@ public class GuiFastQFanwei extends JPanel {
 		add(btnDeleteFastQRight);
 		
 		JLabel lblLeftadaptor = new JLabel("LeftAdaptor");
-		lblLeftadaptor.setBounds(298, 260, 109, 14);
+		lblLeftadaptor.setBounds(366, 256, 109, 14);
 		add(lblLeftadaptor);
 		
 		txtRightAdaptor = new JTextField();
-		txtRightAdaptor.setBounds(417, 284, 166, 18);
+		txtRightAdaptor.setBounds(471, 282, 166, 18);
 		add(txtRightAdaptor);
 		txtRightAdaptor.setColumns(10);
 		
 		JLabel lblRightadaptor = new JLabel("RightAdaptor");
-		lblRightadaptor.setBounds(298, 286, 109, 14);
+		lblRightadaptor.setBounds(366, 284, 109, 14);
 		add(lblRightadaptor);
 		
 		txtLeftAdaptor = new JTextField();
-		txtLeftAdaptor.setBounds(417, 254, 166, 18);
+		txtLeftAdaptor.setBounds(471, 256, 166, 18);
 		add(txtLeftAdaptor);
 		txtLeftAdaptor.setColumns(10);
 		
-		JLabel lblMismatch = new JLabel("mismatch");
-		lblMismatch.setBounds(341, 350, 69, 14);
+		JLabel lblMismatch = new JLabel("Mismatch");
+		lblMismatch.setBounds(327, 350, 80, 14);
 		add(lblMismatch);
 		
 		txtMisMatch = new JTextField();
@@ -308,7 +308,7 @@ public class GuiFastQFanwei extends JPanel {
 		add(txtMisMatch);
 		txtMisMatch.setColumns(10);
 		
-		JLabel lblGaplength = new JLabel("gapLength");
+		JLabel lblGaplength = new JLabel("GapLength");
 		lblGaplength.setBounds(514, 350, 95, 14);
 		add(lblGaplength);
 		
@@ -327,7 +327,7 @@ public class GuiFastQFanwei extends JPanel {
 		add(txtThreadNum);
 		txtThreadNum.setColumns(10);
 		
-		chckbxLowcaseAdaptor = new JCheckBox("LowCase Adaptor");
+		chckbxLowcaseAdaptor = new JCheckBox("LowerCase Adaptor");
 		chckbxLowcaseAdaptor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (chckbxLowcaseAdaptor.isSelected()) {
@@ -344,7 +344,7 @@ public class GuiFastQFanwei extends JPanel {
 				}
 			}
 		});
-		chckbxLowcaseAdaptor.setBounds(614, 252, 196, 22);
+		chckbxLowcaseAdaptor.setBounds(705, 252, 239, 22);
 		add(chckbxLowcaseAdaptor);
 		
 		cmbLibrary = new JComboBoxData<MapLibrary>();
@@ -365,12 +365,12 @@ public class GuiFastQFanwei extends JPanel {
 		cmbMappingSoftware.setBounds(10, 390, 153, 23);
 		add(cmbMappingSoftware);
 		
-		chckbxQcbeforefilter = new JCheckBox("QC before Filter");
+		chckbxQcbeforefilter = new JCheckBox("QC Before Filter");
 		chckbxQcbeforefilter.setSelected(true);
 		chckbxQcbeforefilter.setBounds(10, 308, 162, 23);
 		add(chckbxQcbeforefilter);
 		
-		chckbxQcafterFilter = new JCheckBox("QC after Filter");
+		chckbxQcafterFilter = new JCheckBox("QC After Filter");
 		chckbxQcafterFilter.setBounds(175, 308, 140, 23);
 		add(chckbxQcafterFilter);
 		
@@ -380,7 +380,7 @@ public class GuiFastQFanwei extends JPanel {
 		add(spnTrimNNNcutoff);
 		
 		chkJustQC = new JCheckBox("JustQC");
-		chkJustQC.setBounds(327, 306, 115, 26);
+		chkJustQC.setBounds(319, 306, 148, 26);
 		add(chkJustQC);
 		
 		

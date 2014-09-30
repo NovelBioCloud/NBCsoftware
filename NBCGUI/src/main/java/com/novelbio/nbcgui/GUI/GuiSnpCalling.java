@@ -121,28 +121,28 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 		add(btnDeletePileupFile);
 		
 		combSnpLevel = new JComboBoxData<SnpLevel>();
-		combSnpLevel.setBounds(353, 173, 121, 23);
+		combSnpLevel.setBounds(318, 170, 121, 23);
 		add(combSnpLevel);
 		
-		JLabel lblSnpfilterquality = new JLabel("SnpFilterQuality");
-		lblSnpfilterquality.setBounds(213, 178, 123, 14);
+		JLabel lblSnpfilterquality = new JLabel("SNPFilterQuality");
+		lblSnpfilterquality.setBounds(24, 182, 151, 14);
 		add(lblSnpfilterquality);
 		
-		JLabel lblHetolessinfo = new JLabel("Hetero Snp Reads Prop Level");
-		lblHetolessinfo.setBounds(212, 206, 226, 14);
+		JLabel lblHetolessinfo = new JLabel("Hetero SNP Reads Prop Level");
+		lblHetolessinfo.setBounds(24, 210, 253, 14);
 		add(lblHetolessinfo);
 		
-		JLabel lblHetomorecontainreadsmin = new JLabel("Hetero More Snp Reads Prop Level");
-		lblHetomorecontainreadsmin.setBounds(212, 230, 237, 14);
+		JLabel lblHetomorecontainreadsmin = new JLabel("Hetero More SNP Reads Prop Level");
+		lblHetomorecontainreadsmin.setBounds(24, 236, 264, 14);
 		add(lblHetomorecontainreadsmin);
 		
 		txtHetoSnpProp = new JTextField();
-		txtHetoSnpProp.setBounds(447, 202, 43, 18);
+		txtHetoSnpProp.setBounds(318, 205, 43, 18);
 		add(txtHetoSnpProp);
 		txtHetoSnpProp.setColumns(10);
 		
 		txtHetoMoreSnpProp = new JTextField();
-		txtHetoMoreSnpProp.setBounds(447, 230, 43, 18);
+		txtHetoMoreSnpProp.setBounds(318, 230, 43, 18);
 		add(txtHetoMoreSnpProp);
 		txtHetoMoreSnpProp.setColumns(10);
 		
@@ -203,13 +203,13 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 		btnDeleteSnpFile.setBounds(795, 392, 118, 24);
 		add(btnDeleteSnpFile);
 		
-		rdbtnSnpcalling = new JRadioButton("Snp/InDel Calling");
+		rdbtnSnpcalling = new JRadioButton("SNP/InDel Calling");
 		rdbtnSnpcalling.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setSnpCalling();
 			}
 		});
-		rdbtnSnpcalling.setBounds(14, 8, 170, 22);
+		rdbtnSnpcalling.setBounds(14, 8, 191, 22);
 		add(rdbtnSnpcalling);
 		
 //		rdbtnGetSnpDetail = new JRadioButton("get snp detail");
@@ -236,7 +236,7 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 		btnOutput.setBounds(609, 453, 118, 24);
 		add(btnOutput);
 		
-		JLabel lblSnpsitefile = new JLabel("SnpSiteFile");
+		JLabel lblSnpsitefile = new JLabel("SNPSiteFile");
 		lblSnpsitefile.setBounds(16, 306, 93, 14);
 		add(lblSnpsitefile);
 		
@@ -256,7 +256,7 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 		spinColChrID.setValue(1);
 		add(spinColChrID);
 		
-		JLabel lblColSnpStart = new JLabel("Col Snp Start Site");
+		JLabel lblColSnpStart = new JLabel("Col SNP Start Site");
 		lblColSnpStart.setBounds(246, 306, 136, 14);
 		add(lblColSnpStart);
 		
@@ -265,13 +265,13 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 		spinColSnpStartSite.setValue(2);
 		add(spinColSnpStartSite);
 		
-		rdbtnSnpAnnotation = new JRadioButton("Snp/InDel annotation");
+		rdbtnSnpAnnotation = new JRadioButton("SNP/InDel annotation");
 		rdbtnSnpAnnotation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setSnpAnnotation();
 			}
 		});
-		rdbtnSnpAnnotation.setBounds(288, 8, 161, 22);
+		rdbtnSnpAnnotation.setBounds(288, 8, 202, 22);
 		add(rdbtnSnpAnnotation);
 		
 		JLabel lblColRefnr = new JLabel("Col RefNr");
@@ -320,7 +320,7 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 //				}
 //			}
 //		});
-		guiLayeredPaneSpeciesVersionGff.setBounds(551, 170, 220, 122);
+		guiLayeredPaneSpeciesVersionGff.setBounds(528, 170, 243, 122);
 		add(guiLayeredPaneSpeciesVersionGff);
 
 		initial();
@@ -334,7 +334,7 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 		buttonGroupSnpCallingFinding.add(rdbtnSnpAnnotation);
 		rdbtnSnpcalling.setSelected(true);
 		
-		sclSnpFile.setTitle(new String[]{"Input Snp File"});
+		sclSnpFile.setTitle(new String[]{"Input SNP File"});
 		
 //		rdbtnGatkBamfile.setSelected(true);
 		setSnpCalling();
@@ -371,7 +371,7 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile {
 		
 		//TODO
 		guiLayeredPaneSpeciesVersionGff.setVisible(false);
-		sclInputFile.setTitle(new String[]{"Input PileUp File","Output Snp File"});
+		sclInputFile.setTitle(new String[]{"Input PileUp File","Output SNP File"});
 	}
 	
 	/** 当为获得每个snp信息的时候的界面 */
