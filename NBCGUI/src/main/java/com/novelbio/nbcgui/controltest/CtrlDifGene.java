@@ -114,7 +114,6 @@ public class CtrlDifGene implements IntCmdSoft {
 	}
 	public void copyTmpFileToResultPath() {
 		String outRawData = FileOperate.addSep(outPath) + "Script/";
-		FileOperate.createFolders(outRawData);
  		diffExpAbs.copyTmpFileToPath(outRawData);
 	}
 	public ReportDifGene getDiffReport() {

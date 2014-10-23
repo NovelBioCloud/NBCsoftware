@@ -65,6 +65,6 @@ public class CtrlMedian {
 		ExcelOperate excel = new ExcelOperate();
 		excel.newExcelOpen(excelFile);
 		excel.WriteExcel(1, 1, lsResult);
-		excel.Close();
+		excel.close();
 	}
 }

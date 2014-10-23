@@ -77,9 +77,9 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 		}
 		
 		if (excelPrefix.endsWith("\\") || excelPrefix.endsWith("/")) {
-			saveExcelPrefix = excelPrefix + getResultBaseTitle() + ".xls";
+			saveExcelPrefix = excelPrefix + getResultBaseTitle() + ".xlsx";
 		} else {
-			saveExcelPrefix = FileOperate.changeFilePrefix(excelPrefix, getResultBaseTitle() + "_", "xls");
+			saveExcelPrefix = FileOperate.changeFilePrefix(excelPrefix, getResultBaseTitle() + "_", "xlsx");
 		}
 		if (isCluster) {
 			lsResultFile =  saveExcelCluster(saveExcelPrefix);

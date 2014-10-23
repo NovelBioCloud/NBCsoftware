@@ -15,6 +15,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
 import com.novelbio.analysis.annotation.cog.COGanno;
+import com.novelbio.analysis.annotation.cog.EnumCogType;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.fileOperate.FileOperate;
@@ -29,6 +30,10 @@ import com.novelbio.nbcgui.controltest.CtrlCOG;
 import com.novelbio.nbcgui.controltest.CtrlTestCOGInt;
 import com.novelbio.nbcgui.controltest.CtrlTestGOInt;
 import com.novelbio.nbcgui.controltest.CtrlTestPathInt;
+
+import java.awt.Dimension;
+
+import javax.swing.JComboBox;
 
 
 /**
@@ -73,6 +78,7 @@ public class GuiGoMultiJPanel extends JPanel{
 	
 	JComboBoxData<GoAlgorithm> cmbGoAlgorithm;
 	JComboBoxData<Species> cmbSpecies;
+	JComboBoxData<EnumCogType> cmbCogType;
 	
 	JCheckBox chkGOLevel;
 	JCheckBox chckbxPathAnalysis;
@@ -91,7 +97,7 @@ public class GuiGoMultiJPanel extends JPanel{
 	public GuiGoMultiJPanel() {
 	
 
-		this.setPreferredSize(new java.awt.Dimension(1046, 644));
+		this.setPreferredSize(new Dimension(1078, 662));
 		setAlignmentX(0.0f);
 		setComponent();
 		setLayout(null);
@@ -226,7 +232,7 @@ public class GuiGoMultiJPanel extends JPanel{
 		add(btnSavepath);
 		
 		txtQuerySeq = new JTextField();
-		txtQuerySeq.setBounds(420, 30, 402, 19);
+		txtQuerySeq.setBounds(408, 30, 414, 19);
 		add(txtQuerySeq);
 		txtQuerySeq.setColumns(10);
 		
@@ -248,6 +254,11 @@ public class GuiGoMultiJPanel extends JPanel{
 		JLabel lblEvalueCutoff = new JLabel("evalue cutoff");
 		lblEvalueCutoff.setBounds(316, 12, 80, 15);
 		add(lblEvalueCutoff);
+		
+		cmbCogType = new JComboBoxData<>();
+		cmbCogType.setMapItem(EnumCogType.getMapCogType());
+		cmbCogType.setBounds(152, 296, 152, 24);
+		add(cmbCogType);
 		
 		initial();
 	}
@@ -601,7 +612,7 @@ public class GuiGoMultiJPanel extends JPanel{
 		ctrlCOG.clearParam();
 		ctrlCOG.setTaxID(species);
 		
-		COGanno cogAnno = new COGanno();
+		COGanno cogAnno = new COGanno(cmbCogType.getSelectedValue());
 		try { cogAnno.setEvalueCutoff(Double.parseDouble(txtEvalueCutoff.getText())); 
 		} catch (Exception e) { }
 		if (chckbxCog.isSelected()) {

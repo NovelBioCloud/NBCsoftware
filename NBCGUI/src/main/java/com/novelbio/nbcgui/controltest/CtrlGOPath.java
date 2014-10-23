@@ -275,7 +275,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	}
 	
 	/** 将输入转化为geneID */
-	private HashMultimap<String, GeneID> addBG_And_Convert2GeneID(HashMultimap<String, String> mapPrefix2SetAccID) {
+	protected HashMultimap<String, GeneID> addBG_And_Convert2GeneID(HashMultimap<String, String> mapPrefix2SetAccID) {
 		HashMultimap<String, GeneID> mapPrefix2SetGeneID = HashMultimap.create();
 		for (String prefix : mapPrefix2SetAccID.keySet()) {
 			Set<String> setAccID = mapPrefix2SetAccID.get(prefix);
@@ -334,15 +334,18 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		ExcelOperate excelResult = new ExcelOperate();
 		excelResult.newExcelOpen(excelPath);
 		lsResultExcel.add(excelPath);
-		ExcelOperate excelResultAll = new ExcelOperate();
+		ExcelOperate excelResultAll = null;
 		String excelAllPath = FileOperate.changeFileSuffix(excelPath, "_All",null);
-		excelResultAll.newExcelOpen(excelAllPath);
-		lsResultExcel.add(excelAllPath);
 
 		for (String prefix : mapPrefix2FunTest.keySet()) {
 			FunctionTest functionTest = mapPrefix2FunTest.get(prefix);
 			Map<String,   List<String[]>> mapSheetName2LsInfo = functionTest.getMapWriteToExcel();
 			if (mapPrefix2FunTest.size() > 1 && prefix.equals("All")) {
+				if (excelResultAll == null) {
+					excelResultAll = new ExcelOperate();
+					excelResultAll.newExcelOpen(excelAllPath);
+					lsResultExcel.add(excelAllPath);
+				}				
 				for (String sheetName : mapSheetName2LsInfo.keySet()) {
 					excelResultAll.WriteExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName));
 				}
@@ -353,6 +356,8 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			}
 			copeFile(prefix, excelPath);
 		}
+		excelResult.close();
+		if (excelResultAll != null) excelResultAll.close();
 		return lsResultExcel;
 	}
 	
@@ -400,6 +405,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			for (String sheetName : mapSheetName2LsInfo.keySet()) {
 				excelResult.WriteExcel(sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName));
 			}
+			excelResult.close();
 			copeFile(prefix, excelPath);
 		}
 		return lsResultExcel;
@@ -414,9 +420,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	 */
 	protected abstract void copeFile(String prix, String excelPath);
 	
-	/**
-	 * 清空参数，每次调用之前先清空参数
-	 */
+	/** 清空参数，每次调用之前先清空参数 */
 	public void clearParam() {
 		up = -1;
 		down = -1;

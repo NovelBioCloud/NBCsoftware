@@ -59,6 +59,7 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 	private GuiSnpFiltering guiSnpFiltering;
 	private GuiSnpFilterSimple guiSnpFilterSimple;
 	private GuiRNAalterSpliceSimple guiRNAautoSpliceSimple;
+	private GuiRNAalterSpliceASD guiRNAautoSpliceASD;
 	private GuiUpdateDB guiUpdateDB;
 	private GuiVolcanoPlot guiVolcanoPlot;
 	private GuiGeneNetWork guiGeneNetWork;
@@ -78,8 +79,8 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 				GUIanalysisForm inst = new GUIanalysisForm();
 				inst.setLocationRelativeTo(null);
 				inst.setVisible(true);
-//				inst.setTitle("CASH v 1.0.12");
-				inst.setTitle("AgroMarker Finder");
+				inst.setTitle("ASD v 1.2");
+//				inst.setTitle("AgroMarker Finder");
 				Image im = Toolkit.getDefaultToolkit().getImage("/home/zong0jie/desktop/logo.png");
 				inst.setIconImage(im);
 				inst.setResizable(false); 
@@ -212,9 +213,12 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 				guiRNAautoSpliceSimple = new GuiRNAalterSpliceSimple();
 				jTabbedPane1.addTab("CASH", guiRNAautoSpliceSimple);
 				
-//				guiUpdateDB = new GuiUpdateDB();
-//				jTabbedPane1.addTab("UpdateDB", guiUpdateDB);
-//				
+				guiRNAautoSpliceASD = new GuiRNAalterSpliceASD();
+				jTabbedPane1.addTab("ASD", guiRNAautoSpliceASD);
+				
+				guiUpdateDB = new GuiUpdateDB();
+				jTabbedPane1.addTab("UpdateDB", guiUpdateDB);
+				
 				guiFastQFanwei = new GuiFastQFanwei();
 				jTabbedPane1.addTab("FilterAndMapping", null, guiFastQFanwei, null);
 				
