@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import bsh.This;
+
 import com.google.common.collect.ArrayListMultimap;
 import com.novelbio.GuiAnnoInfo;
 import com.novelbio.analysis.ExceptionNBCsoft;
@@ -34,33 +36,59 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	boolean isCombine = true;
 	
 	
+	//java -jar -Xmx10g xxx.jar --Case:aaa file1.bam --Control:bbb file2.bam --Output sssss
 	/**
-	 * --Case:aaa file1.bam,file2.bam
-	 * --Control:bbb file1.bam,file2.bam
-	 * --Combine true  可选
-	 * --DisplayAllEvent true 可选
-	 * --StrandSpecific F R
+	 * --Case:aaa (或者 -T:aaa) file1.bam,file2.bam
+	 * --Control:bbb (或者 -C:bbb) file1.bam,file2.bam
+	 * --Combine  (或者 -M )  true可选
+	 * --DisplayAllEvent  (或者 -D) true 可选
+	 * --StrandSpecific (或者 -S) F R
+	 * --Reconstruct (或者 -R)
+	 * --Output (或者 -O) outfile
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
+		for (String testString : args) {
+			System.out.println(testString);
+		}
 		//将输入的参数放到这个map里面
 		Map<String, String> mapParam2Value = new LinkedHashMap<>();
 		String param = null, value = null;
 		if (args == null || (args.length == 1 && (args[0].equals("-h") || args[0].equals("--help")))) {
-			
+			for (String content:getHelp()) {
+				System.out.println(content.toString());
+			}
+			System.exit(0);
 		}
-		
 		for (int i = 0; i < args.length; i++) {
-			if (args[i].startsWith("--")) {
-				if (i > 0) {
-					mapParam2Value.put(param, value);
+			if (args[i].startsWith("--") || args[i].startsWith("-")) {
+				param = args[i].substring(1);
+				if (param.startsWith("-")) {
+					param = param.substring(1);
 				}
-				param = args[i].substring(2);
 				value = null;
+				if (param.startsWith("T:")) {
+					param = param.replace("T:", "Case:");
+				}else if (param.startsWith("C:")) {
+					param = param.replace("C:", "Control:");
+				}else if (param.equals("M")) {
+					param = "Combine";
+				}else if (param.equals("D")) {
+					param = "DisplayAllEven";
+				}else if (param.equals("S")) {
+					param = "StrandSpecific";
+				}else if (param.equals("R")) {
+					param = "Reconstruct";
+				}else if (param.equals("O")) {
+					param = "Output";
+				}
 			} else {
 				value = args[i];
 			}
+			mapParam2Value.put(param, value);
 		}
+		
 		String paramCase = null, paramControl = null;
 		for (String paramInfo : mapParam2Value.keySet()) {
 			if (paramInfo.startsWith("Case")) {
@@ -70,11 +98,11 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			}
 		}
 		List<String[]> lsBam2Prefix = new ArrayList<>();
+		
 		String prefixCase = paramCase.split(":")[1];
 		String caseFiles = mapParam2Value.get(paramCase);
 		String prefixControl = paramControl.split(":")[1];
 		String controlFiles = mapParam2Value.get(paramControl);
-		
 		for (String string : caseFiles.split(",")) {
 			lsBam2Prefix.add(new String[]{string, prefixCase});
 		}
@@ -106,22 +134,21 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 				ctrlSplicing.setDisplayAllEvent(false);
 			}
 		}
-
+		
 		ctrlSplicing.setReconstructIso(true);
 		if (mapParam2Value.containsKey("StrandSpecific")) {
 			String strand = mapParam2Value.get("StrandSpecific").toLowerCase();
-			if (strand.equals("f")) {
+			if (strand.equals("f") || strand.toLowerCase().equals("f")) {
 				ctrlSplicing.setStrandSpecific(StrandSpecific.FIRST_READ_TRANSCRIPTION_STRAND);
-			} else if (strand.equals("r")) {
+			} else if (strand.equals("r") || strand.toLowerCase().equals("r")) {
 				ctrlSplicing.setStrandSpecific(StrandSpecific.SECOND_READ_TRANSCRIPTION_STRAND);
 			}
 		}
-		
 		ctrlSplicing.setOutFile(mapParam2Value.get("Output"));
 		ctrlSplicing.run();
 	}
 	
-	private List<String> getHelp() {
+	private static List<String> getHelp() {
 		List<String> lsHelp = new ArrayList<>();
 		lsHelp.add("Usage: java -jar -Xmx10000m <--options> --Case:prefixCase file1.bam,file2.bam --Control:prefixControl file3.bam,file4.bam --Output outPath");
 		lsHelp.add("Example: java -jar -Xmx10000m --DisplayAllEvent True --StrandSpecific F  --Case:prefixCase file1.bam,file2.bam --Control:prefixControl file3.bam,file4.bam --Output outPath");
@@ -247,7 +274,8 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			if (isReconstruceIso) {
 				exonJunction.setgenerateNewIso(true);
 			}
-			long fileLength = exonJunction.getFileLength();
+			System.out.println(exonJunction.getFileLength());
+			long fileLength = exonJunction.getFileLength();   
 			ArrayList<Double> lsLevels = new ArrayList<Double>();
 			lsLevels.add(0.3);
 			lsLevels.add(0.4);
@@ -255,6 +283,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			lsLevels.add(1.0);
 			setProgressBarLevelLs(lsLevels);
 			setProcessBarStartEndBarNum(0, 0, fileLength);
+			
 			exonJunction.run();
 			if (!exonJunction.isFinishedNormal()) {
 				throw new ExceptionNBCsoft("Autonative Splicing Error:" + comparePrefix[0] + " vs " + comparePrefix[1]);
@@ -264,7 +293,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			guiRNAautoSplice.setMessage("Congratulations! Enjoy your CASH.");
 			guiRNAautoSplice.done(null);
 		}
-	
+		
 	}
 
 	public void setProgressBarLevelLs(ArrayList<Double> lsLevels) {
