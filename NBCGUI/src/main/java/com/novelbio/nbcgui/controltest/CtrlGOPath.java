@@ -217,7 +217,10 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 					mapPrefix2AccID.put(Down, strings[0]);
 					mapPrefix2AccID.put(All, strings[0]);
 				}
-			} catch (Exception e) { }
+			} catch (Exception e) {
+
+			}
+
 		}
 		HashMultimap<String, GeneID> mapPrefix2SetAccID = addBG_And_Convert2GeneID(mapPrefix2AccID);
 		setGeneNum(mapPrefix2AccID);
