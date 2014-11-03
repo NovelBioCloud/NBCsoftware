@@ -1,4 +1,4 @@
-package com.novelbio.analysis.seq.rnaseq;
+package com.novelbio.nbcgui.controlseq;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -19,18 +19,19 @@ import com.novelbio.database.domain.information.SoftWareInfo;
 import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
 import com.novelbio.listOperate.HistList;
 
+
 /**
  * simple script : cap3 trinity.fa -f 20 -o 100 -p 90 -z 3 > trinity.cap3.result.txt
  * @author bll
  *
  */
 
-public class CAP3cluster implements IntCmdSoft {
+public class CtrCAP3Cluster implements IntCmdSoft {
 	private static int OVERLAPGAPLEN = 20;
 	private static int OVERLAPLENCUTFF = 40;
 	private static int OVERLAPIDEPERCUTFF = 90;
 	private static int READSSUPPORTNUM = 3;
-	String exePath = "";	
+	String exePath;	
 	
 	/** 需要聚类的序列文件，fasta格式文件
 	 * key: 样本名
@@ -91,14 +92,12 @@ public class CAP3cluster implements IntCmdSoft {
 		}
 	}
 
-	public CAP3cluster() {
+	public CtrCAP3Cluster() {
 		SoftWareInfo softWareInfo = new SoftWareInfo(SoftWare.cap3);
 		this.exePath = softWareInfo.getExePathRun();
 	}
-	
 	public void run() {
 		outMergedFile = ContigId2TranId.mergeTrinity(mapPrefix2TrinityFile, getOutMergedFile());
-		
 		CmdOperate cmdOperate = new CmdOperate(getLsCmd(outMergedFile));
 		cmdOperate.runWithExp("CAP3 error:");
 		
@@ -118,7 +117,7 @@ public class CAP3cluster implements IntCmdSoft {
 	}
 	
 	private String getOutMergedFile() {
-		String outMergedFile = outFile + "merged.fa";
+		String outMergedFile = FileOperate.getPathName(outFile) + "/merged.fa";
 		if (mapPrefix2TrinityFile.size() == 1) {
 			outMergedFile = mapPrefix2TrinityFile.values().iterator().next();
 		}
@@ -137,7 +136,7 @@ public class CAP3cluster implements IntCmdSoft {
 		return lsCmd;
 	}
 	private String[] getFastaNeedCluster(String fastaNeedCluster) {
-		return new String[]{" ",fastaNeedCluster};
+		return new String[]{fastaNeedCluster};
 	}
 	private String[] getOutFile() {
 		return new String[]{">", outFile};
@@ -202,7 +201,7 @@ public class CAP3cluster implements IntCmdSoft {
 /**
  * 对Cap3的输入输出文件做一系列处理，合并输入文件，以及
  * 根据CAP3输出结果，提取Contig 对应 转录组本ID信息，存在HashMap中 */
-public class ContigId2TranId {
+class ContigId2TranId {
 	/** CAP3结果文件名称*/
 	String cap3ResultFile;
 	/** CAP3 输出的Singlets 文件名称*/
@@ -263,12 +262,14 @@ c17938_Sye-12h_g1_i1+<br>
 		TxtReadandWrite txtContig = new TxtReadandWrite(cap3ResultFile);
 		String geneId = null;
 		for (String content : txtContig.readlines()) {
+			String strflag = "*******************";
 			if (content.startsWith("       ")) continue;
 			
-			if (content.startsWith("*")) {
-				geneId = content.replace("*", "").replace(" ", "");
+			if (content.startsWith(strflag)) {
+				geneId = content.replace("", "").replace(" ", "");
 				continue;
 			}
+			System.out.println("Content is " + content);
 			String transId = content.substring(0, content.length() - 1);
 			mapGeneId2LsTransId.put(geneId, transId);
 		}
@@ -327,5 +328,6 @@ c17938_Sye-12h_g1_i1+<br>
 		txtWrite.close();
 		return outMergeResult;
 	}
-
+	
+	
 }

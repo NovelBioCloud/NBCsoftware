@@ -143,6 +143,7 @@ public class CtrlTrinity implements IntCmdSoft {
 			trinity.setGenomeSortedBam(genomeSortedBam);
 			trinity.setIntronMaxLen(intronMaxLen);
 			trinity.setNormalizeReads(isNormalizeReads);
+			trinity.setIsFull_cleanup(true);
 			
 			if (min_kmer_cov != null && min_kmer_cov > 0) {
 				trinity.setMin_kmer_cov(min_kmer_cov);
@@ -182,6 +183,14 @@ public class CtrlTrinity implements IntCmdSoft {
 	@Override
 	public List<String> getCmdExeStr() {
 		return lsCmd;
+	}
+	
+	public void running() {
+		runTrinity_getMapPrefix2File();
+//		Map<String, String> mapAssemblyResult = runTrinity_getMapPrefix2File();
+//		for (String fileName: mapAssemblyResult.keySet()) {
+//			System.out.println("Trinity Assembly result is " + fileName);
+//		}
 	}
 	
 }
