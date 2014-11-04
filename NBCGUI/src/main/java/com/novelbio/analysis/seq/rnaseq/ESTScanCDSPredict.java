@@ -24,6 +24,7 @@ public class ESTScanCDSPredict implements IntCmdSoft {
 	
 	//矩阵分值文件，最小阈值，默认100；
 	int minMatrixValue = 100;
+	
 	//
 	String scoreMatFile;
 	
@@ -31,6 +32,7 @@ public class ESTScanCDSPredict implements IntCmdSoft {
 	int minLength  = 50; 
 	//翻译的蛋白序列文件
 	String pepFile;
+	//输出结果文件
 	String cdsResultFile;
 	
 	public void setInputFile(String inputFile) {
