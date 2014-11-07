@@ -55,7 +55,7 @@ public class OmimGeneMap implements Serializable {
 	}
 
 	/** 记录时间 */
-	public void setRecordTimee(String recordTime) {
+	public void setRecordTime(String recordTime) {
 		this.recordTime = recordTime;
 	}
 
@@ -93,20 +93,7 @@ public class OmimGeneMap implements Serializable {
 		 return SpringFactory.getFactory().getBean(RepoGenemap.class);
 		 
 	 }
-
-//	 public boolean save() {
-//	 try {
-//	 if (customerId != null) {
-//	 Customer customer = Customer.findInstance(customerId);
-//	 this.customerName = customer.getName();
-//	 }
-//	 repo().save(this);
-//	 } catch (Exception e) {
-//	 return false;
-//	 }
-//	 return true;
-//	 }
-
+	 
 	 public static OmimGeneMap findGeneInfByMimId(String id) {
 	 return repo().findOne(id);
 	 }

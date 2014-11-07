@@ -11,10 +11,12 @@ import com.novelbio.omimdb.mongorepo.RepoGenemap;
 
 @Repository
 public class MgmtOMIM {
+	//需要写一个空的构造函数
 	private MgmtOMIM() {}
 	
+//	RepoGenemap repoGenemap = (RepoGenemap)SpringFactory.getFactory().getBean("repoGenemap");
+//	
 	RepoGenemap repoGenemap = (RepoGenemap)SpringFactory.getFactory().getBean("repoGenemap");
-	
 	public List<OmimGeneMap> findByPheMimId(int phenMimId){
 		return repoGenemap.findInfByPheMimId(phenMimId);
 	}
@@ -27,21 +29,13 @@ public class MgmtOMIM {
 	public void save(OmimGeneMap phenMimId){
 		repoGenemap.save(phenMimId);
 	}
-//	public List<NBCSampleQC> findSampleById(String sampleID) {
-//		return repoNBCSampleQC.findBySampleID(sampleID);
-//	}
-//	
-//	public List<NBCSampleQC> findSampleByBatchId(String batchId) {
-//		return repoNBCSampleQC.findByBatchID(batchId);
-//	}
-	
 	
 	//懒汉模式的单例延迟--超牛逼
 	static class MgmtOmimHolder {
 		static MgmtOMIM mgmtOMIM = new MgmtOMIM();
 	}
 	/** 
-	 * 获得已经设定好computer信息的ClientManager对象
+	 * 获得
 	 * @return
 	 */
 	public static MgmtOMIM getInstance() {
