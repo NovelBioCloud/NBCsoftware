@@ -97,4 +97,9 @@ public class ESTScanCDSPredict implements IntCmdSoft {
 	private String[] getCdsResultFile() {
 		return new String[] {">", cdsResultFile + ""};
 	}
+	@Override
+	public List<String> getCmdExeStr() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

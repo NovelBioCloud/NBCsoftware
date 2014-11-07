@@ -551,6 +551,7 @@ public class GuiBlastJpanel extends JPanel {
 		excelSave.newExcelOpen(filePath);
 		lsResult.add(0, title);
 		boolean save = excelSave.WriteExcel( 1, 1, lsResult);
+		excelSave.close();
 		if (save) {
 			JOptionPane.showMessageDialog(null, "Your Data Was Saved!", "Save Finished", JOptionPane.INFORMATION_MESSAGE);
 		}

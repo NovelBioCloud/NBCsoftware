@@ -3,18 +3,22 @@ package com.novelbio.nbcgui.controltest;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.HashMultimap;
 import com.novelbio.analysis.annotation.cog.COGanno;
+import com.novelbio.analysis.annotation.cog.EnumCogType;
 import com.novelbio.analysis.annotation.functiontest.CogFunTest;
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.plot.ImageUtils;
+import com.novelbio.database.model.modgeneid.GeneID;
 import com.novelbio.nbcReport.Params.EnumReport;
 @Service
 @Scope("prototype")
@@ -23,11 +27,17 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 	String saveParentPath = "";
 	String savePrefix = "";
 	List<String> lsResultPic = new ArrayList<>();
-
+	EnumCogType cogType;
 	/** @param QtaxID */
 	public CtrlCOG() {
 		functionTest = FunctionTest.getInstance(FunctionTest.FUNCTION_COG);
 	}
+	
+	public void setCogAnno(COGanno cogAnno) {
+		((CogFunTest)functionTest).setCogAnno(cogAnno);
+		cogType = cogAnno.getCogType();
+	}
+	
 	/** COG没有blast */
 	@Deprecated
 	public void setBlastInfo(double blastevalue, List<Integer> lsBlastTaxID) {
@@ -37,14 +47,31 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 	
 	@Override
 	String getGene2ItemFileName(String fileName) {
-		String suffix = "_COG_Item";
+		String suffix = "_" + cogType.toString() + "_Item";
 		String bgName = FileOperate.changeFileSuffix(fileName, suffix, "txt");
 		bgName = FileOperate.changeFilePrefix(bgName, ".", null);
 		return bgName;
 	}
+
 	
-	public void setCogAnno(COGanno cogAnno) {
-		((CogFunTest)functionTest).setCogAnno(cogAnno);
+	/** 将输入转化为geneID */
+	@Override
+	protected HashMultimap<String, GeneID> addBG_And_Convert2GeneID(HashMultimap<String, String> mapPrefix2SetAccID) {
+		HashMultimap<String, GeneID> mapPrefix2SetGeneID = HashMultimap.create();
+		for (String prefix : mapPrefix2SetAccID.keySet()) {
+			Set<String> setAccID = mapPrefix2SetAccID.get(prefix);
+			for (String accID : setAccID) {
+				GeneID geneID = new GeneID(accID, functionTest.getTaxID());
+				mapPrefix2SetGeneID.put(prefix, geneID);
+			}
+		}//*1
+		//以下是打算将输入的testID补充进入BG，不过我觉得没必要了
+		//我sfesa们只要将BG尽可能做到全面即可，不用想太多
+//		for (String prefix : mapPrefix2SetGeneID.keySet()) {
+//			Set<GeneID> setGeneIDs = mapPrefix2SetGeneID.get(prefix);
+//			functionTest.addBGGeneID(setGeneIDs);
+//		}
+		return mapPrefix2SetGeneID;
 	}
 	
 	@Override
@@ -59,9 +86,9 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 		}
 		
 		if (excelPrefix.endsWith("\\") || excelPrefix.endsWith("/")) {
-			saveExcelPrefix = excelPrefix + getResultBaseTitle() + ".xls";
+			saveExcelPrefix = excelPrefix + getResultBaseTitle() + ".xlsx";
 		} else {
-			saveExcelPrefix = FileOperate.changeFilePrefix(excelPrefix, getResultBaseTitle() + "_", "xls");
+			saveExcelPrefix = FileOperate.changeFilePrefix(excelPrefix, getResultBaseTitle() + "_", "xlsx");
 		}
 		if (isCluster) {
 			lsResultFile =  saveExcelCluster(saveExcelPrefix);

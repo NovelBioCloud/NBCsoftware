@@ -187,9 +187,9 @@ public class CtrlGOall implements CtrlTestGOInt {
 		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
 			String saveName;
 			if (savePathPrefix.endsWith("\\") || savePathPrefix.endsWith("/")) {
-				saveName = savePathPrefix + ctrlGO.getResultBaseTitle() + ".xls";
+				saveName = savePathPrefix + ctrlGO.getResultBaseTitle() + ".xlsx";
 			} else {
-				saveName = FileOperate.changeFilePrefix(savePathPrefix, ctrlGO.getResultBaseTitle() + "_", "xls");
+				saveName = FileOperate.changeFilePrefix(savePathPrefix, ctrlGO.getResultBaseTitle() + "_", "xlsx");
 			}
 			ctrlGO.saveExcel(saveName);
 		}

@@ -28,7 +28,7 @@ import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.nbcgui.GUIinfo;
 import com.novelbio.nbcgui.controlseq.CtrlSplicing;
 
-public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
+public class GuiRNAalterSpliceASD extends JPanel implements GUIinfo {
 	static final int progressLength = 10000;
 	private JTextField txtGff;
 	JScrollPaneData scrlBam;
@@ -67,7 +67,7 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 	/**
 	 * Create the panel.
 	 */
-	public GuiRNAalterSpliceSimple() {
+	public GuiRNAalterSpliceASD() {
 		setLayout(null);
 
 		scrlBam = new JScrollPaneData();
@@ -106,7 +106,7 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 		add(txtGff);
 		txtGff.setColumns(10);
 		
-		btnRun = new JButton("runCASH");
+		btnRun = new JButton("runASD");
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				run();
@@ -207,7 +207,7 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 		lblNewLabel.setBounds(642, 35, 115, 14);
 		add(lblNewLabel);
 		
-		chckbxReconstructIso = new JCheckBox("SpliceCons(needs about 8g memory for humans)");
+		chckbxReconstructIso = new JCheckBox("SpliceCons(needs about 8g for humans)");
 		chckbxReconstructIso.setSelected(true);
 		chckbxReconstructIso.setBounds(153, 341, 335, 26);
 		add(chckbxReconstructIso);
@@ -259,7 +259,7 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 		if (!gffHashGene.isRunning()) {
 			setInfo("Finished Reading GTF File");
 		} else {
-			setInfo(" CASH Is Interrupted Because Reading GTF File Encounters Error");
+			setInfo(" ASD Is Interrupted Because Reading GTF File Encounters Error");
 			return;
 		}
 			
@@ -353,7 +353,7 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 		btnRun.setEnabled(true);
 	}
 	public void setMessage(String string) {
-		JOptionPane.showMessageDialog(null, string, "Thanks using CASH", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, string, "Thanks using ASD", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	private void changeSclCompareGroup() {

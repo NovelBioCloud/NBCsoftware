@@ -326,8 +326,7 @@ public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 	}
 	@Override
 	public List<String> getCmdExeStr() {
-		// TODO Auto-generated method stub
-		return null;
+		return lsCmd;
 	}
 
 }
