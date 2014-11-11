@@ -1,6 +1,7 @@
 package com.novelbio.nbcgui.controlseq;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -261,21 +262,21 @@ c17938_Sye-12h_g1_i1+<br>
 	private void generateContigIDToTranID() {
 		TxtReadandWrite txtContig = new TxtReadandWrite(cap3ResultFile);
 		String geneId = null;
+		String transId ;
 		for (String content : txtContig.readlines()) {
-			String strflag = "*******************";
-			if (content.startsWith("       ")) continue;
-			
-			if (content.startsWith(strflag)) {
-				geneId = content.replace("", "").replace(" ", "");
+			String strflag = "*";
+			if (content.startsWith(" ")) {
 				continue;
+			}else if (content.matches("\\*+\\sContig\\s\\d+\\s+\\*+")) {
+				geneId = content.replaceAll("\\*+", "").trim();
+				continue;
+			}else if (content.startsWith("c")){
+				transId = content.substring(0, content.length() - 1);
+				mapGeneId2LsTransId.put(geneId, transId);
 			}
-			System.out.println("Content is " + content);
-			String transId = content.substring(0, content.length() - 1);
-			mapGeneId2LsTransId.put(geneId, transId);
 		}
 		txtContig.close();
 	}
-	
 	/**提取Singlets文件中的序列ID信息 */
 	private void generateSingletsIDToTranID() {
 		TxtReadandWrite txtSinglets = new TxtReadandWrite(cap3ResultSingletsFile);
