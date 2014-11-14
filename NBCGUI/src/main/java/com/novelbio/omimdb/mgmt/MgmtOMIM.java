@@ -13,9 +13,7 @@ import com.novelbio.omimdb.mongorepo.RepoGenemap;
 public class MgmtOMIM {
 	//需要写一个空的构造函数
 	private MgmtOMIM() {}
-	
-//	RepoGenemap repoGenemap = (RepoGenemap)SpringFactory.getFactory().getBean("repoGenemap");
-//	
+
 	RepoGenemap repoGenemap = (RepoGenemap)SpringFactory.getFactory().getBean("repoGenemap");
 	public List<OmimGeneMap> findByPheMimId(int phenMimId){
 		return repoGenemap.findInfByPheMimId(phenMimId);

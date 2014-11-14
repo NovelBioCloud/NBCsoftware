@@ -3,31 +3,38 @@ package com.novelbio.omimdb.model;
 import java.io.Serializable;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import com.novelbio.database.service.SpringFactory;
+import com.novelbio.omimdb.mongorepo.RepoGeneMIMInfo;
+import com.novelbio.omimdb.mongorepo.RepoGenemap;
 
 @Document(collection = "omimGene")
 public class GeneMIM implements Serializable {
 
-	/** gene ID */
 	@Id
-	private String geneId;
+	private String id;
 	/** gene MIM 号 */
-	private String geneMimId;
+	@Indexed
+	private int geneMimId;
+	/** gene ID */
+	private int geneId;
 	/** Cytogenetic location */
 	private String cytLoc;
 	/** mapping gene method */
 	private String mapGenMet;
 	
-	public void setGeneId(String geneId) {
+	public void setGeneId(int geneId) {
 		this.geneId = geneId;
 	}
-	public String getGeneId() {
+	public int getGeneId() {
 		return geneId;
 	}
-	public void setGeneMimId(String geneMimId) {
+	public void setGeneMimId(int geneMimId) {
 		this.geneMimId = geneMimId;
 	}
-	public String getGeneMimId() {
+	public int getGeneMimId() {
 		return geneMimId;
 	}
 	public void setCytLoc(String cytLoc) {
@@ -42,4 +49,21 @@ public class GeneMIM implements Serializable {
 	public String getMapGenMet() {
 		return mapGenMet;
 	}
+	private static RepoGeneMIMInfo repo() {
+		 return SpringFactory.getFactory().getBean(RepoGeneMIMInfo.class);
+		 
+	 }
+	 
+	 public static GeneMIM findGeneInfByMimId(String id) {
+	 return repo().findOne(id);
+	 }
+
+	 public boolean remove() {
+	 try {
+		 repo().delete(id);
+	 } catch (Exception e) {
+	 return false;
+	 }
+	 return true;
+	 }
 }
