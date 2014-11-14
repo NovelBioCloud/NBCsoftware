@@ -267,10 +267,10 @@ c17938_Sye-12h_g1_i1+<br>
 			String strflag = "*";
 			if (content.startsWith(" ")) {
 				continue;
-			}else if (content.matches("\\*+\\sContig\\s\\d+\\s+\\*+")) {
+			} else if (content.matches("\\*+\\sContig\\s\\d+\\s+\\*+")) {
 				geneId = content.replaceAll("\\*+", "").trim();
 				continue;
-			}else if (content.startsWith("c")){
+			} else if (content.startsWith("c")) {
 				transId = content.substring(0, content.length() - 1);
 				mapGeneId2LsTransId.put(geneId, transId);
 			}
