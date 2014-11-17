@@ -3,18 +3,10 @@ package com.novelbio.omimdb.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.freehep.graphicsio.swf.SWFAction.Push;
-
-import com.lowagie.text.SplitCharacter;
-import com.mongodb.util.MyAsserts.MyAssert;
-import com.novelbio.base.SepSign;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
-import com.novelbio.database.domain.geneanno.GeneInfo;
-import com.novelbio.database.model.modgeneid.GeneID;
 import com.novelbio.omimdb.mgmt.MgmtGeneMIMInfo;
 import com.novelbio.omimdb.mgmt.MgmtOMIM;
 import com.novelbio.omimdb.model.GeneMIM;
-import com.novelbio.omimdb.model.OmimGeneMap;
 
 public class CreatGenemapTable {
 	String inFileString;

@@ -9,15 +9,18 @@ public class CreatMIMTable {
 		
 		TxtReadandWrite txtMIMRead = new TxtReadandWrite(inFileString);
 		int mIMId;
-		
+		String title;
 		for (String content : txtMIMRead.readlines()) {
 			if (content.startsWith("*")) {
 				continue;
-			}else if (content.matches("\\d{6}")) {
+			} else if (content.matches("\\d{6}")) {
 					mIMId = Integer.parseInt(content);
-				}else if(content.matches("[#+%]\\d.*?$")) {
-					
-				}else if(content.matches("\\d.*?$")){
+				} else if(content.matches("[#+%]\\d.*?$")) {
+					title = content.substring(7);
+//					if (content.) {
+//						
+//					}
+				} else if(content.matches("\\d.*?$")){
 					
 				}
 		}
