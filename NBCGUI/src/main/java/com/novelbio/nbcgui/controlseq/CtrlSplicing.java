@@ -5,8 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import bsh.This;
-
 import com.google.common.collect.ArrayListMultimap;
 import com.novelbio.GuiAnnoInfo;
 import com.novelbio.analysis.ExceptionNBCsoft;
@@ -36,7 +34,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	boolean isCombine = true;
 	
 	
-	//java -jar -Xmx10g xxx.jar --Case:aaa file1.bam --Control:bbb file2.bam --Output sssss
+	//java -jar -Xmx10g xxx.jar --Case:aaa file1.bam -GTF file.gtf --Control:bbb file2.bam --Output sssss
 	/**
 	 * --Case:aaa (或者 -T:aaa) file1.bam,file2.bam
 	 * --Control:bbb (或者 -C:bbb) file1.bam,file2.bam
@@ -44,6 +42,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	 * --DisplayAllEvent  (或者 -D) true 可选
 	 * --StrandSpecific (或者 -S) F R
 	 * --Reconstruct (或者 -R)
+	 * --GTF (或者 -G) file.gtf
 	 * --Output (或者 -O) outfile
 	 * @param args
 	 */
@@ -59,10 +58,15 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			for (String content:getHelp()) {
 				System.out.println(content.toString());
 			}
-			System.exit(0);
+			return;
 		}
+		
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].startsWith("--") || args[i].startsWith("-")) {
+				if(param != null) {
+					mapParam2Value.put(param, value);
+				}
+				
 				param = args[i].substring(1);
 				if (param.startsWith("-")) {
 					param = param.substring(1);
@@ -70,24 +74,27 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 				value = null;
 				if (param.startsWith("T:")) {
 					param = param.replace("T:", "Case:");
-				}else if (param.startsWith("C:")) {
+				} else if (param.startsWith("C:")) {
 					param = param.replace("C:", "Control:");
-				}else if (param.equals("M")) {
+				} else if (param.equals("M")) {
 					param = "Combine";
-				}else if (param.equals("D")) {
+				} else if (param.equals("D")) {
 					param = "DisplayAllEven";
-				}else if (param.equals("S")) {
+				} else if (param.equals("S")) {
 					param = "StrandSpecific";
-				}else if (param.equals("R")) {
+				} else if (param.equals("R")) {
 					param = "Reconstruct";
-				}else if (param.equals("O")) {
+				} else if (param.equals("O")) {
 					param = "Output";
+				} else if (param.equals("G")) {
+					param = "GTF";
 				}
 			} else {
 				value = args[i];
 			}
-			mapParam2Value.put(param, value);
+			
 		}
+		mapParam2Value.put(param, value);
 		
 		String paramCase = null, paramControl = null;
 		for (String paramInfo : mapParam2Value.keySet()) {
@@ -103,6 +110,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 		String caseFiles = mapParam2Value.get(paramCase);
 		String prefixControl = paramControl.split(":")[1];
 		String controlFiles = mapParam2Value.get(paramControl);
+		String gtfFile = mapParam2Value.get("GTF");
 		for (String string : caseFiles.split(",")) {
 			lsBam2Prefix.add(new String[]{string, prefixCase});
 		}
@@ -116,6 +124,8 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 		CtrlSplicing ctrlSplicing = new CtrlSplicing();
 		ctrlSplicing.setLsBam2Prefix(lsBam2Prefix);
 		ctrlSplicing.setLsCompareGroup(lsCompare);
+		
+		ctrlSplicing.setGffHashGene(new GffHashGene(gtfFile));
 		
 		if (mapParam2Value.containsKey("Combine")) {
 			String combine = mapParam2Value.get("Combine").toLowerCase();
@@ -150,10 +160,11 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	
 	private static List<String> getHelp() {
 		List<String> lsHelp = new ArrayList<>();
-		lsHelp.add("Usage: java -jar -Xmx10000m <--options> --Case:prefixCase file1.bam,file2.bam --Control:prefixControl file3.bam,file4.bam --Output outPath");
-		lsHelp.add("Example: java -jar -Xmx10000m --DisplayAllEvent True --StrandSpecific F  --Case:prefixCase file1.bam,file2.bam --Control:prefixControl file3.bam,file4.bam --Output outPath");
+		lsHelp.add("Usage: java -jar -Xmx10000m <--options> --Case:prefixCase file1.bam,file2.bam --Control:prefixControl file3.bam,file4.bam --GTF gtfFile.gtf --Output outPath");
+		lsHelp.add("Example: java -jar -Xmx10000m --DisplayAllEvent True --StrandSpecific F  --Case:prefixCase file1.bam,file2.bam --Control:prefixControl file3.bam,file4.bam --GTF hg19.gtf --Output outPath");
 		lsHelp.add("Input:");
 		lsHelp.add("--Case:prefixCase  case bam files, using comma to seperate files. prefixCase");
+		lsHelp.add("--Control:prefixControl  control bam files, using comma to seperate files. prefixControl");
 		return lsHelp;
 	}
 	

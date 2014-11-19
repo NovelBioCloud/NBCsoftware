@@ -23,7 +23,7 @@ public class SpringFactory extends ApplicationObjectSupport {
 	 */
 	public static Object getBean(String id) {
 		if (context == null) {
-			context = new ClassPathXmlApplicationContext("spring.xml");
+			context = new ClassPathXmlApplicationContext("spring_GUI.xml");
 		}
 		return context.getBean(id);
 	}
@@ -39,7 +39,7 @@ public class SpringFactory extends ApplicationObjectSupport {
 	 */
 	public static <T> T getBean(Class<T> requiredType) {
 		if (context == null) {
-			context = new ClassPathXmlApplicationContext("spring.xml");
+			context = new ClassPathXmlApplicationContext("spring_GUI.xml");
 		}
 		return context.getBean(requiredType);
 	}
