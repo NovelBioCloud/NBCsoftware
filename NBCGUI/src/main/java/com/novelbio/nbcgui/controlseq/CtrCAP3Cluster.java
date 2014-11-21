@@ -162,7 +162,9 @@ public class CtrCAP3Cluster implements IntCmdSoft {
 		return lsResult;
 	}
 	
-	/** 返回聚类好的文件 */
+	/** 返回聚类好的文件，同时合并cap3的文件
+	 * 主要是.cap.contigs和.cap.singlets
+	 *  */
 	public String getResultClusterFa() {
 		String capResultContigsFile = getOutMergedFile().concat(".cap.contigs");
 		String capResultSingletsFile = getOutMergedFile().concat(".cap.singlets");
@@ -171,11 +173,11 @@ public class CtrCAP3Cluster implements IntCmdSoft {
 		TxtReadandWrite txtSingletsRead = new TxtReadandWrite(capResultSingletsFile);
 		TxtReadandWrite txtWrite = new TxtReadandWrite(clusterFinalResultFa, true);
 		for (String content : txtContigsRead.readlines()) {
-			txtWrite.readfile();
+			txtWrite.writefileln(content);
 		}
 		txtContigsRead.close();
 		for (String content : txtSingletsRead.readlines()) {
-			txtWrite.readfile();
+			txtWrite.writefileln(content);
 		}
 		txtSingletsRead.close();
 		txtWrite.close();
