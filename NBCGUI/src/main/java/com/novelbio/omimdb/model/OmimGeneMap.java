@@ -99,11 +99,11 @@ public class OmimGeneMap implements Serializable {
 	 }
 
 	 public boolean remove() {
-	 try {
-		 repo().delete(id);
-	 } catch (Exception e) {
-	 return false;
-	 }
-	 return true;
+		 try {
+			 repo().delete(id);
+		 } catch (Exception e) {
+			 return false;
+		 }
+		 return true;
 	 }
 }
