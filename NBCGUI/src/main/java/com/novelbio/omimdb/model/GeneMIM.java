@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.novelbio.database.service.SpringFactory;
+import com.novelbio.springonly.factory.SpringFactory;
 import com.novelbio.omimdb.mongorepo.RepoGeneMIMInfo;
 import com.novelbio.omimdb.mongorepo.RepoGenemap;
 
@@ -50,7 +50,7 @@ public class GeneMIM implements Serializable {
 		return mapGenMet;
 	}
 	private static RepoGeneMIMInfo repo() {
-		 return SpringFactory.getFactory().getBean(RepoGeneMIMInfo.class);
+		 return SpringFactory.getBean(RepoGeneMIMInfo.class);
 		 
 	 }
 	 
@@ -59,11 +59,11 @@ public class GeneMIM implements Serializable {
 	 }
 
 	 public boolean remove() {
-	 try {
-		 repo().delete(id);
-	 } catch (Exception e) {
-	 return false;
-	 }
-	 return true;
+		 try {
+			 repo().delete(id);
+		 } catch (Exception e) {
+			 return false;
+		 }
+		 return true;
 	 }
 }

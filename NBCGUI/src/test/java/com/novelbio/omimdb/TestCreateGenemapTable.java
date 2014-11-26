@@ -17,15 +17,51 @@ import com.novelbio.omimdb.util.CreatGenemapTable;
 import junit.framework.TestCase;
 
 public class TestCreateGenemapTable extends TestCase {
-//	String genemapFilePath = "D:\\OMIM\\genemap2_v2.txt";
-	String genemapFilePath = "D:\\OMIM\\genemap2_v2.txt";
-	
-	public void testaddInf() {
-		CreatGenemapTable creatGenemapTable = new CreatGenemapTable();
-		GeneID geneID = new GeneID("tp53",9606);
-		String test=geneID.getAccID();
-		System.out.println("gene ID is "+ test);
-//		creatGenemapTable.creatGenemapTable(genemapFilePath);
+	static String genemapFilePath = "D:\\OMIM\\genemap2_v2.txt";
+	static String inGeneIdFile = "D:\\OMIM\\mim2gene.txt";
+	public static void main(String[] args) {
+
+//		List<String> list = new ArrayList<String>();
+//		list.add("aa");
+//		list.add("aa");
+//		list.add("bb");
+//		list.add("cc");
+//		list.add("bb");
+//		List<String> listpathList = new ArrayList<String>();
+//		listpathList.add("D:\\aa.txt");
+//		listpathList.add("D:\\ab.txt");
+//		listpathList.add("D:\\bb.txt");
+//		listpathList.add("D:\\cc.txt");
+//		listpathList.add("D:\\bd.txt");
+//		List<String> listNewPathList = new ArrayList<String>();
+//		String str = "";
+//		for (int i=0; i< list.size()-1; i++) {
+//			str = listpathList.get(i);
+//			for (int j=i+1; j< list.size(); j++) {
+//				if (list.get(i).equals(list.get(j))) {
+//					str = str.concat("," + listpathList.get(j));
+//					listpathList.set(i, str);
+//					listpathList.remove(j);
+//					list.remove(j);
+//				}
+//			}
+//		}
+//		
+//		for (int x=0; x<list.size(); x++) {
+//			System.out.println(list.get(x));
+//			System.out.println(listpathList.get(x));
+//		}
+//		
+		
+		
+//		System.out.println(list.get(3));
+		
+//		CreatGenemapTable creatGenemapTable = new CreatGenemapTable();
+//		creatGenemapTable.creatGenemapTable(genemapFilePath, inGeneIdFile);
+		
+//		List<T> list=new ArrayList<T>（）
+		
+//		creatGenemapTable.setInGeneIdFile(inGeneIdFile);
 //		MgmtOMIM mgmtOMIM = MgmtOMIM.getInstance();
 //		List<OmimGeneMap> lsOminGeneMaps = mgmtOMIM.findByGenMimId(geneId);
 

@@ -2,17 +2,16 @@ package com.novelbio.omimdb.mgmt;
 
 import java.util.List;
 
-import com.novelbio.database.service.SpringFactory;
 import com.novelbio.omimdb.mgmt.MgmtGeneMIMInfo.MgmtOmimHolder;
 import com.novelbio.omimdb.model.MIMAllToUni;
 import com.novelbio.omimdb.model.MIMInfo;
 import com.novelbio.omimdb.mongorepo.RepoGeneMIMInfo;
 import com.novelbio.omimdb.mongorepo.RepoMIMInfo;
-
+import com.novelbio.springonly.factory.SpringFactory;
 public class MgmtOMIMUnit {
 
 	private MgmtOMIMUnit () {}
-	RepoMIMInfo repoMIMInfo = (RepoMIMInfo)SpringFactory.getFactory().getBean("repoMIMInfo");
+	RepoMIMInfo repoMIMInfo = (RepoMIMInfo)SpringFactory.getBean("repoMIMInfo");
 	public List<MIMInfo> findByMimId(int MimId){
 		return repoMIMInfo.findInfByMimId(MimId);
 	}

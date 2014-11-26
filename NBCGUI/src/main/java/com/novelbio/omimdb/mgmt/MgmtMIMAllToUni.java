@@ -2,16 +2,18 @@ package com.novelbio.omimdb.mgmt;
 
 import java.util.List;
 
-import com.novelbio.database.service.SpringFactory;
+import org.springframework.stereotype.Repository;
+
 import com.novelbio.omimdb.mgmt.MgmtOMIM.MgmtOmimHolder;
 import com.novelbio.omimdb.model.MIMAllToUni;
 import com.novelbio.omimdb.model.OmimGeneMap;
 import com.novelbio.omimdb.mongorepo.RepoMIMAllToUni;
+import com.novelbio.springonly.factory.SpringFactory;
 
 public class MgmtMIMAllToUni {
 
 	private MgmtMIMAllToUni() {}
-	RepoMIMAllToUni repoMIMAllToUni = (RepoMIMAllToUni)SpringFactory.getFactory().getBean("repoMIMAllToUni");
+	RepoMIMAllToUni repoMIMAllToUni = (RepoMIMAllToUni)SpringFactory.getBean("repoMIMAllToUni");
 	public List<MIMAllToUni> findInfByMimId(int MimId){
 		return repoMIMAllToUni.findInfByMimId(MimId);
 	}

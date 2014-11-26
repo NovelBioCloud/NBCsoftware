@@ -2,16 +2,15 @@ package com.novelbio.omimdb.mgmt;
 
 import java.util.List;
 
-import com.novelbio.database.service.SpringFactory;
-import com.novelbio.omimdb.mgmt.MgmtOMIM.MgmtOmimHolder;
+import org.springframework.stereotype.Repository;
+
 import com.novelbio.omimdb.model.GeneMIM;
-import com.novelbio.omimdb.model.OmimGeneMap;
 import com.novelbio.omimdb.mongorepo.RepoGeneMIMInfo;
-import com.novelbio.omimdb.mongorepo.RepoGenemap;
+import com.novelbio.springonly.factory.SpringFactory;
 
 public class MgmtGeneMIMInfo {
 	private MgmtGeneMIMInfo() {}
-	RepoGeneMIMInfo repoGeneMIMInfo = (RepoGeneMIMInfo)SpringFactory.getFactory().getBean("repoGeneMIMInfo");
+	RepoGeneMIMInfo repoGeneMIMInfo = (RepoGeneMIMInfo)SpringFactory.getBean("repoGeneMIMInfo");
 	public List<GeneMIM> findByGenMimId(int geneMimId){
 		return repoGeneMIMInfo.findInfByGeneMimId(geneMimId);
 	}
