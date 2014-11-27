@@ -15,15 +15,35 @@ import com.novelbio.base.fileOperate.FileOperate;
  * 代表窗口或窗格中的当前所选内容。所选内容代表文档中选定（或突出显示）的区域， 如果文档中没有选定任何内容，则代表插入点。 每个文档窗格只能有一个
  * Selection 对象， 并且在整个应用程序中只能有一个活动的 Selection 对象
  */
-public class Selection extends BaseWord {
+public class Selection {
 	private ActiveXComponent wordApp;
 	private Dispatch doc;
+	private Dispatch instance;
+
+//	public Selection(Dispatch instance, ActiveXComponent wordApp,Dispatch doc) {
+//		super(instance);
+//		this.doc = doc;
+//		this.wordApp = wordApp;
+//	}
+	
+	public Selection() {
+		
+	}
 
 	public Selection(Dispatch instance, ActiveXComponent wordApp,Dispatch doc) {
-		super(instance);
+		this.instance = instance;
 		this.doc = doc;
 		this.wordApp = wordApp;
 	}
+	
+	public Dispatch getInstance() {
+		return instance;
+	}
+
+	public void setInstance(Dispatch instance) {
+		this.instance = instance;
+	}
+
 
 	/**
 	 * 设置选择区的文字
@@ -258,24 +278,7 @@ public class Selection extends BaseWord {
 		new Variant(numRows), new Variant(numCols)).toDispatch();
 		return newTable;
 	}
-	
 
-	/**
-	 * 在指定的单元格里填写数据
-	 *
-	 * @param tableIndex
-	 * @param cellRowIdx
-	 * @param cellColIdx
-	 * @param txt
-	 */
-	public void putTxtToCell(Dispatch table, int cellRowIdx, int cellColIdx,
-			String txt) {
-		Dispatch cell = Dispatch.call(table, "Cell", new Variant(cellRowIdx),
-				new Variant(cellColIdx)).toDispatch();
-		Dispatch.call(cell, "Select");
-		Dispatch.put(instance, "Text", txt);
-	}
-	
 	/**
 	 * 从excel中读取数据并生成表格添加到word中
 	 * @param mapExcelPath2SheetName excel和sheetName的集合
@@ -287,8 +290,7 @@ public class Selection extends BaseWord {
 		Dispatch.call(instance, "InsertCaption", "Table", " : " + title);
 		// ,/**Label*/"-1",/**Title*/title
 		// ,/**TitleAutoText"123",*//**Position*/"1",/**ExcludeLabel*/"False").toDispatch();
-		Dispatch paragraphFormat = Dispatch.get(instance, "ParagraphFormat")
-				.toDispatch();
+		Dispatch paragraphFormat = Dispatch.get(instance, "ParagraphFormat").toDispatch();
 		Dispatch.put(paragraphFormat, "Alignment", "1");
 		nextRow();
 		setParagraphsProperties(0, 0, 0, 0, 0);
@@ -299,24 +301,11 @@ public class Selection extends BaseWord {
 				continue;
 			Dispatch table = createTable(data.get(0).size(),data.size());
 			setTableStyleAsDefault(table);
+			data = formatDataList(data);
 			fillTable(table,data);
+			moveDown();
 		}
 	}
-	/**
-	 * 把数据填到表格中
-	 * @param table
-	 * @param data
-	 */
-	private void fillTable(Dispatch table,List<List<String>> data){
-		List<List<String>> lsNewDatas = formatDataList(data);
-		for (int i = 0; i < lsNewDatas.size(); i++) {
-			for (int j = 0; j < lsNewDatas.get(i).size(); j++) {
-				putTxtToCell(table,i+1,j+1,lsNewDatas.get(i).get(j));
-			}
-		}
-		moveDown();
-	}
-	
 	/**
 	 * 设置默认的表格样式
 	 * @param table
@@ -358,6 +347,35 @@ public class Selection extends BaseWord {
 			lsNewDatas.add(lsData);
 		}
 		return lsNewDatas;
+	}
+	
+	/**
+	 * 把数据填到表格中
+	 * @param table
+	 * @param data
+	 */
+	private void fillTable(Dispatch table,List<List<String>> data) {
+		for (int i = 0; i < data.size(); i++) {
+			for (int j = 0; j < data.get(i).size(); j++) {
+				putTxtToCell(table,i+1,j+1,data.get(i).get(j));
+			}
+		}
+	}
+	
+	/**
+	 * 在指定的单元格里填写数据
+	 *
+	 * @param tableIndex
+	 * @param cellRowIdx
+	 * @param cellColIdx
+	 * @param txt
+	 */
+	public void putTxtToCell(Dispatch table, int cellRowIdx, int cellColIdx,
+			String txt) {
+		Dispatch cell = Dispatch.call(table, "Cell", new Variant(cellRowIdx),
+				new Variant(cellColIdx)).toDispatch();
+		Dispatch.call(cell, "Select");
+		Dispatch.put(instance, "Text", txt);
 	}
 	
 	/**

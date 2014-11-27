@@ -12,15 +12,30 @@ import com.jacob.com.Variant;
  * 创建时间：2011-6-4 下午05:41:47
  * 修改时间：2011-6-4 下午05:41:47
  */
-public class Document extends BaseWord{
+public class Document {
 	private ActiveXComponent wordApp;
 	private Documents documents;
 	private Document anotherDoc;
 	private Selection selection;
+	private Dispatch instance;
+//	public Document(Dispatch instance,ActiveXComponent wordApp,Documents documents) {
+//		super(instance);
+//		this.documents = documents;
+//		this.wordApp = wordApp;
+//	}
+	
 	public Document(Dispatch instance,ActiveXComponent wordApp,Documents documents) {
-		super(instance);
+		this.instance = instance;
 		this.documents = documents;
 		this.wordApp = wordApp;
+	}
+
+	public Dispatch getInstance() {
+		return instance;
+	}
+
+	public void setInstance(Dispatch instance) {
+		this.instance = instance;
 	}
 
 	/**

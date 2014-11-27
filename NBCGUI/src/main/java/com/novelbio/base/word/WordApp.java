@@ -25,18 +25,6 @@ public class WordApp{
 	}
 	
 	/**
-	 * 打开另一个子文档用来复制内容
-	 * @param filePathName
-	 * @return
-	 * @throws Exception
-	 */
-	public Document openExistDocument(String filePathName) throws Exception{
-		Dispatch d = Dispatch.call(documents.getInstance(), "Open", filePathName).toDispatch();
-		nowDoc =new Document(d,wordApp,documents);
-		return nowDoc;
-	}
-	
-	/**
 	 * 应用程序初始化
 	 * @param visible 是否可见
 	 */
@@ -50,6 +38,18 @@ public class WordApp{
 		
 		Dispatch d=wordApp.getProperty("Documents").toDispatch();
 		documents=new Documents(d);
+	}
+	
+	/**
+	 * 打开另一个子文档用来复制内容
+	 * @param filePathName
+	 * @return
+	 * @throws Exception
+	 */
+	public Document openExistDocument(String filePathName) throws Exception{
+		Dispatch d = Dispatch.call(documents.getInstance(), "Open", filePathName).toDispatch();
+		nowDoc =new Document(d,wordApp,documents);
+		return nowDoc;
 	}
 	
 	/**
