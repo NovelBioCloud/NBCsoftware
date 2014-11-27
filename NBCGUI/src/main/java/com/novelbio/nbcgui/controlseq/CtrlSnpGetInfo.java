@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.nbcgui.GUI.GuiSnpCalling;
+import com.novelbio.nbcgui.GUI.GuiSnpCallingInt;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.resequencing.SnpDetailGet;
 import com.novelbio.analysis.seq.resequencing.SnpFilterDetailInfo;
@@ -16,9 +17,9 @@ public class CtrlSnpGetInfo implements RunGetInfo<SnpFilterDetailInfo>{
 	SnpDetailGet snpDetailGet = new SnpDetailGet();	
 	SnpGroupFilterInfo snpGroupInfoFilter = new SnpGroupFilterInfo();
 	
-	GuiSnpCalling guiSnpCalling;
+	GuiSnpCallingInt guiSnpCalling;
 
-	public CtrlSnpGetInfo(GuiSnpCalling guiSnpCalling) {
+	public CtrlSnpGetInfo(GuiSnpCallingInt guiSnpCalling) {
 		this.guiSnpCalling = guiSnpCalling;
 		snpDetailGet.setRunGetInfo(this);
 	}
@@ -66,7 +67,7 @@ public class CtrlSnpGetInfo implements RunGetInfo<SnpFilterDetailInfo>{
 	@Override
 	public void done(RunProcess<SnpFilterDetailInfo> runProcess) {
 		guiSnpCalling.getTxtInfo().setText("Snp Calling Complete");
-		JOptionPane.showMessageDialog(guiSnpCalling, "Snp Calling Complete", "finish", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, "Snp Calling Complete", "finish", JOptionPane.INFORMATION_MESSAGE);
 		
 		guiSnpCalling.getBtnAddPileupFile().setEnabled(true);
 		guiSnpCalling.getBtnDeletePileup().setEnabled(true);

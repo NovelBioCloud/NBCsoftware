@@ -8,13 +8,14 @@ import com.novelbio.analysis.seq.resequencing.SnpFilterDetailInfo;
 import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.nbcgui.GUI.GuiSnpCalling;
+import com.novelbio.nbcgui.GUI.GuiSnpCallingInt;
 
 public class CtrlSnpAnnotation implements RunGetInfo<SnpFilterDetailInfo> {
 
 	SnpAnnotation snpAnnotation = new SnpAnnotation();
-	GuiSnpCalling guiSnpCalling;
+	GuiSnpCallingInt guiSnpCalling;
 
-	public CtrlSnpAnnotation(GuiSnpCalling guiSnpCalling) {
+	public CtrlSnpAnnotation(GuiSnpCallingInt guiSnpCalling) {
 		this.guiSnpCalling = guiSnpCalling;
 		snpAnnotation.setRunGetInfo(this);
 	}
@@ -84,7 +85,7 @@ public class CtrlSnpAnnotation implements RunGetInfo<SnpFilterDetailInfo> {
 		if (guiSnpCalling != null) {
 			guiSnpCalling.getProgressBar().setValue(guiSnpCalling.getProgressBar().getMaximum());
 			guiSnpCalling.getTxtInfo().setText("Snp Annotation Complete");
-			JOptionPane.showMessageDialog(guiSnpCalling, "Snp Annotation Complete", "finish", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Snp Annotation Complete", "finish", JOptionPane.INFORMATION_MESSAGE);
 			guiSnpCalling.getBtnAddPileupFile().setEnabled(true);
 			guiSnpCalling.getBtnDeletePileup().setEnabled(true);
 			guiSnpCalling.getBtnRun().setEnabled(true);

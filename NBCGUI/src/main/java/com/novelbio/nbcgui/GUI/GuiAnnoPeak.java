@@ -49,7 +49,7 @@ public class GuiAnnoPeak extends JPanel implements GuiNeedOpenFile {
 	private JTextField txtTssDown;
 	private JTextField txtTesUp;
 	private JTextField txtTesDown;
-	private JCheckBox chckbxGenebody;
+//	private JCheckBox chckbxGenebody;
 	private GuiLayeredPaneSpeciesVersionGff layeredPaneSpecies;
 	/**
 	 * Create the panel.
@@ -153,7 +153,8 @@ public class GuiAnnoPeak extends JPanel implements GuiNeedOpenFile {
 				
 				ctrlBatchAnno.setTssRange(tss);
 				ctrlBatchAnno.setTesRange(tes);
-				ctrlBatchAnno.setFilterGeneBody(chckbxGenebody.isSelected());
+				ctrlBatchAnno.setFilterGeneBody(true);
+//				ctrlBatchAnno.setFilterGeneBody(chckbxGenebody.isSelected());
 				
 				ctrlBatchAnno.setIsSummitSearch(!chckPeakRange.isSelected());
 				Species species = layeredPaneSpecies.getSelectSpecies();
@@ -175,7 +176,7 @@ public class GuiAnnoPeak extends JPanel implements GuiNeedOpenFile {
 		add(txtTssDown);
 		txtTssDown.setColumns(10);
 		
-		JLabel lblTss = new JLabel("Tss");
+		JLabel lblTss = new JLabel("TSS");
 		lblTss.setBounds(719, 398, 69, 14);
 		add(lblTss);
 		
@@ -205,13 +206,13 @@ public class GuiAnnoPeak extends JPanel implements GuiNeedOpenFile {
 		lblDown_1.setBounds(784, 468, 69, 14);
 		add(lblDown_1);
 		
-		JLabel lblTes = new JLabel("Tes");
+		JLabel lblTes = new JLabel("TTS");
 		lblTes.setBounds(717, 452, 69, 14);
 		add(lblTes);
 		
-		chckbxGenebody = new JCheckBox("GeneBody");
-		chckbxGenebody.setBounds(717, 498, 131, 22);
-		add(chckbxGenebody);
+//		chckbxGenebody = new JCheckBox("GeneBody");
+//		chckbxGenebody.setBounds(717, 498, 131, 22);
+//		add(chckbxGenebody);
 		
 		layeredPaneSpecies = new GuiLayeredPaneSpeciesVersionGff();
 		layeredPaneSpecies.setBounds(717, 58, 213, 164);
