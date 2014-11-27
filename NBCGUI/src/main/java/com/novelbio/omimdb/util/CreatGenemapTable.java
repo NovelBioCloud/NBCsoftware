@@ -1,7 +1,11 @@
 package com.novelbio.omimdb.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.apache.tools.ant.taskdefs.Exit;
 
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.omimdb.mgmt.MgmtGeneMIMInfo;
@@ -10,9 +14,8 @@ import com.novelbio.omimdb.model.GeneMIM;
 import com.novelbio.omimdb.model.OmimGeneMap;
 
 public class CreatGenemapTable {
-	String inFileString;
-	
-	public boolean creatGenemapTable(String inFileString) {
+//	String inGeneIdFile;
+	public boolean creatGenemapTable(String inFileString, String inGeneIdFile) {
 		String recodData;
 		String[] arrAllComment = null;
 		String[] arrComment;
@@ -22,6 +25,13 @@ public class CreatGenemapTable {
 		int geneMimId;
 		List<String> lsPhenToGeneMIM = new ArrayList<>();
 		String phenToGene;
+		String geneName;
+		String geneId;
+		Map<String,String> haGeneID2Name = CreatGenemapTable.getGeneID(inGeneIdFile);
+		for (String testkey:haGeneID2Name.keySet()) {
+			System.out.println(testkey + "\t" + haGeneID2Name.get(testkey));
+		}
+		
 		TxtReadandWrite txtGenemapRead = new TxtReadandWrite(inFileString);
 		MgmtOMIM mgmtOMIM = MgmtOMIM.getInstance();
 		MgmtGeneMIMInfo mgmtGeneMIM = MgmtGeneMIMInfo.getInstance();
@@ -51,12 +61,12 @@ public class CreatGenemapTable {
 						omimGeneMap.setGenMimId(geneMimId);
 						omimGeneMap.setPhenMimId(phenMimId);
 						omimGeneMap.setRecordTime(recodData);
-//						omimGeneMap.setPhenDec(arrGenemap[7]);
+						omimGeneMap.setPhenDec(arrGenemap[7]);
 						omimGeneMap.setPhenMapMeth(arrGenemap[9]);
 						if (arrGenemap.length>12) {
 							omimGeneMap.setMouCorr(arrGenemap[12]);
 						}
-						mgmtOMIM.save(omimGeneMap);
+//						mgmtOMIM.save(omimGeneMap);
 					}
 					lsPhenToGeneMIM.add(phenToGene);
 				}		
@@ -64,19 +74,51 @@ public class CreatGenemapTable {
 			if (arrGenemap.length>8) {
 				GeneMIM geneMIM =new GeneMIM();
 				geneMIM.setGeneMimId(geneMimId);
-//				geneMIM.setGeneId(geneId);
+				geneName = arrGenemap[5].split(",")[0].replaceAll("\"", "");
+//				System.out.print("geneName " + geneName);
+				if (haGeneID2Name.containsKey(geneName)) {
+					geneId = haGeneID2Name.get(geneName);
+				} else {
+					geneId = "0";
+				}
+				if (geneId.equals("0")) {
+					System.out.print("geneName " + geneName);
+					System.out.println("geneId " + geneId);
+				}
+				
+				geneMIM.setGeneId(Integer.parseInt(geneId));
 				geneMIM.setMapGenMet(arrGenemap[6]);
 				geneMIM.setCytLoc(arrGenemap[4]);
-				mgmtGeneMIM.save(geneMIM);
+//				mgmtGeneMIM.save(geneMIM);
 			}		
 		}
 		txtGenemapRead.close();
 		return true;
 	}
-	public String getInFileString() {
-		return inFileString;
+	
+
+//	public String getInGeneIdFile() {
+//		return inGeneIdFile;
+//	}
+//	public void setInGeneIdFile(String inGeneIdFile) {
+//		this.inGeneIdFile = inGeneIdFile;
+//	}
+	
+	public static Map<String,String> getGeneID (String inGeneIdFile) {
+		Map<String,String> haGeneName2ID = new HashMap<String, String>();
+		TxtReadandWrite txtGeneIdFileRead = new TxtReadandWrite(inGeneIdFile);
+		for (String line : txtGeneIdFileRead.readlines()) {
+			String[] lineInfo = line.split("\\s+");
+//			if (lineInfo[1].startsWith("gene")) {
+				if (lineInfo[2].matches("\\d+")) {
+					haGeneName2ID.put(lineInfo[3], lineInfo[2]);
+//					System.out.println(lineInfo[3] +"  === " + lineInfo[2]);
+				}
+				
+//			}
+		}
+		txtGeneIdFileRead.close();
+		return haGeneName2ID;
 	}
-	private void setInFileString(String inFileString) {
-		this.inFileString = inFileString;
-	}
+	
 }

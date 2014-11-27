@@ -9,9 +9,7 @@ import com.novelbio.omimdb.model.OmimGeneMap;
 
 public class TestMgmtOMIM extends TestCase {
 
-	
 	public void testSave() {
-		System.out.println("test");
 //		int pheId = 35432345;
 //		OmimGeneMap genemap = new OmimGeneMap();
 //		genemap.setGenMimId(pheId);
@@ -68,3 +66,4 @@ public class TestMgmtOMIM extends TestCase {
 	
 }
 	
+

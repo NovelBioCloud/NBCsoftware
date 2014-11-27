@@ -4,24 +4,22 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.novelbio.database.service.SpringFactory;
 import com.novelbio.omimdb.mongorepo.RepoGenemap;
 import com.novelbio.omimdb.mongorepo.RepoMIMInfo;
-
+import com.novelbio.springonly.factory.SpringFactory;
 @Document(collection = "omimInfo")
 public class MIMInfo implements Serializable {
 
 	/** MIM ID */
-	@Id
+	@Indexed
 	private int mimId;
 	/** MIM Title 号 */
 	private String mimTitle;
 	/** MIM Txt 信息*/
 	private String mimTxt;
-	/** MIM description */
-	private String descrption;
 	/** Other information */
 	private String othInfor;
 	
@@ -43,17 +41,11 @@ public class MIMInfo implements Serializable {
 	public String getMimTxt() {
 		return mimTxt;
 	}
-	public void setDescrption(String descrption) {
-		this.descrption = descrption;
-	}
-	public String getDescrption() {
-		return descrption;
-	}
 	public void setOthInfor(String othInfor) {
 		this.othInfor = othInfor;
 	}
 	public String getOthInfor() {
-		return descrption;
+		return othInfor;
 	}
 	
 	/**
@@ -222,32 +214,52 @@ marie: 3/25/1988
 		String fieldTxt = "";
 		String key;
 		String des = "";
-		int nullLineNum = 0;
-		
+		int flag = 0;
+		String fieldTitleTmp ="";
+		int fieldNumber = 0;
+		int otherNumber = 0;
 		for (String content : lsOmimunit) {
-			if (content.startsWith("*")) {
-				if (fieldTitle != null) {
+			if (content.startsWith("*RECORD*")) {
+				continue;
+			} else if (content.startsWith("*FIELD*")) {	
+				if (!(fieldTitle.equals(""))) {
+					if (!(fieldTitle.equals("OT"))) {
+						if (fieldTxt.length()>10) {
+							fieldTxt = fieldTxt.substring(10);
+						} else if (fieldTxt.length() ==10) {
+							fieldTxt = "";
+						}
+					}
 					if (fieldTitle.equals("NO")) {
-						mimInfo.setMimId(Integer.parseInt(fieldTxt));
+						mimInfo.setMimId(Integer.parseInt(fieldTxt.trim()));
 					} else if (fieldTitle.equals("TI")) {
 						mimInfo.setMimTitle(fieldTxt);
 					} else if (fieldTitle.equals("TX")) {
 						mimInfo.setMimTxt(fieldTxt);
-					} else  if (fieldTitle.equals("RF")){
-						mimInfo.setDescrption(fieldTxt);
-					} else {
-						mimInfo.setOthInfor(fieldTxt);
 					}
+					if (!(fieldTitle.equals("OT"))) {
+						fieldTxt = "";
+					}				
 				}
-				fieldTitle = content.split(" ")[1];
-				continue;
-			}
+				if (flag>2) {
+					fieldTitle = "OT";
+				} else {
+					fieldTitle = content.split("\\s")[1];
+					flag++;	
+				}
+			} else {
+				if (fieldTitle.equals("OT")) {
+					fieldTxt = fieldTxt.concat(content + " ");
+					mimInfo.setOthInfor(fieldTxt);		
+				}
+			} 
 			fieldTxt = fieldTxt.concat(content + " ");
-		}
-		return new MIMInfo();
+		}	
+		
+		return mimInfo;
 	}
 	 private static RepoMIMInfo repo() {
-		 return SpringFactory.getFactory().getBean(RepoMIMInfo.class);
+		 return SpringFactory.getBean(RepoMIMInfo.class);
 		 
 	 }
 	 
@@ -261,4 +273,5 @@ marie: 3/25/1988
 	 }	 
 	 
 }
+
 
