@@ -160,13 +160,8 @@ public class CtrlFastQ {
 	 * 1: listRight 单端则该list为空，不为null
 	 */
 	public Map<String, List<List<String>>> getFilteredMap() {
-		if (mapCondition2LRFiltered.size() == 0) {
-			if (copeFastq.getMapCondition2LsFastQLR().size() == 0) {
-				copeFastq.setMapCondition2LsFastQLR();
-				return copeFastq.getMapCondition2LslsFastq();
-			}
-		}
-		return mapCondition2LRFiltered;
+		copeFastq.setMapCondition2LsFastQLR();
+		return copeFastq.getMapCondition2LslsFastq();
 	}
 	
 	private void filteredAndCombineReads() {

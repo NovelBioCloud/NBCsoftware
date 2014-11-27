@@ -353,6 +353,7 @@ public class GuiSamToBam extends JPanel {
 		}
 		if (chckRealign.isSelected()) {
 			samFileMerge = samFileMerge.addGroup(prefix, prefix, prefix, "ILLUMINA");
+			samFileMerge.indexMake();
 			samFileMerge = samFileMerge.realign();
 			if (samFileMerge == null) {
 				return;
@@ -367,6 +368,7 @@ public class GuiSamToBam extends JPanel {
 				}
 			}
 			if (lsVcfFile.size() != 0) {
+				samFileMerge.indexMake();
 				samFileMerge = samFileMerge.recalibrate(lsVcfFile);
 				if (samFileMerge == null) {
 					return;

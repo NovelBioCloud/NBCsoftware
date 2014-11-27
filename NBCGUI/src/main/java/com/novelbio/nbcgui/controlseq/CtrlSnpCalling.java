@@ -12,14 +12,15 @@ import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.nbcgui.GUI.GuiSnpCalling;
+import com.novelbio.nbcgui.GUI.GuiSnpCallingInt;
 
 /** 查找snp */
 public class CtrlSnpCalling implements RunGetInfo<SnpFilterDetailInfo> {
 	SnpCalling snpCalling = new SnpCalling();	
 	
-	GuiSnpCalling guiSnpCalling;
+	GuiSnpCallingInt guiSnpCalling;
 		
-	public CtrlSnpCalling(GuiSnpCalling guiSnpCalling) {
+	public CtrlSnpCalling(GuiSnpCallingInt guiSnpCalling) {
 		this.guiSnpCalling = guiSnpCalling;
 		snpCalling.setRunGetInfo(this);
 	}
@@ -95,7 +96,7 @@ public class CtrlSnpCalling implements RunGetInfo<SnpFilterDetailInfo> {
 		guiSnpCalling.getBtnRun().setEnabled(true);
 		guiSnpCalling.getProgressBar().setValue(guiSnpCalling.getProgressBar().getMaximum());
 		
-		JOptionPane.showMessageDialog(guiSnpCalling, "Snp Calling Complete", "finish", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, "Snp Calling Complete", "finish", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	@Override

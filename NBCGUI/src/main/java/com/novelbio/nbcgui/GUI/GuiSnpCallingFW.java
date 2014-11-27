@@ -35,14 +35,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /** snpCalling的界面 */
-public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile, GuiSnpCallingInt {
-	private static final Logger logger = Logger.getLogger(GuiSnpCalling.class);
+public class GuiSnpCallingFW extends JPanel implements GuiNeedOpenFile, GuiSnpCallingInt {
+	private static final Logger logger = Logger.getLogger(GuiSnpCallingFW.class);
 	
 	private JTextField txtHetoSnpProp;
-	private JTextField txtHetoMoreSnpProp;
 	JTextPane txtInformation;
-	
-	JComboBoxData<SnpLevel> combSnpLevel;
 	JButton btnAddPileupFile;
 	JButton btnDeletePileupFile;
 	JButton btnRun;
@@ -85,7 +82,7 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile, GuiSnpCall
 	/**
 	 * Create the panel.
 	 */
-	public GuiSnpCalling() {
+	public GuiSnpCallingFW() {
 		setLayout(null);
 		
 		sclInputFile = new JScrollPaneData();
@@ -120,31 +117,14 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile, GuiSnpCall
 		});
 		add(btnDeletePileupFile);
 		
-		combSnpLevel = new JComboBoxData<SnpLevel>();
-		combSnpLevel.setBounds(318, 170, 121, 23);
-		add(combSnpLevel);
-		
-		JLabel lblSnpfilterquality = new JLabel("SNPFilterQuality");
-		lblSnpfilterquality.setBounds(24, 182, 151, 14);
-		add(lblSnpfilterquality);
-		
 		JLabel lblHetolessinfo = new JLabel("Hetero SNP Reads Prop Level");
-		lblHetolessinfo.setBounds(24, 210, 253, 14);
+		lblHetolessinfo.setBounds(14, 178, 253, 14);
 		add(lblHetolessinfo);
 		
-		JLabel lblHetomorecontainreadsmin = new JLabel("Hetero More SNP Reads Prop Level");
-		lblHetomorecontainreadsmin.setBounds(24, 236, 264, 14);
-		add(lblHetomorecontainreadsmin);
-		
 		txtHetoSnpProp = new JTextField();
-		txtHetoSnpProp.setBounds(318, 205, 43, 18);
+		txtHetoSnpProp.setBounds(271, 174, 66, 24);
 		add(txtHetoSnpProp);
 		txtHetoSnpProp.setColumns(10);
-		
-		txtHetoMoreSnpProp = new JTextField();
-		txtHetoMoreSnpProp.setBounds(318, 230, 43, 18);
-		add(txtHetoMoreSnpProp);
-		txtHetoMoreSnpProp.setColumns(10);
 		
 		progressBar = new JProgressBar();
 		progressBar.setBounds(14, 511, 767, 14);
@@ -327,7 +307,6 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile, GuiSnpCall
 	}
 	
 	private void initial() {
-		combSnpLevel.setMapItem(SnpLevel.getMapStr2SnpLevel());
 		buttonGroupSnpCallingFinding = new ButtonGroup();
 //		buttonGroupSnpCallingFinding.add(rdbtnGetSnpDetail);
 		buttonGroupSnpCallingFinding.add(rdbtnSnpcalling);
@@ -347,8 +326,6 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile, GuiSnpCall
 	}
 	/** 当为snpcalling时候的界面 */
 	private void setSnpCalling() {
-		combSnpLevel.setEnabled(true);
-		txtHetoMoreSnpProp.setEnabled(true);
 		txtHetoSnpProp.setEnabled(true);
 //		rdbtnGatkBamfile.setEnabled(true);
 //		rdbtnSamtoolsPileup.setEnabled(true);
@@ -377,8 +354,6 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile, GuiSnpCall
 	/** 当为获得每个snp信息的时候的界面 */
 	private void setSnpGetInfo() {
 		sclInputFile.setTitle(new String[]{"Input PileUp File", "Sample Name"});
-		combSnpLevel.setEnabled(false);
-		txtHetoMoreSnpProp.setEnabled(false);
 		txtHetoSnpProp.setEnabled(false);
 //		rdbtnGatkBamfile.setEnabled(false);
 //		rdbtnSamtoolsPileup.setEnabled(false);
@@ -409,9 +384,6 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile, GuiSnpCall
 //		rdbtnGatkBamfile.setEnabled(false);
 //		rdbtnSamtoolsPileup.setEnabled(false);
 //		rdbtnNbcmethodPileupfile.setEnabled(false);
-		
-		combSnpLevel.setEnabled(false);
-		txtHetoMoreSnpProp.setEnabled(false);
 		txtHetoSnpProp.setEnabled(false);
 		
 		txtOutput.setVisible(false);
@@ -439,18 +411,15 @@ public class GuiSnpCalling extends JPanel implements GuiNeedOpenFile, GuiSnpCall
 //		setGffChrAbs();
 //		ctrlSnpCalling.setGffChrAbs(gffChrAbs);
 
-		ctrlSnpCalling.setSnpFilterLevel(combSnpLevel.getSelectedValue());
+		ctrlSnpCalling.setSnpFilterLevel(SnpLevel.HeteroMore);
 		ArrayList<String[]> lsFile = sclInputFile.getLsDataInfo();
 		for (String[] strings : lsFile) {
 			ctrlSnpCalling.addSnpFromPileUpFile(strings[0], strings[1]);
 		}
-		try {
-			double hetoSnpProp = Double.parseDouble(txtHetoSnpProp.getText());
-			ctrlSnpCalling.setSnp_Hete_Contain_SnpProp_Min(hetoSnpProp);
-		} catch (Exception e2) { }
+		ctrlSnpCalling.setSnp_Hete_Contain_SnpProp_Min(0);
 		
 		try {
-			double hetoMoreSnpProp = Double.parseDouble(txtHetoMoreSnpProp.getText());
+			double hetoMoreSnpProp = Double.parseDouble(txtHetoSnpProp.getText());
 			ctrlSnpCalling.setSnp_HetoMore_Contain_SnpProp_Min(hetoMoreSnpProp);
 		} catch (Exception e2) { }
 		
