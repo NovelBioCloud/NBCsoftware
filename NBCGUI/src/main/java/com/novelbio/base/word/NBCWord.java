@@ -123,11 +123,11 @@ public class NBCWord {
 	 */
 	@SuppressWarnings("unchecked")
 	private void writeText(Document doc,String key,Collection<?> values) throws Exception{
-		while(doc.getSelection().find("\\$\\{"+key+"\\}",true)){
+		while(doc.getSelection().find("[\\$][\\{]"+key+"[\\}]",true)){
 			NBCWordText wordText = new NBCWordText(doc.getSelection());
 			wordText.replaceAs((Collection<String>)values);
 		}
-		while(doc.getSelection().find("\\$\\{"+key+"[#]*\\}",true)){
+		while(doc.getSelection().find("[\\$][\\{]"+key+"[#]*[\\}]",true)){
 			NBCWordText wordText = new NBCWordText(doc.getSelection());
 			wordText.replaceAs((Collection<String>)values);
 		}
@@ -142,7 +142,7 @@ public class NBCWord {
 	private void writeTables(Document doc,String key,List<Object> tables) throws Exception{
 		if(!(tables.get(0) instanceof NBCWordTable))
 			return;
-		while(doc.getSelection().find("\\$\\{"+key+"\\}",true)){
+		while(doc.getSelection().find("[\\$][\\{]"+key+"[\\}]",true)){
 			String pattern = doc.getSelection().getText();
 			doc.getSelection().replaceSelected("");
 			for (Object object : tables) {
@@ -150,7 +150,7 @@ public class NBCWord {
 				table.addToWord(doc.getSelection(),pattern);
 			}
 		}
-		while(doc.getSelection().find("\\$\\{"+key+"[#]*\\}",true)){
+		while(doc.getSelection().find("[\\$][\\{]"+key+"[#]*[\\}]",true)){
 			String pattern = doc.getSelection().getText();
 			doc.getSelection().replaceSelected("");
 			for (Object object : tables) {
@@ -169,7 +169,7 @@ public class NBCWord {
 	private void writeOtherTemp(Document doc,String key,List<Object> reportBases) throws Exception{
 		if(!(reportBases.get(0) instanceof ReportBase))
 			return;
-		while(doc.getSelection().find("\\$\\{"+key+"\\}",true)){
+		while(doc.getSelection().find("[\\$][\\{]"+key+"[\\}]",true)){
 			doc.getSelection().replaceSelected("");
 			for (Object object : reportBases) {
 				ReportBase reportBase = (ReportBase)object;
@@ -178,7 +178,7 @@ public class NBCWord {
 				doc.copyAllFromAnother();
 			}
 		}
-		while(doc.getSelection().find("\\$\\{"+key+"[#]*\\}",true)){
+		while(doc.getSelection().find("[\\$][\\{]"+key+"[#]*[\\}]",true)){
 			String pattern = doc.getSelection().getText();
 			if(pattern.contains("##e|")){
 				String patternLeft = pattern.substring(2, pattern.length() - 1);
@@ -209,7 +209,7 @@ public class NBCWord {
 	private void writeImages(Document doc,String key,List<Object> images) throws Exception{
 		if(!(images.get(0) instanceof NBCWordImage))
 			return;
-		while(doc.getSelection().find("\\$\\{"+key+"\\}",true)){
+		while(doc.getSelection().find("[\\$][\\{]"+key+"[\\}]",true)){
 			String pattern = doc.getSelection().getText();
 			doc.getSelection().replaceSelected("");
 			for (Object object : images) {
@@ -217,7 +217,7 @@ public class NBCWord {
 				image.addToWord(doc.getSelection(),pattern);
 			}
 		}
-		while(doc.getSelection().find("\\$\\{"+key+"[#]*\\}",true)){
+		while(doc.getSelection().find("[\\$][\\{]"+key+"[#]*[\\}]",true)){
 			String pattern = doc.getSelection().getText();
 			doc.getSelection().replaceSelected("");
 			for (Object object : images) {
