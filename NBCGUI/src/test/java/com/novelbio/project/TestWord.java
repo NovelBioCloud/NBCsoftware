@@ -38,7 +38,7 @@ public class TestWord {
 		image.setUpCompare("这是写在图片上方的说明，睁大你的眼睛看看");
 		image.setTitle("这是一张神奇的图片");
 		image.setNote("注：这个图片只是用来测试有没有用的");
-		image.addPicPath("C:\\Documents and Settings\\Administrator\\桌面\\sampleMgmt.png");
+		image.addPicPath("C:\\Documents and Settings\\Administrator\\桌面\\viewphoto.jpg");
 //		image.setWidth(1000);
 //		image.setHeight(500);
 		image.setAlign(2);
@@ -63,7 +63,19 @@ public class TestWord {
 //		map.put("pic1", pic1);
 //		map.put("table", lsTables);
 		word.render(map);
-//		word.saveDocAs("C:\\Documents and Settings\\Administrator\\桌面\\gooddd.docx");
-//		word.close();
+//		try {
+//			word.close();
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		try {
+			word.saveDocAs("C:\\Documents and Settings\\Administrator\\桌面\\gooddd.doc");
+			word.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }

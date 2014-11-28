@@ -145,8 +145,7 @@ public class Selection {
 		Dispatch inLineShapes = Dispatch.get(instance, "InLineShapes")
 				.toDispatch();
 		for (String imagePath : lsPicPaths) {
-			Dispatch shape = Dispatch.call(inLineShapes, "AddPicture",
-					FileHadoop.convertToLocalPath(imagePath)).toDispatch();
+			Dispatch shape = Dispatch.call(inLineShapes, "AddPicture", imagePath).toDispatch();
 			Dispatch.put(shape, "Width", width == null ? Dispatch.get(shape, "Width")
 					.getFloat() : width);
 			Dispatch.put(shape, "Height", height == null ? Dispatch.get(shape, "Height")
