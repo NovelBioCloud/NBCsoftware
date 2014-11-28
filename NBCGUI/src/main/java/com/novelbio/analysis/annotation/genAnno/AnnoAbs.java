@@ -12,6 +12,7 @@ public abstract class AnnoAbs {
 	public static final int ANNOTATION = 1234;
 	public static final int GO = 2345;
 	public static final int PATH = 3456;
+	public static final int OMIM = 4567;
 	
 	int taxIDthis;
 	int taxIDBlast;
@@ -83,6 +84,8 @@ public abstract class AnnoAbs {
 			return new AnnoGO();
 		} else if (annoType == AnnoAbs.PATH) {
 			return new AnnoPath();
+		} else if (annoType == AnnoAbs.OMIM) {
+			return new AnnoOMIM();
 		}
 		return null;
 	}
@@ -97,6 +100,8 @@ public abstract class AnnoAbs {
 		mapAnno2Anno.put("Annotation", AnnoAbs.ANNOTATION);
 		mapAnno2Anno.put("GO", AnnoAbs.GO);
 		mapAnno2Anno.put("KEGGpath", AnnoAbs.PATH);
+		mapAnno2Anno.put("OMIM", AnnoAbs.OMIM);
 		return mapAnno2Anno;
 	}
 }
+

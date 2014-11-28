@@ -14,11 +14,14 @@ public class MgmtGeneMIMInfo {
 	public List<GeneMIM> findByGenMimId(int geneMimId){
 		return repoGeneMIMInfo.findInfByGeneMimId(geneMimId);
 	}
+	public List<GeneMIM> findOmimInfByGeneId(int geneId){
+		return repoGeneMIMInfo.findOmimInfByGeneId(geneId);
+	}
 	public List<GeneMIM> findAll(){
 		return repoGeneMIMInfo.findAll();
 	}
-	public void save(GeneMIM phenMimId){
-		repoGeneMIMInfo.save(phenMimId);
+	public void save(GeneMIM geneMIM){
+		repoGeneMIMInfo.save(geneMIM);
 	}
 	//懒汉模式的单例延迟--超牛逼
 	static class MgmtOmimHolder {

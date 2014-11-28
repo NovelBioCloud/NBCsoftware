@@ -18,8 +18,8 @@ public class MgmtOMIM {
 	public List<OmimGeneMap> findByPheMimId(int phenMimId){
 		return repoGenemap.findInfByPheMimId(phenMimId);
 	}
-	public List<OmimGeneMap> findByGenMimId(int phenMimId){
-		return repoGenemap.findInfByGenMimId(phenMimId);
+	public List<OmimGeneMap> findByGenMimId(int geneMimId){
+		return repoGenemap.findInfByGenMimId(geneMimId);
 	}
 	public List<OmimGeneMap> findAll(){
 		return repoGenemap.findAll();

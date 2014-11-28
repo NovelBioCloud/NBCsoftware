@@ -66,7 +66,7 @@ public class CreatGenemapTable {
 						if (arrGenemap.length>12) {
 							omimGeneMap.setMouCorr(arrGenemap[12]);
 						}
-//						mgmtOMIM.save(omimGeneMap);
+						mgmtOMIM.save(omimGeneMap);
 					}
 					lsPhenToGeneMIM.add(phenToGene);
 				}		
@@ -75,7 +75,6 @@ public class CreatGenemapTable {
 				GeneMIM geneMIM =new GeneMIM();
 				geneMIM.setGeneMimId(geneMimId);
 				geneName = arrGenemap[5].split(",")[0].replaceAll("\"", "");
-//				System.out.print("geneName " + geneName);
 				if (haGeneID2Name.containsKey(geneName)) {
 					geneId = haGeneID2Name.get(geneName);
 				} else {
@@ -89,7 +88,7 @@ public class CreatGenemapTable {
 				geneMIM.setGeneId(Integer.parseInt(geneId));
 				geneMIM.setMapGenMet(arrGenemap[6]);
 				geneMIM.setCytLoc(arrGenemap[4]);
-//				mgmtGeneMIM.save(geneMIM);
+				mgmtGeneMIM.save(geneMIM);
 			}		
 		}
 		txtGenemapRead.close();

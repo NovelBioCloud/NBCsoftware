@@ -18,7 +18,9 @@ public interface RepoGeneMIMInfo  extends PagingAndSortingRepository<GeneMIM, St
 	 */
 	@Query(value="{ 'GeneMimId' : ?0 }")
 	List<GeneMIM> findInfByGeneMimId(int geneMimId);
-	
+	@Query(value="{ 'geneId' : ?0 }")
+	List<GeneMIM> findOmimInfByGeneId(int geneId);
+
 	List<GeneMIM> findAll();
 	
 }
