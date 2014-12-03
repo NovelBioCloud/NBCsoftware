@@ -2,6 +2,8 @@ package com.novelbio.omimdb.model;
 
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -26,7 +28,7 @@ public class OmimGeneMap implements Serializable {
 	/** phenotype 描述 */
 	private String phenDec;
 	/** phenotype mapping 方法 */
-	private String phenMapMeth;
+	private Set<String> setPhenMapMeth;
 	/** Mouse correlate */
 	private String mouCorr;
 
@@ -70,13 +72,16 @@ public class OmimGeneMap implements Serializable {
 	}
 
 	/** phenotype mapping 方法 */
-	public String getPhenMapMeth() {
-		return phenMapMeth;
+	public Set<String> getSetPhenMapMeth() {
+		return setPhenMapMeth;
 	}
 
 	/** phenotype mapping 方法 */
-	public void setPhenMapMeth(String phenMapMeth) {
-		this.phenMapMeth = phenMapMeth;
+	public void addPhenMapMeth(String phenMapMeth) {
+		if (setPhenMapMeth == null) {
+			setPhenMapMeth = new HashSet<String>();
+		}
+		this.setPhenMapMeth.add(phenMapMeth);
 	}
 
 	/** Mouse correlate */

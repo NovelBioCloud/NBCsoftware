@@ -7,15 +7,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.novelbio.omimdb.model.MIMAllToUni;
 
-public interface RepoMIMAllToUni extends PagingAndSortingRepository<MIMAllToUni, String>{
-	/**
-	 * 
-	 * @param 
-	 * @param 
-	 * @return
-	 */
-	@Query(value="{ 'MimId' : ?0 }")
-	List<MIMAllToUni> findInfByMimId(int MimId);
+public interface RepoMIMAllToUni extends PagingAndSortingRepository<MIMAllToUni, Integer>{
 	
 	List<MIMAllToUni> findAll();
 }

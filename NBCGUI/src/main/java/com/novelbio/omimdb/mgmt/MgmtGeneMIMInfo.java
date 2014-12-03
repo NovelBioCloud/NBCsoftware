@@ -11,16 +11,16 @@ import com.novelbio.springonly.factory.SpringFactory;
 public class MgmtGeneMIMInfo {
 	private MgmtGeneMIMInfo() {}
 	RepoGeneMIMInfo repoGeneMIMInfo = (RepoGeneMIMInfo)SpringFactory.getBean("repoGeneMIMInfo");
-	public List<GeneMIM> findByGenMimId(int geneMimId){
+	public GeneMIM findByGenMimId(int geneMimId) {
 		return repoGeneMIMInfo.findInfByGeneMimId(geneMimId);
 	}
-	public List<GeneMIM> findOmimInfByGeneId(int geneId){
+	public GeneMIM findOmimInfByGeneId(int geneId) {
 		return repoGeneMIMInfo.findOmimInfByGeneId(geneId);
 	}
-	public List<GeneMIM> findAll(){
+	public List<GeneMIM> findAll() {
 		return repoGeneMIMInfo.findAll();
 	}
-	public void save(GeneMIM geneMIM){
+	public void save(GeneMIM geneMIM) {
 		repoGeneMIMInfo.save(geneMIM);
 	}
 	//懒汉模式的单例延迟--超牛逼

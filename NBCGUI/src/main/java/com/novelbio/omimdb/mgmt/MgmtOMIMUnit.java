@@ -12,7 +12,7 @@ public class MgmtOMIMUnit {
 
 	private MgmtOMIMUnit () {}
 	RepoMIMInfo repoMIMInfo = (RepoMIMInfo)SpringFactory.getBean("repoMIMInfo");
-	public List<MIMInfo> findByMimId(int MimId){
+	public MIMInfo findByMimId(int MimId){
 		return repoMIMInfo.findInfByMimId(MimId);
 	}
 	public List<MIMInfo> findAll(){

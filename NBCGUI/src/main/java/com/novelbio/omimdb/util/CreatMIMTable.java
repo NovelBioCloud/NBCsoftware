@@ -22,11 +22,10 @@ public class CreatMIMTable {
 		MgmtOMIMUnit mgmtOMIMUnit =MgmtOMIMUnit.getInstance();
 		MgmtMIMAllToUni mgmtMIMAllToUni = MgmtMIMAllToUni.getInstance();
 		for (String content : txtMIMRead.readlines()) {
-			//TODO 填充lsOmimUnit
 			if(content.startsWith("*RECORD*")) {
 				MIMAllToUni mimAllToUni = MIMAllToUni.getInstanceFromOmimUnit(lsOmimUnit);
 				MIMInfo mIMInfo = MIMInfo.getInstanceFromOmimUnit(lsOmimUnit);
-				if ((mIMInfo != null) && (mIMInfo.getMimId() != 0)) {
+				if ((mIMInfo != null) && (mIMInfo.getMimId() != 0) && (mIMInfo.getType() != '^')) {
 					mgmtOMIMUnit.save(mIMInfo);
 				}
 				if ((mimAllToUni != null) && (mimAllToUni.getAllMIMId() != 0)) {

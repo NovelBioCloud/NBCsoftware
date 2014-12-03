@@ -14,7 +14,7 @@ public interface RepoMIMInfo extends PagingAndSortingRepository<MIMInfo, String>
 	 * @return
 	 */
 	@Query(value="{ 'MimId' : ?0 }")
-	List<MIMInfo> findInfByMimId(int MimId);
+	MIMInfo findInfByMimId(int MimId);
 	
 	List<MIMInfo> findAll();
 	

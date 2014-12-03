@@ -49,13 +49,13 @@ public class GeneMIM implements Serializable {
 	public String getMapGenMet() {
 		return mapGenMet;
 	}
+	
 	private static RepoGeneMIMInfo repo() {
 		 return SpringFactory.getBean(RepoGeneMIMInfo.class);
-		 
 	 }
 	 
 	 public static GeneMIM findGeneInfByMimId(String id) {
-	 return repo().findOne(id);
+		 return repo().findOne(id);
 	 }
 
 	 public boolean remove() {

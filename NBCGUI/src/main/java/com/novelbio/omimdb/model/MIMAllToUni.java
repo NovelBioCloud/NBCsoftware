@@ -20,7 +20,7 @@ import com.novelbio.springonly.factory.SpringFactory;
 public class MIMAllToUni  implements Serializable {
 	
 	/** 所有的MIM ID */
-	@Indexed
+	@Id
 	private int allMIMId;
 	/** Unique MIM 号 */
 	private int uniMIMId;
@@ -97,11 +97,11 @@ public class MIMAllToUni  implements Serializable {
 		 
 	 }
 	 public static MIMAllToUni findInfByMimId(int allMIMId) {
-		 return repo().findOne(allMIMId+"");
+		 return repo().findOne(allMIMId);
 		 }
 	 public boolean remove() {
 		 try {
-			 repo().delete(allMIMId+"");
+			 repo().delete(allMIMId);
 		 } catch (Exception e) {
 			 return false;
 		 }
