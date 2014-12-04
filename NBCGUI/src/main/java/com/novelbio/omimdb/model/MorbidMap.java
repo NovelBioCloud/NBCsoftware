@@ -32,7 +32,7 @@ public class MorbidMap implements Serializable {
 	 * 3 the molecular basis of the disorder is known; 
 	 * 4 the disorder is a chromosome deletion or duplication syndrome;
 	 * */
-//	private int disType;
+	private int disType;
 	
 	public void setGeneId(int geneId) {
 		this.geneId = geneId;
@@ -67,18 +67,23 @@ public class MorbidMap implements Serializable {
 		}
 		this.listDis.add(dis);
 	}
-//	public void setDisType(int disType) {
-//		this.disType = disType;
-//	}
-//	public int getDisType() {
-//		return disType;
-//	}
+	public void setDisType(int disType) {
+		this.disType = disType;
+	}
+	public int getDisType() {
+		return disType;
+	}
 	private static RepoMorbidMap repo() {
 		 return SpringFactory.getBean(RepoMorbidMap.class);
 	 }
 	 public static MorbidMap findInfByGeneId(int id) {
 		 return repo().findOne(id);
 	 }
+		/** 根据完成情况查询分配的任务 */
+		public static List<MorbidMap> findInfByDisease(String disease) {
+			return repo().findInfByDisease(disease);
+		}
+
 //	 public boolean remove() {
 //		 try {
 //			 repo().delete(id);

@@ -16,7 +16,7 @@ public interface RepoMorbidMap extends PagingAndSortingRepository<MorbidMap, Int
 	 */
 	@Query(value="{ 'GeneId' : ?0 }")
 	List<MorbidMap> findInfByGeneId(int GeneId);
-	@Query(value="{ 'Disease' : ?0 }")
+	@Query(value="{ 'listDis' : ?0 }")
 	List<MorbidMap> findInfByDisease(String disease);
 
 	List<MorbidMap> findAll();
