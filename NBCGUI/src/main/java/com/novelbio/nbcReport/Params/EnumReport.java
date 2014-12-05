@@ -82,8 +82,17 @@ public enum EnumReport {
 	 * 获得序列化随机文件名
 	 * @return
 	 */
-	public String getReportRandomFileName(){
+	public String getReportFileName(){
 		return "report_" + this.name();
+	}
+	
+	/**
+	 * 获得序列化文件名
+	 * @return
+	 * @param sufix 文件名中的后缀
+	 */
+	public String getReportFileName(String sufix){
+		return "report_" + this.name() + "_" + sufix;
 	}
 	/**
 	 * 得到word模板路径
