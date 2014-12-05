@@ -56,9 +56,25 @@ public abstract class ReportBase  implements Cloneable, Serializable {
 		String reportPath = FileOperate.addSep(savePath) + ".report";
 		FileOperate.createFolders(reportPath);
 		FileOperate.delAllFile(reportPath);
-		String randomReportFile = FileOperate.addSep(reportPath) +  getEnumReport().getReportRandomFileName();
+		String randomReportFile = FileOperate.addSep(reportPath) +  getEnumReport().getReportFileName();
 		FileOperate.writeObjectToFile(this, randomReportFile);
 		return randomReportFile;
+	}
+	
+	/**
+	 * 把对象本身写成二进制文件
+	 * @param savePath 保存的路径，会添加.report目录
+	 * @param sufix 加在文件名中的后缀
+	 * @return
+	 */
+	public String writeAsFile(String savePath, String sufix) {
+		this.savePath = savePath;
+		String reportPath = FileOperate.addSep(savePath) + ".report";
+		FileOperate.createFolders(reportPath);
+//		FileOperate.delAllFile(reportPath);
+		String reportFile = FileOperate.addSep(reportPath) +  getEnumReport().getReportFileName(sufix);
+		FileOperate.writeObjectToFile(this, reportFile);
+		return reportFile;
 	}
 	
 	/**
