@@ -20,9 +20,14 @@ public class AnnoOMIM extends AnnoAbs {
 //	MgmtOMIM mgmtOMIM = MgmtOMIM.getInstance();
 	MgmtMorbidMap mgmtMorbidMap = MgmtMorbidMap.getInstance();
 	MgmtOMIMUnit mgmtOMIMUnit = MgmtOMIMUnit.getInstance();
+	GOtype gOtype;
 	
+	public void setgOtype(GOtype gOtype) {
+		this.gOtype = gOtype;
+	}
 	@Override
 	public List<String[]> getInfo(int taxID, String accID) {
+		//TODO
 //		GeneID geneId = new GeneID(accID, taxID);
 //		int geneIdint = Integer.parseInt(geneId.getGeneUniID());
 		int geneId = Integer.parseInt(accID);
@@ -66,7 +71,7 @@ public class AnnoOMIM extends AnnoAbs {
 		}
 		if (lsResult.size() == 0) {
 //			fillLsResult(geneID.getAccID(), lsResult, 5);   如果基因ID从数据库中查询的获取的话，使用该语句
-			fillLsResult(accID + "", lsResult, 5);	//此句做测试使用
+			fillLsResult(accID + "", lsResult, 8);	//此句做测试使用
 		}
 		return lsResult;
 	}
@@ -79,10 +84,62 @@ public class AnnoOMIM extends AnnoAbs {
 		lsResult.add(tmpResult);
 	}
 	@Override
-	protected List<String[]> getInfoBlast(int taxID, int subTaxID,
-			double evalue, String accID) {
+	protected List<String[]> getInfoBlast(int taxID, int subTaxID, double evalue, String accID) {
 		// TODO Auto-generated method stub
-		return null;
+		GeneID geneID = new GeneID(accID, taxID);
+		List<String[]> lsResult = new ArrayList<String[]>();
+		ArrayList<String> lsResultTmp = new ArrayList<String>();
+		lsResultTmp.add(geneID.getSymbol());
+		geneID.setBlastInfo(evalue, subTaxID);
+		if (geneID.getGeneIDBlast() != null) {
+			String accIDBlast = geneID.getBlastAccID(accID);
+			GeneID geneIDBlast = new GeneID(accIDBlast, taxID);
+			lsResultTmp.add(geneIDBlast.getLsBlastInfos().get(0).getEvalue() + "");
+			lsResultTmp.add(geneIDBlast.getGeneIDBlast().getSymbol());
+			int geneIdBlastint = Integer.parseInt(geneIDBlast.getGeneUniID());
+			List<MorbidMap> liMorbidMapBlast = mgmtMorbidMap.findInfByGeneId(geneIdBlastint);	
+			if (liMorbidMapBlast.size() == 0) {
+				fillLsResult(accID + "", lsResult, 8);	
+				return lsResult;
+			}
+			for (MorbidMap morbidMap : liMorbidMapBlast) {
+				ArrayList<String> lsTmp = (ArrayList<String>) lsResultTmp.clone();
+				lsTmp.add(morbidMap.getGeneMimId() + "");
+				if (morbidMap.getGeneMimId() != 0) {
+					MIMInfo mimInfo = mgmtOMIMUnit.findByMimId(morbidMap.getGeneMimId());
+					lsTmp.add(mimInfo.getDesc());
+					List<String> listRef = mimInfo.getListRef();
+					lsTmp.add(listRef.get(0));
+				}
+				if (morbidMap.getPheneMimId() == 0) {
+					lsTmp.add("");
+					lsTmp.add("");
+					lsTmp.add("");
+				} else {
+					lsTmp.add(morbidMap.getPheneMimId() + "");
+				}
+				if (morbidMap.getPheneMimId() != 0) {
+					MIMInfo mimInfo = mgmtOMIMUnit.findByMimId(morbidMap.getPheneMimId());
+					lsTmp.add(mimInfo.getDesc());
+					List<String> listRef = mimInfo.getListRef();
+					lsTmp.add(listRef.get(0));
+				}
+				List<String> listDis = morbidMap.getListDis();
+				String disease = "";
+				for (String disContent : listDis) {
+					disease = disease.concat(disContent + "");
+				}
+				lsTmp.add(disease);
+				lsResult.add(lsTmp.toArray(new String[0]));
+			}
+			if (lsResult.size() == 0) {
+//				fillLsResult(geneID.getAccID(), lsResult, 5);   如果基因ID从数据库中查询的获取的话，使用该语句
+				fillLsResult(accID + "", lsResult, 8);	//此句做测试使用
+			}
+			
+		}
+
+		return lsResult;
 	}
 	
 	public String[] getTitle() {
