@@ -109,7 +109,7 @@ public class NBCWord {
 	 * @throws Exception 
 	 */
 	private void replaceOtherKeyToDefault(Document doc) throws Exception{
-		while(doc.getSelection().find("\\$\\{*\\}",true)){
+		while(doc.getSelection().find("[\\$][\\{]*[\\}]",true)){
 			NBCWordText pattern = new NBCWordText(doc.getSelection());
 			pattern.useDefaultText();
 		}
@@ -173,7 +173,8 @@ public class NBCWord {
 			doc.getSelection().replaceSelected("");
 			for (Object object : reportBases) {
 				ReportBase reportBase = (ReportBase)object;
-				Document otherDoc = doc.openDocumentForCopy(reportBase.getTempPathAndName());
+//				Document otherDoc = doc.openDocumentForCopy(reportBase.getTempPathAndName());
+				Document otherDoc = doc.openDocumentForCopy("C:\\Documents and Settings\\Administrator\\桌面\\GO_All.doc");
 				render(otherDoc, reportBase.buildFinalParamMap());
 				doc.copyAllFromAnother();
 			}

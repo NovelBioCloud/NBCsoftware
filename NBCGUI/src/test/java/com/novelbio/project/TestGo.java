@@ -14,6 +14,7 @@ import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.fileOperate.FileHadoop;
 import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.database.model.species.Species;
 import com.novelbio.database.service.SpringFactory;
 import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportAll;
@@ -55,7 +56,8 @@ public class TestGo {
 			ctrlGO.setGoAlgorithm(goAlgorithm);
 			int taxID = -1;
 			taxID = Integer.parseInt(mapParams.get("querySpecies")[0]);
-			ctrlGO.setTaxID(taxID);
+			Species species = new Species(taxID);
+			ctrlGO.setTaxID(species);
 			int colAccID = Integer.parseInt(mapParams.get("acclDColNum")[0]);
 			int colFC = Integer.parseInt(mapParams.get("valueColNum")[0]);
 			ArrayList<String[]> lsAccID = null;

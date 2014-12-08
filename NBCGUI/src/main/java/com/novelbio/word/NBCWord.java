@@ -31,6 +31,16 @@ public class NBCWord {
 	}
 	
 	/**
+	 * 初始化word，即打开一个word应用
+	 */
+	private void initWordApp() {
+		ComThread.InitSTA();
+		wordApp = new ActiveXComponent("Word.Application");
+		wordApp.setProperty("Visible", new Variant(true));
+		documents = wordApp.getProperty("Documents").toDispatch();
+	}
+	
+	/**
 	 * 打开现有文档
 	 * @param path
 	 */
@@ -50,23 +60,11 @@ public class NBCWord {
 	}
 
 	/**
-	 * 初始化word，即打开一个word应用
-	 */
-	private void initWordApp() {
-		ComThread.InitSTA();
-		wordApp = new ActiveXComponent("Word.Application");
-		wordApp.setProperty("Visible", new Variant(true));
-		documents = wordApp.getProperty("Documents").toDispatch();
-	}
-	
-	/**
 	 * 渲染报告
 	 * @param reportBase
 	 */
 	public void renderReport(ReportBase reportBase){
-		// TODO 把reportBase转成Map<String, NBCWordParam>
-		Map<String, NBCWordParam> key2NBCWordParam = null;
-		nowDoc.render(key2NBCWordParam);
+		nowDoc.render(reportBase.buildFinalParamMap());
 	}
 	
 	/**

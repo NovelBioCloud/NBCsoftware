@@ -1,15 +1,22 @@
 package com.novelbio.word;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
+import com.novelbio.word.NBCWordImage;
+import com.novelbio.word.NBCWordTable;
+import com.novelbio.word.NBCWordText;
+import com.novelbio.nbcReport.Params.ReportBase;
 import com.novelbio.word.Document;
 import com.novelbio.word.Selection;
 
 public class Document {
-	
+
 	/**word应用程序*/
 	private ActiveXComponent wordApp;
 	/**带开的文档集合*/
@@ -20,61 +27,214 @@ public class Document {
 	private Dispatch instance;
 	/**另外的文档*/
 	private Document anotherDoc;
-	
+
 	public Document(ActiveXComponent wordApp, Dispatch instance) {
 		this.wordApp = wordApp;
 		this.instance = instance;
 	}
-	
+
 	public Document(ActiveXComponent wordApp, Dispatch instance, Dispatch documents) {
 		this.wordApp = wordApp;
 		this.instance = instance;
 		this.documents = documents;
 	}
-	
+
 	public void setDocuments(Dispatch documents) {
 		this.documents = documents;
 	}
-	
+
 	public Dispatch getInstance() {
 		return instance;
 	}
 
 	/**
 	 * 渲染报告
-	 * @param param
+	 * @param key2Param
 	 * @return
 	 */
-	public Document render(Map<String, NBCWordParam> param) {
-		// TODO 未完成
-		for(String key : param.keySet()) {
-			if(param.get(key) == null) {
+	public Document render(Map<String, Object> key2Param) {
+		for (String key : key2Param.keySet()) {
+			if (key2Param.get(key) == null)
 				continue;
+			if (key2Param.get(key) instanceof Collection) {
+				if (((Collection<?>)key2Param.get(key)).isEmpty())
+					continue;
+				List<Object> lsParam = new ArrayList<>((Collection<?>) key2Param.get(key));
+				if (lsParam.get(0) instanceof NBCWordTable) {
+					writeTables(lsParam, key);
+				} else if (lsParam.get(0) instanceof NBCWordImage) {
+					writeImages(lsParam, key);
+				} else if (lsParam.get(0) instanceof ReportBase) {
+					writeOtherTmp(lsParam, key);
+				} else {
+					writeText(lsParam, key);
+				}
+			} else {
+				List<Object> lsParam = new ArrayList<>();
+				if (key2Param.get(key) instanceof NBCWordTable) {
+					lsParam.add(key2Param.get(key));
+					writeTables(lsParam, key);
+				} else if (key2Param.get(key) instanceof NBCWordImage) {
+					lsParam.add(key2Param.get(key));
+					writeImages(lsParam, key);
+				} else if (key2Param.get(key) instanceof ReportBase) {
+					lsParam.add(key2Param.get(key));
+					writeOtherTmp(lsParam, key);
+				} else {
+					lsParam.add(key2Param.get(key));
+					writeText(lsParam, key);
+				}
 			}
-			NBCWordParam nbcWordParam = param.get(key);
-			nbcWordParam.insertToDoc(this, key);
 		}
+		replaceOtherKeyToDefault();
 		return this;
 	}
 	
 	/**
-	 * 打开另一个文档用来复制
-	 * @param filePathName
+	 * 替换默认的
 	 */
-	public void openDocumentForCopy(String filePathName) {
-		Dispatch dispatch = Dispatch.call(documents, "Open", filePathName).toDispatch();
-		anotherDoc =new Document(wordApp, dispatch, documents);
+	private void replaceOtherKeyToDefault() {
+		while(getSelection().find("[\\$][\\{]*[\\}]",true)){
+			NBCWordText pattern = new NBCWordText();
+			pattern.useDefaultText(getSelection());
+		}
 	}
 	
 	/**
+	 * 写入文本
+	 * @param values
+	 * @param key
+	 */
+	private void writeText(Collection<?> values, String key) {
+		while (getSelection().find("[\\$][\\{]"+key+"[\\}]",true)) {
+			NBCWordText nbcWordText = new NBCWordText();
+			nbcWordText.insertToDoc(getSelection(), values);
+		}
+		while (getSelection().find("[\\$][\\{]"+key+"[#]*[\\}]",true)) {
+			NBCWordText nbcWordText = new NBCWordText();
+			nbcWordText.insertToDoc(getSelection(), values);
+		}
+	}
+	
+	/**
+	 * 写入图片
+	 * @param lsNBCWordImage
+	 * @param isKeyExist
+	 */
+	private void writeImages(List<Object> lsNBCWordImage, String key) {
+		if (!(lsNBCWordImage.get(0) instanceof NBCWordImage)) {
+			return;
+		}
+		while (getSelection().find("[\\$][\\{]"+key+"[\\}]",true)) {
+			for (Object object : lsNBCWordImage) {
+				NBCWordImage nbcWordImage = (NBCWordImage) object;
+				nbcWordImage.insertToDoc(getSelection());
+			}
+		}
+		while (getSelection().find("[\\$][\\{]"+key+"[#]*[\\}]",true)) {
+			for (Object object : lsNBCWordImage) {
+				NBCWordImage nbcWordImage = (NBCWordImage) object;
+				nbcWordImage.insertToDoc(getSelection());
+			}
+		}
+	}
+	
+	/**
+	 * 写入表格
+	 * @param lsNBCWordTable
+	 * @param isKeyExist
+	 */
+	private void writeTables(List<Object> lsNBCWordTable, String key) {
+		if (!(lsNBCWordTable.get(0) instanceof NBCWordTable)) {
+			return;
+		}
+		while (getSelection().find("[\\$][\\{]"+key+"[\\}]",true)) {
+			for (Object object : lsNBCWordTable) {
+				NBCWordTable nbcWordTable = (NBCWordTable) object;
+				nbcWordTable.insertToDoc(getSelection());
+			}
+		}
+		while (getSelection().find("[\\$][\\{]"+key+"[#]*[\\}]",true)) {
+			for (Object object : lsNBCWordTable) {
+				NBCWordTable nbcWordTable = (NBCWordTable) object;
+				nbcWordTable.insertToDoc(getSelection());
+			}
+		}
+	}
+
+	/**
+	 * 写入子报告
+	 * @param lsReportBases
+	 */
+	private void writeOtherTmp(List<Object> lsReportBases, String key) {
+		if (!(lsReportBases.get(0) instanceof ReportBase)) {
+			return;
+		}
+		while (getSelection().find("[\\$][\\{]"+key+"[\\}]",true)) {
+			getSelection().replaceSelected("");
+			insertReportBases(lsReportBases);
+		}
+		while (getSelection().find("[\\$][\\{]"+key+"[#]*[\\}]",true)) {
+			if (!paresePattern(getSelection().getText())) {
+				insertReportBases(lsReportBases);
+			}
+		}
+
+	}
+	
+	/**
+	 * 插入子报告
+	 * @param lsReportBases
+	 * @return
+	 */
+	private void insertReportBases(List<Object> lsReportBases) {
+		for (Object object : lsReportBases) {
+			ReportBase reportBase = (ReportBase)object;
+			anotherDoc = openDocumentForCopy(reportBase.getTempPathAndName());
+			anotherDoc.render(reportBase.buildFinalParamMap());
+			copyAllFromAnother(anotherDoc);
+		}
+	}
+	
+	/**
+	 * 判断是否有默认替换
+	 * @param pattern
+	 * @return
+	 */
+	private boolean paresePattern(String pattern) {
+		if(pattern.contains("##e|")){
+			String patternLeft = pattern.substring(2, pattern.length() - 1);
+			String[] methods = patternLeft.split("##");
+			for (int i = 0; i < methods.length; i++) {
+				if (methods[i].startsWith("e|")) {
+					String existText = methods[i].split("e\\|")[1];
+					getSelection().replaceSelected(existText);
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 打开另一个文档用来复制
+	 * @param filePathName
+	 * @return 
+	 */
+	public Document openDocumentForCopy(String filePathName) {
+		Dispatch dispatch = Dispatch.call(documents, "Open", filePathName).toDispatch();
+		return new Document(wordApp, dispatch, documents);
+	}
+
+	/**
 	 * 复制另一个文档的全部内容
 	 */
-	public void copyAllFromAnother() {
-		Dispatch range = Dispatch.get(anotherDoc.getInstance(), "Content").toDispatch(); // 取得当前文档的内容  
-	    Dispatch.call(range, "Copy");
-	    Dispatch textRange = Dispatch.get(getSelection().getInstance(), "Range").toDispatch();  
-        Dispatch.call(textRange, "Paste");
-        anotherDoc.close();
+	public void copyAllFromAnother(Document doc) {
+		Dispatch range = Dispatch.get(doc.getInstance(), "Content").toDispatch(); // 取得当前文档的内容  
+		Dispatch.call(range, "Copy");
+		Dispatch textRange = Dispatch.get(getSelection().getInstance(), "Range").toDispatch();  
+		Dispatch.call(textRange, "Paste");
+		doc.close();
 	}
 
 	/**
@@ -88,22 +248,22 @@ public class Document {
 		}
 		return selection;
 	}
-	
+
 	/**
 	 * 文档另存为
 	 * @param filePathName
 	 */
 	public void saveAs(String filePathName) {
-		Dispatch.call(instance, "SaveAs", filePathName,new Variant(0));
+		Dispatch.call(instance, "SaveAs", filePathName, new Variant(0));
 	}
-	
+
 	/**
 	 * 文档保存
 	 */
 	public void save() {
 		Dispatch.call(instance, "Save");
 	}
-	
+
 	/**
 	 * 关闭文档
 	 */

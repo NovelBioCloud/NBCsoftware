@@ -41,7 +41,7 @@ public class TestWord {
 		image.addPicPath("C:\\Documents and Settings\\Administrator\\桌面\\viewphoto.jpg");
 //		image.setWidth(1000);
 //		image.setHeight(500);
-		image.setAlign(2);
+		image.setAlign(1);
 		pic.add(image);
 //		NBCWordImage image3 = new NBCWordImage();
 //		image3.setDownCompare("这是写在图片下方的说明，睁大你的眼睛看看");
@@ -70,8 +70,8 @@ public class TestWord {
 //			e.printStackTrace();
 //		}
 		try {
-			word.saveDocAs("C:\\Documents and Settings\\Administrator\\桌面\\gooddd.doc");
-			word.close();
+//			word.saveDocAs("C:\\Documents and Settings\\Administrator\\桌面\\gooddd.doc");
+//			word.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
