@@ -84,6 +84,11 @@ public class NBCWordImage implements Serializable{
 		selection.defaultParagraphStyle();
 		selection.insertPicture(lsPicPaths,title,align,width,height);
 		selection.nextRow();
+		if(!title.equals("")) {
+			selection.setParagraphsProperties(1,0,0,0,2);
+			selection.writeText(title);
+			selection.nextRow();
+		}
 		if(!note.equals("")){
 			selection.setParagraphsProperties(0,0,0,0,2);
 			selection.writeText(note);

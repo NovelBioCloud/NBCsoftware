@@ -7,6 +7,8 @@ import java.util.Map;
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
+import com.novelbio.base.PathDetail;
+import com.novelbio.base.dataOperate.DateUtil;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.fileOperate.FileHadoop;
 import com.novelbio.base.fileOperate.FileOperate;
@@ -145,6 +147,10 @@ public class Selection {
 		Dispatch inLineShapes = Dispatch.get(instance, "InLineShapes")
 				.toDispatch();
 		for (String imagePath : lsPicPaths) {
+			//TODO 将hdfs文件放到临时文件夹下
+//			PathDetail.getTmpPath();
+//			DateUtil.getDateAndRandom();
+			
 			Dispatch shape = Dispatch.call(inLineShapes, "AddPicture", imagePath).toDispatch();
 			Dispatch.put(shape, "Width", width == null ? Dispatch.get(shape, "Width")
 					.getFloat() : width);
@@ -157,7 +163,7 @@ public class Selection {
 			Dispatch.call(instance, "MoveRight");
 		}
 		nextRow();
-		Dispatch.call(instance, "InsertCaption", "Figure", " : " + title);
+//		Dispatch.call(instance, "InsertCaption", "Figure", " : " + title);
 		// ,/**Label*/"-1",/**Title*/title
 		// ,/**TitleAutoText"123",*//**Position*/"1",/**ExcludeLabel*/"False").toDispatch();
 		Dispatch paragraphFormat = Dispatch.get(instance, "ParagraphFormat")
