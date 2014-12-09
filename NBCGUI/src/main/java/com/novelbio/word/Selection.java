@@ -1,8 +1,12 @@
 package com.novelbio.word;
 
+import java.util.List;
+
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
+import com.novelbio.base.PathDetail;
+import com.novelbio.base.dataOperate.DateUtil;
 
 public class Selection {
 	
@@ -61,15 +65,128 @@ public class Selection {
 	}
 	
 	/**
+	 * 写入文本
+	 * @param text
+	 */
+	public void writeText(String text) {
+		Dispatch.call(instance, "TypeText", text);
+	}
+	
+	/**
+	 * 写入图片
+	 * @param lsPicPaths
+	 * @param title
+	 * @param alignment
+	 * @param width
+	 * @param height
+	 */
+	public void writePicture(List<String> lsPicPaths, String title, Integer alignment, Integer width, Integer height) {
+		if(alignment == null)
+			alignment = 1;
+		Dispatch inLineShapes = Dispatch.get(instance, "InLineShapes").toDispatch();
+		for (String imagePath : lsPicPaths) {
+			//TODO 将hdfs文件放到临时文件夹下
+//			System.out.println(PathDetail.getTmpPath());
+//			System.out.println(DateUtil.getDateAndRandom());
+			Dispatch shape = Dispatch.call(inLineShapes, "AddPicture", imagePath).toDispatch();
+			Dispatch.put(shape, "Width", width == null ? Dispatch.get(shape, "Width").getFloat() : width);
+			Dispatch.put(shape, "Height", height == null ? Dispatch.get(shape, "Height").getFloat() : height);
+			Dispatch.call(shape, "Select");
+			Dispatch paragraphFormat = Dispatch.get(instance, "ParagraphFormat").toDispatch();
+			Dispatch.put(paragraphFormat, "Alignment", new Variant(alignment));
+			Dispatch.call(instance, "MoveRight");
+		}
+		nextRow();
+		Dispatch paragraphFormat = Dispatch.get(instance, "ParagraphFormat").toDispatch();
+		Dispatch.put(paragraphFormat, "Alignment", "1");
+	}
+	
+	/**
+	 * 写入表格数据
+	 * @param data
+	 */
+	public void wirteTable(List<List<String>> data) {
+		if (data.size() == 0) {
+			return;
+		}
+		Dispatch table = createTable(data.get(0).size(),data.size());
+		setTableStyleAsDefault(table);
+		fillTable(table, data);
+		moveDown();
+	}
+	
+	/**
+	 * 在文档中创建表格
+	 * @param numCols
+	 * @param numRows
+	 * @return
+	 */
+	private Dispatch createTable(int numCols, int numRows) {
+		Dispatch tables = Dispatch.get(document.getInstance(), "Tables").toDispatch();
+		Dispatch range = Dispatch.get(instance, "Range").toDispatch();
+		Dispatch newTable = Dispatch.call(tables, "Add", range,
+		new Variant(numRows), new Variant(numCols)).toDispatch();
+		return newTable;
+	}
+	
+	/**
+	 * 把数据填到表格中
+	 * @param table
+	 * @param data
+	 */
+	private void fillTable(Dispatch table, List<List<String>> data) {
+		for (int i = 0; i < data.size(); i++) {
+			for (int j = 0; j < data.get(i).size(); j++) {
+				putTxtToCell(table, i+1, j+1, data.get(i).get(j));
+			}
+		}
+	}
+	
+	/**
+	 * 在指定的单元格里填写数据 
+	 * @param tableIndex
+	 * @param cellRowIdx
+	 * @param cellColIdx
+	 * @param txt
+	 */
+	private void putTxtToCell(Dispatch table, int cellRowIdx, int cellColIdx, String txt) {
+		Dispatch cell = Dispatch.call(table, "Cell", new Variant(cellRowIdx), new Variant(cellColIdx)).toDispatch();
+		Dispatch.call(cell, "Select");
+		Dispatch.put(instance, "Text", txt);
+	}
+	
+	/**
+	 * 设置默认的表格样式
+	 * @param table
+	 */
+	private void setTableStyleAsDefault(Dispatch table) {
+		Dispatch.put(table, "Style", "中等深浅底纹 1 - 强调文字颜色 5");
+		Dispatch.put(table, "Spacing", "0");
+		Dispatch.put(table, "PreferredWidthType", "3");
+		Dispatch.put(table, "PreferredWidth", new Variant(450));
+		Dispatch rows = Dispatch.get(table,"Rows").toDispatch();
+		Dispatch.put(rows, "HeightRule", 2);
+		Dispatch.put(rows, "Height", new Variant(15));
+		Dispatch.call(table, "Select");
+		Dispatch font = Dispatch.get(instance, "Font").toDispatch();
+		Dispatch.put(font, "Size", 9);
+	}
+	
+	/**
 	 * 替换已选中的文字
-	 * 
 	 * @param newText
-	 * @throws Exception
 	 */
 	public void replaceSelected(String newText) {
 		Dispatch.put(instance, "Text", newText);
 		if (newText != "")
 			Dispatch.call(instance, "MoveRight");
+	}
+	
+	/** 换一行*/
+	public void nextRow() {
+		Dispatch.call(instance, "TypeParagraph");
+		defaultFont();
+		defaultParagraphStyle();
 	}
 	
 	/**默认的段落样式*/
@@ -107,7 +224,7 @@ public class Selection {
 	
 	/**恢复默认字体 不加粗，不倾斜，没下划线，黑色，小四号字，宋体*/
 	public void defaultFont() {
-		this.setFont(false, false, false, "0, 0, 0", "10.5", "宋体");
+		this.setFont(false, false, false, "0,0,0", "10.5", "宋体");
 	}
 
 	/**

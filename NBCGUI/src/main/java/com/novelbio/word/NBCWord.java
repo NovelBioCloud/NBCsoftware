@@ -30,6 +30,14 @@ public class NBCWord {
 			openExistDocument(path);
 	}
 	
+	public Document getNowDoc() {
+		return nowDoc;
+	}
+
+	public void setNowDoc(Document nowDoc) {
+		this.nowDoc = nowDoc;
+	}
+
 	/**
 	 * 初始化word，即打开一个word应用
 	 */

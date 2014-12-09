@@ -30,8 +30,77 @@ public class NBCWordImage implements Serializable{
 	/** 图片所在路径 */
 	private List<String> lsPicPaths = new ArrayList<>();
 	
+	/**
+	 * 插入文档中
+	 * @param selection
+	 */
 	public void insertToDoc(Selection selection) {
-		// TODO
+		if(lsPicPaths.size() == 0)
+			return;
+		
+		String pattern = selection.getText();
+		paresePattern(pattern);
+		
+		if (existText != null){
+			selection.replaceSelected(existText);
+			return;
+		}
+		
+		insertAndSet(selection);
+		
+		System.out.println("插入图片"+pattern);
+	}
+	
+	/**
+	 * 插入并设置图片和文本的参数
+	 * @param selection
+	 */
+	private void insertAndSet(Selection selection) {
+		selection.defaultFont();
+		if(!upCompare.equals("")){
+			selection.setParagraphsProperties(0,0,0,0,2);
+			selection.writeText(upCompare);
+			selection.nextRow();
+		}
+		selection.defaultParagraphStyle();
+		selection.writePicture(lsPicPaths,title,align,width,height);
+		selection.nextRow();
+		if(!title.equals("")) {
+			selection.setParagraphsProperties(1,0,0,0,2);
+			selection.writeText(title);
+			selection.nextRow();
+		}
+		if(!note.equals("")){
+			selection.setParagraphsProperties(0,0,0,0,2);
+			selection.writeText(note);
+			selection.nextRow();
+		}
+		if(!downCompare.equals("")){
+			selection.writeText(downCompare);
+			selection.nextRow();
+		}
+		if(withEnter)
+			selection.nextRow();
+	}
+	
+	/**
+	 * 解析选中的文本
+	 */
+	private void paresePattern(String pattern){
+		if (!(pattern.startsWith("${") && pattern.endsWith("}"))) {
+			throw new RuntimeException("word表达式:" + pattern + "异常");
+		}
+		String patternLeft = pattern.substring(2, pattern.length() - 1);
+		this.withEnter = patternLeft.contains("##n|");
+		String[] methods = patternLeft.split("##");
+		for (int i = 0; i < methods.length; i++) {
+			if (i == 0)
+				continue;
+			if (methods[i].startsWith("e|"))
+				this.existText = methods[i].split("e\\|")[1];
+			else if (methods[i].startsWith("n|"))
+				this.withEnter = true;
+		}
 	}
 	
 	/** 图片的标题 */

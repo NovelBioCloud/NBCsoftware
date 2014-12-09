@@ -48,43 +48,37 @@ public class Document {
 	}
 
 	/**
-	 * 渲染报告
+	 * 按照参数的类别分别进行渲染
 	 * @param key2Param
 	 * @return
 	 */
 	public Document render(Map<String, Object> key2Param) {
 		for (String key : key2Param.keySet()) {
+			
 			if (key2Param.get(key) == null)
 				continue;
+			
+			List<Object> lsParam;
+
 			if (key2Param.get(key) instanceof Collection) {
 				if (((Collection<?>)key2Param.get(key)).isEmpty())
 					continue;
-				List<Object> lsParam = new ArrayList<>((Collection<?>) key2Param.get(key));
-				if (lsParam.get(0) instanceof NBCWordTable) {
-					writeTables(lsParam, key);
-				} else if (lsParam.get(0) instanceof NBCWordImage) {
-					writeImages(lsParam, key);
-				} else if (lsParam.get(0) instanceof ReportBase) {
-					writeOtherTmp(lsParam, key);
-				} else {
-					writeText(lsParam, key);
-				}
+				lsParam = new ArrayList<>((Collection<?>) key2Param.get(key));
 			} else {
-				List<Object> lsParam = new ArrayList<>();
-				if (key2Param.get(key) instanceof NBCWordTable) {
-					lsParam.add(key2Param.get(key));
-					writeTables(lsParam, key);
-				} else if (key2Param.get(key) instanceof NBCWordImage) {
-					lsParam.add(key2Param.get(key));
-					writeImages(lsParam, key);
-				} else if (key2Param.get(key) instanceof ReportBase) {
-					lsParam.add(key2Param.get(key));
-					writeOtherTmp(lsParam, key);
-				} else {
-					lsParam.add(key2Param.get(key));
-					writeText(lsParam, key);
-				}
+				lsParam = new ArrayList<>();
+				lsParam.add(key2Param.get(key));
 			}
+			
+			if (lsParam.get(0) instanceof NBCWordTable) {
+				writeTables(lsParam, key);
+			} else if (lsParam.get(0) instanceof NBCWordImage) {
+				writeImages(lsParam, key);
+			} else if (lsParam.get(0) instanceof ReportBase) {
+				writeOtherTmp(lsParam, key);
+			} else {
+				writeText(lsParam, key);
+			}
+			
 		}
 		replaceOtherKeyToDefault();
 		return this;
@@ -190,7 +184,9 @@ public class Document {
 	private void insertReportBases(List<Object> lsReportBases) {
 		for (Object object : lsReportBases) {
 			ReportBase reportBase = (ReportBase)object;
-			anotherDoc = openDocumentForCopy(reportBase.getTempPathAndName());
+//			anotherDoc = openDocumentForCopy(reportBase.getTempPathAndName());
+//			anotherDoc.render(reportBase.buildFinalParamMap());
+			anotherDoc = openDocumentForCopy("C:\\Documents and Settings\\Administrator\\桌面\\GO_All.doc");
 			anotherDoc.render(reportBase.buildFinalParamMap());
 			copyAllFromAnother(anotherDoc);
 		}
