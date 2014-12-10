@@ -9,11 +9,11 @@ import com.esotericsoftware.kryo.io.Input;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.geneanno.GeneInfo;
+import com.novelbio.database.domain.omim.MIMInfo;
+import com.novelbio.database.domain.omim.MorbidMap;
 import com.novelbio.database.model.modgeneid.GeneID;
-import com.novelbio.omimdb.mgmt.MgmtMorbidMap;
-import com.novelbio.omimdb.mgmt.MgmtOMIMUnit;
-import com.novelbio.omimdb.model.MIMInfo;
-import com.novelbio.omimdb.model.MorbidMap;
+import com.novelbio.database.model.modomim.MgmtMorbidMap;
+import com.novelbio.database.model.modomim.MgmtOMIMUnit;
 
 public class CtrlOMIMDisToGene {
 

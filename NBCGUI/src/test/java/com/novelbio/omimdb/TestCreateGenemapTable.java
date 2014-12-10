@@ -9,9 +9,9 @@ import java.util.regex.Pattern;
 
 import org.apache.fop.fo.properties.ForcePageCount;
 
+import com.novelbio.database.domain.omim.OmimGeneMap;
 import com.novelbio.database.model.modgeneid.GeneID;
-import com.novelbio.omimdb.mgmt.MgmtOMIM;
-import com.novelbio.omimdb.model.OmimGeneMap;
+import com.novelbio.database.model.modomim.MgmtOMIM;
 import com.novelbio.omimdb.util.CreatGenemapTable;
 
 import junit.framework.TestCase;

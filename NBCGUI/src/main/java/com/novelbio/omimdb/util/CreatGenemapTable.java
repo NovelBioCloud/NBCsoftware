@@ -10,10 +10,10 @@ import java.util.Set;
 import org.apache.tools.ant.taskdefs.Exit;
 
 import com.novelbio.base.dataOperate.TxtReadandWrite;
-import com.novelbio.omimdb.mgmt.MgmtGeneMIMInfo;
-import com.novelbio.omimdb.mgmt.MgmtOMIM;
-import com.novelbio.omimdb.model.GeneMIM;
-import com.novelbio.omimdb.model.OmimGeneMap;
+import com.novelbio.database.domain.omim.GeneMIM;
+import com.novelbio.database.domain.omim.OmimGeneMap;
+import com.novelbio.database.model.modomim.MgmtGeneMIMInfo;
+import com.novelbio.database.model.modomim.MgmtOMIM;
 
 public class CreatGenemapTable {
 //	String inGeneIdFile;

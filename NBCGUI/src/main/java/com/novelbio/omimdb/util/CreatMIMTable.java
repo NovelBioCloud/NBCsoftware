@@ -7,12 +7,12 @@ import java.util.Map;
 
 import com.mongodb.util.MyAsserts.MyAssert;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
-import com.novelbio.omimdb.mgmt.MgmtGeneMIMInfo;
-import com.novelbio.omimdb.mgmt.MgmtMIMAllToUni;
-import com.novelbio.omimdb.mgmt.MgmtOMIM;
-import com.novelbio.omimdb.mgmt.MgmtOMIMUnit;
-import com.novelbio.omimdb.model.MIMAllToUni;
-import com.novelbio.omimdb.model.MIMInfo;
+import com.novelbio.database.domain.omim.MIMAllToUni;
+import com.novelbio.database.domain.omim.MIMInfo;
+import com.novelbio.database.model.modomim.MgmtGeneMIMInfo;
+import com.novelbio.database.model.modomim.MgmtMIMAllToUni;
+import com.novelbio.database.model.modomim.MgmtOMIM;
+import com.novelbio.database.model.modomim.MgmtOMIMUnit;
 
 public class CreatMIMTable {
 	String inFile;

@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.novelbio.analysis.IntCmdSoft;
+import com.novelbio.analysis.seq.denovo.CAP3cluster;
 import com.novelbio.analysis.seq.denovo.N50AndSeqLen;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
-import com.novelbio.analysis.seq.rnaseq.CAP3cluster;
 import com.novelbio.analysis.seq.rnaseq.Trinity;
 import com.novelbio.analysis.seq.rnaseq.TrinityCopeIso;
 import com.novelbio.analysis.seq.rnaseq.TrinityFaMerage;

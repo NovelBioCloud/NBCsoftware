@@ -4,8 +4,9 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import com.novelbio.omimdb.model.GeneMIM;
-import com.novelbio.omimdb.model.OmimGeneMap;
+import com.novelbio.database.domain.omim.GeneMIM;
+import com.novelbio.database.domain.omim.OmimGeneMap;
+import com.novelbio.database.model.modomim.MgmtGeneMIMInfo;
 
 public class TestMgmtOMIM extends TestCase {
 

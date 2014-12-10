@@ -5,8 +5,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.novelbio.base.dataOperate.TxtReadandWrite;
-import com.novelbio.omimdb.mgmt.MgmtMorbidMap;
-import com.novelbio.omimdb.model.MorbidMap;
+import com.novelbio.database.domain.omim.MorbidMap;
+import com.novelbio.database.model.modomim.MgmtMorbidMap;
 
 public class CreatMorbidMapTable {
 
