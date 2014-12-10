@@ -1,18 +1,15 @@
 package com.novelbio.nbcgui.controlseq;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.novelbio.analysis.IntCmdSoft;
-import com.novelbio.analysis.seq.denovo.CAP3cluster;
 import com.novelbio.analysis.seq.denovo.N50AndSeqLen;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.rnaseq.Trinity;
 import com.novelbio.analysis.seq.rnaseq.TrinityCopeIso;
-import com.novelbio.analysis.seq.rnaseq.TrinityFaMerage;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.listOperate.HistList;
 

@@ -185,7 +185,7 @@ public class CtrlBlastPath extends SwingWorker<ArrayList<String[]>, ProgressData
 			return lsResultBlast;
 		}
 		HashSet<String> hashPathIDBlast = new HashSet<String>();
-		ArrayList<KGentry> lsPathBlast = copedIDblast.getKegEntity(false);
+		List<KGentry> lsPathBlast = copedIDblast.getKegEntity(false);
 		int k = 0;
 		for (int i = 0; i < lsPathBlast.size(); i++) {
 			if (hashPathIDBlast.contains(lsPathBlast.get(i).getPathName())) {
