@@ -18,7 +18,7 @@ public class NBCWord {
 	/**word应用程序*/
 	private ActiveXComponent wordApp;
 	/**打开的文档集合*/
-	private Dispatch documents;
+	private Dispatch dispatchDoc;
 	/**当前的文档*/
 	private Document nowDoc;
 	
@@ -36,27 +36,23 @@ public class NBCWord {
 	private void initWordApp() {
 		ComThread.InitSTA();
 		wordApp = new ActiveXComponent("Word.Application");
+		//Visible 设置是否在桌面打开一个word档
 		wordApp.setProperty("Visible", new Variant(true));
-		documents = wordApp.getProperty("Documents").toDispatch();
+		dispatchDoc = wordApp.getProperty("Documents").toDispatch();
 	}
 	
-	/**
-	 * 打开现有文档
-	 * @param path
-	 */
+	/** 打开现有文档 */
 	private void openExistDocument(String path) {
-		Dispatch dispatch = Dispatch.call(documents, "Open", path).toDispatch();
-		nowDoc =new Document(wordApp, dispatch, documents);
+		Dispatch dispatch = Dispatch.call(dispatchDoc, "Open", path).toDispatch();
+		nowDoc =new Document(wordApp, dispatch, dispatchDoc);
 	}
 
-	/**
-	 * 添加新的文档
-	 */
+	/** 新建空文档 */
 	private void addNewDocument() {
-		Dispatch dispatch = Dispatch.call(documents, "Add").toDispatch();
+		Dispatch dispatch = Dispatch.call(dispatchDoc, "Add").toDispatch();
 		nowDoc = new Document(wordApp, dispatch);
-		documents = wordApp.getProperty("Documents").toDispatch();
-		nowDoc.setDocuments(documents);
+//		dispatchDoc = wordApp.getProperty("Documents").toDispatch();
+		nowDoc.setDispatchDoc(dispatchDoc);
 	}
 
 	/**

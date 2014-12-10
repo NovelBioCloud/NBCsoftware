@@ -19,11 +19,11 @@ public class Document {
 
 	/**word应用程序*/
 	private ActiveXComponent wordApp;
-	/**带开的文档集合*/
-	private Dispatch documents;
+	/** 操作word档的“快件”*/
+	private Dispatch dispatchDoc;
 	/**光标的位置，选中的文本*/
 	private Selection selection;
-	/**Dispatch实例*/
+
 	private Dispatch instance;
 	/**另外的文档*/
 	private Document anotherDoc;
@@ -36,11 +36,11 @@ public class Document {
 	public Document(ActiveXComponent wordApp, Dispatch instance, Dispatch documents) {
 		this.wordApp = wordApp;
 		this.instance = instance;
-		this.documents = documents;
+		this.dispatchDoc = documents;
 	}
 
-	public void setDocuments(Dispatch documents) {
-		this.documents = documents;
+	public void setDispatchDoc(Dispatch documents) {
+		this.dispatchDoc = documents;
 	}
 
 	public Dispatch getInstance() {
@@ -218,8 +218,8 @@ public class Document {
 	 * @return 
 	 */
 	public Document openDocumentForCopy(String filePathName) {
-		Dispatch dispatch = Dispatch.call(documents, "Open", filePathName).toDispatch();
-		return new Document(wordApp, dispatch, documents);
+		Dispatch dispatch = Dispatch.call(dispatchDoc, "Open", filePathName).toDispatch();
+		return new Document(wordApp, dispatch, dispatchDoc);
 	}
 
 	/**
