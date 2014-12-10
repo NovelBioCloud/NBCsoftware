@@ -3,7 +3,7 @@ package com.novelbio.omimdb;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.novelbio.omimdb.util.CreatMorbidMapTable;
+import com.novelbio.database.updatedb.omim.CreatMorbidMapTable;
 
 import junit.framework.TestCase;
 

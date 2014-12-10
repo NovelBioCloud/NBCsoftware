@@ -12,7 +12,7 @@ import org.apache.fop.fo.properties.ForcePageCount;
 import com.novelbio.database.domain.omim.OmimGeneMap;
 import com.novelbio.database.model.modgeneid.GeneID;
 import com.novelbio.database.model.modomim.MgmtOMIM;
-import com.novelbio.omimdb.util.CreatGenemapTable;
+import com.novelbio.database.updatedb.omim.CreatGenemapTable;
 
 import junit.framework.TestCase;
 

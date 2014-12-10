@@ -2,7 +2,7 @@ package com.novelbio.omimdb;
 
 import junit.framework.TestCase;
 
-import com.novelbio.omimdb.util.CreatMIMTable;
+import com.novelbio.database.updatedb.omim.CreatMIMTable;
 
 public class TestCreateOMIMTable extends TestCase {
 
