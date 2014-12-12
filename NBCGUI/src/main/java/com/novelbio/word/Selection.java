@@ -7,32 +7,33 @@ import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
 import com.novelbio.base.PathDetail;
 import com.novelbio.base.dataOperate.DateUtil;
+import com.novelbio.base.fileOperate.FileOperate;
 
 public class Selection {
 	
 	/**word应用程序*/
 	private ActiveXComponent wordApp;
 	/**所在文档*/
-	private Document document;
+	private Dispatch currentDis;
 	/**dispatch实例*/
-	private Dispatch instance;
+	private Dispatch selectedDispatch;
 	
-	public Selection(ActiveXComponent wordApp, Document document, Dispatch instance) {
+	public Selection(ActiveXComponent wordApp, Dispatch currentDis, Dispatch selectedDis) {
 		this.wordApp = wordApp;
-		this.document = document;
-		this.instance = instance;
+		this.currentDis = currentDis;
+		this.selectedDispatch = selectedDis;
 	}
 	
 	public Dispatch getInstance() {
-		return instance;
+		return selectedDispatch;
 	}
 	
 	/**替换文本*/
 	public void replace(String oldText, String newText) {
 		while (find(oldText, false)) {
-			Dispatch.put(instance, "Text", newText);
+			Dispatch.put(selectedDispatch, "Text", newText);
 			if (newText != "")
-				Dispatch.call(instance, "MoveRight");
+				Dispatch.call(selectedDispatch, "MoveRight");
 		}
 	}
 	
@@ -41,7 +42,7 @@ public class Selection {
 		if (toFindText == null || toFindText.equals(""))
 			return false;
 		// 从selection所在位置开始查询
-		Dispatch find = wordApp.call(instance, "Find").toDispatch();
+		Dispatch find = wordApp.call(selectedDispatch, "Find").toDispatch();
 		// 设置要查找的内容
 		Dispatch.put(find, "Text", toFindText);
 		// 向前查找
@@ -61,7 +62,7 @@ public class Selection {
 	
 	/**获取当前选中文本*/
 	public String getText() {
-		return Dispatch.get(instance, "Text").getString();
+		return Dispatch.get(selectedDispatch, "Text").getString();
 	}
 	
 	/**
@@ -69,7 +70,7 @@ public class Selection {
 	 * @param text
 	 */
 	public void writeText(String text) {
-		Dispatch.call(instance, "TypeText", text);
+		Dispatch.call(selectedDispatch, "TypeText", text);
 	}
 	
 	/**
@@ -83,21 +84,25 @@ public class Selection {
 	public void writePicture(List<String> lsPicPaths, String title, Integer alignment, Integer width, Integer height) {
 		if(alignment == null)
 			alignment = 1;
-		Dispatch inLineShapes = Dispatch.get(instance, "InLineShapes").toDispatch();
+		Dispatch inLineShapes = Dispatch.get(selectedDispatch, "InLineShapes").toDispatch();
 		for (String imagePath : lsPicPaths) {
-			//TODO 将hdfs文件放到临时文件夹下
-//			System.out.println(PathDetail.getTmpPath());
-//			System.out.println(DateUtil.getDateAndRandom());
-			Dispatch shape = Dispatch.call(inLineShapes, "AddPicture", imagePath).toDispatch();
+			//生成临时文件路径，从hdfs复制文件
+			String tmpPath = FileOperate.getTempFilePath(imagePath);
+			FileOperate.copyFile(imagePath, tmpPath, true);
+			
+			Dispatch shape = Dispatch.call(inLineShapes, "AddPicture", tmpPath).toDispatch();
 			Dispatch.put(shape, "Width", width == null ? Dispatch.get(shape, "Width").getFloat() : width);
 			Dispatch.put(shape, "Height", height == null ? Dispatch.get(shape, "Height").getFloat() : height);
 			Dispatch.call(shape, "Select");
-			Dispatch paragraphFormat = Dispatch.get(instance, "ParagraphFormat").toDispatch();
+			Dispatch paragraphFormat = Dispatch.get(selectedDispatch, "ParagraphFormat").toDispatch();
 			Dispatch.put(paragraphFormat, "Alignment", new Variant(alignment));
-			Dispatch.call(instance, "MoveRight");
+			Dispatch.call(selectedDispatch, "MoveRight");
+			
+			//删除临时文件
+			FileOperate.delFile(tmpPath);
 		}
 		nextRow();
-		Dispatch paragraphFormat = Dispatch.get(instance, "ParagraphFormat").toDispatch();
+		Dispatch paragraphFormat = Dispatch.get(selectedDispatch, "ParagraphFormat").toDispatch();
 		Dispatch.put(paragraphFormat, "Alignment", "1");
 	}
 	
@@ -122,10 +127,9 @@ public class Selection {
 	 * @return
 	 */
 	private Dispatch createTable(int numCols, int numRows) {
-		Dispatch tables = Dispatch.get(document.getInstance(), "Tables").toDispatch();
-		Dispatch range = Dispatch.get(instance, "Range").toDispatch();
-		Dispatch newTable = Dispatch.call(tables, "Add", range,
-		new Variant(numRows), new Variant(numCols)).toDispatch();
+		Dispatch tables = Dispatch.get(currentDis, "Tables").toDispatch();
+		Dispatch range = Dispatch.get(selectedDispatch, "Range").toDispatch();
+		Dispatch newTable = Dispatch.call(tables, "Add", range, new Variant(numRows), new Variant(numCols)).toDispatch();
 		return newTable;
 	}
 	
@@ -152,7 +156,7 @@ public class Selection {
 	private void putTxtToCell(Dispatch table, int cellRowIdx, int cellColIdx, String txt) {
 		Dispatch cell = Dispatch.call(table, "Cell", new Variant(cellRowIdx), new Variant(cellColIdx)).toDispatch();
 		Dispatch.call(cell, "Select");
-		Dispatch.put(instance, "Text", txt);
+		Dispatch.put(selectedDispatch, "Text", txt);
 	}
 	
 	/**
@@ -168,7 +172,7 @@ public class Selection {
 		Dispatch.put(rows, "HeightRule", 2);
 		Dispatch.put(rows, "Height", new Variant(15));
 		Dispatch.call(table, "Select");
-		Dispatch font = Dispatch.get(instance, "Font").toDispatch();
+		Dispatch font = Dispatch.get(selectedDispatch, "Font").toDispatch();
 		Dispatch.put(font, "Size", 9);
 	}
 	
@@ -177,14 +181,14 @@ public class Selection {
 	 * @param newText
 	 */
 	public void replaceSelected(String newText) {
-		Dispatch.put(instance, "Text", newText);
+		Dispatch.put(selectedDispatch, "Text", newText);
 		if (newText != "")
-			Dispatch.call(instance, "MoveRight");
+			Dispatch.call(selectedDispatch, "MoveRight");
 	}
 	
 	/** 换一行*/
 	public void nextRow() {
-		Dispatch.call(instance, "TypeParagraph");
+		Dispatch.call(selectedDispatch, "TypeParagraph");
 		defaultFont();
 		defaultParagraphStyle();
 	}
@@ -204,7 +208,7 @@ public class Selection {
 	 */
 
 	public void setParagraphsProperties(int alignment, int lineSpaceingRule, int lineUnitBefore, int lineUnitAfter, int characterUnitFirstLineIndent) {
-		Dispatch paragraphFormat = Dispatch.get(instance, "ParagraphFormat").toDispatch();
+		Dispatch paragraphFormat = Dispatch.get(selectedDispatch, "ParagraphFormat").toDispatch();
 		// 对齐方式
 		Dispatch.put(paragraphFormat, "Alignment", new Variant(alignment));
 		Dispatch.put(paragraphFormat, "FirstLineIndent", new Variant(0));
@@ -237,7 +241,7 @@ public class Selection {
 	 * @param name
 	 */
 	public void setFont(boolean isBold, boolean isItalic, boolean isUnderLine, String color, String size, String name) {
-		Dispatch font = Dispatch.get(instance, "Font").toDispatch();
+		Dispatch font = Dispatch.get(selectedDispatch, "Font").toDispatch();
 		Dispatch.put(font, "Name", new Variant(name));
 		Dispatch.put(font, "Bold", new Variant(isBold));
 		Dispatch.put(font, "Italic", new Variant(isItalic));
@@ -248,7 +252,7 @@ public class Selection {
 	
 	/**光标下移*/
 	public void moveDown() {
-		Dispatch.call(instance, "MoveDown");
+		Dispatch.call(selectedDispatch, "MoveDown");
 	}
 	
 }

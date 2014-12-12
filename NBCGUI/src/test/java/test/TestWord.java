@@ -1,44 +1,96 @@
 package test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import com.hg.xdoc.model.Path;
+import com.jacob.activeX.ActiveXComponent;
+import com.jacob.com.Dispatch;
+import com.jacob.com.Variant;
+import com.novelbio.base.PathDetail;
+import com.novelbio.base.dataOperate.DateUtil;
+import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportAll;
 import com.novelbio.nbcReport.Params.ReportBase;
-import com.novelbio.nbcReport.Params.ReportGO;
-import com.novelbio.word.NBCWordImage;
 import com.novelbio.word.NBCWord;
-import com.novelbio.word.NBCWordTable;
 
 public class TestWord {
 	
 	public static void main(String[] args) {
-		System.setProperty("hadoop.home.dir", "C:/hadoop/hadoop-2.5.0_compile_win/hadoop-2.5.0");
 		
-		List<String> lsFolders = new ArrayList<>();
-		lsFolders.add("");
-		ReportAll reportAll = EnumReport.ReportAll.getReportBase();
-//		reportAll.addChildReport(reportAll.readReportFromFile("Z:\\hadoop\\GOAnalysis_result\\.report\\report_GOAnalysis"));
-//		reportAll.setProjectName("projectName");
-//		NBCWord word = reportAll.getWord();
-		NBCWord word  = new NBCWord("C:\\Documents and Settings\\Administrator\\桌面\\GOAnalysis_result.doc");
-		ReportBase reportBase = reportAll.readReportFromFile("Z:\\hadoop\\GOAnalysis_result\\.report\\report_GOAnalysis");
-		word.renderReport(reportBase);
-//		String savePath = "";
-//		String fileName =  "zzzz.doc";
-//		String reportFilePath = FileOperate.addSep(savePath)+ "report_result" + FileOperate.getSepPath() + fileName;
-//		File file = FileOperate.getFile(reportFilePath);
-//		FileOperate.createFolders(file.getParent());
-		String realPath = "C:\\Documents and Settings\\Administrator\\桌面\\gooddd.doc";
-		try {
-			word.saveDocAs(realPath); 
-			word.quit();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+//		ActiveXComponent wordApp;
+//		wordApp = new ActiveXComponent("Word.Application");
+//		wordApp.setProperty("Visible", new Variant(true));
+//		
+//		ActiveXComponent wordApp2 = new ActiveXComponent("Word.Application");
+//		wordApp2.setProperty("Visible", new Variant(true));
+//		
+//		Dispatch dispatchWord = wordApp.getProperty("Documents").toDispatch();
+//		Dispatch dispatchWord2 = wordApp2.getProperty("Documents").toDispatch();
+//		
+//		Dispatch dispatch1 = Dispatch.call(dispatchWord, "Open", "C:\\Documents and Settings\\Administrator\\桌面\\a.doc").toDispatch();
+//		Dispatch dispatch2 = Dispatch.call(dispatchWord, "Open", "C:\\Documents and Settings\\Administrator\\桌面\\b.doc").toDispatch();
+//		Dispatch dispatch3 = Dispatch.call(dispatchWord2, "Open", "C:\\Documents and Settings\\Administrator\\桌面\\c.doc").toDispatch();
+//		
+//		Dispatch selected = Dispatch.call(wordApp, "Selection").toDispatch();
+//		Dispatch selected2 = Dispatch.call(wordApp2, "Selection").toDispatch();
+//		
+//		TestWord test = new TestWord();
+//		test.copy(dispatch2, selected2);
+		String path1 = "C:\\Documents and Settings\\Administrator\\桌面\\a.doc";
+		String path2 = "C:\\Documents and Settings\\Administrator\\桌面\\b.doc";
+		String path3 = "C:\\Documents and Settings\\Administrator\\桌面\\c.doc";
+		String path4 = "C:\\Documents and Settings\\Administrator\\桌面\\d.doc";
+		String pathTo1 = "C:\\Documents and Settings\\Administrator\\桌面\\e.doc";
+		String pathTo2 = "C:\\Documents and Settings\\Administrator\\桌面\\f.doc";
+		String pathTo3 = "C:\\Documents and Settings\\Administrator\\桌面\\g.doc";
+		String pathTo4 = "C:\\Documents and Settings\\Administrator\\桌面\\h.doc";
+		Thread thread1 = new Thread(new WordTest(path1, pathTo1));
+		Thread thread2 = new Thread(new WordTest(path2, pathTo2));
+//		Thread thread3 = new Thread(new WordTest(path3, pathTo3));
+//		Thread thread4 = new Thread(new WordTest(path4, pathTo4));
+		thread1.start();
+		thread2.start();
+		
+	}
+	
+	public void copy(Dispatch dispatchDoc, Dispatch selection) {
+		Dispatch range = Dispatch.get(dispatchDoc, "Content").toDispatch(); // 取得当前文档的内容  
+		Dispatch.call(range, "Copy");
+		Dispatch textRange = Dispatch.get(selection, "Range").toDispatch();  
+		Dispatch.call(textRange, "Paste");
+	}
+
+}
+
+
+class WordTest implements Runnable {
+	ActiveXComponent wordApp = new ActiveXComponent("Word.Application");
+	
+	Dispatch dispatchWord = wordApp.getProperty("Documents").toDispatch();
+	Dispatch dispatch;
+	
+	ActiveXComponent wordAppCopyTo = new ActiveXComponent("Word.Application");
+	Dispatch dispatchWordCopyTo = wordAppCopyTo.getProperty("Documents").toDispatch();
+	Dispatch dispatchCopyTo;
+	
+	public WordTest(String pathForm, String pathTo) {
+		wordApp.setProperty("Visible", new Variant(true));
+		dispatch = Dispatch.call(dispatchWord, "Open", pathForm).toDispatch();
+		wordAppCopyTo.setProperty("Visible", new Variant(true));
+		dispatchCopyTo = Dispatch.call(dispatchWordCopyTo, "Open", pathTo).toDispatch();
+	}
+	@Override
+	public void run() {
+		for (int i = 0; i < 10; i++) {
+			Dispatch range = Dispatch.get(dispatch, "Content").toDispatch(); // 取得当前文档的内容  
+			Dispatch.call(range, "Copy");
+			
+			Dispatch copyTo = Dispatch.call(wordAppCopyTo, "Selection").toDispatch();
+		
+			Dispatch textRange = Dispatch.get(copyTo, "Range").toDispatch();  
+			Dispatch.call(textRange, "Paste");
 		}
 		
 		
@@ -46,43 +98,7 @@ public class TestWord {
 		
 		
 		
-//		NBCWord nbcWord = new NBCWord(null);
-//		System.setProperty("hadoop.home.dir", "C:/hadoop/hadoop-2.5.0_compile_win/hadoop-2.5.0");
-//		NBCWord nbcWord = new NBCWord("C:\\Documents and Settings\\Administrator\\桌面\\Read Me123.docx");
-//		Map<String,Object> map = new HashMap<>();
-//		List<String> lsTexts = new ArrayList<>();
-//		lsTexts.add("苹果");
-//		lsTexts.add("香蕉");
-//		lsTexts.add("桔子");
-//		lsTexts.add("牛奶");
-//		map.put("text", lsTexts);
-//		map.put("diffGene_result", map); 
-//		List<NBCWordImage> pic = new ArrayList<>();
-//		NBCWordImage image = new NBCWordImage();
-//		image.setDownCompare("这是写在图片下方的说明，睁大你的眼睛看看");
-//		image.setUpCompare("这是写在图片上方的说明，睁大你的眼睛看看");
-//		image.setTitle("这是一张神奇的图片");
-//		image.setNote("注：这个图片只是用来测试有没有用的");
-//		image.setAlign(1);
-//		image.addPicPath("C:\\Documents and Settings\\Administrator\\桌面\\viewphoto.jpg");
-//		pic.add(image);
-//		map.put("pic", pic);
-//		List<NBCWordTable> lsTables = new ArrayList<>();
-//		NBCWordTable nbcWordTable = new NBCWordTable();
-//		nbcWordTable.setDownCompare("这是写在表格下方的说明，睁大你的眼睛看看");
-//		nbcWordTable.setUpCompare("这是写在表格上方的说明，睁大你的眼睛看看");
-//		nbcWordTable.setTitle("这是一张神奇的表格");
-//		nbcWordTable.setNote("注：这个表格只是用来测试有没有用的");
-//		nbcWordTable.addMapExcelPath2SheetName("C:\\Documents and Settings\\Administrator\\桌面\\A6VSA0-Dif_anno.xls", "A6VSA0-Dif_anno");
-//		lsTables.add(nbcWordTable);
-//		map.put("table", lsTables);
-//		List<ReportBase> lsReportBases = new ArrayList<>();
-//		ReportBase reportBase = new ReportGO();
-//		lsReportBases.add(reportBase);
-//		map.put("reportBase", lsReportBases);
-//		nbcWord.getNowDoc().render(map);
-//		nbcWord.saveDocAs("C:\\Documents and Settings\\Administrator\\桌面\\gooddd.doc");
-//		nbcWord.quit();
+		
 	}
-
+	
 }
