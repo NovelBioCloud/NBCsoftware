@@ -58,8 +58,8 @@ public class CtrlOMIMDisToGene {
 	}
 	//此处这个方法可以与AnnoOMIM.java类型的方法，进行合并，另外写一个类，运用多态的性能即可！
 	public static List<String[]> getOMIMDisGene(String dis) {
-		MgmtMorbidMap mgmtMorbidMap = MgmtMorbidMap.getInstance();
-		MgmtOMIMUnit mgmtOMIMUnit = MgmtOMIMUnit.getInstance();
+		MgmtMorbidMap mgmtMorbidMap = MgmtMorbidMap.getDispatch();
+		MgmtOMIMUnit mgmtOMIMUnit = MgmtOMIMUnit.getDispatch();
 		List<String[]> lsResult = new ArrayList<String[]>();
 		ArrayList<String> lsResultTmp = new ArrayList<String>();
 		List<MorbidMap> liMorbidMap = mgmtMorbidMap.findInfByDisease(dis);

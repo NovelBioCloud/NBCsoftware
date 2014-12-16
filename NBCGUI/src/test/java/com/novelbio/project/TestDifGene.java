@@ -1,19 +1,10 @@
 package com.novelbio.project;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.junit.Before;
-import org.junit.Test;
 
 import com.novelbio.analysis.diffexpress.DiffExpAbs;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
-import com.novelbio.base.fileOperate.FileHadoop;
 import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.nbcReport.Params.ReportDifGeneAll;
-import com.novelbio.nbcReport.Params.ReportAll;
 import com.novelbio.nbcgui.controltest.CtrlDifGene;
 
 public class TestDifGene {

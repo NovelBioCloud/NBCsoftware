@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
+import com.novelbio.base.Computer;
 import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
@@ -193,8 +194,13 @@ public class CtrlGOall implements CtrlTestGOInt {
 			}
 			ctrlGO.saveExcel(saveName);
 		}
-
-		savePic();
+		logger.info(Computer.getInstance().getNameIP() + " draw go pic");
+		try {
+			savePic();
+			logger.info(Computer.getInstance().getNameIP() + " draw go pic sucess");
+		} catch (Exception e) {
+			logger.info(Computer.getInstance().getNameIP() + " draw go pic failed", e);
+		}
 		
 		goReport = new GOReport();
 		goReport.setCtrlGOall(this);

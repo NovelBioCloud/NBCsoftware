@@ -6,11 +6,19 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
+import com.novelbio.base.PathDetail;
+import com.novelbio.base.dataOperate.DateUtil;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
+import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.word.ExcelDataFormat;
 
+//TODO 未来可能的重构，将表格标题，表格上方文本 等属性写到单独的tableInfo类中，然后wordTable继承该类并实现相关替换方法。
+//同样，pdfTable也可以继承该类并实现相关替换方法。
+//此时wordTable和pdfTable可以抽象出一个tableRender接口
 public class NBCWordTable implements Serializable {
-	
+	private static final Logger logger = Logger.getLogger(NBCWordTable.class); 
 	private static final long serialVersionUID = 1L;
 	/** 表格的标题 */
 	private String title = "";
@@ -37,13 +45,48 @@ public class NBCWordTable implements Serializable {
 	 */
 	public void insertToDoc(Selection selection) {
 		String pattern = selection.getText();
-		paresePattern(pattern);
+		parsePattern(pattern);
 		if (existText != null){
 			selection.replaceSelected(existText);
 			return;
 		}
 		insertAndSet(selection);
-		System.out.println("插入表格"+pattern);
+		logger.info("insert table" + pattern);
+	}
+	
+	/**
+	 * 解析选中文本，获得 {@link #withEnter}
+	 * {@link #existText}
+	 * {@link #maxRow}
+	 * 这几个属性的信息
+	 * @param pattern
+	 */
+	//TODO
+	private void parsePattern(String pattern){
+		//${##hfugkeshgf;e|fsae}
+		if (!(pattern.startsWith("${") && pattern.endsWith("}"))) {
+			//TODO 写自己的exception类
+			throw new RuntimeException("word表达式:" + pattern + "异常");
+		}
+		String patternLeft = pattern.substring(2, pattern.length() - 1);
+		this.withEnter = patternLeft.contains("##n|");
+		
+		//methods 为${
+		String[] methods = patternLeft.split("##");
+		for (int i = 0; i < methods.length; i++) {
+			if (i == 0) {
+				continue;
+			} if (methods[i].startsWith("e|")) {
+				this.existText = methods[i].split("e\\|")[1];
+			} else if (methods[i].startsWith("r|")){
+				try {
+					this.maxRow = Integer.parseInt(methods[i].split("r\\|")[1]);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+			}else if (methods[i].startsWith("n|"))
+				this.withEnter = true;
+		}
 	}
 	
 	/**
@@ -85,12 +128,19 @@ public class NBCWordTable implements Serializable {
 	 */
 	private void formatTableDataAndInsert(Selection selection) {
 		for(String excelPath : mapExcelPath2SheetName.keySet()){
-			String sheetName = mapExcelPath2SheetName.get(excelPath);
-			List<List<String>>  data = ExcelTxtRead.readLsExcelTxtls(excelPath, sheetName, 1, maxRow);
+			//生成临时文件路径，从hdfs复制文件
+			String tmpPath = FileOperate.getTempFilePath(excelPath);
+			FileOperate.copyFile(excelPath, tmpPath, true);
+			
+			String sheetName = mapExcelPath2SheetName.get(tmpPath);
+			List<List<String>>  data = ExcelTxtRead.readLsExcelTxtls(tmpPath, sheetName, 1, maxRow);
 			if(data.size() == 0)
 				continue;
 			data = formatDataList(data);
 			selection.wirteTable(data);
+			
+			//删除临时文件
+			FileOperate.delFile(tmpPath);
 		}
 	}
 	
@@ -115,33 +165,7 @@ public class NBCWordTable implements Serializable {
 		}
 		return lsNewDatas;
 	}
-	
-	/**
-	 * 解析选中文本
-	 * @param pattern
-	 */
-	private void paresePattern(String pattern){
-		if (!(pattern.startsWith("${") && pattern.endsWith("}"))) {
-			throw new RuntimeException("word表达式:" + pattern + "异常");
-		}
-		String patternLeft = pattern.substring(2, pattern.length() - 1);
-		this.withEnter = patternLeft.contains("##n|");
-		String[] methods = patternLeft.split("##");
-		for (int i = 0; i < methods.length; i++) {
-			if (i == 0)
-				continue;
-			if (methods[i].startsWith("e|"))
-				this.existText = methods[i].split("e\\|")[1];
-			else if (methods[i].startsWith("r|")){
-				try {
-					this.maxRow = Integer.parseInt(methods[i].split("r\\|")[1]);
-				} catch (Exception e) {
-					// TODO: handle exception
-				}
-			}else if (methods[i].startsWith("n|"))
-				this.withEnter = true;
-		}
-	}
+
 	
 	/** 表格的标题 */
 	public String getTitle() {
