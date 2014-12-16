@@ -107,10 +107,11 @@ public class CtrlVarScan {
 	/** Output file for indel calls [default: output.indel] */
 	String outputIndel;
 	/** Minimum coverage in normal to call somatic [8] */
-	int minCoverNormal;
+	int minCovNor;
 	/** Minimum coverage in tumor to call somatic [6] */
-	int minCoverTumor;
+	int minCovTum;
 	/** P-value threshold to call a somatic site [0.05] */
+	
 	double somaPValue;
 	/** If set to 1, outputs all compared positions even if non-variant */
 	int validation;
@@ -183,12 +184,12 @@ public class CtrlVarScan {
 		this.variants = variants;
 	}
 
-	public void setMinCoverNormal(int minCoverNormal) {
-		this.minCoverNormal = minCoverNormal;
+	public void setMinCovNor(int minCovNor) {
+		this.minCovNor = minCovNor;
 	}
 
-	public void setMinCoverTumor(int minCoverTumor) {
-		this.minCoverTumor = minCoverTumor;
+	public void setMinCovTum(int minCovTum) {
+		this.minCovTum = minCovTum;
 	}
 
 	public void setOutputIndel(String outputIndel) {
@@ -276,15 +277,15 @@ public class CtrlVarScan {
 					ArrayOperate.addArrayToList(lsCmd, getVariants());
 					ArrayOperate.addArrayToList(lsCmd, getOutputFile());
 					if (type.startsWith("mpileup2")) {
-						ArrayOperate.addArrayToList(lsCmd, getOutputVcf());
+//						ArrayOperate.addArrayToList(lsCmd, getOutputVcf());
 						ArrayOperate.addArrayToList(lsCmd, getStrandFilter());
 						//TODO 添加vcf-sample-list 参数
 //						ArrayOperate.addArrayToList(lsCmd, get());
 					}
 				} else if (type.equals("somatic")) {
 					ArrayOperate.addArrayToList(lsCmd, getMinCoverage());
-					ArrayOperate.addArrayToList(lsCmd, getMinCoverNormal());
-					ArrayOperate.addArrayToList(lsCmd, getMinCoverTumor());
+					ArrayOperate.addArrayToList(lsCmd, getMinCovNor());
+					ArrayOperate.addArrayToList(lsCmd, getMinCovTum());
 					ArrayOperate.addArrayToList(lsCmd, getMinVarFreq());
 					ArrayOperate.addArrayToList(lsCmd, getMinFreqForHom());
 					ArrayOperate.addArrayToList(lsCmd, getPValue());
@@ -383,12 +384,12 @@ public class CtrlVarScan {
 		return new String[] { " ", outputIndel};
 	}
 	
-	private String[] getMinCoverNormal() {
-		return new String[] { " ", minCoverNormal + ""};
+	private String[] getMinCovNor() {
+		return new String[] { " ", minCovNor + ""};
 	}
 	
-	private String[] getMinCoverTumor() {
-		return new String[] { " ", minCoverTumor + ""};
+	private String[] getMinCovTum() {
+		return new String[] { " ", minCovTum + ""};
 	}
 	
 	private String[] getSomaPValue() {
