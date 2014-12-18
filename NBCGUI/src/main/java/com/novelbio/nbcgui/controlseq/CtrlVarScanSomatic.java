@@ -6,7 +6,6 @@ import java.util.List;
 import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.base.cmd.CmdOperate;
 import com.novelbio.base.dataStructure.ArrayOperate;
-import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.information.SoftWareInfo;
 import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
 
@@ -19,24 +18,20 @@ public class CtrlVarScanSomatic implements IntCmdSoft {
 	String inputFile;
 	/** Minimum read depth at a position to make a call [8]*/
 	int minCoverage;
-	
+	/** Minimum coverage in normal to call somatic [6] */
 	int minCovNor;
 	/** Minimum coverage in tumor to call somatic [6] */
 	int minCovTum;
 	/** P-value threshold to call a somatic site [0.05] */
 	double somaPValue;
-	
 	/** Minimum variant allele frequency threshold [0.01]*/
 	double minVarFreq;
 	/** Default p-value threshold for calling variants [0.99]*/
 	double pValue;
 	/** Minimum frequency to call homozygote [0.75]*/
 	double minFreqForHom;
-	/** Ignore variants with >90% support on one strand [1] */
-	int strandFilter;
 	/** If set to 1, outputs in VCF format */
 	int outputVcf;
-	
 	/** Output file for SNP calls [default: output.snp] */
 	String outputSnp;
 	/** Output file for indel calls [default: output.indel] */
@@ -48,7 +43,6 @@ public class CtrlVarScanSomatic implements IntCmdSoft {
 	}
 	
 	public void setInputFile(String inputFile) {
-		FileOperate.checkFileExistAndBigThanSize(inputFile, 0);
 		this.inputFile = inputFile;
 	}
 
@@ -66,10 +60,6 @@ public class CtrlVarScanSomatic implements IntCmdSoft {
 
 	public void setMinFreqForHom(double minFreqForHom) {
 		this.minFreqForHom = minFreqForHom;
-	}
-
-	public void setStrandFilter(int strandFilter) {
-		this.strandFilter = strandFilter;
 	}
 
 	public void setOutoutVcf(int outputVcf) {
@@ -102,12 +92,12 @@ public class CtrlVarScanSomatic implements IntCmdSoft {
 	}
 	public void run() {
 		CmdOperate cmdOperate = new CmdOperate(getCmdExeStr());
-		cmdOperate.runWithExp("VarScan error:");
 	}
 	List<String> lsCmd = new ArrayList<>();
 	
 	public List<String> getCmdExeStr() {
-		lsCmd.add("java -jar " + exePath + "varscan.jar" + getVarScanCom(varScanCom));
+		lsCmd.clear();
+		lsCmd.add("java -jar " + exePath + "varscan.jar" + " somatic");
 		ArrayOperate.addArrayToList(lsCmd, getInputFile(inputFile));
 		ArrayOperate.addArrayToList(lsCmd, getMinCoverage());
 		ArrayOperate.addArrayToList(lsCmd, getMinCovNor());
@@ -115,15 +105,11 @@ public class CtrlVarScanSomatic implements IntCmdSoft {
 		ArrayOperate.addArrayToList(lsCmd, getMinVarFreq());
 		ArrayOperate.addArrayToList(lsCmd, getMinFreqForHom());
 		ArrayOperate.addArrayToList(lsCmd, getPValue());
-		ArrayOperate.addArrayToList(lsCmd, getSomaPValue());	
-		ArrayOperate.addArrayToList(lsCmd, getStrandFilter());	
-		ArrayOperate.addArrayToList(lsCmd, getOutputVcf());	
+		ArrayOperate.addArrayToList(lsCmd, getSomaPValue());
+		ArrayOperate.addArrayToList(lsCmd, getOutputVcf());
 		ArrayOperate.addArrayToList(lsCmd, getOutputSnp());
 		ArrayOperate.addArrayToList(lsCmd, getOutputIndel());
 		return lsCmd;
-	}
-	private String getVarScanCom(String varScanCom) {
-		return varScanCom;
 	}
 	private String[] getInputFile(String inputFile) {
 		return new String[]{inputFile};
@@ -133,11 +119,11 @@ public class CtrlVarScanSomatic implements IntCmdSoft {
 	}
 	
 	private String[] getMinCovNor() {
-		return new String[] { "--min-coverage", minCovNor + ""};
+		return new String[] { "--min-coverage-normal", minCovNor + ""};
 	}
 	
 	private String[] getMinCovTum() {
-		return new String[] { "--min-coverage-normal", minCovTum + ""};
+		return new String[] { "--min-coverage-tumor", minCovTum + ""};
 	}
 	private String[] getMinVarFreq() {
 		return new String[] { "--min-var-freq", minVarFreq + "" };
@@ -152,10 +138,10 @@ public class CtrlVarScanSomatic implements IntCmdSoft {
 	private String[] getSomaPValue() {
 		return new String[] { "--min-coverage-tumor", somaPValue + ""};
 	}
-	private String[] getStrandFilter() {
-		return new String[] { "--strand-filter", strandFilter + "" };
-	}	
 	private String[] getOutputVcf() {
+		if (outputVcf != 1) {
+			return null;
+		}
 		return new String[] { "--output-vcf", outputVcf + "" };
 	}
 	
