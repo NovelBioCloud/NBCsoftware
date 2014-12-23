@@ -211,7 +211,7 @@ public class GuiSnpFilterSimpleFW extends JPanel {
 		add(btnDelsnp);
 		
 		JLabel lblHetosnppropfilter = new JLabel("HeteroSNPPropLevel");
-		lblHetosnppropfilter.setBounds(642, 199, 201, 14);
+		lblHetosnppropfilter.setBounds(642, 199, 217, 14);
 		add(lblHetosnppropfilter);
 		
 		txtSnpHeto = new JTextField();

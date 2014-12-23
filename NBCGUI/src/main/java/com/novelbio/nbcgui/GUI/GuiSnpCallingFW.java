@@ -118,11 +118,11 @@ public class GuiSnpCallingFW extends JPanel implements GuiNeedOpenFile, GuiSnpCa
 		add(btnDeletePileupFile);
 		
 		JLabel lblHetolessinfo = new JLabel("Hetero SNP Reads Prop Level");
-		lblHetolessinfo.setBounds(14, 178, 253, 14);
+		lblHetolessinfo.setBounds(12, 178, 288, 14);
 		add(lblHetolessinfo);
 		
 		txtHetoSnpProp = new JTextField();
-		txtHetoSnpProp.setBounds(271, 174, 66, 24);
+		txtHetoSnpProp.setBounds(304, 174, 66, 24);
 		add(txtHetoSnpProp);
 		txtHetoSnpProp.setColumns(10);
 		

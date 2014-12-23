@@ -63,7 +63,7 @@
 		<dependency>
 			<groupId>com.novelBio</groupId>
 			<artifactId>bioinfo-platform</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.novelbio</groupId>

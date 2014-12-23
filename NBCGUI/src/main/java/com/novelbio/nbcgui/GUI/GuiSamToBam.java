@@ -23,6 +23,7 @@ import net.sf.samtools.SAMFileHeader.SortOrder;
 import com.google.common.collect.ArrayListMultimap;
 import com.novelbio.analysis.seq.bed.BedSeq;
 import com.novelbio.analysis.seq.sam.AlignSamReading;
+import com.novelbio.analysis.seq.sam.BamFilterUnique;
 import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.analysis.seq.sam.SamToBamSort;
 import com.novelbio.analysis.seq.sam.SamToBed;
@@ -41,9 +42,11 @@ public class GuiSamToBam extends JPanel {
 	JCheckBox chckRealign;
 	JCheckBox chckRemoveduplicate;
 	JCheckBox chckbxMergebyprefix;
+	JCheckBox chckbxFilteruniquemappedreads;
+	
 	JButton btnAddvcf;
 	JButton btnDelvcf;
-	
+	boolean isFilterMultipleMappedReads;
 	JScrollPaneData scrlSamFile;
 	
 	ButtonGroup buttonGroupRad;
@@ -131,20 +134,20 @@ public class GuiSamToBam extends JPanel {
 		add(lblSamfile);
 		
 		chckbxSortBam = new JCheckBox("SortBam");
-		chckbxSortBam.setBounds(385, 200, 139, 22);
+		chckbxSortBam.setBounds(732, 198, 139, 22);
 		add(chckbxSortBam);
 		
 		chckbxIndex = new JCheckBox("Index");
-		chckbxIndex.setBounds(676, 200, 129, 22);
+		chckbxIndex.setBounds(38, 227, 129, 22);
 		add(chckbxIndex);
 		
 		
 		chckRealign = new JCheckBox("Realign");
-		chckRealign.setBounds(385, 226, 139, 22);
+		chckRealign.setBounds(732, 227, 139, 22);
 		add(chckRealign);
 		
 		chckRemoveduplicate = new JCheckBox("RemoveDuplicate");
-		chckRemoveduplicate.setBounds(38, 225, 187, 22);
+		chckRemoveduplicate.setBounds(385, 226, 187, 22);
 		add(chckRemoveduplicate);
 		
 		
@@ -162,7 +165,7 @@ public class GuiSamToBam extends JPanel {
 				}
 			}
 		});
-		chckRecalibrate.setBounds(676, 226, 305, 22);
+		chckRecalibrate.setBounds(38, 251, 305, 22);
 		add(chckRecalibrate);
 		
 		scrlSamFile = new JScrollPaneData();
@@ -208,7 +211,7 @@ public class GuiSamToBam extends JPanel {
 		add(lblVersion);
 		
 		chckbxGeneratepileupfile = new JCheckBox("GeneratePileUpFile");
-		chckbxGeneratepileupfile.setBounds(38, 250, 187, 22);
+		chckbxGeneratepileupfile.setBounds(385, 252, 187, 22);
 		add(chckbxGeneratepileupfile);
 
 		sclVcfFile = new JScrollPaneData();
@@ -243,6 +246,10 @@ public class GuiSamToBam extends JPanel {
 		chckbxMergebyprefix.setSelected(true);
 		chckbxMergebyprefix.setBounds(38, 198, 187, 23);
 		add(chckbxMergebyprefix);
+		
+		chckbxFilteruniquemappedreads = new JCheckBox("FilterMultipleMappedReads");
+		chckbxFilteruniquemappedreads.setBounds(385, 198, 278, 23);
+		add(chckbxFilteruniquemappedreads);
 		initial();
 	}
 	
@@ -335,13 +342,23 @@ public class GuiSamToBam extends JPanel {
 		SamFile samFileMerge = SamFile.mergeBamFile(resultName , lsSamFile);
 		return samFileMerge;
 	}
-	
-	
-	
+		
 	private void copeSamBamFile(String prefix, SamFile samFileMerge) {
+		isFilterMultipleMappedReads = chckbxFilteruniquemappedreads.isSelected();
+
 		if (chckbxSortBam.isSelected()) {
-			samFileMerge = samFileMerge.sort();
+			if (!SamFile.isSorted(samFileMerge)) {
+				samFileMerge = samFileMerge.sort(isFilterMultipleMappedReads);
+				isFilterMultipleMappedReads = false;
+			}
 		}
+		
+		if (isFilterMultipleMappedReads && !BamFilterUnique.isUniqueMapped(samFileMerge)) {
+			BamFilterUnique bamFilterUnique = new BamFilterUnique();
+			bamFilterUnique.setSamFile(samFileMerge);
+			samFileMerge = bamFilterUnique.filterUniqueReads();
+		}
+		
 		if (chckbxIndex.isSelected()) {
 			samFileMerge.indexMake();
 		}
