@@ -47,10 +47,11 @@ public enum EnumReport {
 	CoExpNet("CoExpNetWork_result",null),
 	GetSeq("GetSeq_result",null),
 	GATK("GATK_result",null),
-	
+	VarScan("VarScan_result",null),
+	CDSPredict("CDSPredict_result",null),
 	GeneAnno("GeneAnno_result",null),
 	Blast("Blast_result", null),
-	
+	Pindel("Pindel_result", null),
 	Degree("Degree_result", null),
 	
 	ReportAll("Novelbio_result",new ReportAll()),
