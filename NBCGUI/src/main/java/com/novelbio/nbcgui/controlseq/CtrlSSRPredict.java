@@ -34,8 +34,8 @@ public class CtrlSSRPredict implements IntCmdSoft {
 	
 	
 	public CtrlSSRPredict() {
-	//	SoftWareInfo softWareInfo = new SoftWareInfo(SoftWare.ESTScan);
-	//	this.exePath = softWareInfo.getExePathRun();
+		SoftWareInfo softWareInfo = new SoftWareInfo(SoftWare.misa);
+		this.exePath = softWareInfo.getExePathRun();
 	}
 	public void run() {
 		CmdOperate cmdOperate = new CmdOperate(getCmdExeStr());
