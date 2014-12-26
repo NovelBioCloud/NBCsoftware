@@ -280,7 +280,7 @@ public class GuiSamStatistics extends JPanel {
 		add(cmbStrandSpecific);
 		
 		chckNCRNAstatistics = new JCheckBox("NCRNA statistics");
-		chckNCRNAstatistics.setBounds(849, 380, 115, 26);
+		chckNCRNAstatistics.setBounds(849, 380, 178, 26);
 		add(chckNCRNAstatistics);
 		
 		initial();

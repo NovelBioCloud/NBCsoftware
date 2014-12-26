@@ -1,5 +1,7 @@
 package com.novelbio.nbcReport.Params;
 
+import org.apache.poi.ss.formula.eval.IntersectionEval;
+
 import com.novelbio.base.PathDetail;
 
 
@@ -53,6 +55,7 @@ public enum EnumReport {
 	Blast("Blast_result", null),
 	Pindel("Pindel_result", null),
 	Degree("Degree_result", null),
+	Intersection("Inersection_result", null),
 	
 	ReportAll("Novelbio_result",new ReportAll()),
 	@Deprecated 

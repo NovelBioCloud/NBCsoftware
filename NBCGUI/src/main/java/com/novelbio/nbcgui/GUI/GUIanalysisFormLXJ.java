@@ -101,32 +101,32 @@ public class GUIanalysisFormLXJ extends javax.swing.JFrame {
 				getContentPane().add(jTabbedPane1, BorderLayout.CENTER);
 				jTabbedPane1.setPreferredSize(new java.awt.Dimension(1035, 682));
 				
-				guiFastQFanwei = new GuiFastQFanwei();
-				jTabbedPane1.addTab("FilterAndMapping", null, guiFastQFanwei, null);
-				
-				guiRNASeqMapping = new GuiRNASeqMapping();
-				jTabbedPane1.addTab("RNAseqMap", guiRNASeqMapping);
-				
-				guiSamToBed = new GuiSamToBed();
-				jTabbedPane1.addTab("SamToBed", null, guiSamToBed, null);
-
-				guiTranscriptomeCufflinks = new GuiTranscriptomeCufflinks();
-				jTabbedPane1.addTab("cufflinks", guiTranscriptomeCufflinks);
+//				guiFastQFanwei = new GuiFastQFanwei();
+//				jTabbedPane1.addTab("FilterAndMapping", null, guiFastQFanwei, null);
+//				
+//				guiRNASeqMapping = new GuiRNASeqMapping();
+//				jTabbedPane1.addTab("RNAseqMap", guiRNASeqMapping);
+//				
+//				guiSamToBed = new GuiSamToBed();
+//				jTabbedPane1.addTab("SamToBed", null, guiSamToBed, null);
+//
+//				guiTranscriptomeCufflinks = new GuiTranscriptomeCufflinks();
+//				jTabbedPane1.addTab("cufflinks", guiTranscriptomeCufflinks);
 				
 				guiSamStatistics = new GuiSamStatistics();
 				jTabbedPane1.addTab("SamStatisticsAndRPKM", guiSamStatistics);
 				
-				guiCuffdiff = new GuiCuffdiff();
-				jTabbedPane1.addTab("CuffDiff", null, guiCuffdiff, null);
-				
-				guiDifGene = new GuiDifGeneJpanel();
-				jTabbedPane1.addTab("DifGene", null, guiDifGene, null);
-				
-				guiRNAautoSplice = new GuiRNAautoSplice();
-				jTabbedPane1.addTab("RNAalterSplice", guiRNAautoSplice);
-				
-				guiTools = new GuiToolsJpanel();
-				jTabbedPane1.addTab("Tools", null, guiTools, null);
+//				guiCuffdiff = new GuiCuffdiff();
+//				jTabbedPane1.addTab("CuffDiff", null, guiCuffdiff, null);
+//				
+//				guiDifGene = new GuiDifGeneJpanel();
+//				jTabbedPane1.addTab("DifGene", null, guiDifGene, null);
+//				
+//				guiRNAautoSplice = new GuiRNAautoSplice();
+//				jTabbedPane1.addTab("RNAalterSplice", guiRNAautoSplice);
+//				
+//				guiTools = new GuiToolsJpanel();
+//				jTabbedPane1.addTab("Tools", null, guiTools, null);
 				
 			}
 			pack();
