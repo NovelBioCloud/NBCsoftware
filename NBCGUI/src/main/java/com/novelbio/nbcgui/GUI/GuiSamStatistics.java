@@ -118,7 +118,8 @@ public class GuiSamStatistics extends JPanel {
 				btnRun.setEnabled(false);
 				ctrlSamRPKMLocate.clear();
 				ctrlSamRPKMLocate.setQueryFile(scrollPaneData.getLsDataInfo());
-				ctrlSamRPKMLocate.setIsCountRPKM(chkRpkmcount.isSelected(), cmbStrandSpecific.getSelectedValue(), chckCalculateFPKM.isSelected(), chckNCRNAstatistics.isSelected());
+				ctrlSamRPKMLocate.setIsCountRPKM(chkRpkmcount.isSelected(), cmbStrandSpecific.getSelectedValue(), 
+						chckCalculateFPKM.isSelected(), chckNCRNAstatistics.isSelected(), false);
 				ctrlSamRPKMLocate.setChrReadsCorrect(chckbxCorrectChrReads.isSelected());
  				int[] tss = new int[]{0,0};
 				int[] tes = new int[]{0,0};

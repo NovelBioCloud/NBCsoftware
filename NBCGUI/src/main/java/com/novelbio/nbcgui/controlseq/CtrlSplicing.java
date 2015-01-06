@@ -32,7 +32,8 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	boolean isReconstruceIso = false;
 	/** 是否合并文件--也就是不考虑重复，默认为true，也就是合并文件 **/
 	boolean isCombine = true;
-	
+	/** 是否选择unique mapped reads */
+	boolean isUniqueMappedReads = false;
 	
 	//java -jar -Xmx10g xxx.jar --Case:aaa file1.bam -GTF file.gtf --Control:bbb file2.bam --Output sssss
 	/**
@@ -168,6 +169,11 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 		return lsHelp;
 	}
 	
+	/** 是否仅选择unique mapped reads */
+	public void setUniqueMappedReads(boolean isUniqueMappedReads) {
+		this.isUniqueMappedReads = isUniqueMappedReads;
+	}
+	
 	public void setGuiRNAautoSplice(GUIinfo guiRNAautoSplice) {
 		this.guiRNAautoSplice = guiRNAautoSplice;
 	}
@@ -282,6 +288,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			exonJunction.setRunGetInfo(this);
 			exonJunction.setSeqHash(seqHash);
 			exonJunction.setCombine(isCombine);
+			exonJunction.setUseUniqueMappedReads(isUniqueMappedReads);
 			if (isReconstruceIso) {
 				exonJunction.setgenerateNewIso(true);
 			}

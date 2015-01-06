@@ -1,7 +1,6 @@
 package com.novelbio.project;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +12,6 @@ import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.database.service.SpringFactory;
-import com.novelbio.nbcReport.Params.ReportSamAndRPKMAll;
 import com.novelbio.nbcgui.controlseq.CtrlSamPPKMint;
 
 
@@ -103,7 +101,7 @@ public class TestSamAndRPKM {
 		}else {
 			isExpressCount = true;
 		}
-		ctrlSamRPKMLocate.setIsCountRPKM(isExpressCount, StrandSpecific.getMapStrandLibrary().get(strandType), isFPKM, isNCrnastatistics);
+		ctrlSamRPKMLocate.setIsCountRPKM(isExpressCount, StrandSpecific.getMapStrandLibrary().get(strandType), isFPKM, isNCrnastatistics, false);
 		int[] tss = new int[]{tssUp,tssDown};
 		int[] tes = new int[]{tesUp,tesDown};
 		ctrlSamRPKMLocate.setTssRange(tss);

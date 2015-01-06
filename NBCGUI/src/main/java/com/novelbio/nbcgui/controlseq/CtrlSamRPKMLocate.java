@@ -77,7 +77,8 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	Map<String, GffChrStatistics> mapPrefix2LocStatistics;
 	Map<String, SamFileStatistics> mapPrefix2Statistics;
 	RPKMcomput rpkMcomput;
-	
+	/** 仅用于RPKM计算 */
+	boolean isJustUseUniqueMappedReads = false;
 	int[] tss;
 	int[] tes;
 	
@@ -153,7 +154,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		
 		tss = null;
 		tes = null;
-		
+		isJustUseUniqueMappedReads = false;
 		resultExpPrefix = null;
 		resultSamPrefix = null;
 	}
@@ -162,7 +163,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		this.lsReadFile = lsReadFile;
 	}
 	@Override
-	public void setIsCountRPKM(boolean isCountExpression, StrandSpecific strandSpecific, boolean isCountFPKM, boolean isCountNCRNA) {
+	public void setIsCountRPKM(boolean isCountExpression, StrandSpecific strandSpecific, boolean isCountFPKM, boolean isCountNCRNA, boolean isJustUseUniqueMappedReads) {
 		this.isCountExpression = isCountExpression;
 		if (strandSpecific == null) {
 			throw new ExceptionNullParam("No Param StrandSpecific");
@@ -170,6 +171,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		this.strandSpecific = strandSpecific;
 		this.isCalculateFPKM = isCountFPKM;
 		this.isCountNCrna = isCountNCRNA;
+		this.isJustUseUniqueMappedReads = isJustUseUniqueMappedReads;
 	}
 	public void setTssRange(int[] tss) {
 		this.tss = tss;
@@ -227,7 +229,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			if (isCountExpression && gffChrAbs.getGffHashGene() != null) {
 				rpkMcomput.setAndAddCurrentCondition(prefix);
 				rpkMcomput.setCalculateFPKM(isCalculateFPKM);
-				
+				rpkMcomput.setUniqueMapped(isJustUseUniqueMappedReads);
 				lsAlignmentRecorders.add(rpkMcomput);
 			}
 			if (isCalculateGeneStructure()) {
@@ -676,5 +678,6 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		
 		return mapPrefix2File;
 	}
+
 	
 }
