@@ -56,7 +56,7 @@ public enum EnumReport {
 	Pindel("Pindel_result", null),
 	Degree("Degree_result", null),
 	Intersection("Inersection_result", null),
-	
+	RNASeqCluster("Cluster_result", null),
 	ReportAll("Novelbio_result",new ReportAll()),
 	@Deprecated 
 	Picture("Picture",null),
