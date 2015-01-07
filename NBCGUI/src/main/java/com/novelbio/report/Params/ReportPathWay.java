@@ -1,16 +1,9 @@
-package com.novelbio.testReport.Params;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+package com.novelbio.report.Params;
 
 import com.novelbio.database.model.species.Species;
-import com.novelbio.nbcReport.XdocTmpltExcel;
-import com.novelbio.nbcReport.XdocTmpltPic;
 
 public class ReportPathWay extends ReportBase{
+	private static final long serialVersionUID = 1L;
 	
 	public ReportPathWay() {
 		// TODO Auto-generated constructor stub
@@ -23,7 +16,7 @@ public class ReportPathWay extends ReportBase{
 		if (ss.length > 2) {
 			name = ss[0] + " " + ss[1];
 		}
-		mapKey2Param.put("SpeciesName", name);
+		mapKey2Param.put("speciesName", name);
 	}
 
 	/** 实验组名 */

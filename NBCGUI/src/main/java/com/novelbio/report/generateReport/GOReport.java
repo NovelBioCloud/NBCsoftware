@@ -1,4 +1,4 @@
-package com.novelbio.testReport.report;
+package com.novelbio.report.generateReport;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,12 +14,12 @@ import com.novelbio.database.model.species.Species;
 import com.novelbio.nbcgui.controltest.CtrlGO;
 import com.novelbio.nbcgui.controltest.CtrlGOPath;
 import com.novelbio.nbcgui.controltest.CtrlGOall;
-import com.novelbio.testReport.ReportImage;
-import com.novelbio.testReport.Params.ReportGO;
-import com.novelbio.testReport.Params.ReportGOAll;
-import com.novelbio.testReport.Params.ReportGOCluster;
-import com.novelbio.testReport.Params.ReportGOResult;
-import com.novelbio.testReport.Params.ReportGOUpDown;
+import com.novelbio.report.ReportImage;
+import com.novelbio.report.Params.ReportGO;
+import com.novelbio.report.Params.ReportGOAll;
+import com.novelbio.report.Params.ReportGOCluster;
+import com.novelbio.report.Params.ReportGOResult;
+import com.novelbio.report.Params.ReportGOUpDown;
 
 public class GOReport {
 	/** GO报告 */
@@ -44,17 +44,8 @@ public class GOReport {
 	/**生成报告*/
 	public void generateReport(CtrlGOall ctrlGOall) {
 		//初始化
-		reportGOAll = new ReportGOAll();
-		for (String prefix : ctrlGOall.mapPrefix2ResultPic.keySet()) {
-			ReportGOResult reportGOResult = new ReportGOResult();
-			mapPrefix2Report.put(prefix, reportGOResult);
-		}
-		if (ctrlGOall.isCluster()) {
-			reportGOCluster = new ReportGOCluster();
-		} else {
-			reportGOUpDown = new ReportGOUpDown();
-		}
-		//=======================
+		init(ctrlGOall);
+
 		for (CtrlGO ctrlGO : ctrlGOall.mapGOtype2CtrlGO.values()) {
 			setReportGoAll(ctrlGO);
 			if (!ctrlGOall.isCluster() && !ctrlGOall.isJustAll()) {
@@ -72,9 +63,9 @@ public class GOReport {
 		
 			ReportImage reportImage = new ReportImage();
 			reportImage.addImgPath(picName);
-			ReportGOResult reportGOCluster = mapPrefix2Report.get(prefix);
-			if (reportGOCluster != null) {
-				reportGOCluster.addReportImage(reportImage);
+			ReportGOResult reportGOResult = mapPrefix2Report.get(prefix);
+			if (reportGOResult != null) {
+				reportGOResult.addReportImage(reportImage);
 			}
 		}
 		
@@ -93,6 +84,7 @@ public class GOReport {
 			reportGOAll.setSpecies(species);
 			reportGOAll.setBlastToSpecies(lsBlastTo);
 			reportGOAll.addSubReport(mapPrefix2Report.get(CtrlGOPath.All));
+			mapPrefix2Report.remove(CtrlGOPath.All);
 			reportGO.addSubReport(reportGOAll);
 		}
 		//设置GOUpDown报告的参数和子报告
@@ -101,11 +93,14 @@ public class GOReport {
 			reportGOUpDown.setBlastToSpecies(lsBlastTo);
 			reportGOUpDown.addSubReport(mapPrefix2Report.get(CtrlGOPath.Up));
 			reportGOUpDown.addSubReport(mapPrefix2Report.get(CtrlGOPath.Down));
+			mapPrefix2Report.remove(CtrlGOPath.Up);
+			mapPrefix2Report.remove(CtrlGOPath.Down);
 			reportGO.addSubReport(reportGOUpDown);
 		}
 		
 		//看是否放入gocluster
 		if (ctrlGOall.isCluster() && !mapPrefix2Report.isEmpty()) {
+			reportGOCluster.setClusterTypeNum(mapPrefix2Report.size());
 			List<ReportGOResult> lsClusterTypes = new ArrayList<>(mapPrefix2Report.values());
 			Collections.sort(lsClusterTypes, new Comparator<ReportGOResult>() {
 				public int compare(ReportGOResult o1, ReportGOResult o2) {
@@ -126,12 +121,26 @@ public class GOReport {
 		}
 	}
 	
+	/**初始化参数*/
+	private void init(CtrlGOall ctrlGOall) {
+		reportGOAll = new ReportGOAll();
+		for (String prefix : ctrlGOall.mapPrefix2ResultPic.keySet()) {
+			ReportGOResult reportGOResult = new ReportGOResult();
+			mapPrefix2Report.put(prefix, reportGOResult);
+		}
+		if (ctrlGOall.isCluster()) {
+			reportGOCluster = new ReportGOCluster();
+		} else {
+			reportGOUpDown = new ReportGOUpDown();
+		}
+	}
+	
 	/** 生成ReportGoAll */
 	private void setReportGoAll(CtrlGO ctrlGO) {
 		FunctionTest functionTest = ctrlGO.getMapResult_Prefix2FunTest().get(CtrlGOPath.All);
-		if (functionTest == null || functionTest.getTestResult().isEmpty()) {
-			return;
-		}
+//		if (functionTest == null || functionTest.getTestResult().isEmpty()) {
+//			return;
+//		}
 		int sigTermNum = getSigTermNum(functionTest);
 		reportGOAll.setDifGeneNum(ctrlGO.getUpAndDownRegulation()[2]);
 		reportGOAll.setGoSigNum(ctrlGO.getGOType(), sigTermNum);

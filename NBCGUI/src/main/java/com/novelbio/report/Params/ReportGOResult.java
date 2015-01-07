@@ -1,4 +1,4 @@
-package com.novelbio.testReport.Params;
+package com.novelbio.report.Params;
 
 import com.novelbio.database.domain.geneanno.GOtype;
 

@@ -1,4 +1,4 @@
-package com.novelbio.testReport;
+package com.novelbio.report;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.novelbio.testReport;
+package com.novelbio.report;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ public class ReportImage {
 	private int width = 5;
 	/**图片的高度*/
 	private int height = 3;
-	/**图片文件路径的集合*/
+	/**图片文件路径的集合，可以存相对路径也可以存绝对路径*/
 	private List<String> lsImgPath = new ArrayList<String>();
 	/**图片的参数*/
 	private Map<String, Object> mapKey2Param = new HashMap<String, Object>();
@@ -44,10 +44,11 @@ public class ReportImage {
 		this.height = height;
 	}
 	
-	/**设置图片的名称*/
+	/**设置图片的名称，传过来的imgPath为图片的全路径*/
 	public void addImgPath(String imgPath) {
-		//截取出图片的绝对路径，即imgPath中倒数第二个“/”以后的字符串
-		lsImgPath.add(imgPath.substring(imgPath.substring(0,  imgPath.lastIndexOf("/")).lastIndexOf("/"), imgPath.length()));
+		//截取除图片的名称
+		String imgName = imgPath.substring(imgPath.lastIndexOf("/") + 1, imgPath.length());
+		lsImgPath.add(imgName);
 	}
 
 }

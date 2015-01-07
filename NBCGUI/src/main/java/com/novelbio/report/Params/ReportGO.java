@@ -1,4 +1,4 @@
-package com.novelbio.testReport.Params;
+package com.novelbio.report.Params;
 
 import com.novelbio.database.model.species.Species;
 
@@ -8,7 +8,7 @@ import com.novelbio.database.model.species.Species;
  * 
  */
 public class ReportGO extends ReportBase {
-	private static final long serialVersionUID = 5362772692510596256L;
+	private static final long serialVersionUID = 1L;
 	
 	/**　测试方法　*/
 	public void setTestMethod(String testMethod) {

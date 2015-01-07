@@ -1,4 +1,4 @@
-package com.novelbio.testReport.Params;
+package com.novelbio.report.Params;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import com.novelbio.database.domain.geneanno.GOtype;
 import com.novelbio.database.model.species.Species;
 
 public class ReportGOAll extends ReportBase  {
-	private static final long serialVersionUID = 604960994760611470L;
+	private static final long serialVersionUID = 1L;
 	/**
 	 * 添加图片模板
 	 * @param nbcWordImage

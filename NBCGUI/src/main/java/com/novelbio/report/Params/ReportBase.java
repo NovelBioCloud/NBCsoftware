@@ -1,4 +1,4 @@
-package com.novelbio.testReport.Params;
+package com.novelbio.report.Params;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,8 +11,8 @@ import org.apache.log4j.Logger;
 
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.word.NBCWord;
-import com.novelbio.testReport.ReportImage;
-import com.novelbio.testReport.ReportTable;
+import com.novelbio.report.ReportImage;
+import com.novelbio.report.ReportTable;
 
 /**
  * 参数对象基本抽象类

@@ -1,17 +1,17 @@
-package com.novelbio.testReport.Params;
+package com.novelbio.report.Params;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ReportDNASeqMap extends ReportBase{
+public class ReportRNASeqMap extends ReportBase{
 	private String no = "${no}";
 	
-	public ReportDNASeqMap() {
+	public ReportRNASeqMap() {
 		// TODO Auto-generated constructor stub
 	}
 	
 	public EnumReport getEnumReport() {
-		return EnumReport.DNASeqMap;
+		return EnumReport.RNASeqMap;
 	}
 	
 	public Map<String, Object> getMapKey2Param() {

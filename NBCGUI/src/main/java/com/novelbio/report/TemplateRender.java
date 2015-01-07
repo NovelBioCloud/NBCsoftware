@@ -1,11 +1,11 @@
-package com.novelbio.testReport;
+package com.novelbio.report;
 
 import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 
 import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.testReport.Params.ReportBase;
+import com.novelbio.report.Params.ReportBase;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;

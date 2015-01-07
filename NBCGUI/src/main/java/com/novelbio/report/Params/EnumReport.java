@@ -1,4 +1,4 @@
-package com.novelbio.testReport.Params;
+package com.novelbio.report.Params;
 
 import org.apache.poi.ss.formula.eval.IntersectionEval;
 

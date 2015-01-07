@@ -1,7 +1,6 @@
-package com.novelbio.testReport.Params;
+package com.novelbio.report.Params;
 
 import java.util.List;
-import java.util.Map;
 
 import com.novelbio.base.word.NBCWordImage;
 import com.novelbio.database.domain.geneanno.GOtype;
@@ -9,20 +8,7 @@ import com.novelbio.database.model.species.Species;
 
 public class ReportGOUpDown extends ReportBase {
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * 添加图片
-	 * @param up 上调还是下调
-	 * @param nbcWordImage
-	 */
-	public void addNBCWordImage(boolean up, NBCWordImage nbcWordImage) {
-		if (up) {
-			mapKey2Param.put("upRegulateImage", nbcWordImage);
-		} else {
-			mapKey2Param.put("downRegulateImage", nbcWordImage);
-		}
-	}
-
+	
 	/** 物种 */
 	public void setSpecies(Species species) {
 		mapKey2Param.put("SpeciesName", species.getCommonName());
