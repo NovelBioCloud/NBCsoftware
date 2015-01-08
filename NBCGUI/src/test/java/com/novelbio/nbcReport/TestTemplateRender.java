@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.novelbio.Report.ReportImage;
-import com.novelbio.Report.TemplateRender;
 import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.report.ReportImage;
+import com.novelbio.report.TemplateRender;
 
 import junit.framework.TestCase;
 

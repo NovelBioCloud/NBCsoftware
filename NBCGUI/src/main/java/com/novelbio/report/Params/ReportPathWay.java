@@ -18,6 +18,11 @@ public class ReportPathWay extends ReportBase{
 		}
 		mapKey2Param.put("speciesName", name);
 	}
+	
+	/** 总的差异基因数量 */
+	public void setDifGeneNum(int difGeneNum) {
+		mapKey2Param.put("DifNum", difGeneNum);
+	}
 
 	/** 实验组名 */
 	public void setTeamName(String teamName) {
@@ -32,6 +37,10 @@ public class ReportPathWay extends ReportBase{
 	/** 筛选条件 */
 	public void setFinderCondition(String finderCondition) {
 		mapKey2Param.put("finderCondition", finderCondition);
+	}
+	
+	public void setItemTerm(String itemTerm) {
+		mapKey2Param.put("itemTerm", itemTerm);
 	}
 
 	public void setUpRegulation(int upRegulation) {

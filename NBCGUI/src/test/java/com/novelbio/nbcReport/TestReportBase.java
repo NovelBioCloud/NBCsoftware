@@ -16,10 +16,10 @@ public class TestReportBase extends TestCase {
 	
 	public void testReadReportFromFile() throws IOException {
 		
-		String reportPath = "/media/nbfs/nbCloud/public/dev/AllProject/project_53a3ef98559aa1839ed9c4d2/task_54aa497283144ad8830987fb/GOAnalysis_result";
+		String reportPath = "/media/nbfs/nbCloud/public/dev/AllProject/project_53a3ef98559aa1839ed9c4d2/task_54aca51a8314525ab6dc8cb8/GOAnalysis_result";
 		GenerateReport generateReport = new GenerateReport();
 		generateReport.generateReport(reportPath);
-		assertEquals(true, FileOperate.isFileExist("/media/nbfs/nbCloud/public/dev/AllProject/project_53a3ef98559aa1839ed9c4d2/task_54aa497283144ad8830987fb/GOAnalysis_result/report_GOAnalysis_AvsB-Dif.tex"));
+		assertEquals(true, FileOperate.isFileExist("/media/nbfs/nbCloud/public/dev/AllProject/project_53a3ef98559aa1839ed9c4d2/task_54aca51a8314525ab6dc8cb8/GOAnalysis_result/report_GOAnalysis_AvsB-Dif.tex"));
 		
 	}
 

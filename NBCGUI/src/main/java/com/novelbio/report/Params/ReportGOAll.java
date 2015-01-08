@@ -19,6 +19,11 @@ public class ReportGOAll extends ReportBase  {
 	public void setDifGeneNum(int difGeneNum) {
 		mapKey2Param.put("DifNum", difGeneNum);
 	}
+	
+	public void setAllDifGeneNum(int allDifGeneNum) {
+		mapKey2Param.put("allDifGeneNum", allDifGeneNum);
+	}
+	
 	/** 物种 */
 	public void setSpecies(Species species) {
 		mapKey2Param.put("SpeciesName", species.getCommonName());
