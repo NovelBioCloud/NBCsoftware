@@ -51,6 +51,7 @@ public enum EnumReport {
 	GATK("GATK_result",null),
 	VarScan("VarScan_result",null),
 	CDSPredict("CDSPredict_result",null),
+	SSR("SSRPredict_result",null),
 	GeneAnno("GeneAnno_result",null),
 	Blast("Blast_result", null),
 	Pindel("Pindel_result", null),
