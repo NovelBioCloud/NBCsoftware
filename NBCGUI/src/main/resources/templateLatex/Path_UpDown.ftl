@@ -1,0 +1,2 @@
+	Moreover, up-regulated and down–regulated pathway analysis was introduced by Novelbio which could indicate the up or down differentially genes effect tendency in pathway. \textbf{${UpRegulation} significant} up-regulated enriched pathways and \textbf{${DownRegulation} significant} pathway was enriched by down-regulated gene. The visualization result could be observed in file “9. Pathway-Analysis”. \textbf{(${FinderCondition})}\\
+	
