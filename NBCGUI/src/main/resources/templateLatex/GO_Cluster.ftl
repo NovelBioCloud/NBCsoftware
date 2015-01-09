@@ -1,2 +1,2 @@
-    \textbf{Furthermore, NovelBio} provide \textbf{GO} analysis against \textbf{${SpeciesName}} Database blasting \textbf{${BlastSpeciesName!"database"}}, \textbf{with regarding of the ${ClusterTypeNum} Clustering type of the gene}.
+    \textbf{Furthermore, NovelBio} provide \textbf{GO} analysis against \textbf{${SpeciesName}} Database blasting \textbf{${BlastSpeciesName!"database"}}, \textbf{with regarding of the ${ClusterTypeNum} Clustering type of the gene}.\\
     

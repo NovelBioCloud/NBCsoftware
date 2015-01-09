@@ -21,6 +21,7 @@ public class ReportGOResult extends ReportBase {
 	 * @param geneNum 该go所拥有的条目
 	 */
 	public void setGoTerm_Num(GOtype goType, int termRank, String goTermDetail, int geneNum, double pvalue) {
+		// TODO 如果为更多时，把goterm放在一个list中
 		if (termRank == 0) {
 			setGoTerm_1st_Num(goType, goTermDetail, geneNum, pvalue);
 		} else if (termRank == 1) {

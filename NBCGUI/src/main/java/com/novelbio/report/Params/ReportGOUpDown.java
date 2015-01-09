@@ -2,7 +2,6 @@ package com.novelbio.report.Params;
 
 import java.util.List;
 
-import com.novelbio.base.word.NBCWordImage;
 import com.novelbio.database.domain.geneanno.GOtype;
 import com.novelbio.database.model.species.Species;
 

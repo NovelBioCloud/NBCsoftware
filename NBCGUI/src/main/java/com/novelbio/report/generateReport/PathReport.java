@@ -1,20 +1,25 @@
 package com.novelbio.report.generateReport;
 
+import java.util.List;
 import java.util.Map;
 
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.analysis.annotation.functiontest.StatisticTestResult;
 import com.novelbio.database.model.species.Species;
-import com.novelbio.nbcgui.controltest.CtrlGOPath;
-import com.novelbio.nbcgui.controltest.CtrlGOall;
 import com.novelbio.nbcgui.controltest.CtrlPath;
 import com.novelbio.report.ReportImage;
+import com.novelbio.report.Params.ReportPathResult;
+import com.novelbio.report.Params.ReportPathUpDown;
 import com.novelbio.report.Params.ReportPathWay;
 
 public class PathReport {
 	
-	private ReportPathWay reportPathWay;
-
+	// TODO 问张博，确定pathway模板
+	
+	/** Pathway报告 */
+	private ReportPathWay reportPathWay = new ReportPathWay();
+	private ReportPathUpDown reportPathUpDown;
+	
 	public PathReport(CtrlPath ctrlPath) {
 		generateReport(ctrlPath);
 	}
@@ -22,50 +27,32 @@ public class PathReport {
 	public ReportPathWay getReportPathWay() {
 		return reportPathWay;
 	}
-
+	
 	public void generateReport(CtrlPath ctrlPath) {
 		
-		Map<String, FunctionTest> mapResult_prefix2FunTest = ctrlPath.getMapResult_Prefix2FunTest();
-//		
-//		int sigTermNum = GOReport.getSigTermNum(functionTest)
-		
-//		CtrlGOall tr = null;
-//		FunctionTest ff = tr.getMapResult_Prefix2FunTest().values().iterator().next().getMapResult_Prefix2FunTest().values().iterator().next();
-//		ff.getAllDifGeneNum();//328 genes were annotated based on Vitis vinifera 
-//		GOReport.getSigTermNum(ff);//16  pathways categories were detected to be significant enriched in as sho
-		reportPathWay = new ReportPathWay();
-		
-		reportPathWay.setDb("KEGG");
-		reportPathWay.setUpRegulation(ctrlPath.getUpAndDownRegulation()[0]);
-		reportPathWay.setDownRegulation(ctrlPath.getUpAndDownRegulation()[1]);
-		reportPathWay.setDifGeneNum(ctrlPath.getUpAndDownRegulation()[2]);
-		reportPathWay.setFinderCondition(ctrlPath.getFinderCondition());
-		
-//		StatisticTestResult statisticTestResult = functionTestUp.ge
-//		
-//		for (int i = 0; i < GOReport.getSigTermNum(ff); i++) {
-//			if (i >= 3) break;
-//			StatisticTestResult statisticTestResult = ff.getTestResult().get(i);
-//			GOReport.getSigTermNum(ff);
-//			statisticTestResult.getItemTerm();
-//			
-//			reportGOResult.setGoTerm_Num( goType, i, statisticTestResult.getItemTerm(),
-//					statisticTestResult.getDifGeneInItemNum(), statisticTestResult.getPvalue());
-//		}
-		
-		//添加物种
-		Species species = new Species(ctrlPath.getTaxID());
-		reportPathWay.setSpecies(species);
-		
-		reportPathWay.setTeamName(ctrlPath.getSavePrefix());
-		
-		//添加图片
-		for (String resultPic : ctrlPath.getLsResultPic()) {
+		Map<String, FunctionTest> mapPrefix2Funtest = ctrlPath.getMapResult_Prefix2FunTest();
+		for (String prefix : mapPrefix2Funtest.keySet()) {
+			ReportPathResult reportPathResult = new ReportPathResult();
+			FunctionTest functionTest = mapPrefix2Funtest.get(prefix);
+			reportPathResult.setAllDifNum(functionTest.getAllDifGeneNum());
+			reportPathResult.setDifNum(functionTest.getAllGeneNum());
+			reportPathResult.setSigTermNum(GOReport.getSigTermNum(functionTest));
+			Species species = new Species(functionTest.getTaxID());
+			reportPathResult.setSpeciesName(species);
 			ReportImage reportImage = new ReportImage();
-			reportImage.addImgPath(resultPic);
-			reportPathWay.addReportImage(reportImage);
+			reportImage.addImgPath(ctrlPath.getSavePicEnrichmentName(prefix));
+			reportImage.addImgPath(ctrlPath.getSavePicPvalueName(prefix));
+			reportPathResult.addReportImage(reportImage);
+			List<StatisticTestResult> lsTestResult = functionTest.getTestResult();
+			reportPathResult.setItemTerm(lsTestResult.get(0).getItemTerm(), lsTestResult.get(1).getItemTerm(), lsTestResult.get(2).getItemTerm());
+			reportPathWay.addSubReport(reportPathResult);
 		}
 		
+		reportPathUpDown = new ReportPathUpDown();
+		reportPathUpDown.setUpDownRegulation(ctrlPath.getUpAndDownRegulation()[0], ctrlPath.getUpAndDownRegulation()[1]);
+		reportPathUpDown.setFinderCondition(ctrlPath.getFinderCondition());
+		reportPathWay.addSubReport(reportPathUpDown);
+		
 	}
-
+	
 }

@@ -3,14 +3,12 @@ package com.novelbio.report.Params;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 
 import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.base.word.NBCWord;
 import com.novelbio.report.ReportImage;
 import com.novelbio.report.ReportTable;
 

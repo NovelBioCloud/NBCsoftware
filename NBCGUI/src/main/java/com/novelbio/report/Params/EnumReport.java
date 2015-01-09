@@ -1,7 +1,5 @@
 package com.novelbio.report.Params;
 
-import org.apache.poi.ss.formula.eval.IntersectionEval;
-
 import com.novelbio.base.PathDetail;
 
 
@@ -23,6 +21,8 @@ public enum EnumReport {
 	GO_Result("GO_Result",new ReportGOResult()),
 	
 	PathWay("PathWayAnalysis_result",new ReportPathWay()),
+	Path_UpDown("Path_UpDown",new ReportPathUpDown()),
+	Path_Result("Path_Result",new ReportPathResult()),
 	COG("COGAnalysis_result",null),
 	
 	SamStatistics("SamStatistic_result",new ReportSamAndRPKM()),

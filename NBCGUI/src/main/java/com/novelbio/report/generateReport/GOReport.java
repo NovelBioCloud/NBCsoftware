@@ -22,6 +22,9 @@ import com.novelbio.report.Params.ReportGOResult;
 import com.novelbio.report.Params.ReportGOUpDown;
 
 public class GOReport {
+	
+	private static final int goTermNum = 3;
+	
 	/** GO报告 */
 	private ReportGO reportGO = new ReportGO();
 	/** GOAll报告 */
@@ -178,7 +181,7 @@ public class GOReport {
 		ReportGOResult reportGOResult = mapPrefix2Report.get(prefix);
 		reportGOResult.setGeneNum(functionTest.getAllDifGeneNum());
 		for (int i = 0; i < getSigTermNum(functionTest); i++) {
-			if (i >= 3) break;
+			if (i >= goTermNum) break;
 			StatisticTestResult statisticTestResult = functionTest.getTestResult().get(i);
 			reportGOResult.setGoTerm_Num( goType, i, statisticTestResult.getItemTerm(),
 					statisticTestResult.getDifGeneInItemNum(), statisticTestResult.getPvalue());
