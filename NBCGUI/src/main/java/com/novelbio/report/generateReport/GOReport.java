@@ -22,8 +22,10 @@ import com.novelbio.report.Params.ReportGOResult;
 import com.novelbio.report.Params.ReportGOUpDown;
 
 public class GOReport {
-	
+	/** 要显示的goTerm的个数 */
 	private static final int goTermNum = 3;
+	/** 要显示的goCluster的个数 */
+	private static final int goClusterNum = 3;
 	
 	/** GO报告 */
 	private ReportGO reportGO = new ReportGO();
@@ -119,7 +121,7 @@ public class GOReport {
 			//仅展示clustergo 的前三个结果
 			int num = 0;
 			for (ReportGOResult reportGOClusterType : lsClusterTypes) {
-				if (num++ >= 3) {
+				if (num++ >= goClusterNum) {
 					break;
 				}
 				reportGOCluster.addSubReport(reportGOClusterType);
@@ -177,13 +179,12 @@ public class GOReport {
 		if (functionTest == null || functionTest.getTestResult().isEmpty()) {
 			return;
 		}
-		
 		ReportGOResult reportGOResult = mapPrefix2Report.get(prefix);
 		reportGOResult.setGeneNum(functionTest.getAllDifGeneNum());
 		for (int i = 0; i < getSigTermNum(functionTest); i++) {
 			if (i >= goTermNum) break;
 			StatisticTestResult statisticTestResult = functionTest.getTestResult().get(i);
-			reportGOResult.setGoTerm_Num( goType, i, statisticTestResult.getItemTerm(),
+			reportGOResult.addGoTerm( goType, statisticTestResult.getItemTerm(),
 					statisticTestResult.getDifGeneInItemNum(), statisticTestResult.getPvalue());
 		}
 	}

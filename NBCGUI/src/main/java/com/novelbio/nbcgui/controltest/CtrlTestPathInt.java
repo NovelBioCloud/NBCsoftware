@@ -6,8 +6,7 @@ import java.util.Map;
 
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.database.model.species.Species;
-import com.novelbio.nbcReport.XdocTmpltExcel;
-import com.novelbio.nbcReport.Params.ReportPathWay;
+import com.novelbio.report.Params.ReportPathWay;
 
 public interface CtrlTestPathInt {
 	public void setTaxID(Species taxID);

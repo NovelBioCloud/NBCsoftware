@@ -1,5 +1,10 @@
 package com.novelbio.report.Params;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.novelbio.database.domain.geneanno.GOtype;
 
 public class ReportGOResult extends ReportBase {
@@ -20,64 +25,30 @@ public class ReportGOResult extends ReportBase {
 	 * @param goTermDetail 具体的go名字
 	 * @param geneNum 该go所拥有的条目
 	 */
-	public void setGoTerm_Num(GOtype goType, int termRank, String goTermDetail, int geneNum, double pvalue) {
+	public void addGoTerm(GOtype goType, String goTermDetail, int geneNum, double pvalue) {
 		// TODO 如果为更多时，把goterm放在一个list中
-		if (termRank == 0) {
-			setGoTerm_1st_Num(goType, goTermDetail, geneNum, pvalue);
-		} else if (termRank == 1) {
-			setGoTerm_2nd_Num(goType, goTermDetail, geneNum, pvalue);
-		} else if (termRank == 2) {
-			setGoTerm_3rd_Num(goType, goTermDetail, geneNum, pvalue);
+		Map<String, Object> mapKey2GOTermParam = new HashMap<String, Object>();
+		mapKey2GOTermParam.put("detail", goTermDetail);
+		mapKey2GOTermParam.put("num", geneNum);
+		mapKey2GOTermParam.put("pValue", pvalue);
+		if (goType == GOtype.BP) {
+			addGOTerm("lsGOTermBP", mapKey2GOTermParam);
+		} else if (goType == GOtype.CC) {
+			addGOTerm("lsGOTermCC", mapKey2GOTermParam);
+		} else if (goType == GOtype.MF) {
+			addGOTerm("lsGOTermMF", mapKey2GOTermParam);
 		}
 	}
 	
-	/** 载入GO-Analysis中BP中，排在第一显著的GO-Term的名称和个数 */
-	private void setGoTerm_1st_Num(GOtype goType, String goTermDetail, int geneNum, double pvalue) {
-		if (goType == GOtype.BP) {
-			mapKey2Param.put("GOBPFirst", goTermDetail);
-			mapKey2Param.put("GOBPFirstNum", geneNum);
-			mapKey2Param.put("GOBPFirstP", pvalue);
-		} else if (goType == GOtype.CC) {
-			mapKey2Param.put("GOCCFirst", goTermDetail);
-			mapKey2Param.put("GOCCFirstNum", geneNum);
-			mapKey2Param.put("GOCCFirstP", pvalue);
-		} else if (goType == GOtype.MF) {
-			mapKey2Param.put("GOMFFirst", goTermDetail);
-			mapKey2Param.put("GOMFFirstNum", geneNum);
-			mapKey2Param.put("GOMFFirstP", pvalue);
+	private void addGOTerm(String paramName, Map<String, Object> mapKey2GOTermParam) {
+		List<Map<String, Object>> lsMapKey2GOTermParam = null;
+		if (mapKey2Param.containsKey(paramName)) {
+			lsMapKey2GOTermParam = (List<Map<String, Object>>) mapKey2Param.get(paramName);
+		} else {
+			lsMapKey2GOTermParam =  new ArrayList<Map<String,Object>>();
 		}
-	}
-	/** 载入GO-Analysis中BP中，排在第一显著的GO-Term的名称和个数 */
-	private void setGoTerm_2nd_Num(GOtype goType, String goTermDetail, int geneNum, double pvalue) {
-		if (goType == GOtype.BP) {
-			mapKey2Param.put("GOBPSecond", goTermDetail);
-			mapKey2Param.put("GOBPSecondNum", geneNum);
-			mapKey2Param.put("GOBPSecondP", pvalue);
-		} else if (goType == GOtype.CC) {
-			mapKey2Param.put("GOCCSecond", goTermDetail);
-			mapKey2Param.put("GOCCSecondNum", geneNum);
-			mapKey2Param.put("GOCCSecondP", pvalue);
-		} else if (goType == GOtype.MF) {
-			mapKey2Param.put("GOMFSecond", goTermDetail);
-			mapKey2Param.put("GOMFSecondNum", geneNum);
-			mapKey2Param.put("GOMFSecondP", pvalue);
-		}
-	}
-	/** 载入GO-Analysis中BP中，排在第一显著的GO-Term的名称和个数 */
-	private void setGoTerm_3rd_Num(GOtype goType, String goTermDetail, int geneNum, double pvalue) {
-		if (goType == GOtype.BP) {
-			mapKey2Param.put("GOBPThird", goTermDetail);
-			mapKey2Param.put("GOBPThirdNum", geneNum);
-			mapKey2Param.put("GOBPThirdP", pvalue);
-		} else if (goType == GOtype.CC) {
-			mapKey2Param.put("GOCCThird", goTermDetail);
-			mapKey2Param.put("GOCCThirdNum", geneNum);
-			mapKey2Param.put("GOCCThirdP", pvalue);
-		} else if (goType == GOtype.MF) {
-			mapKey2Param.put("GOMFThird", goTermDetail);
-			mapKey2Param.put("GOMFThirdNum", geneNum);
-			mapKey2Param.put("GOMFThirdP", pvalue);
-		}
+		lsMapKey2GOTermParam.add(mapKey2GOTermParam);
+		mapKey2Param.put(paramName, lsMapKey2GOTermParam);
 	}
 
 	@Override

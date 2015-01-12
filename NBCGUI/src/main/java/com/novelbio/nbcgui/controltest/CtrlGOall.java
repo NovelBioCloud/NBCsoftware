@@ -22,9 +22,12 @@ import com.novelbio.base.multithread.RunProcess.RunThreadStat;
 import com.novelbio.base.plot.ImageUtils;
 import com.novelbio.database.domain.geneanno.GOtype;
 import com.novelbio.database.model.species.Species;
-import com.novelbio.nbcReport.Params.EnumReport;
-import com.novelbio.nbcReport.Params.ReportGO;
-import com.novelbio.nbcReport.report.GOReport;
+import com.novelbio.report.Params.EnumReport;
+import com.novelbio.report.Params.ReportGO;
+//import com.novelbio.nbcReport.Params.EnumReport;
+//import com.novelbio.nbcReport.Params.ReportGO;
+//import com.novelbio.nbcReport.report.GOReport;
+import com.novelbio.report.generateReport.GOReport;
 
 /** 同时把BP、MF、CC三个类型都做了 */
 @Component
@@ -202,9 +205,11 @@ public class CtrlGOall implements CtrlTestGOInt {
 			logger.info(Computer.getInstance().getNameIP() + " draw go pic failed", e);
 		}
 		
-		goReport = new GOReport();
-		goReport.setCtrlGOall(this);
-		goReport.generateReport();
+//		goReport = new GOReport();
+//		goReport.setCtrlGOall(this);
+//		goReport.generateReport();
+		
+		goReport = new GOReport(this);
 	}
 	
 	/** 获得保存到文件夹的前缀，譬如保存到/home/zong0jie/stage10，那么前缀就是stage10 */

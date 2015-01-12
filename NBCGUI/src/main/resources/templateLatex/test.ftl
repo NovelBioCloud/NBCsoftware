@@ -3,8 +3,8 @@
   \caption{}\label{}
   \begin{tabular}{cccc}
     \hline
-     <#list lsStr as str>
-		${str[0]} & ${str[1]} & ${str[2]} & ${str[3]}\\<#if str_index==0>\hline</#if>
+     <#list lsStr as string>
+		${string[0]} & ${string[1]} & ${string[2]} & ${string[3]}\\<#if string_index==0>\hline</#if>
 	  </#list>
     \hline
   \end{tabular}
@@ -45,3 +45,11 @@
 
 ${d?c}
 ${d?string("0.##E0")}
+
+<#if test==1>是1<#else><#if lsStr?size==2>是2<#else>不知道</#if></#if>
+
+${lsStr?size}
+
+
+
+

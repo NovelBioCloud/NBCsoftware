@@ -19,7 +19,9 @@ import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.plot.ImageUtils;
 import com.novelbio.database.model.modgeneid.GeneID;
-import com.novelbio.nbcReport.Params.EnumReport;
+import com.novelbio.report.Params.EnumReport;
+import com.novelbio.report.generateReport.COGReport;
+//import com.novelbio.nbcReport.Params.EnumReport;
 @Service
 @Scope("prototype")
 public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
@@ -28,6 +30,9 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 	String savePrefix = "";
 	List<String> lsResultPic = new ArrayList<>();
 	EnumCogType cogType;
+	
+	COGReport cogReport;
+	
 	/** @param QtaxID */
 	public CtrlCOG() {
 		functionTest = FunctionTest.getInstance(FunctionTest.FUNCTION_COG);
@@ -96,6 +101,9 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 			lsResultFile =  saveExcelNorm(saveExcelPrefix);
 		}
 		savePic();
+		
+		cogReport = new COGReport(this);
+		
 		return lsResultFile;
 	}
 	

@@ -43,6 +43,9 @@ public class TestTemplateRender extends TestCase {
 		mapStr2Str.put("sex", "男");
 		mapStr2Str.put("lsStr", lsLsList);
 		mapStr2Str.put("d", d);
+		
+		mapStr2Str.put("test", 3);
+		
 		Writer out = new BufferedWriter(new OutputStreamWriter(FileOperate.getOutputStream("/home/novelbio/jpx/test.txt", true)));
 		templateRender.render("/templateLatex/test.ftl", mapStr2Str, out);
 		assertEquals(true, FileOperate.isFileExist("/home/novelbio/jpx/test.txt"));

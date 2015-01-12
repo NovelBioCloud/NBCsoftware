@@ -372,11 +372,12 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	 *            已知条件，用来比较返回更宽松的条件
 	 * @return
 	 */
-	protected String getFinderCondition() {
+	public String getFinderCondition() {
 		int fdrSum1 = 0;
 		int fdrSum5 = 0;
 		int pValueSum1 = 0;
-		String[] result = { "FDR&lt;0.01", "FDR&lt;0.05", "P-value&lt;0.01", "P-value&lt;0.05" };
+//		String[] result = { "FDR&lt;0.01", "FDR&lt;0.05", "P-value&lt;0.01", "P-value&lt;0.05" };
+		String[] result = { "FDR<0.01", "FDR<0.05", "P-value<0.01", "P-value<0.05" };
 		if (mapPrefix2FunTest.size() == 0) {
 			return result[1];
 		}

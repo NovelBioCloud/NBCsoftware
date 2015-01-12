@@ -1,6 +1,7 @@
 package com.novelbio.report.Params;
 
 import com.novelbio.base.PathDetail;
+import com.novelbio.base.SepSign;
 
 
 /**
@@ -96,7 +97,8 @@ public enum EnumReport {
 	 * @param sufix 文件名中的后缀
 	 */
 	public String getReportFileName(String sufix){
-		return "report_" + this.name() + "_" + sufix;
+//		return "report_" + this.name() + "_" + sufix;
+		return sufix + SepSign.SEP_INFO + this.name();
 	}
 	/**
 	 * 得到word模板路径
