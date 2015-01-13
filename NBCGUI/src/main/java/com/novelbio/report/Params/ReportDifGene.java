@@ -1,96 +1,55 @@
 package com.novelbio.report.Params;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import com.novelbio.generalConf.TitleFormatNBC;
-import com.novelbio.nbcReport.XdocTmpltExcel;
 
 public class ReportDifGene  extends ReportBase{
+	private static final long serialVersionUID = -5594189660605968860L;
 	
-	
-	String diffGeneType;
-	
-	double log2FC;
-	
-	double pValueOrFDR;
-	
-	TitleFormatNBC titleFormatNBC;
-	
-	Set<String> lsResults ;
-	
-	
-	
-	List<XdocTmpltExcel> lsTmpltExcels;
-	
-
-	public String getDiffGeneType() {
-		return diffGeneType;
+	public void setAlgorithm(String algorithm) {
+		mapKey2Param.put("algorithm", algorithm);
 	}
-
-	public void setDiffGeneType(String diffGeneType) {
-		this.diffGeneType = diffGeneType;
+	
+	public void setDifExpNum(int difExpNum) {
+		mapKey2Param.put("difExpNum", difExpNum);
 	}
-
-	public double getLog2FC() {
-		return log2FC;
+	
+	public void setUpDownGeneNum(int upGeneNum, int downGeneNum) {
+		mapKey2Param.put("upGeneNum", upGeneNum);
+		mapKey2Param.put("downGeneNum", downGeneNum);
 	}
-
-	public void setLog2FC(double log2fc) {
-		log2FC = log2fc;
+	
+	public void setpValueOrFDR(TitleFormatNBC titleFormatNBC, double value) {
+		String pValueOrFDR = titleFormatNBC + "<" + value;
+		mapKey2Param.put("pValueOrFDR", pValueOrFDR);
 	}
-
-
-	public Set<String> getLsResults() {
-		Set<String> lsSet = new LinkedHashSet<>();
-		for (String string : lsResults) {
-			lsSet.add(EnumReport.DiffExp + string.split(EnumReport.DiffExp.getResultFolder())[1]);
+	
+	/** 组名 */
+	public void setCaseVSContorl(String caseVSContorl) {
+		mapKey2Param.put("caseVSControl", caseVSContorl);
+	}
+	
+	/**
+	 * 添加组名和对应的基因数量，把一条数据（mapKey2GroupOrGeneNum）添加到报告所有参数集合中去
+	 * @param mapKey2GroupOrGeneNum key对应的是参数名称（如caseVSControl，difExpNum，upGeneNum，downGeneNum ）GroupOrGeneNum为对应的值
+	 */
+	public void addMapGroupAndGeneNum(Map<String, Object> mapKey2GroupOrGeneNum) {
+		List<Map<String, Object>> lsGroupAndGeneNum = null;
+		if (mapKey2Param.containsKey("lsGroupAndGeneNum")) {
+			lsGroupAndGeneNum = (List<Map<String, Object>>) mapKey2Param.get("lsGroupAndGeneNum");
+		} else {
+			lsGroupAndGeneNum = new ArrayList<Map<String,Object>>();
 		}
-		return lsSet;
-	}
-
-	public void setLsResults(Set<String> lsResults) {
-		this.lsResults = lsResults;
-	}
-	
-	
-
-
-	public double getpValueOrFDR() {
-		return pValueOrFDR;
-	}
-
-	public void setpValueOrFDR(double pValueOrFDR) {
-		this.pValueOrFDR = pValueOrFDR;
-	}
-
-	public TitleFormatNBC getTitleFormatNBC() {
-		return titleFormatNBC;
-	}
-
-	public void setTitleFormatNBC(TitleFormatNBC titleFormatNBC) {
-		this.titleFormatNBC = titleFormatNBC;
-	}
-
-	public List<String> getLsTmpltExcels() {
-		List<String> lsList = new ArrayList<>();
-		for (XdocTmpltExcel xdocTmpltExcel : lsTmpltExcels) {
-			lsList.add(xdocTmpltExcel.toString());
-		}
-		return lsList;
-	}
-
-	public void setLsTmpltExcels(List<XdocTmpltExcel> lsTmpltExcels) {
-		this.lsTmpltExcels = lsTmpltExcels;
+		lsGroupAndGeneNum.add(mapKey2GroupOrGeneNum);
+		mapKey2Param.put("lsGroupAndGeneNum", lsGroupAndGeneNum);
 	}
 
 	@Override
 	public EnumReport getEnumReport() {
 		return EnumReport.DiffExp;
 	}
-
-
 
 }

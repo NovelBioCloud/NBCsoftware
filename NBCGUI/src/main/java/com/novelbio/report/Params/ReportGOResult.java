@@ -27,6 +27,7 @@ public class ReportGOResult extends ReportBase {
 	 */
 	public void addGoTerm(GOtype goType, String goTermDetail, int geneNum, double pvalue) {
 		// TODO 如果为更多时，把goterm放在一个list中
+		//key为参数名称，GOTermParam是对应的参数的值
 		Map<String, Object> mapKey2GOTermParam = new HashMap<String, Object>();
 		mapKey2GOTermParam.put("detail", goTermDetail);
 		mapKey2GOTermParam.put("num", geneNum);

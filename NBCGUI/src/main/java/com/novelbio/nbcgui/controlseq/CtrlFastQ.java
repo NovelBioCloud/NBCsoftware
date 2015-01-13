@@ -1,6 +1,7 @@
 package com.novelbio.nbcgui.controlseq;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,8 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import uk.ac.babraham.FastQC.Modules.BasicStats;
 
 import com.google.common.collect.HashMultimap;
 import com.novelbio.analysis.seq.fastq.FastQ;
@@ -90,6 +93,11 @@ public class CtrlFastQ {
 	public void setJustFastqc(boolean isJustFastqc) {
 		this.isJustFastqc = isJustFastqc;
 	}
+	
+	public boolean isJustFastqc() {
+		return isJustFastqc;
+	}
+	
 	/**
 	 * @param trimNNN 是否过滤两端低质量序列
 	 * @param qualityCutoff cutoff为多少
@@ -323,6 +331,36 @@ public class CtrlFastQ {
 		}
 		return lsResult;
 	}
+	
+	public Map<String, BasicStats> getMapPrefix2BasicStatsBefore() {
+		Map<String, BasicStats> mapPrefix2BasicStats = new LinkedHashMap<String, BasicStats>();
+		if (!qcBefore) return new HashMap<>();
+		for (String prefix : mapCond2FastQCBefore.keySet()) {
+			FastQC[] fastQCBefore = mapCond2FastQCBefore.get(prefix);
+			BasicStats basicStats =  fastQCBefore[0].getBasicStats();
+			if (fastQCBefore[1] != null) {
+				basicStats.add(fastQCBefore[1].getBasicStats());
+			}
+			mapPrefix2BasicStats.put(prefix, basicStats);
+		}
+		return mapPrefix2BasicStats;
+//		BasicStats basicStats;
+//		basicStats.
+	}
+	public Map<String, BasicStats> getMapPrefix2BasicStatsAfter() {
+		Map<String, BasicStats> mapPrefix2BasicStats = new LinkedHashMap<String, BasicStats>();
+		if (!qcAfter) return new HashMap<>();
+		for (String prefix : mapCond2FastQCAfter.keySet()) {
+			FastQC[] fastQCAfter = mapCond2FastQCAfter.get(prefix);
+			BasicStats basicStats =  fastQCAfter[0].getBasicStats();
+			if (fastQCAfter[1] != null) {
+				basicStats.add(fastQCAfter[1].getBasicStats());
+			}
+			mapPrefix2BasicStats.put(prefix, basicStats);
+		}
+		return mapPrefix2BasicStats;
+	}
+	
 	
 	private static FastQC[] getFastQC(List<String[]> lsFastQLR, String prefix, boolean qc) {
 		FastQC[] fastQCs = new FastQC[2];

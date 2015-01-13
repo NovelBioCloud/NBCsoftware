@@ -3,6 +3,7 @@ package com.novelbio.report.Params;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.novelbio.nbcReport.XdocTmpltPic;
@@ -14,108 +15,37 @@ import com.novelbio.nbcReport.XdocTmpltPic;
  * 
  */
 public class ReportQC extends ReportBase{
-	private String teamName;
-	private String basicStatExcelPath;
-	private Set<String> setResultFiles;
-	private List<XdocTmpltPic> lsXdocTmpltPics;
-	private List<XdocTmpltPic> lsXdocTmpltPics1;
+	private static final long serialVersionUID = 7757181385034786919L;
+	/** 不包含before和after的样本的信息参数的个数 */
+	private static final int sampleInfoSize = 5;
 	
-	public ReportQC() {
+	public void setAvgSize(double avgSize) {
+		mapKey2Param.put("avgSize", avgSize);
 	}
 	
-	/**
-	 * 添加图片模板
-	 * @param xdocTmpltPic
-	 */
-	public void addXdocTempPic(XdocTmpltPic xdocTmpltPic) {
-		if (lsXdocTmpltPics == null) {
-			lsXdocTmpltPics = new ArrayList<XdocTmpltPic>();
+	public void setAvgFilterRate(double avgFilterRate) {
+		mapKey2Param.put("avgFilterRate", avgFilterRate * 100);
+	}
+	
+	public void addSampleInfo(Map<String, Object> mapKey2SampleInfo) {
+		List<Map<String, Object>> lsSampleInfo = null;
+		String key;
+		// 当mapKey2SampleInfo的长度为不包含before和after的样本信息参数的个数时，key为lsSampleInfo，否则为lsSampleInfoHasBA
+		if (mapKey2SampleInfo.size() == ReportQC.sampleInfoSize) {
+			key = "lsSampleInfo";
+		} else {
+			key = "lsSampleInfoHasBA";
 		}
-		lsXdocTmpltPics.add(xdocTmpltPic);
-	}
-	
-	/**
-	 * 添加图片模板
-	 * @param xdocTmpltPic
-	 */
-	public void addXdocTempPic1(XdocTmpltPic xdocTmpltPic) {
-		if (lsXdocTmpltPics1 == null) {
-			lsXdocTmpltPics1 = new ArrayList<XdocTmpltPic>();
+		
+		if (mapKey2Param.containsKey(key)) {
+			lsSampleInfo = (List<Map<String, Object>>) mapKey2Param.get(key);
+		} else {
+			lsSampleInfo = new ArrayList<Map<String,Object>>();
 		}
-		lsXdocTmpltPics1.add(xdocTmpltPic);
-	}
-	
-
-	
-	/**
-	 * 取得所有的图片集合
-	 * @return
-	 */
-	public List<String> getPictures(){
-		List<String> lsPictures = new ArrayList<String>();
-		for (XdocTmpltPic xdocTmpltPic : lsXdocTmpltPics) {
-			lsPictures.add(xdocTmpltPic.toString());
-		}
-		return lsPictures;
-	}
-	
-	/**
-	 * 取得所有的图片集合
-	 * @return
-	 */
-	public List<String> getPictures1(){
-		List<String> lsPictures1 = new ArrayList<String>();
-		for (XdocTmpltPic xdocTmpltPic : lsXdocTmpltPics1) {
-			lsPictures1.add(xdocTmpltPic.toString());
-		}
-		return lsPictures1;
-	}
-	
-
-
-	/** 实验组名 */
-	public String getTeamName() {
-		return teamName;
-	}
-	/** 实验组名 */
-	public void setTeamName(String teamName) {
-		this.teamName = teamName;
-	}
-	
-	public Set<String> getLsResultFiles() {
-		Set<String> setResultFiles1 = new LinkedHashSet<>();
-		for (String file : setResultFiles) {
-			setResultFiles1.add(EnumReport.FastQC.getResultFolder() + file.split(EnumReport.FastQC.getResultFolder())[1]);
-		}
-		return setResultFiles1;
-	}
-	
-	public Set<String> getSetResultRealFiles(){
-		return setResultFiles;
+		lsSampleInfo.add(mapKey2SampleInfo);
+		mapKey2Param.put(key, lsSampleInfo);
 	}
 
-	public void addResultFile(String resultFile) {
-		if (setResultFiles == null) {
-			setResultFiles = new LinkedHashSet<>();
-		}
-		setResultFiles.add(resultFile);
-	}
-	
-	/**
-	 * 总的统计文件路径
-	 * @param basicStatExcelPath
-	 */
-	public void setBasicStatExcelPath(String basicStatExcelPath) {
-		this.basicStatExcelPath = basicStatExcelPath;
-	}
-	
-	/**
-	 * 总的统计文件路径
-	 */
-	public String getBasicStatExcelPath() {
-		return basicStatExcelPath;
-	}
-	
 	@Override
 	public EnumReport getEnumReport() {
 		return EnumReport.FastQC;

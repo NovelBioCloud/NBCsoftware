@@ -13,20 +13,26 @@ import com.novelbio.analysis.diffexpress.EnumDifGene;
 import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.generalConf.TitleFormatNBC;
-import com.novelbio.nbcReport.EnumTableType;
-import com.novelbio.nbcReport.XdocTmpltExcel;
-import com.novelbio.nbcReport.Params.EnumReport;
-import com.novelbio.nbcReport.Params.ReportDifGene;
+//import com.novelbio.nbcReport.EnumTableType;
+//import com.novelbio.nbcReport.XdocTmpltExcel;
+//import com.novelbio.nbcReport.Params.EnumReport;
+//import com.novelbio.nbcReport.Params.ReportDifGene;
+import com.novelbio.report.Params.EnumReport;
+import com.novelbio.report.Params.ReportDifGene;
 
 public class CtrlDifGene implements IntCmdSoft {
 	DiffExpAbs diffExpAbs;
 	String outPath;
-	
+
 	/**
 	 * @param diffGeneID {@link DiffExpAbs#DEGSEQ} 等
 	 */
 	public CtrlDifGene(EnumDifGene diffGeneID) {
 		diffExpAbs = (DiffExpAbs) DiffExpAbs.createDiffExp(diffGeneID);
+	}
+	
+	public DiffExpAbs getDiffExpAbs() {
+		return diffExpAbs;
 	}
 	
 	public void setCol2Sample(List<String[]> lsSampleColumn2GroupName) {
@@ -54,7 +60,7 @@ public class CtrlDifGene implements IntCmdSoft {
 	/** 计算差异 */
 	public void calculateResult() {
 		diffExpAbs.calculateResult();
-		getDiffReport();
+//		getDiffReport();
 	}
 	
 	/** 将计算差异分为两个步骤，这是第一步，产生数据和脚本 */
@@ -64,7 +70,7 @@ public class CtrlDifGene implements IntCmdSoft {
 	/** 将计算差异分为两个步骤，这是第二步，进行计算 */
 	public void runAndModifyResult() {
 		diffExpAbs.runAndModifyResult();
-		getDiffReport();
+//		getDiffReport();
 	}
 	/** 将输入的表达值取log */
 	public void setLogTheValue(boolean logTheValue) {
@@ -124,20 +130,20 @@ public class CtrlDifGene implements IntCmdSoft {
 		Set<String> lsStrings = new HashSet<>();
 		lsStrings.addAll(lsResult);
 		ReportDifGene reportDifGene = new ReportDifGene();
-		reportDifGene.setLog2FC(logFC);
-		reportDifGene.setpValueOrFDR(pValueOrFDR);
-		reportDifGene.setTitleFormatNBC(titleFormatNBC);
-		reportDifGene.setLsResults(lsStrings);
-		List<XdocTmpltExcel> lsTmpltExcels = new ArrayList<>(); 
+//		reportDifGene.setLog2FC(logFC);
+//		reportDifGene.setpValueOrFDR(pValueOrFDR);
+//		reportDifGene.setTitleFormatNBC(titleFormatNBC);
+//		reportDifGene.setLsResults(lsStrings);
+//		List<XdocTmpltExcel> lsTmpltExcels = new ArrayList<>(); 
 		
 		for (String string : lsStrings) {
-			XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(EnumTableType.DifGene.getXdocTable());
-			xdocTmpltExcel.setExcelTitle("差异基因表达分析结果的截图展示");
-			xdocTmpltExcel.addExcel(string, 1);
-			lsTmpltExcels.add(xdocTmpltExcel);
+//			XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(EnumTableType.DifGene.getXdocTable());
+//			xdocTmpltExcel.setExcelTitle("差异基因表达分析结果的截图展示");
+//			xdocTmpltExcel.addExcel(string, 1);
+//			lsTmpltExcels.add(xdocTmpltExcel);
 		}
 		String outFolder = FileOperate.getParentPathNameWithSep(lsResult.get(0));
-		reportDifGene.setLsTmpltExcels(lsTmpltExcels);
+//		reportDifGene.setLsTmpltExcels(lsTmpltExcels);
 		reportDifGene.writeAsFile(outFolder);
 		return reportDifGene;
 	}
