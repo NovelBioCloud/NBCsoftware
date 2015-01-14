@@ -1,5 +1,6 @@
 package test;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -14,15 +15,21 @@ public class TestRegex {
 	
 	public static void main(String[] args) {
 		
-		int num = 0;
-		for (int i = 0; i < 5; i++) {
-			if (num++ >= 3) {
-				System.out.println("num1:"+num);
-				break;
-			}
-			System.out.println("num2:"+num);
-			System.out.println("i:"+i);
-		}
+		DecimalFormat decimalFormat = new DecimalFormat("#.###"); 
+		long long1 = 12345678546l;
+		long long2 = 54654698546l;
+		double d = (double)long2/long1;
+		System.out.println(decimalFormat.format(d));
+		
+//		int num = 0;
+//		for (int i = 0; i < 5; i++) {
+//			if (num++ >= 3) {
+//				System.out.println("num1:"+num);
+//				break;
+//			}
+//			System.out.println("num2:"+num);
+//			System.out.println("i:"+i);
+//		}
 		
 //		TestRegex testRegex = new TestRegex();
 //		System.out.println(testRegex.reportImage == null);

@@ -56,7 +56,7 @@ public enum EnumReport {
 	Blast("Blast_result", null),
 	Pindel("Pindel_result", null),
 	Degree("Degree_result", null),
-	Intersection("Inersection_result", null),
+	Intersection("Intersection_result", new ReportIntersection()),
 	
 	ReportAll("Novelbio_result",new ReportAll()),
 	@Deprecated 
@@ -67,7 +67,9 @@ public enum EnumReport {
 	MiRNASeqAnalysis("MiRNASeqAnalysis_result",null),
 	MiRNAPredict("MiRNAPredict_result",null),
 	
-	SamConvert("SamConvert_result", null);
+	SamConvert("SamConvert_result", null),
+	
+	Abstract("Abstract", null);
 	
 	/** 模板名称 也可以是结果文件夹名*/
 	String tempName;

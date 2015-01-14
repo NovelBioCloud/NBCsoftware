@@ -1,0 +1,2 @@
+\paragraph{Pathway Analysis:}
+Pathway analysis was used to find out the significant pathway of the differential genes according to KEGG database. We turn to the Fisher's exact test to select the significant pathway, and the threshold of significance was defined by P-value and FDR. [5]

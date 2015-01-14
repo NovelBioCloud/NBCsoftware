@@ -3,14 +3,21 @@ package com.novelbio.nbcReport;
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
+import com.novelbio.database.model.species.Species;
 import com.novelbio.generalConf.TitleFormatNBC;
 import com.novelbio.report.TemplateRender;
+import com.novelbio.report.Params.ReportAbstract;
 import com.novelbio.report.Params.ReportDifGene;
 import com.novelbio.report.Params.ReportQC;
+import com.novelbio.report.Params.ReportRNASeqMap;
+import com.novelbio.report.Params.ReportSamAndRPKM;
 
 import junit.framework.TestCase;
 
@@ -41,7 +48,7 @@ public class TestReport extends TestCase {
 	public void testFastQCReport() {
 		
 		ReportQC reportQC = new ReportQC();
-		reportQC.setAvgFilterRate(85);
+		reportQC.setAvgFilterRate(0.85);
 		reportQC.setAvgSize(4.0);
 		Map<String, Object> mapKey2SampleInfo = new HashMap<String, Object>();
 //	    mapKey2SampleInfo.put("sampleName", "sampleName");
@@ -53,12 +60,8 @@ public class TestReport extends TestCase {
 	    mapKey2SampleInfo.put("sampleName", "sampleName");
 	    mapKey2SampleInfo.put("beforeReadsNum", 100);
 	    mapKey2SampleInfo.put("afterReadsNum", 100);
-	    mapKey2SampleInfo.put("beforeLen", 100);
-	    mapKey2SampleInfo.put("afterLen", 100);
 	    mapKey2SampleInfo.put("beforeBaseNum", 100);
 	    mapKey2SampleInfo.put("afterBaseNum", 100);
-	    mapKey2SampleInfo.put("beforeCG", 85);
-	    mapKey2SampleInfo.put("afterCG", 85);
 	    mapKey2SampleInfo.put("baseFilterRate", 85);
 		
 	    reportQC.addSampleInfo(mapKey2SampleInfo);
@@ -69,5 +72,76 @@ public class TestReport extends TestCase {
 		templateRender.render("/templateLatex/QualityControl_result.ftl", reportQC.getMapKey2Param(), out);
 		assertEquals(true, FileOperate.isFileExist("/home/novelbio/jpx/FastQCReport.tex"));
 	}
+	
+	public void testRNASeqMapReport() {
+		ReportRNASeqMap reportRNASeqMap = new ReportRNASeqMap();
+		reportRNASeqMap.setSoftware(SoftWare.mapsplice);
+		Species species = new Species(10090);
+		reportRNASeqMap.setSpeciesName(species);
+		
+		TemplateRender templateRender = new TemplateRender();
+		Writer out = new BufferedWriter(new OutputStreamWriter(FileOperate.getOutputStream("/home/novelbio/jpx/RNASeqMapReport.tex", true)));
+		templateRender.render("/templateLatex/RNASeqMap_result.ftl", reportRNASeqMap.getMapKey2Param(), out);
+		assertEquals(true, FileOperate.isFileExist("/home/novelbio/jpx/RNASeqMapReport.tex"));
+
+	}
+	
+	public void testSamAndRPKMReport() {
+		
+		ReportSamAndRPKM reportSamAndRPKM = new ReportSamAndRPKM();
+		
+		reportSamAndRPKM.setMappingRate(0.8565465456);
+		reportSamAndRPKM.setUniqueMappingRate(0.90564684);
+		reportSamAndRPKM.setJunctionReadsRate(0.25687448);
+		
+		Map<String, Object> mapKey2SampleInfo = new HashMap<String, Object>();
+		mapKey2SampleInfo.put("sampleName", "S360d");
+		mapKey2SampleInfo.put("TotalReads", 100);
+		mapKey2SampleInfo.put("TotalMappedReads", 100);
+		mapKey2SampleInfo.put("MappingRate", 0.8567468746);
+		mapKey2SampleInfo.put("UniqueMapping", 100);
+		mapKey2SampleInfo.put("UniqueMappingRate", 0.8566546);
+		mapKey2SampleInfo.put("junctionAllMappedReads", 100);
+		mapKey2SampleInfo.put("junctionUniqueMapping", 100);
+		mapKey2SampleInfo.put("repeatMapping", 100);
+		mapKey2SampleInfo.put("UnMapped", 100);
+		reportSamAndRPKM.addSampleInfo(mapKey2SampleInfo);
+		reportSamAndRPKM.addSampleInfo(mapKey2SampleInfo);
+		reportSamAndRPKM.addSampleInfo(mapKey2SampleInfo);
+		reportSamAndRPKM.addSampleInfo(mapKey2SampleInfo);
+		reportSamAndRPKM.addSampleInfo(mapKey2SampleInfo);
+		reportSamAndRPKM.addSampleInfo(mapKey2SampleInfo);
+		reportSamAndRPKM.addSampleInfo(mapKey2SampleInfo);
+		reportSamAndRPKM.addSampleInfo(mapKey2SampleInfo);
+		reportSamAndRPKM.addSampleInfo(mapKey2SampleInfo);
+		reportSamAndRPKM.addSampleInfo(mapKey2SampleInfo);
+		reportSamAndRPKM.addSampleInfo(mapKey2SampleInfo);
+		reportSamAndRPKM.addSampleInfo(mapKey2SampleInfo);
+		
+		TemplateRender templateRender = new TemplateRender();
+		Writer out = new BufferedWriter(new OutputStreamWriter(FileOperate.getOutputStream("/home/novelbio/jpx/SamAndRPKMReport.tex", true)));
+		templateRender.render("/templateLatex/SamStatistic_result.ftl", reportSamAndRPKM.getMapKey2Param(), out);
+		assertEquals(true, FileOperate.isFileExist("/home/novelbio/jpx/SamAndRPKMReport.tex"));
+		
+	}
+	
+	public void testReportAbstract() {
+		ReportAbstract reportAbstract = new ReportAbstract();
+		reportAbstract.setAlgrithm("DESeq");
+		List<Species> lsBlastToSpecies = new ArrayList<Species>();
+		lsBlastToSpecies.add(new Species(10090));
+		reportAbstract.setBlastToSpecies(lsBlastToSpecies);
+		reportAbstract.setSamples("一", "二", "三");
+		reportAbstract.setSequence("Life technologies Ion Proton Sequencer");
+		reportAbstract.setSoftware(SoftWare.mapsplice);
+		reportAbstract.setSpeciesName(new Species(10090));
+		
+		TemplateRender templateRender = new TemplateRender();
+		Writer out = new BufferedWriter(new OutputStreamWriter(FileOperate.getOutputStream("/home/novelbio/jpx/AbstractReport.tex", true)));
+		templateRender.render("/templateLatex/Abstract.ftl", reportAbstract.getMapKey2Param(), out);
+		assertEquals(true, FileOperate.isFileExist("/home/novelbio/jpx/AbstractReport.tex"));
+		
+	}
+	
 
 }

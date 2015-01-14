@@ -120,6 +120,14 @@ public class CtrlRNAmap implements IntCmdSoft {
 		}
 		this.sensitive= sensitive;
 	}
+	
+	public SoftWare getSoftWare() {
+		return softWare;
+	}
+	/** 物种如果不存在，则返回红底黑字："用户自定义物种"，方便项目部手工修改 */
+	public Species getSpecies() {
+		return species;
+	}
 	/**
 	 * 如果referece在数据库中找不到，就输入该文件
 	 * @param indexFile

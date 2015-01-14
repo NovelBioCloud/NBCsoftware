@@ -43,27 +43,26 @@
 </#list>
 </#if>
 
-${d?c}
-${d?string("0.##E0")}
+${d}
+
 
 <#if test==1>是1<#else><#if lsStr?size==2>是2<#else>不知道</#if></#if>
 
-\begin{table}
-  \centering
-  \caption{Differentially Expressed Unigene Analysis}
-  \begin{tabular}{|c|c|c|c|}
-    \hline
-    % after \\: \hline or \cline{col1-col2} \cline{col3-col4} ...
-    caseVScontrol & difGeneNum & upGeneNum & downGeneNum \\\hline
-    <#list table.lsLsData as lsData>
-			${lsData[0]} & ${lsData[1]} & ${lsData[2]} & ${lsData[3]}\\
-	 </#list>
-    \hline
-  \end{tabular}
-\end{table}
-
 
 ${lsStr?size}
+
+${speciesName!"\\colorbox{red}{用户自定义物种}"}
+
+<#assign i=11/5 />
+<#assign i=i?ceiling-1>
+${i}
+
+<#list 0..i as t>
+${t}
+</#list>
+
+$PI^{TM}$
+
 
 
 

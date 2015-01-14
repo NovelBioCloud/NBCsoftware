@@ -1,0 +1,2 @@
+\paragraph{Go analysis:}
+Gene ontology (GO) analysis was performed to facilitate elucidating the biological implications of unique genes in the significant or representative profiles of the differentially expressed gene in the experiment [4]. We downloaded the GO annotations from NCBI (http://www.ncbi.nlm.nih.gov/), UniProt (http://www.uniprot.org/) and the Gene Ontology (http://www.geneontology.org/). Fisher's exact test was applied to identify the significant GO categories and FDR was used to correct the p-values.

@@ -46,12 +46,8 @@ public class FastQCReport {
 			    mapKey2SampleInfo.put("sampleName", basicStatsBefore.getName());
 			    mapKey2SampleInfo.put("beforeReadsNum", basicStatsBefore.getReadsNum());
 			    mapKey2SampleInfo.put("afterReadsNum", basicStatsAfter.getReadsNum());
-			    mapKey2SampleInfo.put("beforeLen", basicStatsBefore.getSeqLen());
-			    mapKey2SampleInfo.put("afterLen", basicStatsAfter.getSeqLen());
 			    mapKey2SampleInfo.put("beforeBaseNum", basicStatsBefore.getBaseNum());
 			    mapKey2SampleInfo.put("afterBaseNum", basicStatsAfter.getBaseNum());
-			    mapKey2SampleInfo.put("beforeCG", basicStatsBefore.getGCpersentage() * 100);
-			    mapKey2SampleInfo.put("afterCG", basicStatsAfter.getGCpersentage() * 100);
 			    double baseFitlerRate = (double)basicStatsAfter.getBaseNum()/basicStatsBefore.getBaseNum();
 			    mapKey2SampleInfo.put("baseFilterRate", baseFitlerRate * 100);
 			    baseNumSum = baseNumSum + basicStatsAfter.getBaseNum();

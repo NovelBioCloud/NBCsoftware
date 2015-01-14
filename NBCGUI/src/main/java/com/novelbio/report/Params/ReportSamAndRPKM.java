@@ -1,60 +1,37 @@
 package com.novelbio.report.Params;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import com.novelbio.nbcReport.XdocTmpltExcel;
-import com.novelbio.nbcReport.XdocTmpltPic;
 
 public class ReportSamAndRPKM extends ReportBase{
-	Set<String> setResultFile;
-	List<XdocTmpltExcel> lsExcels;
-	List<XdocTmpltPic> lsTmpltPics;
+	private static final long serialVersionUID = -1180209931503665138L;
 	
+	public void setMappingRate(double mappingRate) {
+		mapKey2Param.put("mappingRate", mappingRate * 100);
+	}
 	
-	public void setSetResultFile(Set<String> setResultFile) {
-		this.setResultFile = setResultFile;
+	public void setUniqueMappingRate(double uniqueMappingRate) {
+		mapKey2Param.put("uniqueMappingRate", uniqueMappingRate * 100);
 	}
-
-	public Set<String> getSetResultFile() {
-		Set<String> lsSet = new LinkedHashSet<>();
-		for (String string : setResultFile) {
-			lsSet.add(EnumReport.SamStatistics + string.split(EnumReport.SamStatistics.getResultFolder())[1]);
+	
+	public void setJunctionReadsRate(double junctionReadsRate) {
+		mapKey2Param.put("junctionReadsRate", junctionReadsRate * 100);
+	}
+	
+	/**
+	 * 添加样本信息
+	 * @param mapKey2SampleInfo key对应的参数的名字，SampleInfo为参数名字所对应的值
+	 */
+	public void addSampleInfo(Map<String, Object> mapKey2SampleInfo) {
+		List<Map<String, Object>> lsSampleInfo = null;
+		if (mapKey2Param.containsKey("lsSampleInfo")) {
+			lsSampleInfo = (List<Map<String, Object>>) mapKey2Param.get("lsSampleInfo");
+		} else {
+			lsSampleInfo = new ArrayList<Map<String,Object>>();
 		}
-		return lsSet;
-	}
-
-
-	public List<String> getLsExcels() {
-		List<String> lsList = new ArrayList<>();
-		for (XdocTmpltExcel xdocExcel : lsExcels) {
-			lsList.add(xdocExcel.toString());
-		}
-		return lsList;
-	}
-
-
-	public void setLsExcels(List<XdocTmpltExcel> lsExcels) {
-		this.lsExcels = lsExcels;
-	}
-
-
-
-	public List<String> getLsTmpltPics() {
-		List<String> lsList = new ArrayList<>();
-		for (XdocTmpltPic xdocPic : lsTmpltPics) {
-			lsList.add(xdocPic.toString());
-		}
-		return lsList;
-	}
-
-
-	public void setLsTmpltPics(List<XdocTmpltPic> lsTmpltPics) {
-		this.lsTmpltPics = lsTmpltPics;
+		lsSampleInfo.add(mapKey2SampleInfo);
+		mapKey2Param.put("lsSampleInfo", lsSampleInfo);
 	}
 
 	@Override

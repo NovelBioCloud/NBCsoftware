@@ -3,6 +3,7 @@ package com.novelbio.nbcReport;
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,10 +18,11 @@ import junit.framework.TestCase;
 public class TestTemplateRender extends TestCase {
 	
 	public void testRender() {
+		DecimalFormat decimalFormat = new DecimalFormat("#.###"); 
 		TemplateRender templateRender = new TemplateRender();
 		Map<String, Object> mapStr2Str = new HashMap<String, Object>();
 		
-		double d = 0.0000000001;
+		double d = 0.12345678;
 		
 		List<List<String>> lsLsList = new ArrayList<List<String>>();
 		List<String> lsStr = new ArrayList<String>();
@@ -42,7 +44,7 @@ public class TestTemplateRender extends TestCase {
 		mapStr2Str.put("name", "张三");
 		mapStr2Str.put("sex", "男");
 		mapStr2Str.put("lsStr", lsLsList);
-		mapStr2Str.put("d", d);
+		mapStr2Str.put("d", decimalFormat.format(d));
 		
 		mapStr2Str.put("test", 3);
 		
