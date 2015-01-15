@@ -127,15 +127,15 @@ public abstract class ReportBase  implements Cloneable, Serializable {
 		mapKey2Param.put("lsImage", lsReportImage);
 	}
 	
-	/**添加表格*/
-	public void addReportTable(ReportTable reportTable) {
-		List<Map<String, Object>> lsReportTable = null;
-		if (!mapKey2Param.containsKey("lsTable")) {
-			lsReportTable = new ArrayList<Map<String, Object>>();
-		} else {
-			lsReportTable = (List<Map<String, Object>>) mapKey2Param.get("lsTable");
-		}
-		lsReportTable.add(reportTable.getMapKey2Param());
-		mapKey2Param.put("lsTable", lsReportTable);
-	}
+//	/**添加表格*/
+//	public void addReportTable(ReportTable reportTable) {
+//		List<Map<String, Object>> lsReportTable = null;
+//		if (!mapKey2Param.containsKey("lsTable")) {
+//			lsReportTable = new ArrayList<Map<String, Object>>();
+//		} else {
+//			lsReportTable = (List<Map<String, Object>>) mapKey2Param.get("lsTable");
+//		}
+//		lsReportTable.add(reportTable.getMapKey2Param());
+//		mapKey2Param.put("lsTable", lsReportTable);
+//	}
 }

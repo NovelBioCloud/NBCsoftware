@@ -14,9 +14,11 @@ import com.novelbio.database.model.species.Species;
 import com.novelbio.generalConf.TitleFormatNBC;
 import com.novelbio.report.TemplateRender;
 import com.novelbio.report.Params.ReportAbstract;
+import com.novelbio.report.Params.ReportAlternativeSplicing;
 import com.novelbio.report.Params.ReportDifGene;
 import com.novelbio.report.Params.ReportQC;
 import com.novelbio.report.Params.ReportRNASeqMap;
+import com.novelbio.report.Params.ReportRNAassembly;
 import com.novelbio.report.Params.ReportSamAndRPKM;
 
 import junit.framework.TestCase;
@@ -141,6 +143,31 @@ public class TestReport extends TestCase {
 		templateRender.render("/templateLatex/Abstract.ftl", reportAbstract.getMapKey2Param(), out);
 		assertEquals(true, FileOperate.isFileExist("/home/novelbio/jpx/AbstractReport.tex"));
 		
+	}
+	
+	public void testReportAlternativeSplicing() {
+		ReportAlternativeSplicing reportAlternativeSplicing = new ReportAlternativeSplicing();
+		reportAlternativeSplicing.setGroupName("S360dvsWT0d");
+	}
+	
+	public void testReportRNAassembly() {
+		ReportRNAassembly reportRNAassembly = new ReportRNAassembly();
+		Map<String, Object> mapKey2SampleInfo = new HashMap<String, Object>();
+		mapKey2SampleInfo.put("sampleName", "S360d");
+		mapKey2SampleInfo.put("RawReads", 100);
+		mapKey2SampleInfo.put("CleanReads", 100);
+		mapKey2SampleInfo.put("contigNum", 0.8567468746);
+		mapKey2SampleInfo.put("characterNum", 100);
+		mapKey2SampleInfo.put("avgContigLen", 0.8566546);
+		mapKey2SampleInfo.put("minContigLen", 100);
+		mapKey2SampleInfo.put("contigN50Len", 100);
+		mapKey2SampleInfo.put("readsMappingRate", 100);
+		reportRNAassembly.addSampleInfo(mapKey2SampleInfo);
+
+		TemplateRender templateRender = new TemplateRender();
+		Writer out = new BufferedWriter(new OutputStreamWriter(FileOperate.getOutputStream("/home/novelbio/jpx/RNAassemblyReport.tex", true)));
+		templateRender.render("/templateLatex/RNAassembly_result.ftl", reportRNAassembly.getMapKey2Param(), out);
+		assertEquals(true, FileOperate.isFileExist("/home/novelbio/jpx/RNAassemblyReport.tex"));
 	}
 	
 

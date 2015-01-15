@@ -32,15 +32,15 @@ public class SamAndRPKMReport {
 			Map<String, Object> mapKey2SampleInfo = new HashMap<String, Object>();
 			SamFileStatistics samFileStatistics = mapPrefix2Statistics.get(prefix);
 			
-			long totalReads = samFileStatistics.getReadsNum(MappingReadsType.allReads);
-			long totalMappedReads = samFileStatistics.getReadsNum(MappingReadsType.allMappedReads);
+			long totalReads = samFileStatistics.getReadsNum(MappingReadsType.All);
+			long totalMappedReads = samFileStatistics.getReadsNum(MappingReadsType.Mapped);
 			double mappingRate = (double)totalMappedReads/totalReads;
-			long uniqueMapping = samFileStatistics.getReadsNum(MappingReadsType.uniqueMapping);
+			long uniqueMapping = samFileStatistics.getReadsNum(MappingReadsType.UniqueMapped);
 			double uniqueMappingRate = (double)uniqueMapping/totalReads;
-			long junctionAllMappedReads = samFileStatistics.getReadsNum(MappingReadsType.junctionAllMappedReads);
-			long junctionUniqueMapping = samFileStatistics.getReadsNum(MappingReadsType.junctionUniqueMapping);
-			long repeatMapping = samFileStatistics.getReadsNum(MappingReadsType.repeatMapping);
-			long unMapped = samFileStatistics.getReadsNum(MappingReadsType.unMapped);
+			long junctionAllMappedReads = samFileStatistics.getReadsNum(MappingReadsType.JunctionAllMapped);
+			long junctionUniqueMapping = samFileStatistics.getReadsNum(MappingReadsType.JunctionUniqueMapped);
+			long repeatMapping = samFileStatistics.getReadsNum(MappingReadsType.RepeatMapped);
+			long unMapped = samFileStatistics.getReadsNum(MappingReadsType.UnMapped);
 			double junctionReadsRate = (double)junctionAllMappedReads/totalReads;
 			
 			lsMappingRate.add(mappingRate);

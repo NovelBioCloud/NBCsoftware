@@ -31,5 +31,20 @@ public class GenerateReport {
 			out.close();
 		}
 	}
+	
+	public void generateReport(String taskResultPath, Writer out) {
+		List<String> lsReportFilePath = FileOperate.getFoldFileNameLs(FileOperate.addSep(taskResultPath) + ".report");
+		for (String reportFilePath : lsReportFilePath) {
+			ReportBase reportBase = (ReportBase)ReportBase.readReportFromFile(reportFilePath);
+			TemplateRender templateRender = new TemplateRender();
+			//生成latex文件的全路径
+			String latexFilePath = taskResultPath + reportFilePath.substring(reportFilePath.lastIndexOf("/"), reportFilePath.length()) + ".tex";
+			//如果文件存在就删掉，因为如果不删会报错
+			if (FileOperate.isFileExist(latexFilePath)) {
+				FileOperate.delFile(latexFilePath);
+			}
+			templateRender.render(reportBase, out);
+		}		
+	}
 
 }

@@ -12,78 +12,63 @@ import com.novelbio.word.ExcelDataFormat;
 
 public class ReportTable {
 	
-	/**表格的名称*/
-	private String tableTitle;
-	/**表格的行数*/
-	private int rowNum = 10;
-	/**excel表格的路径*/
-	private String excelPath;
-	/**表格的参数*/
-	private Map<String, Object> mapKey2Param = new HashMap<String, Object>();
-	
 	/**获得表格的参数*/
-	public Map<String, Object> getMapKey2Param() {
+	public Map<String, Object> getMapKey2Param(String tableTitle, List<String[]> lsLsData) {
+		Map<String, Object> mapKey2Param = new HashMap<String, Object>();
 		mapKey2Param.put("tableTitle", tableTitle);
-		mapKey2Param.put("lsLsData", getLsLsData());
+		mapKey2Param.put("lsLsData", getLsLsData(lsLsData));
 		return mapKey2Param;
 	}
 	
-	/**获得excel中的表格数据*/
-	private List<List<String>> getLsLsData() {
+	/**获得表格的参数*/
+	public Map<String, Object> getMapKey2Param(String tableTitle, String excelPath) {
+		Map<String, Object> mapKey2Param = new HashMap<String, Object>();
+		mapKey2Param.put("tableTitle", tableTitle);
+		mapKey2Param.put("lsLsData", getLsLsData(excelPath));
+		return mapKey2Param;
+	}
+	
+	/** 获得excel中的表格数据 */
+	private List<String[]> getLsLsData(String excelPath) {
 		//生成临时文件路径，从hdfs复制文件
 		PathDetail.getTmpHdfsPath();
 		String tmpPath = PathDetail.getTmpPath();
 		FileOperate.copyFile(excelPath, tmpPath, true);
-		List<List<String>>  data = ExcelTxtRead.readLsExcelTxtls(tmpPath, tableTitle, 1, rowNum);
-		data = formatDataList(data);
+		List<String[]>  data = ExcelTxtRead.readLsExcelTxt(excelPath, 1);
+		 data = formatDataList(data);
+		return data;
+	}
+	
+	/**
+	 * 获得list中的表格数据
+	 * @param lsInfo 第一行是title
+	 * @return
+	 */
+	private List<String[]> getLsLsData(List<String[]> lsInfo) {
+		List<String[]> data = formatDataList(lsInfo);
 		return data;
 	}
 	
 	/**对从excel中获得的数据进行格式化*/
-	private List<List<String>> formatDataList(List<List<String>> lsAllDatas) {
-		List<List<String>> lsNewDatas = new ArrayList<List<String>>();
+	private List<String[]> formatDataList(List<String[]> lsAllDatas) {
+		List<String[]> lsNewDatas = new ArrayList<String[]>();
 		if(lsAllDatas.size() == 0)
 			return lsAllDatas;
-		List<String> lsTitles = lsAllDatas.get(0);
+		String[] lsTitles = lsAllDatas.get(0);
 		lsNewDatas.add(lsTitles);
 		for (int i = 1; i < lsAllDatas.size(); i++) {
 			List<String> lsData = new ArrayList<String>();
-			for (int j = 0; j < lsTitles.size(); j++) {
+			for (int j = 0; j < lsTitles.length; j++) {
 				try {
-					lsData.add(ExcelDataFormat.format(lsTitles.get(j), lsAllDatas.get(i).get(j)));
+					lsData.add(ExcelDataFormat.format(lsTitles[j], lsAllDatas.get(i)[j]));
 				} catch (Exception e) {
-					lsData.add(ExcelDataFormat.format(lsTitles.get(j), lsAllDatas.get(i).get(j)));
+					lsData.add(ExcelDataFormat.format(lsTitles[j], lsAllDatas.get(i)[j]));
 					e.printStackTrace();
 				}
 			}
-			lsNewDatas.add(lsData);
+			lsNewDatas.add((String[])lsData.toArray());
 		}
 		return lsNewDatas;
-	}
-	
-	/**表格的名称*/
-	public String getTableTitle() {
-		return tableTitle;
-	}
-	/**表格的名称*/
-	public void setTableTitle(String tableTitle) {
-		this.tableTitle = tableTitle;
-	}
-	/**表格的行数*/
-	public int getRowNum() {
-		return rowNum;
-	}
-	/**表格的行数*/
-	public void setRowNum(int rowNum) {
-		this.rowNum = rowNum;
-	}
-	/**excel表格的路径*/
-	public String getExcelPath() {
-		return excelPath;
-	}
-	/**excel表格的路径*/
-	public void setExcelPath(String excelPath) {
-		this.excelPath = excelPath;
 	}
 
 }
