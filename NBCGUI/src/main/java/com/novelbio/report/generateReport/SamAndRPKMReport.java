@@ -1,7 +1,6 @@
 package com.novelbio.report.generateReport;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,9 +8,12 @@ import com.novelbio.analysis.seq.mapping.MappingReadsType;
 import com.novelbio.analysis.seq.sam.SamFileStatistics;
 import com.novelbio.base.dataStructure.MathComput;
 import com.novelbio.nbcgui.controlseq.CtrlSamRPKMLocate;
+import com.novelbio.report.ReportTable;
 import com.novelbio.report.Params.ReportSamAndRPKM;
 
 public class SamAndRPKMReport {
+	/** 表格行数 */
+	private static final int TableRowNum = 10;
 	private ReportSamAndRPKM reportSamAndRPKM = new ReportSamAndRPKM();
 	
 	public SamAndRPKMReport(CtrlSamRPKMLocate ctrlSamRPKMLocate) {
@@ -27,9 +29,10 @@ public class SamAndRPKMReport {
 		List<Double> lsUniqueMappingRate = new ArrayList<Double>();
 		List<Double> lsJunctionReadsRate = new ArrayList<Double>();
 		
+		List<String[]> lsLsData = getLsLsData(mapPrefix2Statistics.size() + 1);
+		 
+		int currentStatistics = 0;
 		for (String prefix : mapPrefix2Statistics.keySet()) {
-			//key对应的为参数的名字，SampleInfo是参数名对应的值
-			Map<String, Object> mapKey2SampleInfo = new HashMap<String, Object>();
 			SamFileStatistics samFileStatistics = mapPrefix2Statistics.get(prefix);
 			
 			long totalReads = samFileStatistics.getReadsNum(MappingReadsType.All);
@@ -46,24 +49,45 @@ public class SamAndRPKMReport {
 			lsMappingRate.add(mappingRate);
 			lsUniqueMappingRate.add(uniqueMappingRate);
 			lsJunctionReadsRate.add(junctionReadsRate);
-
-			mapKey2SampleInfo.put("sampleName", prefix);
-			mapKey2SampleInfo.put("TotalReads", totalReads);
-			mapKey2SampleInfo.put("TotalMappedReads", totalMappedReads);
-			mapKey2SampleInfo.put("MappingRate", mappingRate);
-			mapKey2SampleInfo.put("UniqueMapping", uniqueMapping);
-			mapKey2SampleInfo.put("UniqueMappingRate", uniqueMappingRate);
-			mapKey2SampleInfo.put("junctionAllMappedReads", junctionAllMappedReads);
-			mapKey2SampleInfo.put("junctionUniqueMapping", junctionUniqueMapping);
-			mapKey2SampleInfo.put("repeatMapping", repeatMapping);
-			mapKey2SampleInfo.put("UnMapped", unMapped);
 			
-			reportSamAndRPKM.addSampleInfo(mapKey2SampleInfo);
+			lsLsData.get(0)[currentStatistics + 1] = prefix;
+			lsLsData.get(1)[currentStatistics + 1] = totalReads + "";
+			lsLsData.get(2)[currentStatistics + 1] = totalMappedReads + "";
+			lsLsData.get(3)[currentStatistics + 1] = mappingRate + "";
+			lsLsData.get(4)[currentStatistics + 1] = uniqueMapping + "";
+			lsLsData.get(5)[currentStatistics + 1] = uniqueMappingRate + "";
+			lsLsData.get(6)[currentStatistics + 1] = junctionAllMappedReads + "";
+			lsLsData.get(7)[currentStatistics + 1] = junctionUniqueMapping + "";
+			lsLsData.get(8)[currentStatistics + 1] = repeatMapping + "";
+			lsLsData.get(9)[currentStatistics + 1] = unMapped + "";
+			
+			currentStatistics++;
 		}
 		reportSamAndRPKM.setMappingRate(MathComput.median(lsMappingRate, 25));
 		reportSamAndRPKM.setUniqueMappingRate(MathComput.median(lsUniqueMappingRate, 25));
 		reportSamAndRPKM.setJunctionReadsRate(MathComput.median(lsJunctionReadsRate, 25));
-		
+		ReportTable reportTable = new ReportTable();
+		reportTable.getMapKey2Param("Mapping Statistics", lsLsData, 6);
+		reportSamAndRPKM.addTable(reportTable.getMapKey2Param("Mapping Statistics", lsLsData, 6));
+	}
+	
+	private List<String[]> getLsLsData(int length) {
+		List<String[]> lsLsData = new ArrayList<String[]>();
+		String[] lsData = new String[length];
+		for (int i = 0; i < TableRowNum; i++) {
+			lsLsData.add(lsData);
+		}
+		lsLsData.get(0)[0] = "sampleName";
+		lsLsData.get(1)[0] = "TotalReads";
+		lsLsData.get(2)[0] = "TotalMappedReads";
+		lsLsData.get(3)[0] = "MappingRate";
+		lsLsData.get(4)[0] = "UniqueMapping";
+		lsLsData.get(5)[0] = "UniqueMappingRate";
+		lsLsData.get(6)[0] = "junctionAllMappedReads";
+		lsLsData.get(7)[0] = "junctionUniqueMapping";
+		lsLsData.get(8)[0] = "repeatMapping";
+		lsLsData.get(9)[0] = "UnMapped";
+		return null;
 	}
 
 }

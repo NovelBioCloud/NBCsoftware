@@ -1,7 +1,9 @@
 package test;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,11 +17,17 @@ public class TestRegex {
 	
 	public static void main(String[] args) {
 		
-		DecimalFormat decimalFormat = new DecimalFormat("#.###"); 
-		long long1 = 12345678546l;
-		long long2 = 54654698546l;
-		double d = (double)long2/long1;
-		System.out.println(decimalFormat.format(d));
+		List<String[]> lslsList = new ArrayList<String[]>();
+		String[] lsStrings = new String[2];
+		lslsList.add(lsStrings);
+		lslsList.get(0)[0] = "adfgad";
+		System.out.println(lslsList.get(0)[0]);
+		
+//		DecimalFormat decimalFormat = new DecimalFormat("#.###"); 
+//		long long1 = 12345678546l;
+//		long long2 = 54654698546l;
+//		double d = (double)long2/long1;
+//		System.out.println(decimalFormat.format(d));
 		
 //		int num = 0;
 //		for (int i = 0; i < 5; i++) {

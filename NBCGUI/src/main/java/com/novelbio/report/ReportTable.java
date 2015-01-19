@@ -10,18 +10,36 @@ import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.word.ExcelDataFormat;
 
+import freemarker.core.ReturnInstruction.Return;
+
 public class ReportTable {
-	
-	/**获得表格的参数*/
-	public Map<String, Object> getMapKey2Param(String tableTitle, List<String[]> lsLsData) {
+	/**
+	 *  获得表格的参数
+	 * @param tableTitle 表格的标题
+	 * @param lsLsData List<String[]>类型的数据
+	 * @param columnNum 列数
+	 * @return
+	 */
+	public Map<String, Object> getMapKey2Param(String tableTitle, List<String[]> lsLsData, int columnNum) {
 		Map<String, Object> mapKey2Param = new HashMap<String, Object>();
 		mapKey2Param.put("tableTitle", tableTitle);
-		mapKey2Param.put("lsLsData", getLsLsData(lsLsData));
+		mapKey2Param.put("lsFirstColumn", getFirstColumn(lsLsData));
+		mapKey2Param.put("lsLsData", lsLsData);
+		//表格的列数需要除掉第一列，渲染表格时需要
+		mapKey2Param.put("columnNum", columnNum - 1);
 		return mapKey2Param;
 	}
 	
+	private List<String> getFirstColumn(List<String[]> lsLsData) {
+		List<String> firstColumn = new ArrayList<String>();
+		for (String[] lsData : lsLsData) {
+			firstColumn.add(lsData[0]);
+		}
+		return firstColumn;
+	}
+	
 	/**获得表格的参数*/
-	public Map<String, Object> getMapKey2Param(String tableTitle, String excelPath) {
+	public Map<String, Object> getMapKey2Param(String tableTitle, String excelPath, int columnNum) {
 		Map<String, Object> mapKey2Param = new HashMap<String, Object>();
 		mapKey2Param.put("tableTitle", tableTitle);
 		mapKey2Param.put("lsLsData", getLsLsData(excelPath));

@@ -7,7 +7,6 @@ import java.util.Map;
 import uk.ac.babraham.FastQC.Modules.BasicStats;
 
 import com.novelbio.nbcgui.controlseq.CtrlFastQ;
-import com.novelbio.report.Params.ReportDifGene;
 import com.novelbio.report.Params.ReportQC;
 
 public class FastQCReport {

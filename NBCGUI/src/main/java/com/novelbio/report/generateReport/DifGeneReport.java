@@ -1,7 +1,6 @@
 package com.novelbio.report.generateReport;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import com.novelbio.analysis.diffexpress.DiffExpAbs;

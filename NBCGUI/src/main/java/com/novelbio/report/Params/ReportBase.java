@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Key;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.report.ReportImage;
 import com.novelbio.report.ReportTable;
@@ -125,6 +126,16 @@ public abstract class ReportBase  implements Cloneable, Serializable {
 		}
 		lsReportImage.add(reportImage.getMapKey2Param());
 		mapKey2Param.put("lsImage", lsReportImage);
+	}
+	
+	/** 添加表格，表格对应的参数名默认为table */
+	public void addTable(Map<String, Object> mapKey2TableData) {
+		mapKey2Param.put("table", mapKey2TableData);
+	}
+	
+	/** 添加表格，表格所对应的参数名可以设定，tableName为对应的名称模板中会用到 */
+	public void addTable(String tableName, Map<String, Object> mapKey2TableData) {
+		mapKey2Param.put(tableName, mapKey2TableData);
 	}
 	
 //	/**添加表格*/
