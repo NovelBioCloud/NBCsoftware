@@ -26,14 +26,14 @@ public class TestTemplateRender extends TestCase {
 		table.put("tableTitle", "测试表格");
 		table.put("columnNum", 5);
 		List<String[]> lsLsData = new ArrayList<String[]>();
-		String[] lsData = new String[7];
+		String[] lsData = new String[5];
 		lsData[0] = "1";
 		lsData[1] = "2";
 		lsData[2] = "3";
 		lsData[3] = "4";
 		lsData[4] = "5";
-		lsData[5] = "6";
-		lsData[6] = "7";
+//		lsData[5] = "6";
+//		lsData[6] = "7";
 		lsLsData.add(lsData);
 		lsLsData.add(lsData);
 		lsLsData.add(lsData);

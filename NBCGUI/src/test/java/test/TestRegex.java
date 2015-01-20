@@ -17,11 +17,13 @@ public class TestRegex {
 	
 	public static void main(String[] args) {
 		
-		List<String[]> lslsList = new ArrayList<String[]>();
-		String[] lsStrings = new String[2];
-		lslsList.add(lsStrings);
-		lslsList.get(0)[0] = "adfgad";
-		System.out.println(lslsList.get(0)[0]);
+		System.out.println("\\%");
+		
+//		List<String[]> lslsList = new ArrayList<String[]>();
+//		String[] lsStrings = new String[2];
+//		lslsList.add(lsStrings);
+//		lslsList.get(0)[0] = "adfgad";
+//		System.out.println(lslsList.get(0)[0]);
 		
 //		DecimalFormat decimalFormat = new DecimalFormat("#.###"); 
 //		long long1 = 12345678546l;

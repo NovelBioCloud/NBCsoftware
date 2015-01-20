@@ -3,15 +3,15 @@ Group：${groupName}
 Alternative splicing analysis was constructed to discover the difference of each samples group and discover several important alternative splicing genes. Following table 4 was the alternative splicing result of compare ${groupName}.
 
 <#if table??>
-	\begin{table}
+	\begin{table}[h]
 	  \centering
 	  <#if table.tableTitle??>
 	  \caption{${table.tableTitle}}
 	  </#if>
         <#if table.lsLsData??>
-          <#assign i=table.lsLsData[0]?size/table.columnNum>
-          <#assign i=i?floor>
-          <#list 0..i as t>
+          <#assign i=(table.lsLsData[0]?size-1)/table.columnNum>
+          <#assign i=i?ceiling>
+          <#list 0..i-1 as t>
         	  \begin{tabular}{cccccccccccccc}
         	    \hline
                 <#list table.lsLsData as lsData>

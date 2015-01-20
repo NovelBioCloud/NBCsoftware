@@ -10,8 +10,6 @@ import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.word.ExcelDataFormat;
 
-import freemarker.core.ReturnInstruction.Return;
-
 public class ReportTable {
 	/**
 	 *  获得表格的参数

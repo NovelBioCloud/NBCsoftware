@@ -5,9 +5,9 @@
 	  \caption{${table.tableTitle}}
 	  </#if>
         <#if table.lsLsData??>
-          <#assign i=table.lsLsData[0]?size/table.columnNum>
-          <#assign i=i?floor>
-          <#list 0..i as t>
+          <#assign i=(table.lsLsData[0]?size-1)/table.columnNum>
+          <#assign i=i?ceiling>
+          <#list 0..i-1 as t>
         	  \begin{tabular}{cccccccccccccc}
         	    \hline
                 <#list table.lsLsData as lsData>

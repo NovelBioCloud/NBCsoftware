@@ -137,22 +137,44 @@
       \item \textbf{Purpose of Experiment}\\
       The goal of this study was to characterize transcriptome profiles manifested in ${speciesName}. Transcriptome assembly and annotated were introduced to predict the probable function of the transcripts.
       \item \textbf{Experimental design}\\
-      <#if lsExperimentInfo??>
-        \begin{table}[h]
-          \centering
-            \begin{tabular}{ccc}
-            \toprule[1.4pt]
-                \hline
-                Group & n & Description \\
-                \hline
-                <#list lsExperimentInfo as experimentInfo>
-                    ${experimentInfo.group} & ${experimentInfo.n} & ${experimentInfo.description} \\
+<#if tbSampleInfo??>
+	\begin{table}[h]
+	  \centering
+	  <#if tbSampleInfo.tableTitle??>
+	  \caption{${tbSampleInfo.tableTitle}}
+	  </#if>
+        <#if tbSampleInfo.lsLsData??>
+          <#assign i=(tbSampleInfo.lsLsData[0]?size-1)/tbSampleInfo.columnNum>
+          <#assign i=i?ceiling>
+          <#list 0..i-1 as t>
+        	  \begin{tabular}{cccccccccccccc}
+        	    \hline
+                <#list tbSampleInfo.lsLsData as lsData>
+                	<#assign row=tbSampleInfo.lsFirstColumn[lsData_index]+" & ">
+            		<#list 1..tbSampleInfo.columnNum as j>
+            				<#assign data="">
+                     <#if lsData[t*tbSampleInfo.columnNum+j]??>
+            					<#assign data=lsData[t*tbSampleInfo.columnNum+j]>
+            			<#else>
+            					<#assign data="">
+            			</#if>
+        				<#if j==tbSampleInfo.columnNum>
+        				<#assign row=row+data+" \\\\">
+        				<#else>
+        				<#assign row=row+data+" & ">
+        				</#if>
+            		</#list>
+            		<#if lsData_index==0>
+            				<#assign row=row+"\\hline">		
+            		</#if>
+                	${row}
                 </#list>
-                \hline
-            \bottomrule[1.4pt]
-            \end{tabular}
-        \end{table}
-      </#if>
+        	    \hline
+        	  \end{tabular}
+          </#list>
+        </#if>
+	\end{table}
+</#if>
       \item \textbf{Sample Information}\\
       Sample DNA QC detailed report is attached in a separate file.\\
       <#if lsSampleInfo??>

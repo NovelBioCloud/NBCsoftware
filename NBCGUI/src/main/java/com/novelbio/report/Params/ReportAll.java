@@ -32,6 +32,11 @@ public class ReportAll extends ReportBase {
 		mapKey2Param.put("speciesName", name);
 	}
 	
+	/** 设置物种信息，多个物种名字连成的字符串 */
+	public void setSpeciesName(String speciesName) {
+		mapKey2Param.put("speciesName", speciesName);
+	}
+	
 	/** 设置合同编号 */
 	public void setContractId(String contractId) {
 		mapKey2Param.put("contractId", contractId);

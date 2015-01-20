@@ -12,8 +12,8 @@ import com.novelbio.report.ReportTable;
 import com.novelbio.report.Params.ReportSamAndRPKM;
 
 public class SamAndRPKMReport {
-	/** 表格行数 */
-	private static final int TableRowNum = 10;
+	/** 报告中表格行数 */
+	private static final int TABLEROW = 10;
 	private ReportSamAndRPKM reportSamAndRPKM = new ReportSamAndRPKM();
 	
 	public SamAndRPKMReport(CtrlSamRPKMLocate ctrlSamRPKMLocate) {
@@ -30,7 +30,7 @@ public class SamAndRPKMReport {
 		List<Double> lsJunctionReadsRate = new ArrayList<Double>();
 		
 		List<String[]> lsLsData = getLsLsData(mapPrefix2Statistics.size() + 1);
-		 
+		//标识当前的是第几个样本
 		int currentStatistics = 0;
 		for (String prefix : mapPrefix2Statistics.keySet()) {
 			SamFileStatistics samFileStatistics = mapPrefix2Statistics.get(prefix);
@@ -74,7 +74,7 @@ public class SamAndRPKMReport {
 	private List<String[]> getLsLsData(int length) {
 		List<String[]> lsLsData = new ArrayList<String[]>();
 		String[] lsData = new String[length];
-		for (int i = 0; i < TableRowNum; i++) {
+		for (int i = 0; i < TABLEROW; i++) {
 			lsLsData.add(lsData);
 		}
 		lsLsData.get(0)[0] = "sampleName";
