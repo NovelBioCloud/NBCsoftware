@@ -2,7 +2,7 @@
 
 <#if lsImage??>
 <#list lsImage as image>
-	\begin{figure}
+	\begin{figure}[h]
 	  \begin{center}
 	  <#list image.lsImgPath as imgPath>
 	    \includegraphics[width=${image.width}cm,height=${image.height}cm]{${imgPath}}

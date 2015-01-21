@@ -1,5 +1,6 @@
 package com.novelbio.report.generateReport;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,7 +13,7 @@ import com.novelbio.report.ReportTable;
 import com.novelbio.report.Params.ReportQC;
 
 public class FastQCReport {
-	
+	private static final DecimalFormat TWO_DECIMAL = new DecimalFormat("#.##");
 	private static final String TABLETITLE = "Raw Data \\& Clean Data Statistics";
 	private static final int TABLECOLUMN = 5;
 	private static final int TABLEHASBACOLUMN = 6;
@@ -56,13 +57,14 @@ public class FastQCReport {
 		lsSampleInfo.add(sampleInfo);
 		
 		for (String prefix : mapPrefix2BasicStatsBefore.keySet()) {
+			sampleInfo = new String[TABLECOLUMN];
 			BasicStats basicStatsBefore = mapPrefix2BasicStatsBefore.get(prefix);
 			
 			sampleInfo[0] = basicStatsBefore.getName();
 			sampleInfo[1] = basicStatsBefore.getReadsNum() + "";
 			sampleInfo[2] = basicStatsBefore.getSeqLen() + "";
 			sampleInfo[3] = basicStatsBefore.getBaseNum() + "";
-			sampleInfo[4] = basicStatsBefore.getGCpersentage() * 100 + "\\%";
+			sampleInfo[4] = TWO_DECIMAL.format(basicStatsBefore.getGCpersentage() * 100) + "\\%";
 			
 		    baseNumSum = baseNumSum + basicStatsBefore.getBaseNum();
 		    
@@ -73,7 +75,8 @@ public class FastQCReport {
 		reportQC.addTable("lsSampleInfo", reportTable.getMapKey2Param(TABLETITLE, lsSampleInfo, TABLECOLUMN));
 		
 		double avgSize = baseNumSum/mapPrefix2BasicStatsBefore.size();
-		reportQC.setAvgSize(avgSize);
+		int sizeGB = (int) (avgSize/Math.pow(1024, 3));
+		reportQC.setAvgSize(sizeGB);
 		
 	}
 	
@@ -95,6 +98,7 @@ public class FastQCReport {
 		lsSampleInfo.add(sampleInfo);
 		
 		for (String prefix : mapPrefix2BasicStatsBefore.keySet()) {
+			sampleInfo = new String[TABLEHASBACOLUMN];
 			BasicStats basicStatsBefore = mapPrefix2BasicStatsBefore.get(prefix);
 			BasicStats basicStatsAfter = mapPrefix2BasicStatsAfter.get(prefix);
 			
@@ -104,7 +108,7 @@ public class FastQCReport {
 			sampleInfo[3] = basicStatsBefore.getBaseNum() + "";
 			sampleInfo[4] = basicStatsAfter.getBaseNum() + "";
 		    double baseFitlerRate = (double)basicStatsAfter.getBaseNum()/basicStatsBefore.getBaseNum();
-			sampleInfo[5] = baseFitlerRate * 100 + "\\%";
+			sampleInfo[5] = TWO_DECIMAL.format(baseFitlerRate * 100) + "\\%";
 
 		    baseNumSum = baseNumSum + basicStatsAfter.getBaseNum();
 		    baseFitlerRateSum = baseFitlerRateSum + baseFitlerRate;
@@ -116,7 +120,8 @@ public class FastQCReport {
 		reportQC.addTable("lsSampleInfoHasBA", reportTable.getMapKey2Param(TABLETITLE, lsSampleInfo, TABLEHASBACOLUMN));
 		
 		double avgSize = baseNumSum/mapPrefix2BasicStatsBefore.size();
-		reportQC.setAvgSize(avgSize);
+		int sizeGB = (int) (avgSize/Math.pow(1024, 3));
+		reportQC.setAvgSize(sizeGB);
 		double avgFilterRate = baseFitlerRateSum/mapPrefix2BasicStatsBefore.size();
 		reportQC.setAvgFilterRate(avgFilterRate);
 	}

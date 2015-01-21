@@ -11,6 +11,10 @@ public class RNASeqMapReport {
 		generateReport(ctrlRNAmap);
 	}
 	
+	public ReportRNASeqMap getReportRNASeqMap() {
+		return reportRNASeqMap;
+	}
+	
 	public void generateReport(CtrlRNAmap ctrlRNAmap) {
 		reportRNASeqMap.setSoftware(ctrlRNAmap.getSoftWare());
 		reportRNASeqMap.setSpeciesName(ctrlRNAmap.getSpecies());

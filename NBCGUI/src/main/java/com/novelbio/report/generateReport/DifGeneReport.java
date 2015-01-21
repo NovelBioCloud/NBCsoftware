@@ -49,6 +49,7 @@ public class DifGeneReport {
 			}
 			//如果mapGroup2GeneNum的个数大于1就向DifGene的报告中添加，在报告中生成一个表格
 			if (mapGroup2GeneNum.size() > 1) {
+				groupAndGeneNum = new String[TABLECOLUMN];
 				groupAndGeneNum[0] = group;
 				groupAndGeneNum[1] = lsGeneNum[0] + "";
 				groupAndGeneNum[2] = lsGeneNum[1] + "";

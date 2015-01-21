@@ -11,6 +11,10 @@ public class RNAassemblyReport {
 		generateReport(ctrlTrinity);
 	}
 	
+	public ReportRNAassembly getReportRNAassembly() {
+		return reportRNAassembly;
+	}
+	
 	public void generateReport(CtrlTrinity ctrlTrinity) {
 
 	}

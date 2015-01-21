@@ -10,27 +10,32 @@ import java.util.List;
 import java.util.Set;
 
 import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.dbInfo.model.order.NBCExperimentNew;
+import com.novelbio.dbInfo.model.order.NBCOrderNew;
+import com.novelbio.dbInfo.model.order.NBCSample;
+import com.novelbio.dbInfo.model.project.NBCFile;
+import com.novelbio.dbInfo.model.project.NBCProject;
+import com.novelbio.dbInfo.model.project.NBCTask;
 import com.novelbio.report.ReportImage;
 import com.novelbio.report.ReportTable;
 import com.novelbio.report.TemplateRender;
-import com.novelbio.report.Params.EnumReport;
 import com.novelbio.report.Params.ReportAll;
 import com.novelbio.report.Params.ReportBase;
-import com.novelbio.web.model.order.NBCExperimentNew;
-import com.novelbio.web.model.order.NBCOrderNew;
-import com.novelbio.web.model.order.NBCSample;
-import com.novelbio.web.model.project.NBCFile;
-import com.novelbio.web.model.project.NBCProject;
-import com.novelbio.web.model.project.NBCTask;
+import com.novelbio.report.Params.ReportEnd;
 
 public class ProjectReport {
 	
 	private ReportAll reportAll = new ReportAll();
+	private ReportEnd reportEnd = new ReportEnd();
 	private List<String> lsTaskId = new ArrayList<String>();
 	
 	public ProjectReport(String projectId, List<String> lsTaskId) {
 		generateReport(projectId, lsTaskId);
 		this.lsTaskId = lsTaskId;
+	}
+	
+	public ReportAll getReportAll() {
+		return reportAll;
 	}
 	
 	private void generateReport(String projectId, List<String> lsTaskId) {
@@ -67,6 +72,7 @@ public class ProjectReport {
 		lsSampleInfo.add(sampleInfo);
 		// 添加表格的美容
 		for (NBCSample nbcSample : lsNBCSample) {
+			sampleInfo = new String[2];
 			sampleInfo[0] = nbcSample.getSampleName();
 			sampleInfo[1] = nbcSample.getGroupName();
 			lsSampleInfo.add(sampleInfo);
@@ -96,12 +102,13 @@ public class ProjectReport {
 	
 	/** 生成项目报告，参数为保存的路径 
 	 * @throws IOException */
+	// TODO 未测试
 	public void saveReport(String savePath) throws IOException {
 		String projectReportPath = FileOperate.addSep(savePath) + "projectReport.tex";
 		Writer out = new BufferedWriter(new OutputStreamWriter(FileOperate.getOutputStream(projectReportPath, true)));
 		TemplateRender templateRender = new TemplateRender();
 		// 渲染项目信息
-		templateRender.render(EnumReport.ReportAll.getFtlTempName(), reportAll.getMapKey2Param(), out);
+		templateRender.render(reportAll.getFtlTempPathAndName(), reportAll.getMapKey2Param(), out);
 		
 		// 渲染各个task报告
 		List<String> lsTaskResultPath = getLsTaskResultPath();
@@ -118,14 +125,15 @@ public class ProjectReport {
 		
 		// 渲染整个报告的结尾部分
 		// TODO 加参数
-		templateRender.render(EnumReport.NovelbioEnd.getFtlTempName(), null, out);
+		templateRender.render(reportEnd.getFtlTempPathAndName(), null, out);
 		out.close();
 	}
 	/** 获取所有的Task结果文件路径 */
-	private List<String> getLsTaskResultPath() {
+	public List<String> getLsTaskResultPath() {
 		List<String> lsTaskResultPath = new ArrayList<String>();
 		for (String taskId : lsTaskId) {
 			NBCTask nbcTask = NBCTask.findInstance(taskId);
+			if (nbcTask == null) continue;
 			List<NBCFile> lsNBCFile = nbcTask.getResultFolders();
 			for (NBCFile nbcFile : lsNBCFile) {
 				lsTaskResultPath.add(nbcFile.getRealPathAndName());
@@ -134,15 +142,17 @@ public class ProjectReport {
 		return lsTaskResultPath;
 	}
 	
-	/** 复制各个task的结果图片，复制到结果报告路径下的image_taskId文件夹（images_54aca51a8314525ab6dc8cb8） */
-	private void copyImages(String savePath) {
+	/** 复制各个task的结果图片，复制到结果报告路径下的image_taskId文件夹（image_54aca51a8314525ab6dc8cb8） */
+	public void copyImages(String savePath) {
 		for (String taskId : lsTaskId) {
+			NBCTask nbcTask = NBCTask.findInstance(taskId);
+			if (nbcTask == null) continue;
 			String imagePath = FileOperate.addSep(savePath) + ReportImage.IMAGE + taskId;
 			FileOperate.createFolders(imagePath);
-			NBCTask nbcTask = NBCTask.findInstance(taskId);
 			List<NBCFile> lsNBCFile = nbcTask.getResultFolders();
 			for (NBCFile nbcFile : lsNBCFile) {
-				List<String> lsImgPath = FileOperate.getFoldFileNameLs(nbcFile.getRealPathAndName(), "*", "png");
+				// 查找png格式的图片路径
+				List<String> lsImgPath = FileOperate.getFoldFileNameLs(nbcFile.getRealPathAndName(), "*", "*");
 				for (String imgPath : lsImgPath) {
 					String newImgPath = FileOperate.addSep(imagePath) + FileOperate.getFileName(imgPath);
 					FileOperate.copyFile(imgPath, newImgPath, true);

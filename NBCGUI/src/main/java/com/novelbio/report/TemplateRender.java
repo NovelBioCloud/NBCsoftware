@@ -12,6 +12,13 @@ import freemarker.template.Template;
 
 public class TemplateRender {
 	
+	private Configuration configuration = null;
+
+	public TemplateRender() {
+		configuration = new Configuration();
+		configuration.setDefaultEncoding("utf-8");
+	}
+	
 	/**
 	 * 渲染报告，递归渲染其子报告
 	 * @param reportBase 要渲染的报告
@@ -36,8 +43,6 @@ public class TemplateRender {
 	 */
 	public void render(String templatePath, Map<String, Object> mapKey2Param, Writer writer) {
 		//用来配置渲染模板时的默认编码和模板的路径
-		Configuration configuration = new Configuration();
-		configuration.setDefaultEncoding("utf-8");
 		configuration.setClassForTemplateLoading(this.getClass(), FileOperate.getParentPathNameWithSep(templatePath));
 		try {
 			Template template = configuration.getTemplate(FileOperate.getFileName(templatePath));

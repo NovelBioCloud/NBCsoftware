@@ -63,11 +63,11 @@
 
 \noindent{\zihao{3}\textbf{${speciesName} RNA sequencing Report}}\\
 
-\noindent\textbf{${contractId}}\\
+\noindent\textbf{}\\
 
-\noindent\textbf{CLIENT: }		${clientInfo}\\
+\noindent\textbf{CLIENT: }		\\
 
-\noindent\textbf{DATE:} 	${projectDate}\\
+\noindent\textbf{DATE:} 	\\
 
 %\maketitle
 \newpage
@@ -77,34 +77,7 @@
     \newpage
 
 %========== PROJECT INFORMATION ==========
-\section{PROJECT INFORMATION}
-    \begin{table}[h]
-      \centering
-      \begin{tabular}{|c|c|c|c|}
-        \hline
-        \multirow{2}*{\includegraphics[width=3cm,height=1cm]{images/logo.png}}
-        &\multicolumn{3}{|c|}{NovelBio Corp. Shanghai}\\\cline{2-4}
-        & Project Final Report Approval & No. & ${contractId} \\\hline
-        \multicolumn{4}{|c|}{Basic Information} \\\hline
-        Project Code & \multicolumn{3}{|c|}{${projectCode}} \\\hline
-        Project Name & \multicolumn{3}{|c|}{${projectName}} \\\hline
-        Report Title & \multicolumn{3}{|c|}{${reportTitle}} \\\hline
-        Completed Date & \multicolumn{3}{|c|}{${completedDate}}\\\hline
-        Report Drafter & Bo Zhang & Date & ${drafterDate} \\\hline
-        Quality Controls & Yanling Li & Date & ${qualityCtrlDate} \\\hline
-        Study Manager & Bo Zhang & Date & ${studyDate} \\\hline
-        Project Manager & Bo Zhang & Date & ${projectDate} \\\hline
-        Director & Jie Zong & Date & ${directorDate}  \\\hline
-        Note & \multicolumn{3}{|c|}{None} \\\hline
-      \end{tabular}
-    \end{table}
 
-    \noindent 质量保证申明：\\
-    我们确认实验中所采用的方法、步骤及观察均作了准确、完整的描述，报告结果准确、完整的反映了该项目的原始数据。\\
-    我们对该项目研究的检查保证了原始数据的准确性。\\
-    Quality Assurance Statement:\\
-    We confirmed that methods, procedures and observations were accurately and completely described, and the reported results accurately and completely reflect the raw data of this study project.\\
-    We performed study-based inspection to insure the accuracy of the raw data.\\
 
     \newpage
 
@@ -177,42 +150,12 @@
 </#if>
       \item \textbf{Sample Information}\\
       Sample DNA QC detailed report is attached in a separate file.\\
-      <#if lsSampleInfo??>
-        \begin{table}[h]
-          \centering
-            \begin{tabular}{cccc}
-            \toprule[1.4pt]
-                \hline
-                No & Sample ID & Sample Type & RIN \\
-                \hline
-                <#list lsSampleInfo as sampleInfo>
-                    ${sampleInfo.No} & ${sampleInfo.sampleID} & ${sampleInfo.sampleType} & ${sampleInfo.RIN} \\
-                </#list>
-                \hline
-            \bottomrule[1.4pt]
-            \end{tabular}
-        \end{table}
-      </#if>
+
       \item \textbf{Analysis Process}\\
       \textbf{NovelBio provided the RNA sequencing service on the work flow accepted by the clients, which could be study in the supplementary data. }
       \item \textbf{Data Quality: Instrument and Process Variability}\\
         Novelbio: Reads Quality Analysis and the GC distribution are applied using Fast-QC \\ (\href{http://www.bioinformatics.babraham.ac.uk/projects/fastqc/}{http://www.bioinformatics.babraham.ac.uk/projects/fastqc/}). Reads Quality Analysis was determined by the percentage of the reads over Q20 quality. GC distribution analysis was determined by the similarity of the raw reads distribution to the theory GC content.
-        <#if lsQCSample??>
-        \begin{table}[h]
-          \centering
-            \begin{tabular}{cc}
-            \toprule[1.4pt]
-                \hline
-                QC Sample & Measurement \\
-                \hline
-                <#list lsQCSample as QCSample>
-                ${QCSample.name} & ${QCSample.measurement} \\
-                </#list>
-                \hline
-            \bottomrule[1.4pt]
-            \end{tabular}
-        \end{table}
-        </#if>
+
     \end{enumerate}
 
     \newpage
@@ -222,11 +165,4 @@
 
 \subsection{ABSTRACT}
 
-    \paragraph{Raw Data Treatment:}
-    Using high-throughput ${sequence}, the transcript with poly (A)+ RNA of ${speciesName} were analyzed. Reads sequenced were filtered and mapped to ${speciesName} genome (download from NCBI) using ${software} software. The mapped reads was counted to achieve the expression of each gene based on the gene annotation information from NCBI database.
-    \paragraph{Preliminary Analysis:}
-    The differentially expressed genes were achieved by ${algorithm} algorithms and annotated by NCBI Database and by blasting to ${blastSampleName} protein sequence of the transcripts. Based on the differentially expressed gene, we applied the Gene Ontology (GO) Analysis and Pathway Analysis to discover the function and pathway enriched among the differentially expressed gene.
-    \paragraph{In-Depth Analysis:}
-    Series Cluster Analysis was introduced to discover the expression trend of differentially expressed gene in different strains of grape from 0d, 1d to 7d. GO Analysis and Pathway Analysis was applied towards the gene with different expression trend. Venn Analysis was introduced towards the ${samples} group to discover the genes' expression trend difference. GO Analysis, Pathway Analysis and Co-Expression-Network was done to discover the core gene among the gene with different trends. Alternative Splicing Analysis result was achieved to discover the alternative splicing difference in different sample. Venn Analysis on Alternative Splicing was also committed to discover the difference between ${samples} strains.
-    
      

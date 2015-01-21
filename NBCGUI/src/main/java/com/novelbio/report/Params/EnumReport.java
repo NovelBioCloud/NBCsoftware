@@ -59,7 +59,7 @@ public enum EnumReport {
 	Intersection("Intersection_result", new ReportIntersection()),
 	
 	ReportAll("Novelbio_result", new ReportAll()),
-	NovelbioEnd("Novelbio_end", null),
+	NovelbioEnd("Novelbio_end", new ReportEnd()),
 	@Deprecated 
 	Picture("Picture",null),
 	@Deprecated 

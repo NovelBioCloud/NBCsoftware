@@ -1,5 +1,9 @@
 package test;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +12,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.nbcReport.Params.ReportBase;
 import com.novelbio.report.ReportImage;
 import com.novelbio.report.Params.ReportGOResult;
@@ -17,7 +22,26 @@ public class TestRegex {
 	
 	public static void main(String[] args) {
 		
-		System.out.println("\\%");
+		List<String> lsImgPath = FileOperate.getFoldFileNameLs("/home/novelbio/jpx/test", "*", "*");
+		
+		
+//		Writer out = new BufferedWriter(new OutputStreamWriter(FileOperate.getOutputStream("/home/novelbio/jpx/jpx.txt", true)));
+//		try {
+//			out.write("dgadrfg\n");
+//			out.write("test");
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} finally {
+//			try {
+//				out.close();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+		
+//		System.out.println("\\%");
 		
 //		List<String[]> lslsList = new ArrayList<String[]>();
 //		String[] lsStrings = new String[2];

@@ -20,6 +20,10 @@ public class SamAndRPKMReport {
 		generateReport(ctrlSamRPKMLocate);
 	}
 	
+	public ReportSamAndRPKM getReportSamAndRPKM() {
+		return reportSamAndRPKM;
+	}
+	
 	public void generateReport(CtrlSamRPKMLocate ctrlSamRPKMLocate) {
 		
 		Map<String, SamFileStatistics> mapPrefix2Statistics = ctrlSamRPKMLocate.getMapPrefix2Statistics();
@@ -73,8 +77,8 @@ public class SamAndRPKMReport {
 	
 	private List<String[]> getLsLsData(int length) {
 		List<String[]> lsLsData = new ArrayList<String[]>();
-		String[] lsData = new String[length];
 		for (int i = 0; i < TABLEROW; i++) {
+			String[] lsData = new String[length];
 			lsLsData.add(lsData);
 		}
 		lsLsData.get(0)[0] = "sampleName";

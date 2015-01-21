@@ -61,7 +61,7 @@
             			<#else>
             					<#assign data="">
             			</#if>
-        				<#if j==table.columnNum>
+        				<#if j==lsSampleInfoHasBA.columnNum>
         				<#assign row=row+data+" \\\\">
         				<#else>
         				<#assign row=row+data+" & ">

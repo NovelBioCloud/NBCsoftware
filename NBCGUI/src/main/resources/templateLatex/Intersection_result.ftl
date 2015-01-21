@@ -5,7 +5,7 @@ Venn Analysis 1: We have compared the differentially expressed gene of S360dvsWT
 
 <#if lsImage??>
 <#list lsImage as image>
-	\begin{figure}
+	\begin{figure}[h]
 	  \begin{center}
 	  <#list image.lsImgPath as imgPath>
 	    \includegraphics[width=${image.width}cm,height=${image.height}cm]{${imgPath}}
@@ -24,7 +24,7 @@ GO Analysis and Pathway Analysis towards the gene with same series in S36 and S9
 
 <#if lsImage??>
 <#list lsImage as image>
-	\begin{figure}
+	\begin{figure}[h]
 	  \begin{center}
 	  <#list image.lsImgPath as imgPath>
 	    \includegraphics[width=${image.width}cm,height=${image.height}cm]{${imgPath}}
