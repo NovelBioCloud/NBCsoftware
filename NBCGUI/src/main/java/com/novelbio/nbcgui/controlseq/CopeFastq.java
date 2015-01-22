@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.novelbio.analysis.seq.fastq.ExceptionFastq;
 import com.novelbio.analysis.seq.fastq.FastQ;
 import com.novelbio.base.fileOperate.FileOperate;
 
@@ -80,7 +81,7 @@ public class CopeFastq {
 	 * 的形式
 	 * @return 内部会判定同一类的Fastq文件是否都是双端或都是单端
 	 */
-	public boolean setMapCondition2LsFastQLR() {
+	public void setMapCondition2LsFastQLR() {
 		mapCondition2LsFastQLR.clear();
 		mapCondition2LslsFastq.clear();
 		
@@ -90,9 +91,7 @@ public class CopeFastq {
 			String[] tmpFastQLR = null;
 			String fastqL = getFastqFile(lsFastQfileLeft, i);
 			String fastqR = getFastqFile(lsFastQfileRight, i);
-			if (!setFastqLR(lsPrefixFastQsLR, tmpFastQLR, fastqL, fastqR)) {
-				return false;
-			}
+			setFastqLR(lsPrefixFastQsLR, tmpFastQLR, fastqL, fastqR);
 			
 			List<List<String>> lsLsFastQLR = getLsFastqLR(mapCondition2LslsFastq, prefix);
 			if (FileOperate.isFileExistAndBigThanSize(fastqL, 1)) {
@@ -105,7 +104,6 @@ public class CopeFastq {
 				}
 			}
 		}
-		return true;
 	}
 	
 	private List<String[]> getLsPrefixFastqLR(Map<String, List<String[]>> mapCondition2LsFastQLR, String prefix) {
@@ -153,7 +151,7 @@ public class CopeFastq {
 	 * @param fastqR
 	 * @return
 	 */
-	private boolean setFastqLR(List<String[]> lsPrefixFastQLR, String[] tmpFastQLR, String fastqL, String fastqR) {
+	private void setFastqLR(List<String[]> lsPrefixFastQLR, String[] tmpFastQLR, String fastqL, String fastqR) {
 		boolean isFqLExist = fileIsExist(checkFileIsExist, fastqL);
 		boolean isFqRExist = fileIsExist(checkFileIsExist, fastqR);
 		if (isFqLExist && isFqRExist) {
@@ -171,10 +169,10 @@ public class CopeFastq {
 		}
 		
 		if (lsPrefixFastQLR.size() > 0 && (tmpFastQLR == null ||  lsPrefixFastQLR.get(0).length != tmpFastQLR.length)) {
-			return false;
+			throw new ExceptionFastq("prefix number is not equals to fastq file number" +
+		"prefix number is:" + lsPrefixFastQLR.size() + "  fastq file number is:" + tmpFastQLR.length);
 		}
 		lsPrefixFastQLR.add(tmpFastQLR);
-		return true;
 	}
 	
 	private boolean fileIsExist(boolean checkFileIsExist, String fileName) {
