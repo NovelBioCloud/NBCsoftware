@@ -12,9 +12,14 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.novelbio.base.StringOperate;
+import com.novelbio.base.dataStructure.PatternOperate;
 import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.dbInfo.model.project.NBCFile;
+import com.novelbio.dbInfo.model.project.NBCTask;
 import com.novelbio.nbcReport.Params.ReportBase;
 import com.novelbio.report.ReportImage;
+import com.novelbio.report.Params.EnumAnalysisType;
 import com.novelbio.report.Params.ReportGOResult;
 import com.novelbio.report.generateReport.GenerateReport;
 
@@ -22,7 +27,46 @@ public class TestRegex {
 	
 	public static void main(String[] args) {
 		
-		List<String> lsImgPath = FileOperate.getFoldFileNameLs("/home/novelbio/jpx/test", "*", "*");
+		String tempName = "adsga_adgadrg";
+		System.out.println(tempName.split("_")[0] + "_Method.ftl");
+		
+//		List<String> lsTaskId = new ArrayList<String>();
+//		lsTaskId.add("");
+//		lsTaskId.add("");
+//		lsTaskId.add("");
+//		lsTaskId.add("");
+//		lsTaskId.add("");
+//		
+//		for (String taskId : lsTaskId) {
+//			NBCTask nbcTask = NBCTask.findInstance(taskId);
+//			String analysisType = EnumAnalysisType.valueOf(nbcTask.getTaskType().toString()).toString();
+//			if (analysisType.equals("rawData")) {
+//				System.out.println("rawData" + taskId);
+//			} else if (analysisType.equals("preliminary")) {
+//				System.out.println("preliminary" + taskId);
+//			} else {
+//				System.out.println("indepth" + taskId);
+//			}
+//		}
+//		
+		
+//		NBCTask nbcTask = NBCTask.findInstance("54bf3f59831478065502032d");
+//		System.out.println(EnumAnalysisType.valueOf(nbcTask.getTaskType().toString()).toString());
+		
+		
+//		String regex = "/home/novelbio/jpx/jpx.pngb";
+//		System.out.println(regex.endsWith(".png"));
+//		Pattern pattern = Pattern.compile(regex);
+//		Matcher matcher = pattern.matcher("iasdhgq.png");
+//		System.out.println(matcher.matches());
+		
+//		List<String> lsImgPath = FileOperate.getFoldFileNameLs("/home/novelbio/jpx/test");
+//		
+////		for (String imgPath : lsImgPath) {
+////			NBCFile nbcFile = NBCFile.findInstance(imgPath);
+////		}
+//		
+//		System.out.println(lsImgPath.size());
 		
 		
 //		Writer out = new BufferedWriter(new OutputStreamWriter(FileOperate.getOutputStream("/home/novelbio/jpx/jpx.txt", true)));

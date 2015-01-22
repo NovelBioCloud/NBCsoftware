@@ -101,7 +101,7 @@ public enum EnumReport {
 	 */
 	public String getReportFileName(String sufix){
 //		return "report_" + this.name() + "_" + sufix;
-		return sufix + SepSign.SEP_INFO + this.name();
+		return sufix + SepSign.SEP_INFO_WELLS + this.name();
 	}
 	/**
 	 * 得到word模板路径
@@ -128,7 +128,11 @@ public enum EnumReport {
 	}
 	
 	public String getFtlTempName(){
-		return tempName+".ftl";
+		return tempName + ".ftl";
+	}
+	
+	public String getFtlMethodTempName() {
+		return tempName.split("_")[0] + "_Method.ftl";
 	}
 	
 	/**

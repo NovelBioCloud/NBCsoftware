@@ -37,6 +37,8 @@
 	\end{table}
 </#if>
 
+${double?string("0.0")}
+
 
 
 

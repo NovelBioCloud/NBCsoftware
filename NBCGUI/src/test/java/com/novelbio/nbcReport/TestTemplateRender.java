@@ -45,6 +45,8 @@ public class TestTemplateRender extends TestCase {
 		lsFirstColumn.add("a");
 		table.put("lsFirstColumn", lsFirstColumn);
 		table.put("lsLsData", lsLsData);
+		double dou = 1.000;
+		mapStr2Str.put("double", dou);
 		mapStr2Str.put("table", table);
 		
 //		double d = 0.12345678;

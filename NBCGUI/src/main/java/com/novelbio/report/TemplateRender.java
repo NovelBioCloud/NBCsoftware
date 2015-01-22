@@ -35,6 +35,16 @@ public class TemplateRender {
 		}
 	}
 	
+	/** 渲染对应的method报告 */
+	public void renderMethodReport(ReportBase reportBase, Writer writer) {
+		//获得报告的参数对
+		Map<String, Object> mapKey2Param = reportBase.getMapKey2Param();
+		String tempPath = reportBase.getMethodTempPathAndName();
+		if (FileOperate.isFileExist(tempPath)) {
+			render(tempPath, mapKey2Param, writer);
+		}
+	}
+	
 	/**
 	 * 模板的渲染方法
 	 * @param templatePath 模板的路径

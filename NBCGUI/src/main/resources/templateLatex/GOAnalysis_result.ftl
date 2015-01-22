@@ -1,3 +1,3 @@
-    \subsection{Gene Ontology (GO) Analysis}
+    \subsubsection{Gene Ontology (GO) Analysis}
     To functionally categorize \textbf{${SpeciesName}} genes, Gene Ontology (GO) terms were assigned to each differ-gene. GO terms are dynamically-structured control vocabulary that can be applied to describe functions of genes and by which genes can be classified into three major categories, namely \textbf{Biological Process, Molecular Function, and Cellular Component,} and their sub-categories.\\
     

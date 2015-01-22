@@ -91,7 +91,7 @@ public class SamAndRPKMReport {
 		lsLsData.get(7)[0] = "junctionUniqueMapping";
 		lsLsData.get(8)[0] = "repeatMapping";
 		lsLsData.get(9)[0] = "UnMapped";
-		return null;
+		return lsLsData;
 	}
 
 }
