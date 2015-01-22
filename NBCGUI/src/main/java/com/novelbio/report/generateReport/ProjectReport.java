@@ -19,23 +19,51 @@ import com.novelbio.dbInfo.model.project.NBCTask;
 import com.novelbio.report.ReportImage;
 import com.novelbio.report.ReportTable;
 import com.novelbio.report.TemplateRender;
+import com.novelbio.report.Params.EnumAnalysisType;
+import com.novelbio.report.Params.ReportAbstract;
 import com.novelbio.report.Params.ReportAll;
 import com.novelbio.report.Params.ReportBase;
 import com.novelbio.report.Params.ReportEnd;
 
 public class ProjectReport {
 	
+	/** 分析类型的分类rawData */
+	public static final String RAWDTA = "rawData";
+	/** 分析类型的分类preliminary */
+	public static final String PRELIMINARY = "preliminary";
+	/** 分析类型的分类inDepth */
+	public static final String INDEPTH = "inDepth";
+	
 	private ReportAll reportAll = new ReportAll();
 	private ReportEnd reportEnd = new ReportEnd();
+	private ReportAbstract reportAbstract = new ReportAbstract();
+	private List<String> lsRawDataTaskId = new ArrayList<String>();
+	private List<String> lsPreliminaryTaskId = new ArrayList<String>();
+	private List<String> lsInDepthTaskId = new ArrayList<String>();
 	private List<String> lsTaskId = new ArrayList<String>();
 	
 	public ProjectReport(String projectId, List<String> lsTaskId) {
 		generateReport(projectId, lsTaskId);
+		classifyTaskId(lsTaskId);
 		this.lsTaskId = lsTaskId;
 	}
 	
 	public ReportAll getReportAll() {
 		return reportAll;
+	}
+	
+	private void classifyTaskId(List<String> lsTaskId) {
+		for (String taskId : lsTaskId) {
+			NBCTask nbcTask = NBCTask.findInstance(taskId);
+			String analysisType = EnumAnalysisType.valueOf(nbcTask.getTaskType().toString()).toString();
+			if (analysisType.equals(RAWDTA)) {
+				lsRawDataTaskId.add(taskId);
+			} else if (analysisType.equals(PRELIMINARY)) {
+				lsPreliminaryTaskId.add(taskId);
+			} else if (analysisType.equals(INDEPTH)) {
+				lsInDepthTaskId.add(taskId);
+			}
+		}
 	}
 	
 	private void generateReport(String projectId, List<String> lsTaskId) {
@@ -109,29 +137,56 @@ public class ProjectReport {
 		TemplateRender templateRender = new TemplateRender();
 		// 渲染项目信息
 		templateRender.render(reportAll.getFtlTempPathAndName(), reportAll.getMapKey2Param(), out);
-		
-		// 渲染各个task报告
-		List<String> lsTaskResultPath = getLsTaskResultPath();
-		for (String taskResultPath : lsTaskResultPath) {
-			List<String> lsReportFilePath = FileOperate.getFoldFileNameLs(FileOperate.addSep(taskResultPath) + ".report");
-			for (String reportFilePath : lsReportFilePath) {
-				ReportBase reportBase = (ReportBase)ReportBase.readReportFromFile(reportFilePath);
-				templateRender.render(reportBase, out);
-			}
-		}
-
+		// 渲染Abstract
+		templateRender.render(reportAbstract.getFtlTempPathAndName(), reportAll.getMapKey2Param(), out);
+		// 渲染Raw Data Treatment:
+		out.write("\\subsection{Raw Data Treatment:}\n");
+		renderTaskReport(lsRawDataTaskId, templateRender, out);
+		// 渲染Preliminary Analysis:
+		out.write("\\subsection{Preliminary Analysis:}\n");
+		renderTaskReport(lsPreliminaryTaskId, templateRender, out);
+		// 渲染In-Depth Analysis
+		out.write("\\subsection{In-Depth Analysis}\n");
+		renderTaskReport(lsInDepthTaskId, templateRender, out);
+		// 生成method
+		out.write("\\section{METHOD}\n");
+		renderTaskMethod(templateRender, out);
 		// 复制图片到结果报告的目录下面
 		copyImages(savePath);
-		
 		// 渲染整个报告的结尾部分
 		// TODO 加参数
 		templateRender.render(reportEnd.getFtlTempPathAndName(), null, out);
 		out.close();
 	}
+	
+	/** 渲染task结果报告 */
+	private void renderTaskReport(List<String> lsClassifyTaskId, TemplateRender templateRender, Writer out) {
+		List<String> lsTaskResultPath = getLsTaskResultPath(lsClassifyTaskId);
+		for (String taskResultPath : lsTaskResultPath) {
+			List<String> lsReportFilePath = FileOperate.getFoldFileNameLs(FileOperate.addSep(taskResultPath) + ".report");
+			for (String reportFilePath : lsReportFilePath) {
+				ReportBase reportBase = ReportBase.readReportFromFile(reportFilePath);
+				templateRender.render(reportBase, out);
+			}
+		}
+	}
+	
+	/** 渲染task对应的method报告 */
+	private void renderTaskMethod(TemplateRender templateRender, Writer out) {
+		List<String> lsTaskResultPath = getLsTaskResultPath(lsTaskId);
+		for (String taskResultPath : lsTaskResultPath) {
+			List<String> lsReportFilePath = FileOperate.getFoldFileNameLs(FileOperate.addSep(taskResultPath) + ".report");
+			for (String reportFilePath : lsReportFilePath) {
+				ReportBase reportBase = ReportBase.readReportFromFile(reportFilePath);
+				templateRender.renderMethodReport(reportBase, out);
+			}
+		}
+	}
+	
 	/** 获取所有的Task结果文件路径 */
-	public List<String> getLsTaskResultPath() {
+	private List<String> getLsTaskResultPath(List<String> lsClassifyTaskId) {
 		List<String> lsTaskResultPath = new ArrayList<String>();
-		for (String taskId : lsTaskId) {
+		for (String taskId : lsClassifyTaskId) {
 			NBCTask nbcTask = NBCTask.findInstance(taskId);
 			if (nbcTask == null) continue;
 			List<NBCFile> lsNBCFile = nbcTask.getResultFolders();
@@ -143,7 +198,7 @@ public class ProjectReport {
 	}
 	
 	/** 复制各个task的结果图片，复制到结果报告路径下的image_taskId文件夹（image_54aca51a8314525ab6dc8cb8） */
-	public void copyImages(String savePath) {
+	private void copyImages(String savePath) {
 		for (String taskId : lsTaskId) {
 			NBCTask nbcTask = NBCTask.findInstance(taskId);
 			if (nbcTask == null) continue;
@@ -152,13 +207,30 @@ public class ProjectReport {
 			List<NBCFile> lsNBCFile = nbcTask.getResultFolders();
 			for (NBCFile nbcFile : lsNBCFile) {
 				// 查找png格式的图片路径
-				List<String> lsImgPath = FileOperate.getFoldFileNameLs(nbcFile.getRealPathAndName(), "*", "*");
-				for (String imgPath : lsImgPath) {
-					String newImgPath = FileOperate.addSep(imagePath) + FileOperate.getFileName(imgPath);
-					FileOperate.copyFile(imgPath, newImgPath, true);
+				List<String> lsFilePath = getAllFilePath(nbcFile.getRealPathAndName());
+				for (String filePath : lsFilePath) {
+					if (filePath.endsWith(".png")) {
+						String newImgPath = FileOperate.addSep(imagePath) + FileOperate.getFileName(filePath);
+						FileOperate.copyFile(filePath, newImgPath, true);
+					}
 				}
 			}
 		}
+	}
+	
+	/** 递归获取文件夹下的所有文件路径 */
+	private List<String> getAllFilePath(String folderPath) {
+		List<String> lsFoldFilePath = FileOperate.getFoldFileNameLs(folderPath);
+		List<String> lsFilePath = new ArrayList<String>();
+		for (String filePath : lsFoldFilePath) {
+			NBCFile nbcFile = NBCFile.findInstance(filePath);
+			if (nbcFile.isFolder()) {
+				lsFilePath.addAll(getAllFilePath(filePath));
+			} else {
+				lsFilePath.add(filePath);
+			}
+		}
+		return lsFilePath;
 	}
 
 }

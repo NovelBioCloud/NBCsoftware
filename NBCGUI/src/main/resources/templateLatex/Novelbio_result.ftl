@@ -163,6 +163,5 @@
 %========== RESULT DESCRIPTION ==========
 \section{RESULT DESCRIPTION}
 
-\subsection{ABSTRACT}
 
      

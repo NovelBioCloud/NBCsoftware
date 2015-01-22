@@ -90,6 +90,7 @@ public abstract class ReportBase  implements Cloneable, Serializable {
 			ReportBase reportBase = (ReportBase) FileOperate.readFileAsObject(pathAndName);
 			return reportBase;
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error("报告文件 :"+pathAndName +" 序列化失败");
 			return null;
 		}
@@ -107,7 +108,12 @@ public abstract class ReportBase  implements Cloneable, Serializable {
 	
 	/**获取ftl模板路径*/
 	public String getFtlTempPathAndName() {
-		String pathAndName = FileOperate.addSep(getEnumReport().getTempPath())+getEnumReport().getFtlTempName();
+		String pathAndName = FileOperate.addSep(getEnumReport().getTempPath()) + getEnumReport().getFtlTempName();
+		return pathAndName;
+	}
+	
+	public String getMethodTempPathAndName() {
+		String pathAndName = FileOperate.addSep(getEnumReport().getTempPath()) + getEnumReport().getFtlMethodTempName();
 		return pathAndName;
 	}
 	
