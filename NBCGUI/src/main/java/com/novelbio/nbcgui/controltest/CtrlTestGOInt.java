@@ -86,4 +86,10 @@ public interface CtrlTestGOInt {
 	public void setTeamName(String teamName);
 	
 	List<String> getLsResultPic();
+	
+	/** 设定自定义的GO注释文件
+	 * @param goAnnoFile GO注释文件，第一列为GeneName，第二列为GOIterm
+	 * @param isCombineDB 是否与数据库已有的数据进行合并，false表示仅用输入的文本来做go分析
+	 */
+	void setGOanno(String goAnnoFile, boolean isCombine);
 }

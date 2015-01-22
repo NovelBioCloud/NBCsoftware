@@ -111,7 +111,7 @@ public class CtrlFastQ {
 	}
 	
 	public boolean isFiltered() {
-		return fastQfilter.isFiltered();
+		return fastQfilter.isNeedFilter();
 	}
 	
 	public String getOutFilePrefix() {
@@ -178,7 +178,7 @@ public class CtrlFastQ {
 		mapCond2FastQCAfter = new LinkedHashMap<String, FastQC[]>();
 		for (String prefix : copeFastq.getLsPrefix()) {
 			List<String[]> lsFastQLR = copeFastq.getMapCondition2LsFastQLR().get(prefix);
-			if (!fastQfilter.isFiltered() && lsFastQLR.size() < 2) {
+			if (!fastQfilter.isNeedFilter() && lsFastQLR.size() < 2) {
 				mapCondition2LRFiltered.put(prefix, copeFastq.getMapCondition2LslsFastq().get(prefix));
 				continue;
 			}
@@ -186,12 +186,12 @@ public class CtrlFastQ {
 			boolean isRunFilter = false;
 			if (!isJustFastqc) {
 				ctrlFastQfilter.setFastQfilterParam(fastQfilter);
-				String[] fileName = createCombineFQname(fastQfilter.isFiltered(), outFilePrefix, prefix, lsFastQLR, false);
+				String[] fileName = createCombineFQname(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR, false);
 				//文件存在则跳过
 				if (!FileOperate.isFileExistAndBigThanSize(fileName[0], 10)) {
 					isRunFilter = true;
 				}
-				ctrlFastQfilter.setFastQLRfilteredOut(createCombineFastq(fastQfilter.isFiltered(), outFilePrefix, prefix, lsFastQLR));
+				ctrlFastQfilter.setFastQLRfilteredOut(createCombineFastq(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR));
 			} else {
 				String filePic = CtrlFastQfilter.getFastQCPicName(outFilePrefix + prefix);
 				//文件存在则跳过
@@ -201,7 +201,7 @@ public class CtrlFastQ {
 			}
 			
 			if (!isRunFilter) {
-				String[] fileNameFinal = createCombineFQname(fastQfilter.isFiltered(), outFilePrefix, prefix, lsFastQLR, false);
+				String[] fileNameFinal = createCombineFQname(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR, false);
 				List<List<String>> lsLR = new ArrayList<>();
 				List<String> lsLeft = new ArrayList<>();
 				lsLeft.add(fileNameFinal[0]);
@@ -229,8 +229,8 @@ public class CtrlFastQ {
 			ctrlFastQfilter.filteredAndCombineReads();
 			List<List<String>> lsLR = new ArrayList<>();
 			if (!isJustFastqc) {
-				String[] fileNameTmp = createCombineFQname(fastQfilter.isFiltered(), outFilePrefix, prefix, lsFastQLR, true);
-				String[] fileNameFinal = createCombineFQname(fastQfilter.isFiltered(), outFilePrefix, prefix, lsFastQLR, false);
+				String[] fileNameTmp = createCombineFQname(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR, true);
+				String[] fileNameFinal = createCombineFQname(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR, false);
 				FileOperate.moveFile(true, fileNameTmp[0], fileNameFinal[0]);
 				List<String> lsLeft = new ArrayList<>();
 				lsLeft.add(fileNameFinal[0]);
@@ -272,6 +272,55 @@ public class CtrlFastQ {
 			String prefixFinal = prefix + sep + subPrefix;
 			mapPrefix2ResultQC.putAll(prefixFinal, mapPrefix2File.get(subPrefix));
 		}
+	}
+	
+	/** 在yarn中，仅跑部分的过滤工作 */
+	public void runSubPrefix() {
+		
+	}
+	
+	/** 读取运行完毕的文件信息，并将结果写入basicStatsAll */
+	public void readFinishedFile() {
+		if (!copeFastq.setMapCondition2LsFastQLR()) {
+			return;
+		}
+		mapCond2FastQCBefore = new LinkedHashMap<String, FastQC[]>();
+		mapCond2FastQCAfter = new LinkedHashMap<String, FastQC[]>();
+		BasicStats basicStats = new BasicStats();
+		
+		for (String prefix : copeFastq.getLsPrefix()) {
+			List<String[]> lsFastQLR = copeFastq.getMapCondition2LsFastQLR().get(prefix);
+			if (!fastQfilter.isNeedFilter() && lsFastQLR.size() < 2) {
+				mapCondition2LRFiltered.put(prefix, copeFastq.getMapCondition2LslsFastq().get(prefix));
+				continue;
+			}
+			
+			FastQC[] fastQCsBefore = getFastQC(lsFastQLR, prefix, qcBefore);
+			mapCond2FastQCBefore.put(prefix, fastQCsBefore);
+			FastQC[] fastQCsAfter = getFastQC(lsFastQLR, prefix, qcAfter);
+			mapCond2FastQCAfter.put(prefix, fastQCsAfter);
+			
+			String basicInfoBefore = basicStats.getSavePath(CtrlFastQfilter.getPathPrefix(outFilePrefix + prefix, true));
+			String basicInfoAfter = basicStats.getSavePath(CtrlFastQfilter.getPathPrefix(outFilePrefix + prefix, false));
+			fastQCsBefore[0].getBasicStats().readTable(basicInfoBefore, true);
+			if (fastQCsBefore[1] != null) {
+				fastQCsBefore[1].getBasicStats().readTable(basicInfoBefore, false);
+			}
+			if (!isJustFastqc) {
+				fastQCsAfter[0].getBasicStats().readTable(basicInfoAfter, true);
+				if (fastQCsAfter[1] != null) {
+					fastQCsAfter[1].getBasicStats().readTable(basicInfoAfter, false);
+				}
+			}
+		}
+		
+		List<String[]> lsSummary = getStatistics();
+		String totalExcelPath = outFilePrefix + "basicStatsAll.xls";
+		TxtReadandWrite txtWrite = null;
+		FileOperate.createFolders(FileOperate.getParentPathNameWithSep(totalExcelPath));
+		txtWrite = new TxtReadandWrite(totalExcelPath, true);
+		txtWrite.ExcelWrite(lsSummary);
+		txtWrite.close();
 	}
 	
 	private List<String[]> getStatistics() {
@@ -332,6 +381,7 @@ public class CtrlFastQ {
 		return lsResult;
 	}
 	
+	/** 用于自动化报告 */
 	public Map<String, BasicStats> getMapPrefix2BasicStatsBefore() {
 		Map<String, BasicStats> mapPrefix2BasicStats = new LinkedHashMap<String, BasicStats>();
 		if (!qcBefore) return new HashMap<>();
@@ -345,6 +395,8 @@ public class CtrlFastQ {
 		}
 		return mapPrefix2BasicStats;
 	}
+	
+	/** 用于自动化报告 */
 	public Map<String, BasicStats> getMapPrefix2BasicStatsAfter() {
 		Map<String, BasicStats> mapPrefix2BasicStats = new LinkedHashMap<String, BasicStats>();
 		if (!qcAfter) return new HashMap<>();

@@ -18,6 +18,7 @@ public class CtrlGO extends CtrlGOPath {
 	
 	GOtype GOClass = GOtype.BP;
 	GoAlgorithm goAlgorithm = GoAlgorithm.novelgo;
+	
 	int goLevel = -1;
 	public GOtype getGOType() {
 		return GOClass;
@@ -55,6 +56,14 @@ public class CtrlGO extends CtrlGOPath {
 			goLevel = levelNum;
 			((NovelGOFunTest) functionTest).setGOlevel(levelNum);
 		}
+	}
+	
+	/** 设定自定义的GO注释文件
+	 * @param goAnnoFile GO注释文件，第一列为GeneName，第二列为GOIterm
+	 * @param isCombineDB 是否与数据库已有的数据进行合并，false表示仅用输入的文本来做go分析
+	 */
+	public void setGOanno(String goAnnoFile, boolean isCombine) {
+		((NovelGOFunTest) functionTest).setGoAnnoFile(goAnnoFile, isCombine);
 	}
 	
 	public void setGOType(GOtype goType) {
