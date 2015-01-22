@@ -1,5 +1,8 @@
+	\subsubsection{Trinity Assembly: }
+	Based on the clean reads after filtering, Novelbio committed the transcripts assembly on each sample utilizing Trinity Assembly Software. The result of the first step assembly was showed as following table2:
+
 <#if table??>
-	\begin{table}
+	\begin{table}[h]
 	  \centering
 	  <#if table.tableTitle??>
 	  \caption{${table.tableTitle}}
@@ -36,8 +39,3 @@
         </#if>
 	\end{table}
 </#if>
-
-
-
-
-

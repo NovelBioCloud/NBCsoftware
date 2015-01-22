@@ -5,9 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.novelbio.base.StringOperate;
+import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.dbInfo.model.project.NBCTask;
 
 public class ReportImage {
+	/** 图片上层文件夹的前缀，后面加taskId，例 image_54aca51a8314525ab6dc8cb8*/
+	public static final String IMAGE = "image_";
 	
 	/**图片的主题*/
 	private String imgTitle;
@@ -44,11 +47,13 @@ public class ReportImage {
 		this.height = height;
 	}
 	
-	/**设置图片的名称，传过来的imgPath为图片的全路径*/
+	/**设置图片的名称，传过来的imgPath为图片的全路径，taskId用于生成图片的路径 例如：image_54aca51a8314525ab6dc8cb8/filename.png*/
 	public void addImgPath(String imgPath) {
 		//截取除图片的名称
 		String imgName = imgPath.substring(imgPath.lastIndexOf("/") + 1, imgPath.length());
-		lsImgPath.add(imgName);
+		String taskId = NBCTask.getTaskId(imgPath);
+		String imagePath = FileOperate.addSep(IMAGE + taskId) + imgName;
+		lsImgPath.add(imagePath);
 	}
 
 }

@@ -1,0 +1,2 @@
+\paragraph{Dif-Gene-Finder-t:}
+We applied ${algorithm} algorithm to filter the differentially expressed genes, after the significant analysis and FDR analysis under the following criteria: i) Fold Change>2 or <0.5; ii) ${pValueOrFDR}.

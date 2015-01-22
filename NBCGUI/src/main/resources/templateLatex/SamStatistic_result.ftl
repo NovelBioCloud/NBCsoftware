@@ -1,5 +1,8 @@
+	\subsubsection{Mapping Statistics:}
+	Mapping statistics was showed in Table 2, from which we could mention the mapping rates about ${mappingRate}\% indicating the well-performance of the sequencing experiment. Furthermore, more than ${uniqueMappingRate}\% unique mapping rate and more than ${junctionReadsRate}\% of the junction reads could lead to the best quality of the gene expression and alternative splicing analysis.
+
 <#if table??>
-	\begin{table}
+	\begin{table}[h]
 	  \centering
 	  <#if table.tableTitle??>
 	  \caption{${table.tableTitle}}
@@ -37,7 +40,4 @@
 	\end{table}
 </#if>
 
-
-
-
-
+	Chromosome Distribution Analysis for analyzing the sequencing quality and Gene Structure Analysis for analyzing the RNA capture quality was introduced and could be achieved in folder "3. Chromosome Distribution Analysis" and "4. Gene Structure Analysis".

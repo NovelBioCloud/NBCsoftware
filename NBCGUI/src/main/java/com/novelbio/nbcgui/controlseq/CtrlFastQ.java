@@ -389,7 +389,7 @@ public class CtrlFastQ {
 			FastQC[] fastQCBefore = mapCond2FastQCBefore.get(prefix);
 			BasicStats basicStats =  fastQCBefore[0].getBasicStats();
 			if (fastQCBefore[1] != null) {
-				basicStats.add(fastQCBefore[1].getBasicStats());
+				basicStats = basicStats.add(fastQCBefore[1].getBasicStats());
 			}
 			mapPrefix2BasicStats.put(prefix, basicStats);
 		}
@@ -404,7 +404,7 @@ public class CtrlFastQ {
 			FastQC[] fastQCAfter = mapCond2FastQCAfter.get(prefix);
 			BasicStats basicStats =  fastQCAfter[0].getBasicStats();
 			if (fastQCAfter[1] != null) {
-				basicStats.add(fastQCAfter[1].getBasicStats());
+				basicStats = basicStats.add(fastQCAfter[1].getBasicStats());
 			}
 			mapPrefix2BasicStats.put(prefix, basicStats);
 		}

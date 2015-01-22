@@ -1,10 +1,18 @@
 package test;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.nbcReport.Params.ReportBase;
 import com.novelbio.report.ReportImage;
 import com.novelbio.report.Params.ReportGOResult;
@@ -14,15 +22,48 @@ public class TestRegex {
 	
 	public static void main(String[] args) {
 		
-		int num = 0;
-		for (int i = 0; i < 5; i++) {
-			if (num++ >= 3) {
-				System.out.println("num1:"+num);
-				break;
-			}
-			System.out.println("num2:"+num);
-			System.out.println("i:"+i);
-		}
+		List<String> lsImgPath = FileOperate.getFoldFileNameLs("/home/novelbio/jpx/test", "*", "*");
+		
+		
+//		Writer out = new BufferedWriter(new OutputStreamWriter(FileOperate.getOutputStream("/home/novelbio/jpx/jpx.txt", true)));
+//		try {
+//			out.write("dgadrfg\n");
+//			out.write("test");
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} finally {
+//			try {
+//				out.close();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+		
+//		System.out.println("\\%");
+		
+//		List<String[]> lslsList = new ArrayList<String[]>();
+//		String[] lsStrings = new String[2];
+//		lslsList.add(lsStrings);
+//		lslsList.get(0)[0] = "adfgad";
+//		System.out.println(lslsList.get(0)[0]);
+		
+//		DecimalFormat decimalFormat = new DecimalFormat("#.###"); 
+//		long long1 = 12345678546l;
+//		long long2 = 54654698546l;
+//		double d = (double)long2/long1;
+//		System.out.println(decimalFormat.format(d));
+		
+//		int num = 0;
+//		for (int i = 0; i < 5; i++) {
+//			if (num++ >= 3) {
+//				System.out.println("num1:"+num);
+//				break;
+//			}
+//			System.out.println("num2:"+num);
+//			System.out.println("i:"+i);
+//		}
 		
 //		TestRegex testRegex = new TestRegex();
 //		System.out.println(testRegex.reportImage == null);

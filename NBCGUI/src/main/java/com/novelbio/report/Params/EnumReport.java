@@ -35,8 +35,8 @@ public enum EnumReport {
 	RemoveRrna("RemoveRrna_result",null),
 	SamToFastq("SamToFastq_result",null),
 	
-	RNAassembly("RNAassembly_result",null),
-	RNAAlternativeSplicing("RNAAlternativeSplicing_result",null),
+	RNAassembly("RNAassembly_result", new ReportRNAassembly()),
+	RNAAlternativeSplicing("RNAAlternativeSplicing_result", new ReportAlternativeSplicing()),
 
 	DiffExp("DifferenceExpression_result",new ReportDifGene()),
 	RfamStatistics("RfamStatistics_result", null),
@@ -56,9 +56,10 @@ public enum EnumReport {
 	Blast("Blast_result", null),
 	Pindel("Pindel_result", null),
 	Degree("Degree_result", null),
-	Intersection("Inersection_result", null),
+	Intersection("Intersection_result", new ReportIntersection()),
 	
-	ReportAll("Novelbio_result",new ReportAll()),
+	ReportAll("Novelbio_result", new ReportAll()),
+	NovelbioEnd("Novelbio_end", new ReportEnd()),
 	@Deprecated 
 	Picture("Picture",null),
 	@Deprecated 
@@ -67,7 +68,9 @@ public enum EnumReport {
 	MiRNASeqAnalysis("MiRNASeqAnalysis_result",null),
 	MiRNAPredict("MiRNAPredict_result",null),
 	
-	SamConvert("SamConvert_result", null);
+	SamConvert("SamConvert_result", null),
+	
+	Abstract("Abstract", new ReportAbstract());
 	
 	/** 模板名称 也可以是结果文件夹名*/
 	String tempName;

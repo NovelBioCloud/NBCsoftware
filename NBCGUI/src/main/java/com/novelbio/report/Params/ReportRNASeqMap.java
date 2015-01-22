@@ -1,26 +1,25 @@
 package com.novelbio.report.Params;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
+import com.novelbio.database.model.species.Species;
 
 public class ReportRNASeqMap extends ReportBase{
-	private String no = "${no}";
+	private static final long serialVersionUID = 1615663921940298732L;
 	
-	public ReportRNASeqMap() {
-		// TODO Auto-generated constructor stub
+	public void setSoftware(SoftWare software) {
+		mapKey2Param.put("software", software);
 	}
 	
+	public void setSpeciesName(Species species) {
+		String name = species.getNameLatin();
+		String[] ss = name.split(" ");
+		if (ss.length > 2) {
+			name = ss[0] + " " + ss[1];
+		}
+		mapKey2Param.put("SpeciesName", name);
+	}
+
 	public EnumReport getEnumReport() {
 		return EnumReport.RNASeqMap;
 	}
-	
-	public Map<String, Object> getMapKey2Param() {
-		mapKey2Param.put("no", no);
-		return super.getMapKey2Param();
-	}
-	
-	public String getNo() {
-		return no;
-	}
-	
 }
