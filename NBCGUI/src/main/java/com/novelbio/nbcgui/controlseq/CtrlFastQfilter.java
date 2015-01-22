@@ -152,33 +152,34 @@ public class CtrlFastQfilter {
 	 */
 	public HashMultimap<String, String> saveFastQC(String savePathAndPrefix) {
 		mapPrefix2QCresult.clear();
-		String fileName = FileOperate.getParentPathNameWithSep(savePathAndPrefix) + FOLDER_NAME + FileOperate.getFileName(savePathAndPrefix);
-		FileOperate.createFolders(FileOperate.getParentPathNameWithSep(fileName) );
+		String fileNameBefore = getPathPrefix(savePathAndPrefix, true);
+		String fileNameAfter = getPathPrefix(savePathAndPrefix, false);
+		FileOperate.createFolders(FileOperate.getParentPathNameWithSep(fileNameAfter) );
 		HashMultimap<String, String> mapParam = HashMultimap.create();
 		try {
 			List<String> lsPic = null, lsTable = null;
 			if (fastQCbefore.length <= 1 || fastQCbefore[1] == null) {
-				lsPic = fastQCbefore[0].saveToPathPic(fileName + "_BeforeFilter");
-				lsTable = fastQCbefore[0].saveToPathTable(fileName + "_BeforeFilter");
+				lsPic = fastQCbefore[0].saveToPathPic(fileNameBefore);
+				lsTable = fastQCbefore[0].saveToPathTable(fileNameBefore);
 			} else {
-				lsPic = fastQCbefore[0].saveToPathPic(30, fastQCbefore[1], fileName + "_BeforeFilter");
-				lsTable = fastQCbefore[0].saveToPathTable(fastQCbefore[1], fileName + "_BeforeFilter");
+				lsPic = fastQCbefore[0].saveToPathPic(30, fastQCbefore[1], fileNameBefore);
+				lsTable = fastQCbefore[0].saveToPathTable(fastQCbefore[1], fileNameBefore);
 			}
 			mapPrefix2QCresult.putAll("BeforeFilter_Pic", lsPic);
 			mapPrefix2QCresult.putAll("BeforeFilter_Table", lsTable);
 			
-			mapParam.putAll(fastQCbefore[0].getMapParam(fileName + "_BeforeFilter"));
+			mapParam.putAll(fastQCbefore[0].getMapParam(fileNameBefore));
 			if (!isJustFastqc) {
 				if (fastQCafter.length <= 1 || fastQCafter[1] == null) {
-					lsPic = fastQCafter[0].saveToPathPic(fileName + "_AfterFilter");
-					lsTable = fastQCafter[0].saveToPathTable(fileName + "_AfterFilter");
+					lsPic = fastQCafter[0].saveToPathPic(fileNameAfter);
+					lsTable = fastQCafter[0].saveToPathTable(fileNameAfter);
 				} else {
-					lsPic = fastQCafter[0].saveToPathPic(30, fastQCafter[1], fileName + "_AfterFilter");
-					lsTable = fastQCafter[0].saveToPathTable(fastQCafter[1], fileName + "_AfterFilter");
+					lsPic = fastQCafter[0].saveToPathPic(30, fastQCafter[1], fileNameAfter);
+					lsTable = fastQCafter[0].saveToPathTable(fastQCafter[1], fileNameAfter);
 				}
 				mapPrefix2QCresult.putAll("AfterFilter_Pic", lsPic);
 				mapPrefix2QCresult.putAll("AfterFilter_Table", lsTable);
-				mapParam.putAll(fastQCafter[0].getMapParam(fileName + "_AfterFilter"));
+				mapParam.putAll(fastQCafter[0].getMapParam(fileNameAfter));
 			}
 			
 			//TODO 这里有问题，是否只将fastq过滤后的结果放入报告
@@ -211,4 +212,9 @@ public class CtrlFastQfilter {
 		return mapPrefix2QCresult;
 	}
 	
+	public static String getPathPrefix(String savePathAndPrefix, boolean isBeforeFilter) {
+		String fileName = FileOperate.getParentPathNameWithSep(savePathAndPrefix) + FOLDER_NAME + FileOperate.getFileName(savePathAndPrefix);
+		fileName += isBeforeFilter?  "_BeforeFilter" : "_AfterFilter";
+		return fileName;
+	}
 }

@@ -226,21 +226,21 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		for (String prefix : mapPrefix2AlignSeqReadings.keySet()) {
 			List<AlignSeqReading> lsAlignSeqReadings = mapPrefix2AlignSeqReadings.get(prefix);
 			List<AlignmentRecorder> lsAlignmentRecorders = new ArrayList<AlignmentRecorder>();
-			if (isCountExpression && gffChrAbs.getGffHashGene() != null) {
-				rpkMcomput.setAndAddCurrentCondition(prefix);
-				rpkMcomput.setCalculateFPKM(isCalculateFPKM);
-				rpkMcomput.setUniqueMapped(isJustUseUniqueMappedReads);
-				lsAlignmentRecorders.add(rpkMcomput);
-			}
+//			if (isCountExpression && gffChrAbs.getGffHashGene() != null) {
+//				rpkMcomput.setAndAddCurrentCondition(prefix);
+//				rpkMcomput.setCalculateFPKM(isCalculateFPKM);
+//				rpkMcomput.setUniqueMapped(isJustUseUniqueMappedReads);
+//				lsAlignmentRecorders.add(rpkMcomput);
+//			}
 			if (isCalculateGeneStructure()) {
 				setGeneStructure(prefix, lsAlignmentRecorders, gffChrAbs);
 			}
-			if (isSamStatistics) {
-				SamFile samFile = (SamFile)lsAlignSeqReadings.get(0).getFirstSamFile();
-				if (samFile != null) {
-					setSamStatistics(prefix, lsAlignmentRecorders, samFile.getMapChrID2Length());
-				}
-			}
+//			if (isSamStatistics) {
+//				SamFile samFile = (SamFile)lsAlignSeqReadings.get(0).getFirstSamFile();
+//				if (samFile != null) {
+//					setSamStatistics(prefix, lsAlignmentRecorders, samFile.getMapChrID2Length());
+//				}
+//			}
 			
 			for (AlignSeqReading alignSeqReading : lsAlignSeqReadings) {
 				alignSeqReading.setReadInfo(0L, readByte);

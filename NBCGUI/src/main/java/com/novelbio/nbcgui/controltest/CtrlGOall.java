@@ -56,6 +56,17 @@ public class CtrlGOall implements CtrlTestGOInt {
 		this.taxID = species.getTaxID();
 	}
 	
+	/** 设定自定义的GO注释文件
+	 * @param goAnnoFile GO注释文件，第一列为GeneName，第二列为GOIterm
+	 * @param isCombineDB 是否与数据库已有的数据进行合并，false表示仅用输入的文本来做go分析
+	 */
+	@Override
+	public void setGOanno(String goAnnoFile, boolean isCombine) {
+		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
+			ctrlGO.setGOanno(goAnnoFile, isCombine);
+		}
+	}
+	
 	public ReportGO getReportGO() {
 		return goReport.getReportGO();
 	}
