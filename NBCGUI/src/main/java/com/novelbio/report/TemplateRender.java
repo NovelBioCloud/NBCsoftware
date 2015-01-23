@@ -40,9 +40,10 @@ public class TemplateRender {
 		//获得报告的参数对
 		Map<String, Object> mapKey2Param = reportBase.getMapKey2Param();
 		String tempPath = reportBase.getMethodTempPathAndName();
-		if (FileOperate.isFileExist(tempPath)) {
-			render(tempPath, mapKey2Param, writer);
-		}
+		render(tempPath, mapKey2Param, writer);
+//		if (FileOperate.isFileExist(tempPath)) {
+//			render(tempPath, mapKey2Param, writer);
+//		}
 	}
 	
 	/**

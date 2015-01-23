@@ -47,7 +47,7 @@ public class TestReport extends TestCase {
 		lsGroupAndGeneNum.add(groupAndGeneNum);
 		
 		ReportTable reportTable = new ReportTable();
-		reportDifGene.addTable(reportTable.getMapKey2Param("test", lsGroupAndGeneNum, 4));
+		reportDifGene.addTable(reportTable.getMapKey2Param("test", "tabltest", lsGroupAndGeneNum, 4));
 //		Map<String, Object> mapKey2GroupAndGeneNum = new HashMap<String, Object>();
 //		mapKey2GroupAndGeneNum.put("caseVSControl", "group");
 //		mapKey2GroupAndGeneNum.put("difExpNum", 100);
@@ -96,7 +96,7 @@ public class TestReport extends TestCase {
 		lsGroupAndGeneNum.add(groupAndGeneNum);
 		
 		ReportTable reportTable = new ReportTable();
-		reportQC.addTable(reportTable.getMapKey2Param("test", lsGroupAndGeneNum, 4));
+		reportQC.addTable(reportTable.getMapKey2Param("test", "tabltest", lsGroupAndGeneNum, 4));
 		
 		TemplateRender templateRender = new TemplateRender();
 		Writer out = new BufferedWriter(new OutputStreamWriter(FileOperate.getOutputStream("/home/novelbio/jpx/FastQCReport.tex", true)));
@@ -162,7 +162,7 @@ public class TestReport extends TestCase {
 		lsGroupAndGeneNum.add(groupAndGeneNum);
 		
 		ReportTable reportTable = new ReportTable();
-		reportSamAndRPKM.addTable(reportTable.getMapKey2Param("test", lsGroupAndGeneNum, 4));
+		reportSamAndRPKM.addTable(reportTable.getMapKey2Param("test", "tabltest", lsGroupAndGeneNum, 4));
 		
 		TemplateRender templateRender = new TemplateRender();
 		Writer out = new BufferedWriter(new OutputStreamWriter(FileOperate.getOutputStream("/home/novelbio/jpx/SamAndRPKMReport.tex", true)));
@@ -221,7 +221,7 @@ public class TestReport extends TestCase {
 		lsGroupAndGeneNum.add(groupAndGeneNum);
 		
 		ReportTable reportTable = new ReportTable();
-		reportRNAassembly.addTable(reportTable.getMapKey2Param("test", lsGroupAndGeneNum, 4));
+		reportRNAassembly.addTable(reportTable.getMapKey2Param("test", "tabltest", lsGroupAndGeneNum, 4));
 
 		TemplateRender templateRender = new TemplateRender();
 		Writer out = new BufferedWriter(new OutputStreamWriter(FileOperate.getOutputStream("/home/novelbio/jpx/RNAassemblyReport.tex", true)));

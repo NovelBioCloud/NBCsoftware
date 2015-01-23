@@ -1,6 +1,6 @@
 %!mode::"TeX:UTF-8"
 %========== 指定文档类型 ==========
-\documentclass{article}
+\documentclass[a4paper]{article}
 
 %========== 导入相关的包 ==========
 \usepackage{ctex}
@@ -8,7 +8,7 @@
 \usepackage{draftwatermark}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage[top=2.54cm,bottom=2.54cm,left=3.18cm,right=3.18cm]{geometry}
+\usepackage[top=2.54cm,bottom=2.54cm,left=2.54cm,right=2.54cm]{geometry}
 \usepackage{fancyhdr}
 \usepackage{booktabs}
 \usepackage{colortbl}

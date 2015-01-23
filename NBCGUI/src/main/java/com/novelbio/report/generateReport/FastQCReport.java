@@ -15,6 +15,7 @@ import com.novelbio.report.Params.ReportQC;
 public class FastQCReport {
 	private static final DecimalFormat TWO_DECIMAL = new DecimalFormat("#.##");
 	private static final String TABLETITLE = "Raw Data \\& Clean Data Statistics";
+	private static final String TABLELABEL = "tablfastQC";
 	private static final int TABLECOLUMN = 3;
 	private static final int TABLEROW = 5;
 	private static final int TABLEHASBAROW = 6;
@@ -74,7 +75,7 @@ public class FastQCReport {
 		}
 		
 		ReportTable reportTable = new ReportTable();
-		reportQC.addTable("lsSampleInfo", reportTable.getMapKey2Param(TABLETITLE, lsSampleInfo, TABLECOLUMN));
+		reportQC.addTable("lsSampleInfo", reportTable.getMapKey2Param(TABLETITLE, TABLELABEL, lsSampleInfo, TABLECOLUMN));
 		
 		double avgSize = baseNumSum/mapPrefix2BasicStatsBefore.size();
 		double sizeGB =  (avgSize/Math.pow(1024, 3));
@@ -119,7 +120,7 @@ public class FastQCReport {
 		}
 		
 		ReportTable reportTable = new ReportTable();
-		reportQC.addTable("lsSampleInfoHasBA", reportTable.getMapKey2Param(TABLETITLE, lsSampleInfo, TABLECOLUMN));
+		reportQC.addTable("lsSampleInfoHasBA", reportTable.getMapKey2Param(TABLETITLE, TABLELABEL, lsSampleInfo, TABLECOLUMN));
 		
 		double avgSize = baseNumSum/mapPrefix2BasicStatsBefore.size();
 		int sizeGB = (int) (avgSize/Math.pow(1024, 3));

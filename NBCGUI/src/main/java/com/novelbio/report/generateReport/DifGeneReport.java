@@ -12,6 +12,7 @@ import com.novelbio.report.Params.ReportDifGene;
 public class DifGeneReport {
 	/** 报告中表格的标题 */
 	private static final String TABLETITLE = "Differentially Expressed Unigene Analysis";
+	private static final String TABLELABEL = "tabldifGene";
 	/** 报告中表格的列数 */
 	private static final int TABLECOLUMN = 4;
 	
@@ -59,7 +60,7 @@ public class DifGeneReport {
 		}
 		
 		ReportTable reportTable = new ReportTable();
-		reportDifGene.addTable(reportTable.getMapKey2Param(TABLETITLE, lsGroupAndGeneNum, TABLECOLUMN));
+		reportDifGene.addTable(reportTable.getMapKey2Param(TABLETITLE, TABLELABEL, lsGroupAndGeneNum, TABLECOLUMN));
 		
 		reportDifGene.setpValueOrFDR(diffExpAbs.getTitleFormatNBC(), diffExpAbs.getpValueOrFDR());
 		// TODO 算法

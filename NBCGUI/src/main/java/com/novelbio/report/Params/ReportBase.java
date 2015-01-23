@@ -122,16 +122,26 @@ public abstract class ReportBase  implements Cloneable, Serializable {
 		lsReportBase.add(reportBase);
 	}
 	
-	/**添加图片*/
+//	/**添加图片*/
+//	public void addReportImage(ReportImage reportImage) {
+//		List<Map<String, Object>> lsReportImage = null;
+//		if (!mapKey2Param.containsKey("lsImage")) {
+//			lsReportImage = new ArrayList<Map<String, Object>>();
+//		} else {
+//			lsReportImage = (List<Map<String, Object>>) mapKey2Param.get("lsImage");
+//		}
+//		lsReportImage.add(reportImage.getMapKey2Param());
+//		mapKey2Param.put("lsImage", lsReportImage);
+//	}
+	
+	/**添加图片，图片对应的参数名默认为image*/
 	public void addReportImage(ReportImage reportImage) {
-		List<Map<String, Object>> lsReportImage = null;
-		if (!mapKey2Param.containsKey("lsImage")) {
-			lsReportImage = new ArrayList<Map<String, Object>>();
-		} else {
-			lsReportImage = (List<Map<String, Object>>) mapKey2Param.get("lsImage");
-		}
-		lsReportImage.add(reportImage.getMapKey2Param());
-		mapKey2Param.put("lsImage", lsReportImage);
+		mapKey2Param.put("image", reportImage.getMapKey2Param());
+	}
+	
+	/**添加图片，可以设定图片对应的参数名，imageName为图片对应的参数名*/
+	public void addReportImage(String imageName, ReportImage reportImage) {
+		mapKey2Param.put(imageName, reportImage.getMapKey2Param());
 	}
 	
 	/** 添加表格，表格对应的参数名默认为table */

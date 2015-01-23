@@ -1,12 +1,12 @@
 \subsubsection{Alternative Splicing Analysis:}
 Group：${groupName}
-Alternative splicing analysis was constructed to discover the difference of each samples group and discover several important alternative splicing genes. Following table 4 was the alternative splicing result of compare ${groupName}.
+Alternative splicing analysis was constructed to discover the difference of each samples group and discover several important alternative splicing genes. Following (Table <#if table??>\ref{${table.label}</#if>}) was the alternative splicing result of compare ${groupName}.
 
 <#if table??>
 	\begin{table}[h]
 	  \centering
 	  <#if table.tableTitle??>
-	  \caption{${table.tableTitle}}
+	  \caption{${table.tableTitle}}\label{${table.label}}
 	  </#if>
         <#if table.lsLsData??>
           <#assign i=(table.lsLsData[0]?size-1)/table.columnNum>

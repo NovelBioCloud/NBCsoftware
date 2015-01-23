@@ -7,8 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.analysis.annotation.functiontest.StatisticTestResult;
+import com.novelbio.base.dataOperate.DateUtil;
 import com.novelbio.database.domain.geneanno.GOtype;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.nbcgui.controltest.CtrlGO;
@@ -22,6 +25,9 @@ import com.novelbio.report.Params.ReportGOResult;
 import com.novelbio.report.Params.ReportGOUpDown;
 
 public class GOReport {
+	static Logger logger = Logger.getLogger(GOReport.class);
+	private static final String GOIMGTITLE = "The Gene Ontology Analysis on Differentially Expressed gene";
+
 	/** 要显示的goTerm的个数 */
 	private static final int goTermNum = 3;
 	/** 要显示的goCluster的个数 */
@@ -69,6 +75,10 @@ public class GOReport {
 			if (picName == null) continue;
 		
 			ReportImage reportImage = new ReportImage();
+			reportImage.setImgTitle(GOIMGTITLE);
+			String imgLabel = ReportImage.IMAGELABEL + DateUtil.getDateMSAndRandom();
+			logger.info(imgLabel);
+			reportImage.setLabel(imgLabel);
 			reportImage.addImgPath(picName);
 			ReportGOResult reportGOResult = mapPrefix2Report.get(prefix);
 			if (reportGOResult != null) {

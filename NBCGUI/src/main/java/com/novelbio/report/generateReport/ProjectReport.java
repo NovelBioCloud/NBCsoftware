@@ -27,6 +27,8 @@ import com.novelbio.report.Params.ReportEnd;
 
 public class ProjectReport {
 	
+	/** sampleInfo表格的label，用于表格的引用 */
+	private static final String TABLELABEL = "tablsampleInfo";
 	/** 分析类型的分类rawData */
 	public static final String RAWDTA = "rawData";
 	/** 分析类型的分类preliminary */
@@ -37,13 +39,18 @@ public class ProjectReport {
 	private ReportAll reportAll = new ReportAll();
 	private ReportEnd reportEnd = new ReportEnd();
 	private ReportAbstract reportAbstract = new ReportAbstract();
+	
+	/** RawData类别的taskId */
 	private List<String> lsRawDataTaskId = new ArrayList<String>();
+	/** Preliminary类别的taskId */
 	private List<String> lsPreliminaryTaskId = new ArrayList<String>();
+	/** InDepth类别的taskId */
 	private List<String> lsInDepthTaskId = new ArrayList<String>();
+	/** 全部的taskId */
 	private List<String> lsTaskId = new ArrayList<String>();
 	
 	public ProjectReport(String projectId, List<String> lsTaskId) {
-		generateReport(projectId, lsTaskId);
+		generateProjectInfo(projectId);
 		classifyTaskId(lsTaskId);
 		this.lsTaskId = lsTaskId;
 	}
@@ -52,6 +59,36 @@ public class ProjectReport {
 		return reportAll;
 	}
 	
+	/** 生成项目报告，参数为保存的路径 */
+	public void saveReport(String savePath) throws IOException {
+		String projectReportPath = FileOperate.addSep(savePath) + "projectReport.tex";
+		Writer out = new BufferedWriter(new OutputStreamWriter(FileOperate.getOutputStream(projectReportPath, true)));
+		TemplateRender templateRender = new TemplateRender();
+		// 渲染项目信息
+		templateRender.render(reportAll.getFtlTempPathAndName(), reportAll.getMapKey2Param(), out);
+		// 渲染Abstract
+		templateRender.render(reportAbstract.getFtlTempPathAndName(), reportAll.getMapKey2Param(), out);
+		// 渲染Raw Data Treatment:
+		out.write("\\subsection{Raw Data Treatment:}\n");
+		renderTaskReport(lsRawDataTaskId, templateRender, out);
+		// 渲染Preliminary Analysis:
+		out.write("\\subsection{Preliminary Analysis:}\n");
+		renderTaskReport(lsPreliminaryTaskId, templateRender, out);
+		// 渲染In-Depth Analysis
+		out.write("\\subsection{In-Depth Analysis}\n");
+		renderTaskReport(lsInDepthTaskId, templateRender, out);
+		// 生成method
+		out.write("\\section{METHOD}\n");
+//		renderTaskMethod(templateRender, out);
+		// 复制图片到结果报告的目录下面
+		copyImages(savePath);
+		// 渲染整个报告的结尾部分
+		// TODO 加参数
+		templateRender.render(reportEnd.getFtlTempPathAndName(), null, out);
+		out.close();
+	}
+	
+	/** 将task分为RAWDTA，PRELIMINARY，INDEPTH三类 */
 	private void classifyTaskId(List<String> lsTaskId) {
 		for (String taskId : lsTaskId) {
 			NBCTask nbcTask = NBCTask.findInstance(taskId);
@@ -66,7 +103,8 @@ public class ProjectReport {
 		}
 	}
 	
-	private void generateReport(String projectId, List<String> lsTaskId) {
+	/** 获取project报告所需要的信息 */
+	private void generateProjectInfo(String projectId) {
 		//TODO project的参数未全部完成
 		NBCProject nbcProject = NBCProject.findInstance(projectId);
 		reportAll.setProjectName(nbcProject.getProjectName());
@@ -83,7 +121,7 @@ public class ProjectReport {
 		//获取样本信息
 		List<String[]> lsSampleInfo = getSampleInfoByOrder(lsNBCSample);
 		ReportTable reportTable = new ReportTable();
-		reportAll.addTable("tbSampleInfo", reportTable.getMapKey2Param("", lsSampleInfo, 2));
+		reportAll.addTable("tbSampleInfo", reportTable.getMapKey2Param("", TABLELABEL, lsSampleInfo, 2));
 		// 获取平台名称
 		NBCExperimentNew nbcExperimentNew = setNBCExperiment.iterator().next();
 		String sequence = EnumSequence.valueOf(nbcExperimentNew.getSequencingPlatform()).toString();
@@ -128,41 +166,12 @@ public class ProjectReport {
 		return allSpeciesName;
 	}
 	
-	/** 生成项目报告，参数为保存的路径 
-	 * @throws IOException */
-	// TODO 未测试
-	public void saveReport(String savePath) throws IOException {
-		String projectReportPath = FileOperate.addSep(savePath) + "projectReport.tex";
-		Writer out = new BufferedWriter(new OutputStreamWriter(FileOperate.getOutputStream(projectReportPath, true)));
-		TemplateRender templateRender = new TemplateRender();
-		// 渲染项目信息
-		templateRender.render(reportAll.getFtlTempPathAndName(), reportAll.getMapKey2Param(), out);
-		// 渲染Abstract
-		templateRender.render(reportAbstract.getFtlTempPathAndName(), reportAll.getMapKey2Param(), out);
-		// 渲染Raw Data Treatment:
-		out.write("\\subsection{Raw Data Treatment:}\n");
-		renderTaskReport(lsRawDataTaskId, templateRender, out);
-		// 渲染Preliminary Analysis:
-		out.write("\\subsection{Preliminary Analysis:}\n");
-		renderTaskReport(lsPreliminaryTaskId, templateRender, out);
-		// 渲染In-Depth Analysis
-		out.write("\\subsection{In-Depth Analysis}\n");
-		renderTaskReport(lsInDepthTaskId, templateRender, out);
-		// 生成method
-		out.write("\\section{METHOD}\n");
-		renderTaskMethod(templateRender, out);
-		// 复制图片到结果报告的目录下面
-		copyImages(savePath);
-		// 渲染整个报告的结尾部分
-		// TODO 加参数
-		templateRender.render(reportEnd.getFtlTempPathAndName(), null, out);
-		out.close();
-	}
-	
 	/** 渲染task结果报告 */
 	private void renderTaskReport(List<String> lsClassifyTaskId, TemplateRender templateRender, Writer out) {
+		// 获取task结果的路径
 		List<String> lsTaskResultPath = getLsTaskResultPath(lsClassifyTaskId);
 		for (String taskResultPath : lsTaskResultPath) {
+			// 获取.report下的序列化文件
 			List<String> lsReportFilePath = FileOperate.getFoldFileNameLs(FileOperate.addSep(taskResultPath) + ".report");
 			for (String reportFilePath : lsReportFilePath) {
 				ReportBase reportBase = ReportBase.readReportFromFile(reportFilePath);
@@ -206,7 +215,6 @@ public class ProjectReport {
 			FileOperate.createFolders(imagePath);
 			List<NBCFile> lsNBCFile = nbcTask.getResultFolders();
 			for (NBCFile nbcFile : lsNBCFile) {
-				// 查找png格式的图片路径
 				List<String> lsFilePath = getAllFilePath(nbcFile.getRealPathAndName());
 				for (String filePath : lsFilePath) {
 					if (filePath.endsWith(".png")) {
