@@ -7,8 +7,8 @@ public class ReportEnd extends ReportBase {
 	
 
 	@Override
-	public EnumReport getEnumReport() {
-		return EnumReport.NovelbioEnd;
+	public EnumTaskReport getEnumReport() {
+		return EnumTaskReport.NovelbioEnd;
 	}
 
 }

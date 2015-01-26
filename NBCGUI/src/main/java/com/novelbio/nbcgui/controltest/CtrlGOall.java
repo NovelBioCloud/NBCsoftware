@@ -22,7 +22,7 @@ import com.novelbio.base.multithread.RunProcess.RunThreadStat;
 import com.novelbio.base.plot.ImageUtils;
 import com.novelbio.database.domain.geneanno.GOtype;
 import com.novelbio.database.model.species.Species;
-import com.novelbio.report.Params.EnumReport;
+import com.novelbio.report.Params.EnumTaskReport;
 import com.novelbio.report.Params.ReportGO;
 //import com.novelbio.nbcReport.Params.EnumReport;
 //import com.novelbio.nbcReport.Params.ReportGO;
@@ -194,7 +194,7 @@ public class CtrlGOall implements CtrlTestGOInt {
 	
 	@Override
 	public void saveExcel(String excelPath) {
-		savePathPrefix = FoldeCreate.createAndInFold(excelPath, EnumReport.GOAnalysis.getResultFolder());
+		savePathPrefix = FoldeCreate.createAndInFold(excelPath, EnumTaskReport.GOAnalysis.getResultFolder());
 		if (!savePathPrefix.endsWith("\\") && !savePathPrefix.endsWith("/")) {
 			savePrefix = FileOperate.getFileName(savePathPrefix);
 		}

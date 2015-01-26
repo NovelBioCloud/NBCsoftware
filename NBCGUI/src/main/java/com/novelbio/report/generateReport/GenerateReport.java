@@ -21,7 +21,8 @@ public class GenerateReport {
 			ReportBase reportBase = (ReportBase)ReportBase.readReportFromFile(reportFilePath);
 			TemplateRender templateRender = new TemplateRender();
 			//生成latex文件的全路径
-			String latexFilePath = taskResultPath + reportFilePath.substring(reportFilePath.lastIndexOf("/"), reportFilePath.length()) + ".tex";
+//			String latexFilePath = taskResultPath + reportFilePath.substring(reportFilePath.lastIndexOf("/"), reportFilePath.length()) + ".tex";
+			String latexFilePath = taskResultPath + FileOperate.getFileName(reportFilePath) + ".tex";
 			//如果文件存在就删掉，因为如果不删会报错
 			if (FileOperate.isFileExist(latexFilePath)) {
 				FileOperate.delFile(latexFilePath);
@@ -38,7 +39,8 @@ public class GenerateReport {
 			ReportBase reportBase = (ReportBase)ReportBase.readReportFromFile(reportFilePath);
 			TemplateRender templateRender = new TemplateRender();
 			//生成latex文件的全路径
-			String latexFilePath = taskResultPath + reportFilePath.substring(reportFilePath.lastIndexOf("/"), reportFilePath.length()) + ".tex";
+//			String latexFilePath = taskResultPath + reportFilePath.substring(reportFilePath.lastIndexOf("/"), reportFilePath.length()) + ".tex";
+			String latexFilePath = taskResultPath + FileOperate.getFileName(reportFilePath) + ".tex";
 			//如果文件存在就删掉，因为如果不删会报错
 			if (FileOperate.isFileExist(latexFilePath)) {
 				FileOperate.delFile(latexFilePath);

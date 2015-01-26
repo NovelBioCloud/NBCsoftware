@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.analysis.annotation.functiontest.StatisticTestResult;
+import com.novelbio.base.dataOperate.DateUtil;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.nbcgui.controltest.CtrlPath;
 import com.novelbio.report.ReportImage;
@@ -15,6 +16,8 @@ import com.novelbio.report.Params.ReportPathWay;
 public class PathReport {
 	
 	// TODO 问张博，确定pathway模板
+	
+	private static final String PATHIMGTITLE = "Pathway Analysis of All Differentially expressed Genes";
 	
 	/** Pathway报告 */
 	private ReportPathWay reportPathWay = new ReportPathWay();
@@ -42,6 +45,8 @@ public class PathReport {
 			ReportImage reportImage = new ReportImage();
 			reportImage.addImgPath(ctrlPath.getSavePicEnrichmentName(prefix));
 			reportImage.addImgPath(ctrlPath.getSavePicPvalueName(prefix));
+			reportImage.setImgTitle(PATHIMGTITLE);
+			reportImage.setLabel(ReportImage.IMAGELABEL + DateUtil.getDateAndRandom());
 			reportPathResult.addReportImage(reportImage);
 			List<StatisticTestResult> lsTestResult = functionTest.getTestResult();
 			reportPathResult.setItemTerm(lsTestResult.get(0).getItemTerm(), lsTestResult.get(1).getItemTerm(), lsTestResult.get(2).getItemTerm());

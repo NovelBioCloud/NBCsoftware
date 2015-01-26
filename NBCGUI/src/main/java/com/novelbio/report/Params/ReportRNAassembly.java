@@ -23,8 +23,8 @@ public class ReportRNAassembly extends ReportBase {
 	}
 
 	@Override
-	public EnumReport getEnumReport() {
-		return EnumReport.RNAassembly;
+	public EnumTaskReport getEnumReport() {
+		return EnumTaskReport.RNAassembly;
 	}
 
 }

@@ -53,8 +53,8 @@ public class ReportGOResult extends ReportBase {
 	}
 
 	@Override
-	public EnumReport getEnumReport() {
-		return EnumReport.GO_Result;
+	public EnumTaskReport getEnumReport() {
+		return EnumTaskReport.GO_Result;
 	}
 
 }

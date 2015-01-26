@@ -10,8 +10,8 @@ public class ReportDNASeqMap extends ReportBase{
 		// TODO Auto-generated constructor stub
 	}
 	
-	public EnumReport getEnumReport() {
-		return EnumReport.DNASeqMap;
+	public EnumTaskReport getEnumReport() {
+		return EnumTaskReport.DNASeqMap;
 	}
 	
 	public Map<String, Object> getMapKey2Param() {

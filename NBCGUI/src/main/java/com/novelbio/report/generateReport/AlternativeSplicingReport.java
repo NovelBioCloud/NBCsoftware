@@ -14,13 +14,18 @@ public class AlternativeSplicingReport {
 	/** 报告中表格的列数 */
 	private static final int COLUMNNUM = 4;
 	/** 报告中表格的标题 */
-	private static final String TABLETITLE = "Mapping Statistics";
+	private static final String TABLETITLE = "Alternative Splicing Result ";
+	private static final String TABLELABEL = "tablalterSplicing";
 	private static final String fileNameSufix = "_statistics.txt";
 	private static final String geneAccIDName = "SplicingEvent";
 	private ReportAlternativeSplicing reportAlternativeSplicing = new ReportAlternativeSplicing();
 	
 	public AlternativeSplicingReport() {
 
+	}
+	
+	public ReportAlternativeSplicing getAlternativeSplicing() {
+		return reportAlternativeSplicing;
 	}
 	
 	public void generateReport(String savePath, List<String> lsPrefix) {
@@ -41,7 +46,10 @@ public class AlternativeSplicingReport {
 			}
 		}
 		ReportTable reportTable = new ReportTable();
-		reportAlternativeSplicing.addTable(reportTable.getMapKey2Param(TABLETITLE, lsSplicingEvent, COLUMNNUM));
+		reportAlternativeSplicing.addTable(reportTable.getMapKey2Param(TABLETITLE, TABLELABEL, lsSplicingEvent, COLUMNNUM));
+		
+		reportAlternativeSplicing.setGroupName("开发中");
+		
 	}
 	
 	public List<String[]> getSplicingEvent(String savePath, String prefix) {

@@ -1,6 +1,7 @@
 package test;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -13,6 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.novelbio.base.StringOperate;
+import com.novelbio.base.dataOperate.DateUtil;
 import com.novelbio.base.dataStructure.PatternOperate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.dbInfo.model.project.NBCFile;
@@ -26,9 +28,14 @@ import com.novelbio.report.generateReport.GenerateReport;
 public class TestRegex {
 	
 	public static void main(String[] args) {
+		for (int i = 0; i < 10; i++) {
+			System.out.println(DateUtil.getDateMSAndRandom());
+		}
+//		File file = new File("/templateLatex/PathWayAnalysis_Method.ftl");
+//		System.out.println(file.exists());
 		
-		String tempName = "adsga_adgadrg";
-		System.out.println(tempName.split("_")[0] + "_Method.ftl");
+//		String tempName = "adsga_adgadrg";
+//		System.out.println(tempName.split("_")[0] + "_Method.ftl");
 		
 //		List<String> lsTaskId = new ArrayList<String>();
 //		lsTaskId.add("");

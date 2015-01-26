@@ -8,8 +8,8 @@ public class ReportAlternativeSplicing extends ReportBase {
 	}
 
 	@Override
-	public EnumReport getEnumReport() {
-		return EnumReport.RNAAlternativeSplicing;
+	public EnumTaskReport getEnumReport() {
+		return EnumTaskReport.RNAAlternativeSplicing;
 	}
 
 }

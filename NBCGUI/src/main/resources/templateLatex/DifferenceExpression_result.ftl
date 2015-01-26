@@ -1,11 +1,11 @@
     \subsubsection{Differentially Expressed Unigene Analysis}
-    ${caseVSControl} Differ gene analysis were committed between the Control group including S1, S2 and S3 and the Case Group including R1, R2 and R3 by \textbf{${algorithm}}  Algorithm. We have discovered \textbf{${difExpNum}} differentially expressed Unigene including ${upGeneNum} up-regulated gene and ${downGeneNum} down regulated gene (Fold Change Case/Control >2 or <0.5, ${pValueOrFDR}).
+    ${caseVSControl} Differ gene analysis were committed between the Control group including S1, S2 and S3 and the Case Group including R1, R2 and R3 by \textbf{${algorithm}}  Algorithm. We have discovered \textbf{${difExpNum}} differentially expressed Unigene including ${upGeneNum} up-regulated gene and ${downGeneNum} down regulated gene (Fold Change Case/Control >2 or <0.5, ${pValueOrFDR}).(In  Table <#if table??>\ref{${table.label}</#if>})
  
 <#if table??>
 	\begin{table}[h]
 	  \centering
 	  <#if table.tableTitle??>
-	  \caption{${table.tableTitle}}
+	  \caption{${table.tableTitle}}\label{${table.label}}
 	  </#if>
         <#if table.lsLsData??>
           <#assign i=(table.lsLsData[0]?size-1)/table.columnNum>

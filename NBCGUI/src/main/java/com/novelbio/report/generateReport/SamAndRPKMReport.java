@@ -12,6 +12,9 @@ import com.novelbio.report.ReportTable;
 import com.novelbio.report.Params.ReportSamAndRPKM;
 
 public class SamAndRPKMReport {
+	
+	private static final String TABLETITLE = "Mapping Statistics";
+	private static final String TABLELABEL = "tablMapping";
 	/** 报告中表格行数 */
 	private static final int TABLEROW = 10;
 	private ReportSamAndRPKM reportSamAndRPKM = new ReportSamAndRPKM();
@@ -71,8 +74,7 @@ public class SamAndRPKMReport {
 		reportSamAndRPKM.setUniqueMappingRate(MathComput.median(lsUniqueMappingRate, 25));
 		reportSamAndRPKM.setJunctionReadsRate(MathComput.median(lsJunctionReadsRate, 25));
 		ReportTable reportTable = new ReportTable();
-		reportTable.getMapKey2Param("Mapping Statistics", lsLsData, 6);
-		reportSamAndRPKM.addTable(reportTable.getMapKey2Param("Mapping Statistics", lsLsData, 6));
+		reportSamAndRPKM.addTable(reportTable.getMapKey2Param(TABLETITLE, TABLELABEL, lsLsData, 6));
 	}
 	
 	private List<String[]> getLsLsData(int length) {

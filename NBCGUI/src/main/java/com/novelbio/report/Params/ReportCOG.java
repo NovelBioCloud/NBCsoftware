@@ -16,8 +16,8 @@ public class ReportCOG extends ReportBase {
 	}
 
 	@Override
-	public EnumReport getEnumReport() {
-		return EnumReport.COG;
+	public EnumTaskReport getEnumReport() {
+		return EnumTaskReport.COG;
 	}
 
 }

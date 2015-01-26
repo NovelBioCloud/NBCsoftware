@@ -1,11 +1,11 @@
 	\subsubsection{Mapping Statistics:}
-	Mapping statistics was showed in Table 2, from which we could mention the mapping rates about ${mappingRate}\% indicating the well-performance of the sequencing experiment. Furthermore, more than ${uniqueMappingRate}\% unique mapping rate and more than ${junctionReadsRate}\% of the junction reads could lead to the best quality of the gene expression and alternative splicing analysis.
+	Mapping statistics was showed in (Table <#if table??>\ref{${table.label}</#if>}), from which we could mention the mapping rates about ${mappingRate}\% indicating the well-performance of the sequencing experiment. Furthermore, more than ${uniqueMappingRate}\% unique mapping rate and more than ${junctionReadsRate}\% of the junction reads could lead to the best quality of the gene expression and alternative splicing analysis.
 
 <#if table??>
 	\begin{table}[h]
 	  \centering
 	  <#if table.tableTitle??>
-	  \caption{${table.tableTitle}}
+	  \caption{${table.tableTitle}}\label{${table.label}}
 	  </#if>
         <#if table.lsLsData??>
           <#assign i=(table.lsLsData[0]?size-1)/table.columnNum>

@@ -14,7 +14,7 @@ public class ReportAbstract extends ReportBase {
 		if (ss.length > 2) {
 			name = ss[0] + " " + ss[1];
 		}
-		mapKey2Param.put("SpeciesName", name);
+		mapKey2Param.put("speciesName", name);
 	}
 	
 	public void setSoftware(SoftWare softWare) {
@@ -49,8 +49,8 @@ public class ReportAbstract extends ReportBase {
 	}
 	
 	@Override
-	public EnumReport getEnumReport() {
-		return EnumReport.Abstract;
+	public EnumTaskReport getEnumReport() {
+		return EnumTaskReport.Abstract;
 	}
 	
 	

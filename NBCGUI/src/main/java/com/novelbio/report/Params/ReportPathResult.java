@@ -32,8 +32,8 @@ public class ReportPathResult extends ReportBase {
 	}
 
 	@Override
-	public EnumReport getEnumReport() {
-		return EnumReport.Path_Result;
+	public EnumTaskReport getEnumReport() {
+		return EnumTaskReport.Path_Result;
 	}
 
 }

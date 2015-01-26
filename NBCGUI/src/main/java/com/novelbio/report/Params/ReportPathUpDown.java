@@ -13,8 +13,8 @@ public class ReportPathUpDown extends ReportBase {
 	}
 	
 	@Override
-	public EnumReport getEnumReport() {
-		return EnumReport.Path_UpDown;
+	public EnumTaskReport getEnumReport() {
+		return EnumTaskReport.Path_UpDown;
 	}
 
 }

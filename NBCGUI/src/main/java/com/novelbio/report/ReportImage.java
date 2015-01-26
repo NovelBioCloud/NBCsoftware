@@ -9,11 +9,16 @@ import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.dbInfo.model.project.NBCTask;
 
 public class ReportImage {
+	
+	
+	public static final String IMAGELABEL = "fig:";
 	/** 图片上层文件夹的前缀，后面加taskId，例 image_54aca51a8314525ab6dc8cb8*/
 	public static final String IMAGE = "image_";
 	
 	/**图片的主题*/
 	private String imgTitle;
+	/** latex模板中的label属性，用于在文本中引用图片 */
+	private String label;
 	/**图片的宽度*/
 	private int width = 5;
 	/**图片的高度*/
@@ -26,6 +31,7 @@ public class ReportImage {
 	/**获得图片的参数*/
 	public Map<String, Object> getMapKey2Param() {
 		mapKey2Param.put("imgTitle", imgTitle);
+		mapKey2Param.put("label", label);
 		mapKey2Param.put("width", width);
 		mapKey2Param.put("height", height);
 		mapKey2Param.put("lsImgPath", lsImgPath);
@@ -35,6 +41,11 @@ public class ReportImage {
 	/**设置图片标题*/
 	public void setImgTitle(String imgTitle) {
 		this.imgTitle = imgTitle;
+	}
+	
+	/** 设置表格的label */
+	public void setLabel(String label) {
+		this.label = label;
 	}
 	
 	/**设置宽度*/

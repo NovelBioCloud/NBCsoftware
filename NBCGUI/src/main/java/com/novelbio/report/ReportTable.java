@@ -18,9 +18,10 @@ public class ReportTable {
 	 * @param columnNum 列数
 	 * @return
 	 */
-	public Map<String, Object> getMapKey2Param(String tableTitle, List<String[]> lsLsData, int columnNum) {
+	public Map<String, Object> getMapKey2Param(String tableTitle, String label, List<String[]> lsLsData, int columnNum) {
 		Map<String, Object> mapKey2Param = new HashMap<String, Object>();
 		mapKey2Param.put("tableTitle", tableTitle);
+		mapKey2Param.put("label", label);
 		mapKey2Param.put("lsFirstColumn", getFirstColumn(lsLsData));
 		mapKey2Param.put("lsLsData", lsLsData);
 		//表格的列数需要除掉第一列，渲染表格时需要
@@ -28,6 +29,7 @@ public class ReportTable {
 		return mapKey2Param;
 	}
 	
+	/** 获取出表格的第一列 */
 	private List<String> getFirstColumn(List<String[]> lsLsData) {
 		List<String> firstColumn = new ArrayList<String>();
 		for (String[] lsData : lsLsData) {
@@ -37,9 +39,10 @@ public class ReportTable {
 	}
 	
 	/**获得表格的参数*/
-	public Map<String, Object> getMapKey2Param(String tableTitle, String excelPath, int columnNum) {
+	public Map<String, Object> getMapKey2Param(String tableTitle,String label, String excelPath, int columnNum) {
 		Map<String, Object> mapKey2Param = new HashMap<String, Object>();
 		mapKey2Param.put("tableTitle", tableTitle);
+		mapKey2Param.put("label", label);
 		mapKey2Param.put("lsLsData", getLsLsData(excelPath));
 		return mapKey2Param;
 	}

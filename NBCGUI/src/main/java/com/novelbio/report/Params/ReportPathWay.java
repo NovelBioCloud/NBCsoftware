@@ -26,8 +26,8 @@ public class ReportPathWay extends ReportBase{
 	}
 	
 	@Override
-	public EnumReport getEnumReport() {
-		return EnumReport.PathWay;
+	public EnumTaskReport getEnumReport() {
+		return EnumTaskReport.PathWay;
 	}
 
 }

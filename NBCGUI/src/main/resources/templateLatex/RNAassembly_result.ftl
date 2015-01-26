@@ -1,11 +1,11 @@
 	\subsubsection{Trinity Assembly: }
-	Based on the clean reads after filtering, Novelbio committed the transcripts assembly on each sample utilizing Trinity Assembly Software. The result of the first step assembly was showed as following table2:
+	Based on the clean reads after filtering, Novelbio committed the transcripts assembly on each sample utilizing Trinity Assembly Software. The result of the first step assembly was showed as following (Table <#if table??>\ref{${table.label}</#if>}):
 
 <#if table??>
 	\begin{table}[h]
 	  \centering
 	  <#if table.tableTitle??>
-	  \caption{${table.tableTitle}}
+	  \caption{${table.tableTitle}}\label{${table.label}}
 	  </#if>
         <#if table.lsLsData??>
           <#assign i=(table.lsLsData[0]?size-1)/table.columnNum>

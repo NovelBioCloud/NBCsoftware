@@ -19,7 +19,7 @@ public class ReportRNASeqMap extends ReportBase{
 		mapKey2Param.put("SpeciesName", name);
 	}
 
-	public EnumReport getEnumReport() {
-		return EnumReport.RNASeqMap;
+	public EnumTaskReport getEnumReport() {
+		return EnumTaskReport.RNASeqMap;
 	}
 }

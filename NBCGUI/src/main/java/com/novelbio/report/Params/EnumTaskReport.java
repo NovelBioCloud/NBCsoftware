@@ -10,7 +10,7 @@ import com.novelbio.base.SepSign;
  * @author novelbio
  * 
  */
-public enum EnumReport {
+public enum EnumTaskReport {
 	GeneExp("GeneExpression_result",new ReportGeneExpression()),
 	GeneStructure("GeneStructure_result",null),
 	
@@ -81,7 +81,7 @@ public enum EnumReport {
 	 * @param tempName 模板名称 也可以是结果文件夹名
 	 * @param reportBase 报告对象
 	 */
-	EnumReport(String tempName,ReportBase reportBase) {
+	EnumTaskReport(String tempName,ReportBase reportBase) {
 		this.tempName = tempName;
 		this.reportBase = reportBase;
 	}
