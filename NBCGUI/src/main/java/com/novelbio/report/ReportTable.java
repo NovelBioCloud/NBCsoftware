@@ -29,6 +29,7 @@ public class ReportTable {
 		return mapKey2Param;
 	}
 	
+	/** 获取出表格的第一列 */
 	private List<String> getFirstColumn(List<String[]> lsLsData) {
 		List<String> firstColumn = new ArrayList<String>();
 		for (String[] lsData : lsLsData) {

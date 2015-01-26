@@ -31,7 +31,7 @@ public class ReportGO extends ReportBase {
 	}
 	
 	@Override
-	public EnumReport getEnumReport() {
-		return EnumReport.GOAnalysis;
+	public EnumTaskReport getEnumReport() {
+		return EnumTaskReport.GOAnalysis;
 	}
 }

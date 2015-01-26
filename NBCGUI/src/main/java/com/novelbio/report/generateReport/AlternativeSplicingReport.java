@@ -24,6 +24,10 @@ public class AlternativeSplicingReport {
 
 	}
 	
+	public ReportAlternativeSplicing getAlternativeSplicing() {
+		return reportAlternativeSplicing;
+	}
+	
 	public void generateReport(String savePath, List<String> lsPrefix) {
 		List<String[]> lsSplicingEvent = new ArrayList<String[]>();
 		for (int i = 0; i < lsPrefix.size(); i++) {
@@ -43,6 +47,9 @@ public class AlternativeSplicingReport {
 		}
 		ReportTable reportTable = new ReportTable();
 		reportAlternativeSplicing.addTable(reportTable.getMapKey2Param(TABLETITLE, TABLELABEL, lsSplicingEvent, COLUMNNUM));
+		
+		reportAlternativeSplicing.setGroupName("开发中");
+		
 	}
 	
 	public List<String[]> getSplicingEvent(String savePath, String prefix) {

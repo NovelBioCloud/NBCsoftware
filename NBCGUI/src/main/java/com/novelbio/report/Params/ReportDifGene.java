@@ -29,8 +29,8 @@ public class ReportDifGene  extends ReportBase{
 	}
 
 	@Override
-	public EnumReport getEnumReport() {
-		return EnumReport.DiffExp;
+	public EnumTaskReport getEnumReport() {
+		return EnumTaskReport.DiffExp;
 	}
 
 }

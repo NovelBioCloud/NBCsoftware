@@ -18,8 +18,8 @@ public class ReportQC extends ReportBase{
 	}
 
 	@Override
-	public EnumReport getEnumReport() {
-		return EnumReport.FastQC;
+	public EnumTaskReport getEnumReport() {
+		return EnumTaskReport.FastQC;
 	}
 
 }

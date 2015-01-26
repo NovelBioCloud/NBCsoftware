@@ -159,8 +159,8 @@ public class ReportAll extends ReportBase {
 	}
 	
 	@Override
-	public EnumReport getEnumReport() {
-		return EnumReport.ReportAll;
+	public EnumTaskReport getEnumReport() {
+		return EnumTaskReport.ReportAll;
 	}
 
 

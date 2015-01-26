@@ -49,8 +49,8 @@ public class ReportAbstract extends ReportBase {
 	}
 	
 	@Override
-	public EnumReport getEnumReport() {
-		return EnumReport.Abstract;
+	public EnumTaskReport getEnumReport() {
+		return EnumTaskReport.Abstract;
 	}
 	
 	

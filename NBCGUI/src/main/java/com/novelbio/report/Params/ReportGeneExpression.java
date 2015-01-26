@@ -21,7 +21,7 @@ public class ReportGeneExpression  extends ReportBase{
 	public Set<String> getSetResultFile() {
 		Set<String> setFile = new LinkedHashSet<>();
 		for (String outFile : setResultFile) {
-			String outFile2 = EnumReport.SamStatistics.getResultFolder() + outFile.split(EnumReport.SamStatistics.getResultFolder())[1];
+			String outFile2 = EnumTaskReport.SamStatistics.getResultFolder() + outFile.split(EnumTaskReport.SamStatistics.getResultFolder())[1];
 			setFile.add(outFile2);
 		}
 		return setFile;
@@ -48,8 +48,8 @@ public class ReportGeneExpression  extends ReportBase{
 	}
 
 	@Override
-	public EnumReport getEnumReport() {
-		return EnumReport.GeneExp;
+	public EnumTaskReport getEnumReport() {
+		return EnumTaskReport.GeneExp;
 	}
 
 

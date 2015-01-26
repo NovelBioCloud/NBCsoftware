@@ -19,7 +19,7 @@ import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.plot.ImageUtils;
 import com.novelbio.database.model.modgeneid.GeneID;
-import com.novelbio.report.Params.EnumReport;
+import com.novelbio.report.Params.EnumTaskReport;
 import com.novelbio.report.generateReport.COGReport;
 //import com.novelbio.nbcReport.Params.EnumReport;
 @Service
@@ -82,7 +82,7 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 	@Override
 	public List<String> saveExcel(String excelPath) {
 		List<String> lsResultFile = new ArrayList<>();
-		String excelPrefix = FoldeCreate.createAndInFold(excelPath, EnumReport.COG.getResultFolder());
+		String excelPrefix = FoldeCreate.createAndInFold(excelPath, EnumTaskReport.COG.getResultFolder());
 		if (excelPrefix.endsWith("\\") || excelPrefix.endsWith("/")) {
 			saveParentPath = excelPrefix;
 		} else {

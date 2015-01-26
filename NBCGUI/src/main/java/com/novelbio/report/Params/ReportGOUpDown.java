@@ -70,8 +70,8 @@ public class ReportGOUpDown extends ReportBase {
 	}
 	
 	@Override
-	public EnumReport getEnumReport() {
-		return EnumReport.GO_UpDown;
+	public EnumTaskReport getEnumReport() {
+		return EnumTaskReport.GO_UpDown;
 	}
 	
 }

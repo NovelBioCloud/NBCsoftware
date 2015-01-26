@@ -46,7 +46,7 @@ public abstract class ReportBase  implements Cloneable, Serializable {
 	 * 得到报告类型
 	 * @return
 	 */
-	public abstract EnumReport getEnumReport();
+	public abstract EnumTaskReport getEnumReport();
 	
 	
 	/**

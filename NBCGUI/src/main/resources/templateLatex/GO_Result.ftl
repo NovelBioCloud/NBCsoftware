@@ -7,9 +7,11 @@
 
 <#if image??>
 	\begin{figure}[h]
+	  \setlength{\abovecaptionskip}{0pt}
+     \setlength{\belowcaptionskip}{0pt}
 	  \begin{center}
 	  <#list image.lsImgPath as imgPath>
-	    \includegraphics[width=15cm,height=9cm]{${imgPath}}
+	    \includegraphics[width=10cm,height=6cm]{${imgPath}}
 	  </#list>
 	  \end{center}
 	  <#if image.imgTitle??>

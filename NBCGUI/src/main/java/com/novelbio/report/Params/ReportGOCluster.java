@@ -34,8 +34,8 @@ public class ReportGOCluster extends ReportBase {
 	}
 
 	@Override
-	public EnumReport getEnumReport() {
-		return EnumReport.GO_Cluster;
+	public EnumTaskReport getEnumReport() {
+		return EnumTaskReport.GO_Cluster;
 	}
 	
 }

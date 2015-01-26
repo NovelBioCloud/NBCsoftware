@@ -16,7 +16,7 @@ import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.plot.ImageUtils;
 import com.novelbio.nbcReport.XdocTmpltPic;
-import com.novelbio.report.Params.EnumReport;
+import com.novelbio.report.Params.EnumTaskReport;
 import com.novelbio.report.Params.ReportPathWay;
 //import com.novelbio.nbcReport.XdocTmpltExcel;
 //import com.novelbio.nbcReport.XdocTmpltPic;
@@ -76,7 +76,7 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 	@Override
 	public List<String> saveExcel(String excelPath) {
 		List<String> lsResultFile = new ArrayList<>();
-		String excelPrefix = FoldeCreate.createAndInFold(excelPath, EnumReport.PathWay.getResultFolder());
+		String excelPrefix = FoldeCreate.createAndInFold(excelPath, EnumTaskReport.PathWay.getResultFolder());
 		if (excelPrefix.endsWith("\\") || excelPrefix.endsWith("/")) {
 			saveParentPath = excelPrefix;
 		} else {

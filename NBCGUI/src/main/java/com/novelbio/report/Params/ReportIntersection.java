@@ -9,8 +9,8 @@ public class ReportIntersection extends ReportBase {
 	}
 
 	@Override
-	public EnumReport getEnumReport() {
-		return EnumReport.Intersection;
+	public EnumTaskReport getEnumReport() {
+		return EnumTaskReport.Intersection;
 	}
 
 }

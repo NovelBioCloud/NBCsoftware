@@ -43,6 +43,7 @@ public class ReportImage {
 		this.imgTitle = imgTitle;
 	}
 	
+	/** 设置表格的label */
 	public void setLabel(String label) {
 		this.label = label;
 	}

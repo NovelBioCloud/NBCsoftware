@@ -55,7 +55,7 @@ public class ReportGOAll extends ReportBase  {
 	}
 	
 	@Override
-	public EnumReport getEnumReport() {
-		return EnumReport.GO_All;
+	public EnumTaskReport getEnumReport() {
+		return EnumTaskReport.GO_All;
 	}
 }

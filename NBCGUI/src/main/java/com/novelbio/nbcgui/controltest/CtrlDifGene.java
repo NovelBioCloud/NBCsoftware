@@ -17,7 +17,7 @@ import com.novelbio.generalConf.TitleFormatNBC;
 //import com.novelbio.nbcReport.XdocTmpltExcel;
 //import com.novelbio.nbcReport.Params.EnumReport;
 //import com.novelbio.nbcReport.Params.ReportDifGene;
-import com.novelbio.report.Params.EnumReport;
+import com.novelbio.report.Params.EnumTaskReport;
 import com.novelbio.report.Params.ReportDifGene;
 
 public class CtrlDifGene implements IntCmdSoft {
@@ -40,7 +40,7 @@ public class CtrlDifGene implements IntCmdSoft {
 	}
 
 	public void addFileName2Compare(String fileName, String[] comparePair) {
-		String fileNameFinal = FoldeCreate.createAndInFold(fileName, EnumReport.DiffExp.getResultFolder());
+		String fileNameFinal = FoldeCreate.createAndInFold(fileName, EnumTaskReport.DiffExp.getResultFolder());
 		outPath = FileOperate.getPathName(fileNameFinal);
 		diffExpAbs.addFileName2Compare(fileNameFinal, comparePair);
 	}
