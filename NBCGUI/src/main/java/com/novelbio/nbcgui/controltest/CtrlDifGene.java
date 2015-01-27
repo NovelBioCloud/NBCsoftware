@@ -1,24 +1,15 @@
 package com.novelbio.nbcgui.controltest;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.google.common.collect.HashMultimap;
 import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.diffexpress.DiffExpAbs;
 import com.novelbio.analysis.diffexpress.DiffExpDESeq;
 import com.novelbio.analysis.diffexpress.EnumDifGene;
-import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.generalConf.TitleFormatNBC;
-//import com.novelbio.nbcReport.EnumTableType;
-//import com.novelbio.nbcReport.XdocTmpltExcel;
-//import com.novelbio.nbcReport.Params.EnumReport;
-//import com.novelbio.nbcReport.Params.ReportDifGene;
-import com.novelbio.report.Params.EnumTaskReport;
-import com.novelbio.report.Params.ReportDifGene;
 
 public class CtrlDifGene implements IntCmdSoft {
 	DiffExpAbs diffExpAbs;
@@ -39,10 +30,10 @@ public class CtrlDifGene implements IntCmdSoft {
 		diffExpAbs.setCol2Sample(lsSampleColumn2GroupName);
 	}
 
-	public void addFileName2Compare(String fileName, String[] comparePair) {
-		String fileNameFinal = FoldeCreate.createAndInFold(fileName, EnumTaskReport.DiffExp.getResultFolder());
-		outPath = FileOperate.getPathName(fileNameFinal);
-		diffExpAbs.addFileName2Compare(fileNameFinal, comparePair);
+	public void addFileName2Compare(String resultPath, String[] comparePair) {
+//		String fileNameFinal = FoldeCreate.createAndInFold(fileName, EnumTaskReport.DiffExp.getResultFolder());
+		outPath = FileOperate.getPathName(resultPath);
+		diffExpAbs.addFileName2Compare(resultPath, comparePair);
 	}
 
 	public void setGeneInfo(ArrayList<String[]> lsGeneInfo) {
@@ -122,31 +113,30 @@ public class CtrlDifGene implements IntCmdSoft {
 		String outRawData = FileOperate.addSep(outPath) + "Script/";
  		diffExpAbs.copyTmpFileToPath(outRawData);
 	}
-	public ReportDifGene getDiffReport() {
-		double logFC =  diffExpAbs.getLogFC();
-		double pValueOrFDR = diffExpAbs.getpValueOrFDR();
-		TitleFormatNBC titleFormatNBC = diffExpAbs.getTitleFormatNBC();
-		List<String> lsResult =  diffExpAbs.getResultFileName();
-		Set<String> lsStrings = new HashSet<>();
-		lsStrings.addAll(lsResult);
-		ReportDifGene reportDifGene = new ReportDifGene();
-//		reportDifGene.setLog2FC(logFC);
-//		reportDifGene.setpValueOrFDR(pValueOrFDR);
-//		reportDifGene.setTitleFormatNBC(titleFormatNBC);
-//		reportDifGene.setLsResults(lsStrings);
-//		List<XdocTmpltExcel> lsTmpltExcels = new ArrayList<>(); 
-		
-		for (String string : lsStrings) {
-//			XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(EnumTableType.DifGene.getXdocTable());
-//			xdocTmpltExcel.setExcelTitle("差异基因表达分析结果的截图展示");
-//			xdocTmpltExcel.addExcel(string, 1);
-//			lsTmpltExcels.add(xdocTmpltExcel);
-		}
-		String outFolder = FileOperate.getParentPathNameWithSep(lsResult.get(0));
-//		reportDifGene.setLsTmpltExcels(lsTmpltExcels);
-		reportDifGene.writeAsFile(outFolder);
-		return reportDifGene;
-	}
+//	public ReportDifGene getDiffReport() {
+//		double logFC =  diffExpAbs.getLogFC();
+//		double pValueOrFDR = diffExpAbs.getpValueOrFDR();
+//		TitleFormatNBC titleFormatNBC = diffExpAbs.getTitleFormatNBC();
+//		List<String> lsResult =  diffExpAbs.getResultFileName();
+//		Set<String> lsStrings = new HashSet<>();
+//		lsStrings.addAll(lsResult);
+////		reportDifGene.setLog2FC(logFC);
+////		reportDifGene.setpValueOrFDR(pValueOrFDR);
+////		reportDifGene.setTitleFormatNBC(titleFormatNBC);
+////		reportDifGene.setLsResults(lsStrings);
+////		List<XdocTmpltExcel> lsTmpltExcels = new ArrayList<>(); 
+//		
+//		for (String string : lsStrings) {
+////			XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(EnumTableType.DifGene.getXdocTable());
+////			xdocTmpltExcel.setExcelTitle("差异基因表达分析结果的截图展示");
+////			xdocTmpltExcel.addExcel(string, 1);
+////			lsTmpltExcels.add(xdocTmpltExcel);
+//		}
+//		String outFolder = FileOperate.getParentPathNameWithSep(lsResult.get(0));
+////		reportDifGene.setLsTmpltExcels(lsTmpltExcels);
+//		reportDifGene.writeAsFile(outFolder);
+//		return reportDifGene;
+//	}
 	
 	/**
 	 * 输入比较的文件名和组后，

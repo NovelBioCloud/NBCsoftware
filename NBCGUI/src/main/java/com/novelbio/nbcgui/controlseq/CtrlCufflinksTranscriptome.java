@@ -20,7 +20,6 @@ import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.nbcReport.Params.EnumReport;
 
 public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 	boolean reconstructTranscriptome = false;
@@ -133,8 +132,9 @@ public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 		cufflinksGTF.setUpQuartileNormalized(isUpQuartileNormalized);
 	}
 
-	public void setOutPathPrefix(String outPathPrefix) {
-		this.outPrefix = FoldeCreate.createAndInFold(outPathPrefix, EnumReport.ReconstructTranscriptome.getResultFolder());
+	public void setOutPathPrefix(String resultPath) {
+		this.outPrefix = resultPath;
+//		this.outPrefix = FoldeCreate.createAndInFold(outPathPrefix, EnumReport.ReconstructTranscriptome.getResultFolder());
 		String tmpCufflinksResult = FileOperate.getPathName(outPrefix) + "tmpCufflinks/";
 		FileOperate.createFolders(tmpCufflinksResult);
 		cufflinksGTF.setOutPathPrefix(tmpCufflinksResult);
@@ -313,13 +313,13 @@ public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 	 * @param isFilter 是否过滤，如果不过滤就直接合并
 	 * @return
 	 */
-	public static HashMultimap<String, String> getPredictMapPrefix2FilteredFQ(String outPrefix, boolean isReconstruct) {
+	public static HashMultimap<String, String> getPredictMapPrefix2FilteredFQ(String resultPath, boolean isReconstruct) {
 		HashMultimap<String, String> mapPrefix2File = HashMultimap.create();
 		if (!isReconstruct) return mapPrefix2File;
 			
-		String outFoldPrefix = FoldeCreate.getInFold(outPrefix, EnumReport.ReconstructTranscriptome.getResultFolder());
-		String outGtf = outFoldPrefix + "novelTranscriptom.gtf";
-		String outStatistics = outFoldPrefix + "novelTranscriptomStatistics.txt";
+//		String outFoldPrefix = FoldeCreate.getInFold(outPrefix, EnumReport.ReconstructTranscriptome.getResultFolder());
+		String outGtf = resultPath + "novelTranscriptom.gtf";
+		String outStatistics = resultPath + "novelTranscriptomStatistics.txt";
 		mapPrefix2File.put("reconstruct_gtf", outGtf);
 		mapPrefix2File.put("reconstruct_statistics", outStatistics);
 		return mapPrefix2File;

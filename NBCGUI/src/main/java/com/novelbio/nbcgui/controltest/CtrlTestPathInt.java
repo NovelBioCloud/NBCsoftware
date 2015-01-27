@@ -6,7 +6,6 @@ import java.util.Map;
 
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.database.model.species.Species;
-import com.novelbio.report.Params.ReportPathWay;
 
 public interface CtrlTestPathInt {
 	public void setTaxID(Species taxID);
@@ -24,8 +23,6 @@ public interface CtrlTestPathInt {
 	 * @param fileName
 	 */
 	public void setLsBG(String fileName);
-	
-	public ReportPathWay getReportPathWay();
 	
 	public void setIsCluster(boolean isCluster);
 

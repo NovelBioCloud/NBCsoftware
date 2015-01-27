@@ -6,8 +6,6 @@ import java.util.Map;
 
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.database.model.species.Species;
-import com.novelbio.nbcReport.XdocTmpltExcel;
-import com.novelbio.nbcReport.Params.ReportPathWay;
 
 public interface CtrlTestCOGInt {
 	public void setTaxID(Species taxID);

@@ -1,2 +1,0 @@
-\paragraph{RNA sequencing Mapping:}
-Mapping of ${readsType} reads. Before read mapping, clean reads were obtained from the raw reads by removing the adaptor sequences, ${readsInfo}. The clean reads were then aligned to grape genome using the ${softwareInfo}. In alignment, preliminary experiments were performed to optimize the alignment parameters (${parameters}) to provide the largest information on the AS events.

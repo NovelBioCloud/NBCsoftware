@@ -22,12 +22,6 @@ import com.novelbio.base.multithread.RunProcess.RunThreadStat;
 import com.novelbio.base.plot.ImageUtils;
 import com.novelbio.database.domain.geneanno.GOtype;
 import com.novelbio.database.model.species.Species;
-import com.novelbio.report.Params.EnumTaskReport;
-import com.novelbio.report.Params.ReportGO;
-//import com.novelbio.nbcReport.Params.EnumReport;
-//import com.novelbio.nbcReport.Params.ReportGO;
-//import com.novelbio.nbcReport.report.GOReport;
-import com.novelbio.report.generateReport.GOReport;
 
 /** 同时把BP、MF、CC三个类型都做了 */
 @Component
@@ -42,8 +36,6 @@ public class CtrlGOall implements CtrlTestGOInt {
 	List<Integer> lsBlastTaxID = new ArrayList<Integer>();
 	boolean isCluster = false;
 	boolean isJustAll = true;
-	
-	GOReport goReport;
 	
 	String savePathPrefix;
 	String savePrefix = "";
@@ -66,10 +58,7 @@ public class CtrlGOall implements CtrlTestGOInt {
 			ctrlGO.setGOanno(goAnnoFile, isCombine);
 		}
 	}
-	
-	public ReportGO getReportGO() {
-		return goReport.getReportGO();
-	}
+
 	/** 是否仅检测全体基因，不检测updown等 */
 	public boolean isJustAll() {
 		return isJustAll;
@@ -193,18 +182,18 @@ public class CtrlGOall implements CtrlTestGOInt {
 	}
 	
 	@Override
-	public void saveExcel(String excelPath) {
-		savePathPrefix = FoldeCreate.createAndInFold(excelPath, EnumTaskReport.GOAnalysis.getResultFolder());
-		if (!savePathPrefix.endsWith("\\") && !savePathPrefix.endsWith("/")) {
-			savePrefix = FileOperate.getFileName(savePathPrefix);
+	public void saveExcel(String resultPath) {
+//		savePathPrefix = FoldeCreate.createAndInFold(excelPath, EnumTaskReport.GOAnalysis.getResultFolder());
+		if (!resultPath.endsWith("\\") && !resultPath.endsWith("/")) {
+			savePrefix = FileOperate.getFileName(resultPath);
 		}
 		
 		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
 			String saveName;
-			if (savePathPrefix.endsWith("\\") || savePathPrefix.endsWith("/")) {
-				saveName = savePathPrefix + ctrlGO.getResultBaseTitle() + ".xlsx";
+			if (resultPath.endsWith("\\") || resultPath.endsWith("/")) {
+				saveName = resultPath + ctrlGO.getResultBaseTitle() + ".xlsx";
 			} else {
-				saveName = FileOperate.changeFilePrefix(savePathPrefix, ctrlGO.getResultBaseTitle() + "_", "xlsx");
+				saveName = FileOperate.changeFilePrefix(resultPath, ctrlGO.getResultBaseTitle() + "_", "xlsx");
 			}
 			ctrlGO.saveExcel(saveName);
 		}
@@ -215,12 +204,6 @@ public class CtrlGOall implements CtrlTestGOInt {
 		} catch (Exception e) {
 			logger.info(Computer.getInstance().getNameIP() + " draw go pic failed", e);
 		}
-		
-//		goReport = new GOReport();
-//		goReport.setCtrlGOall(this);
-//		goReport.generateReport();
-		
-		goReport = new GOReport(this);
 	}
 	
 	/** 获得保存到文件夹的前缀，譬如保存到/home/zong0jie/stage10，那么前缀就是stage10 */

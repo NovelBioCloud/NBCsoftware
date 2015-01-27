@@ -21,7 +21,6 @@ import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.genome.GffChrStatistics;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGeneAbs;
-import com.novelbio.analysis.seq.mapping.Align;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.rnaseq.RPKMcomput;
 import com.novelbio.analysis.seq.sam.AlignSamReading;
@@ -32,20 +31,11 @@ import com.novelbio.analysis.seq.sam.SamErrorException;
 import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.analysis.seq.sam.SamFileStatistics;
 import com.novelbio.base.ExceptionNullParam;
-import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
-import com.novelbio.base.dataStructure.Alignment;
 import com.novelbio.base.dataStructure.ArrayOperate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.database.model.species.Species;
-import com.novelbio.nbcReport.EnumTableType;
-import com.novelbio.nbcReport.XdocTable;
-import com.novelbio.nbcReport.XdocTmpltExcel;
-import com.novelbio.nbcReport.XdocTmpltPic;
-import com.novelbio.nbcReport.Params.EnumReport;
-import com.novelbio.nbcReport.Params.ReportGeneExpression;
-import com.novelbio.nbcReport.Params.ReportSamAndRPKM;
 import com.novelbio.nbcgui.GUI.GuiSamStatistics;
 
 @Component
@@ -56,8 +46,6 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	
 	GuiSamStatistics guiSamStatistics;
 	GffChrAbs gffChrAbs = new GffChrAbs();
-	
-	ReportSamAndRPKM reportSamAndRPKM;
 	
 	List<String[]> lsReadFile;
 	
@@ -181,10 +169,26 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	}
 	/** 设定输出文件路径前缀 */
 	public void setResultPrefix(String resultPrefix) {
-		this.resultSamPrefix = FoldeCreate.getInFold(resultPrefix, EnumReport.SamStatistics.getResultFolder());
-		this.resultExpPrefix = FoldeCreate.getInFold(resultPrefix, EnumReport.GeneExp.getResultFolder());
-		this.resultGeneStructure = FoldeCreate.getInFold(resultPrefix, EnumReport.GeneStructure.getResultFolder());
-		this.resultPath = resultPrefix;
+//		this.resultSamPrefix = FoldeCreate.getInFold(resultPrefix, EnumReport.SamStatistics.getResultFolder());
+//		this.resultExpPrefix = FoldeCreate.getInFold(resultPrefix, EnumReport.GeneExp.getResultFolder());
+//		this.resultGeneStructure = FoldeCreate.getInFold(resultPrefix, EnumReport.GeneStructure.getResultFolder());
+//		this.resultPath = resultPrefix;
+	}
+	
+	public void setResultSamPrefix(String resultSamPrefix) {
+		this.resultSamPrefix = resultSamPrefix;
+	}
+	
+	public void setResultExpPrefix(String resultExpPrefix) {
+		this.resultExpPrefix = resultExpPrefix;
+	}
+	
+	public void setResultGeneStructure(String resultGeneStructure) {
+		this.resultGeneStructure = resultGeneStructure;
+	}
+	
+	public void setResultPath(String resultPath) {
+		this.resultPath =resultPath;
 	}
 	
 	public void run() {
@@ -205,7 +209,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			e.printStackTrace();
 		}
 		if (isCountExpression) {
-			writeReportGeneExp();
+//			writeReportGeneExp();
 		}
 		
 		done(null);
@@ -509,76 +513,76 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		}
 	}
 	
-	public ReportSamAndRPKM WriteReportSamAndRPKM(String picPathName, String excelPathName) {
-		reportSamAndRPKM = new ReportSamAndRPKM();
-		
-		List<XdocTmpltExcel> lsExcels = new ArrayList<>();
-		XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(EnumTableType.MappingResult.getXdocTable());
-		xdocTmpltExcel.setExcelTitle("Mapping率分析统计结果");
-		xdocTmpltExcel.addExcel(excelPathName, 1);
-		
-		XdocTmpltExcel xdocTmpltExcel2 = new XdocTmpltExcel(EnumTableType.MappingChrFile.getXdocTable());
-		xdocTmpltExcel2.setExcelTitle("Reads在染色体上的分布统计");
-		xdocTmpltExcel2.addExcel(excelPathName, 2);	
-		
-		lsExcels.add(xdocTmpltExcel);
-		lsExcels.add(xdocTmpltExcel2);
-
-		
-		XdocTmpltExcel xdocTmpltExcel3 = new XdocTmpltExcel(EnumTableType.MappingStatistics.getXdocTable());
-		xdocTmpltExcel3.setExcelTitle("Reads在基因上的分布统计图表");
-		xdocTmpltExcel3.addExcel(geneStructureResultFile, 1);
-		lsExcels.add(xdocTmpltExcel3);
-		reportSamAndRPKM.setLsExcels(lsExcels);
-		List<XdocTmpltPic> lsPics = new ArrayList<>();
-		XdocTmpltPic xdocTmpltPic = new XdocTmpltPic(picPathName);
-		xdocTmpltPic.setTitle("Reads在染色体上的分布柱状图");
-		lsPics.add(xdocTmpltPic);
-		reportSamAndRPKM.setLsTmpltPics(lsPics);
-		
-		Set<String> lsResultFile = new LinkedHashSet<>();
-		lsResultFile.add(excelPathName);
-		lsResultFile.add(geneStructureResultFile);
-		lsResultFile.add(picPathName);
-		reportSamAndRPKM.setSetResultFile(lsResultFile);
-		
-		reportSamAndRPKM.writeAsFile(FileOperate.getPathName(resultSamPrefix));
-		return reportSamAndRPKM;
-	}
+//	public ReportSamAndRPKM WriteReportSamAndRPKM(String picPathName, String excelPathName) {
+//		reportSamAndRPKM = new ReportSamAndRPKM();
+//		
+//		List<XdocTmpltExcel> lsExcels = new ArrayList<>();
+//		XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(EnumTableType.MappingResult.getXdocTable());
+//		xdocTmpltExcel.setExcelTitle("Mapping率分析统计结果");
+//		xdocTmpltExcel.addExcel(excelPathName, 1);
+//		
+//		XdocTmpltExcel xdocTmpltExcel2 = new XdocTmpltExcel(EnumTableType.MappingChrFile.getXdocTable());
+//		xdocTmpltExcel2.setExcelTitle("Reads在染色体上的分布统计");
+//		xdocTmpltExcel2.addExcel(excelPathName, 2);	
+//		
+//		lsExcels.add(xdocTmpltExcel);
+//		lsExcels.add(xdocTmpltExcel2);
+//
+//		
+//		XdocTmpltExcel xdocTmpltExcel3 = new XdocTmpltExcel(EnumTableType.MappingStatistics.getXdocTable());
+//		xdocTmpltExcel3.setExcelTitle("Reads在基因上的分布统计图表");
+//		xdocTmpltExcel3.addExcel(geneStructureResultFile, 1);
+//		lsExcels.add(xdocTmpltExcel3);
+//		reportSamAndRPKM.setLsExcels(lsExcels);
+//		List<XdocTmpltPic> lsPics = new ArrayList<>();
+//		XdocTmpltPic xdocTmpltPic = new XdocTmpltPic(picPathName);
+//		xdocTmpltPic.setTitle("Reads在染色体上的分布柱状图");
+//		lsPics.add(xdocTmpltPic);
+//		reportSamAndRPKM.setLsTmpltPics(lsPics);
+//		
+//		Set<String> lsResultFile = new LinkedHashSet<>();
+//		lsResultFile.add(excelPathName);
+//		lsResultFile.add(geneStructureResultFile);
+//		lsResultFile.add(picPathName);
+//		reportSamAndRPKM.setSetResultFile(lsResultFile);
+//		
+//		reportSamAndRPKM.writeAsFile(FileOperate.getPathName(resultSamPrefix));
+//		return reportSamAndRPKM;
+//	}
 	
 	//TODO 新增了NCrna统计表
 	
 	
-	public ReportGeneExpression writeReportGeneExp() {
-		ReportGeneExpression reportGeneExpression = new ReportGeneExpression();
-		if (isCalculateFPKM) {
-			reportGeneExpression.setGeneExpType("FPKM");
-		}else {
-			reportGeneExpression.setGeneExpType("RPKM");
-		}
-		
-		List<XdocTmpltExcel> lsXdocTmpltExcels = new ArrayList<>();	
-		int colNum = lsCounts.get(0).length;
-		
-		XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(new XdocTable(colNum, 20));
-		xdocTmpltExcel.addExcel(fragmentsFileName, 1);
-		xdocTmpltExcel.setExcelTitle("标准化Fragment值列表");
-		
-		XdocTmpltExcel xdocTmpltExcel2 = new XdocTmpltExcel(new XdocTable(colNum, 20));
-		xdocTmpltExcel2.addExcel(RPKMFileName, 1);
-		xdocTmpltExcel2.setExcelTitle("标准化FPKM值列表");
-		lsXdocTmpltExcels.add(xdocTmpltExcel);
-		lsXdocTmpltExcels.add(xdocTmpltExcel2);
-		
-		
-		reportGeneExpression.setLsExcels(lsXdocTmpltExcels);
-		Set<String> lsResult = new LinkedHashSet<>();
-		lsResult.add(fragmentsFileName);
-		lsResult.add(RPKMFileName);
-		reportGeneExpression.setSetResultFile(lsResult);
-		reportGeneExpression.writeAsFile(FileOperate.getPathName(resultExpPrefix));
-		return reportGeneExpression;
-	}
+//	public ReportGeneExpression writeReportGeneExp() {
+//		ReportGeneExpression reportGeneExpression = new ReportGeneExpression();
+//		if (isCalculateFPKM) {
+//			reportGeneExpression.setGeneExpType("FPKM");
+//		}else {
+//			reportGeneExpression.setGeneExpType("RPKM");
+//		}
+//		
+//		List<XdocTmpltExcel> lsXdocTmpltExcels = new ArrayList<>();	
+//		int colNum = lsCounts.get(0).length;
+//		
+//		XdocTmpltExcel xdocTmpltExcel = new XdocTmpltExcel(new XdocTable(colNum, 20));
+//		xdocTmpltExcel.addExcel(fragmentsFileName, 1);
+//		xdocTmpltExcel.setExcelTitle("标准化Fragment值列表");
+//		
+//		XdocTmpltExcel xdocTmpltExcel2 = new XdocTmpltExcel(new XdocTable(colNum, 20));
+//		xdocTmpltExcel2.addExcel(RPKMFileName, 1);
+//		xdocTmpltExcel2.setExcelTitle("标准化FPKM值列表");
+//		lsXdocTmpltExcels.add(xdocTmpltExcel);
+//		lsXdocTmpltExcels.add(xdocTmpltExcel2);
+//		
+//		
+//		reportGeneExpression.setLsExcels(lsXdocTmpltExcels);
+//		Set<String> lsResult = new LinkedHashSet<>();
+//		lsResult.add(fragmentsFileName);
+//		lsResult.add(RPKMFileName);
+//		reportGeneExpression.setSetResultFile(lsResult);
+//		reportGeneExpression.writeAsFile(FileOperate.getPathName(resultExpPrefix));
+//		return reportGeneExpression;
+//	}
 	
 	
 	@Override
@@ -629,11 +633,11 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	 */
 	public static HashMultimap<String, String> getPredictMapPrefix2Result(int taxID, boolean isCountExpression,
 			boolean isGeneStructureStatistics, boolean isFPKM, boolean isCountNCrna,
-			boolean isSamStatistics, String resultPrefix, List<String> lsPrefix) {
+			boolean isSamStatistics, String resultExpPrefix, String resultGeneStructure, String resultSamPrefix, List<String> lsPrefix) {
 		HashMultimap<String, String> mapPrefix2File = HashMultimap.create();
-		String resultExpPrefix = FoldeCreate.getInFold(resultPrefix, EnumReport.GeneExp.getResultFolder());
-		String resultGeneStructure = FoldeCreate.getInFold(resultPrefix, EnumReport.GeneStructure.getResultFolder());
-		String resultSamPrefix = FoldeCreate.getInFold(resultPrefix, EnumReport.SamStatistics.getResultFolder());
+//		String resultExpPrefix = FoldeCreate.getInFold(resultPrefix, EnumReport.GeneExp.getResultFolder());
+//		String resultGeneStructure = FoldeCreate.getInFold(resultPrefix, EnumReport.GeneStructure.getResultFolder());
+//		String resultSamPrefix = FoldeCreate.getInFold(resultPrefix, EnumReport.SamStatistics.getResultFolder());
 		for (String prefix : lsPrefix) {
 			if (isGeneStructureStatistics) {
 				String tmpGeneStructure = resultGeneStructure + prefix + "_GeneStructure.txt";

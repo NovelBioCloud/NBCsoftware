@@ -15,13 +15,9 @@ import com.novelbio.analysis.annotation.cog.COGanno;
 import com.novelbio.analysis.annotation.cog.EnumCogType;
 import com.novelbio.analysis.annotation.functiontest.CogFunTest;
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
-import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.plot.ImageUtils;
 import com.novelbio.database.model.modgeneid.GeneID;
-import com.novelbio.report.Params.EnumTaskReport;
-import com.novelbio.report.generateReport.COGReport;
-//import com.novelbio.nbcReport.Params.EnumReport;
 @Service
 @Scope("prototype")
 public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
@@ -30,8 +26,6 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 	String savePrefix = "";
 	List<String> lsResultPic = new ArrayList<>();
 	EnumCogType cogType;
-	
-	COGReport cogReport;
 	
 	/** @param QtaxID */
 	public CtrlCOG() {
@@ -43,10 +37,6 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 		cogType = cogAnno.getCogType();
 	}
 	
-	/** COG没有blast */
-	@Deprecated
-	public void setBlastInfo(double blastevalue, List<Integer> lsBlastTaxID) {
-	}
 	@Override
 	protected void copeFile(String prix, String excelPath) { }
 	
@@ -80,20 +70,19 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 	}
 	
 	@Override
-	public List<String> saveExcel(String excelPath) {
+	public List<String> saveExcel(String resultPath) {
 		List<String> lsResultFile = new ArrayList<>();
-		String excelPrefix = FoldeCreate.createAndInFold(excelPath, EnumTaskReport.COG.getResultFolder());
-		if (excelPrefix.endsWith("\\") || excelPrefix.endsWith("/")) {
-			saveParentPath = excelPrefix;
+		if (resultPath.endsWith("\\") || resultPath.endsWith("/")) {
+			saveParentPath = resultPath;
 		} else {
-			saveParentPath = FileOperate.getParentPathNameWithSep(excelPrefix);
-			savePrefix = FileOperate.getFileName(excelPath);
+			saveParentPath = FileOperate.getParentPathNameWithSep(resultPath);
+			savePrefix = FileOperate.getFileName(saveParentPath);
 		}
 		
-		if (excelPrefix.endsWith("\\") || excelPrefix.endsWith("/")) {
-			saveExcelPrefix = excelPrefix + getResultBaseTitle() + ".xlsx";
+		if (resultPath.endsWith("\\") || resultPath.endsWith("/")) {
+			saveExcelPrefix = resultPath + getResultBaseTitle() + ".xlsx";
 		} else {
-			saveExcelPrefix = FileOperate.changeFilePrefix(excelPrefix, getResultBaseTitle() + "_", "xlsx");
+			saveExcelPrefix = FileOperate.changeFilePrefix(resultPath, getResultBaseTitle() + "_", "xlsx");
 		}
 		if (isCluster) {
 			lsResultFile =  saveExcelCluster(saveExcelPrefix);
@@ -101,8 +90,6 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 			lsResultFile =  saveExcelNorm(saveExcelPrefix);
 		}
 		savePic();
-		
-		cogReport = new COGReport(this);
 		
 		return lsResultFile;
 	}

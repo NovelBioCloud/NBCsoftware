@@ -20,6 +20,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
+import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
@@ -281,7 +282,9 @@ public class GuiPathJpanel extends JPanel{
 				public void actionPerformed(ActionEvent evt) {
 					String savefilename = guiFileOpen.saveFileNameAndPath("excel2003", "");
 					if (ctrlPath != null) {
-						ctrlPath.saveExcel(savefilename);
+						String resultPath = FoldeCreate.createAndInFold(savefilename, "PathWayAnalysis_result");
+						ctrlPath.saveExcel(resultPath);// TODO 加路径
+//						ctrlPath.saveExcel(savefilename, ""); // TODO 加路径
 					}
 				}
 			});

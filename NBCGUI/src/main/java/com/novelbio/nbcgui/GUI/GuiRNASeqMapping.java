@@ -17,6 +17,7 @@ import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.mapping.MapBowtie;
 import com.novelbio.analysis.seq.mapping.MapLibrary;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
+import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
@@ -213,7 +214,10 @@ public class GuiRNASeqMapping extends JPanel {
 				ctrlRNAmap.setThreadNum(threadNum);
 				ctrlRNAmap.setIsUseGTF(chckbxUseGtf.isSelected());
 				ctrlRNAmap.setSensitive(cmbSensitive.getSelectedValue());
-				ctrlRNAmap.setOutPathPrefix(out);
+				
+				String outPathPrefix = FoldeCreate.createAndInFold(out, "RNASeqMap_result");//TODO
+				ctrlRNAmap.setOutPathPrefix(outPathPrefix);
+//				ctrlRNAmap.setOutPathPrefix(out);
 				ctrlRNAmap.mapping();
 				if (cmbRNAsoftware.getSelectedValue() == SoftWare.rsem) {
 					ctrlRNAmap.writeToResult();

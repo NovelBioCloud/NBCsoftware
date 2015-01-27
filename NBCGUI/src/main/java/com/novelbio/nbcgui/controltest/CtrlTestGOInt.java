@@ -7,8 +7,6 @@ import java.util.Map;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.database.domain.geneanno.GOtype;
 import com.novelbio.database.model.species.Species;
-import com.novelbio.report.Params.ReportGO;
-//import com.novelbio.nbcReport.Params.ReportGO;
 
 /** 不是单例 */
 public interface CtrlTestGOInt {
@@ -36,8 +34,6 @@ public interface CtrlTestGOInt {
 	 */
 	public void saveExcel(String excelPath);
 	
-	
-	public ReportGO getReportGO();
 	/**
 	 * <b>GO用到</b><br>
 	 * 必须第一时间设定，这个就会初始化检验模块

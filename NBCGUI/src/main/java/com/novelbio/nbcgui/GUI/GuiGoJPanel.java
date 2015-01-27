@@ -24,6 +24,7 @@ import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.analysis.annotation.functiontest.StatisticTestResult;
 import com.novelbio.analysis.annotation.functiontest.TestType;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
+import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
@@ -349,7 +350,8 @@ public class GuiGoJPanel extends JPanel{
 				public void actionPerformed(ActionEvent evt) {
 					String savefilename = guiFileOpen.saveFileNameAndPath("excel2007", "");
 					if (ctrlGO != null) {
-						ctrlGO.saveExcel(savefilename);
+						String resultPath = FoldeCreate.createAndInFold(savefilename, "GOAnalysis_result");
+						ctrlGO.saveExcel(resultPath);// TODO 加路径
 					}
 				}
 			});

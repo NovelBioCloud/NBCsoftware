@@ -21,7 +21,6 @@ import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.model.species.Species;
-import com.novelbio.nbcReport.Params.EnumReport;
 
 public class CtrlRseQC implements IntCmdSoft {
 	List<String[]> lsPrefix2File;
@@ -91,8 +90,8 @@ public class CtrlRseQC implements IntCmdSoft {
 		this.lsPrefix2File = lsPrefix2File;
 	}
 	/** 输出文件路径 */
-	public void setOutFilePrefix(String outFilePrefix) {
-		this.outPath = FoldeCreate.createAndInFold(outFilePrefix, EnumReport.RSeQC.getResultFolder());
+	public void setOutFilePrefix(String outPath) {
+		this.outPath = outPath;
 	}
 
 	/** 输入物种信息，与bed文件和gtf文件三选一  */

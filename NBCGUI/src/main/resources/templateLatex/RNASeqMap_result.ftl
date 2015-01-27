@@ -1,2 +1,0 @@
-    \textbf{Mapping Information:}
-    Based on the clean reads after filtering, Novelbio applied the RNA-seq mapping using ${software} software to the ${SpeciesName!"\\colorbox{red}{用户自定义物种}"} genome for further study.

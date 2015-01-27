@@ -26,7 +26,6 @@ import com.novelbio.database.domain.information.SoftWareInfo;
 import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.generalConf.TitleFormatNBC;
-import com.novelbio.nbcReport.Params.EnumReport;
 
 public class CtrlRNAmap implements IntCmdSoft {
 	SoftWare softWare;
@@ -87,8 +86,8 @@ public class CtrlRNAmap implements IntCmdSoft {
 	public void setMapUnmapedReads(boolean mapUnmapedReads) {
 		this.mapUnmapedReads = mapUnmapedReads;
 	}
-	public void setOutPathPrefix(String outPathPrefix) {
-		outPrefix = FoldeCreate.createAndInFold(outPathPrefix, EnumReport.RNASeqMap.getResultFolder());
+	public void setOutPathPrefix(String outPrefix) {
+		this.outPrefix = outPrefix;
 	}
 	
 	public String getOutPrefix() {
@@ -261,7 +260,7 @@ public class CtrlRNAmap implements IntCmdSoft {
 	}
 	
 	public static HashMultimap<String, String> getPredictMapPrefix2File(String outPrefix, SoftWare softWare, List<String> lsPrefix) {
-		outPrefix = FoldeCreate.getInFold(outPrefix, EnumReport.RNASeqMap.getResultFolder());
+//		outPrefix = FoldeCreate.getInFold(outPrefix, EnumReport.RNASeqMap.getResultFolder());
 		HashMultimap<String, String> mapPrefix2Value = HashMultimap.create();
 		if (softWare == SoftWare.rsem) {
 			mapPrefix2Value.put("resultFPKM", outPrefix + "ResultFPKM.xls");

@@ -12,7 +12,6 @@ import com.novelbio.analysis.seq.GeneExpTable;
 import com.novelbio.analysis.seq.fasta.SeqHash;
 import com.novelbio.analysis.seq.fastq.FastQ;
 import com.novelbio.analysis.seq.fastq.FastQRecord;
-import com.novelbio.analysis.seq.mapping.MapBowtie;
 import com.novelbio.analysis.seq.mapping.MapBwaAln;
 import com.novelbio.analysis.seq.mirna.RfamStatistic;
 import com.novelbio.analysis.seq.rnaseq.RPKMcomput.EnumExpression;
@@ -22,12 +21,9 @@ import com.novelbio.analysis.seq.sam.SamMapRate;
 import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.database.domain.information.SoftWareInfo;
-import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.generalConf.PathDetailNBC;
 import com.novelbio.generalConf.TitleFormatNBC;
-import com.novelbio.nbcReport.Params.EnumReport;
 
 /** 检测RNAseq样本的rrna污染情况以及ncRNA的情况 */
 @Component
@@ -67,7 +63,7 @@ public class CtrlRfamStatistics implements IntCmdSoft {
 		this.threadNum = threadNum;
 	}
 	public void setOutPath(String outPath) {
-		this.outPath = FoldeCreate.createAndInFold(outPath, EnumReport.RfamStatistics.getResultFolder());
+		this.outPath = outPath;
 	}
 	/** 获取每个样本的多少条reads，默认是仅检测前一百万条reads */
 	public void setTestReadsNum(int testReadsNum) {

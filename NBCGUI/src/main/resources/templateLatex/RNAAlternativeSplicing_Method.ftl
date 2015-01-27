@@ -1,2 +1,0 @@
-\paragraph{Alternative Splicing Detection:}
-We selected the Alternative Splicing Detector (ASD, available on http://www.novelbio.com/asd/ASD.html) as the tool to detect the differentially alternative splicing cases based on the bam file after mapping and reference grape genome sequence according to the P-Value threshold (P-Value<${pValue}).

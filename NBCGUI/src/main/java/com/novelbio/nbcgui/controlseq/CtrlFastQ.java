@@ -20,8 +20,6 @@ import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.service.SpringFactory;
-import com.novelbio.nbcReport.Params.EnumReport;
-import com.novelbio.nbcReport.Params.ReportQC;
 
 @Component
 @Scope("prototype")
@@ -45,7 +43,7 @@ public class CtrlFastQ {
 	/** 过滤后是否要QC，不要就只计数 */
 	boolean qcAfter = true;
 	
-	List<ReportQC> lsReportQCs = new ArrayList<>();
+//	List<ReportQC> lsReportQCs = new ArrayList<>();
 	/** 返回fastqc的质检文件 */
 	HashMultimap<String, String> mapPrefix2ResultQC = HashMultimap.create();
 	
@@ -55,9 +53,9 @@ public class CtrlFastQ {
 	 * 得到所有的报告
 	 * @return
 	 */
-	public List<ReportQC> getLsReportQCs() {
-		return lsReportQCs;
-	}
+//	public List<ReportQC> getLsReportQCs() {
+//		return lsReportQCs;
+//	}
 	public void setCheckFormat(boolean isCheckFormat) {
 		this.isCheckFormat = isCheckFormat;
 	}
@@ -107,7 +105,7 @@ public class CtrlFastQ {
 	}
 	
 	public void setOutFilePrefix(String outFilePrefix) {
-		this.outFilePrefix = FoldeCreate.createAndInFold(outFilePrefix, EnumReport.FastQC.getResultFolder());
+		this.outFilePrefix = outFilePrefix;
 	}
 	
 	public boolean isFiltered() {
@@ -242,7 +240,7 @@ public class CtrlFastQ {
 			}
 			ctrlFastQfilter.saveFastQC(outFilePrefix + prefix);
 			
-			lsReportQCs.add(ctrlFastQfilter.getReportQC());
+//			lsReportQCs.add(ctrlFastQfilter.getReportQC());
 			if (!isJustFastqc) {
 				mapCondition2LRFiltered.put(prefix, lsLR);
 			}
@@ -517,7 +515,7 @@ public class CtrlFastQ {
 		copeFastq.setMapCondition2LsFastQLR();
 
 		HashMultimap<String, String> mapPrefix2LsFilteredFile = HashMultimap.create();
-		outPrefix = FoldeCreate.getInFold(outPrefix, EnumReport.FastQC.getResultFolder());
+//		outPrefix = FoldeCreate.getInFold(outPrefix, EnumReport.FastQC.getResultFolder());
 		for (String prefix : copeFastq.getLsPrefix()) {
 			List<String[]> lsFastQLR = copeFastq.getMapCondition2LsFastQLR().get(prefix);
 			if (!isFilter && lsFastQLR.size() < 2) {

@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 
 import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
+import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
@@ -122,7 +123,8 @@ public class GuiTranscriptomeCufflinks extends JPanel {
 				if (FileOperate.isFileDirectory(outPathPrefix)) {
 					outPathPrefix = FileOperate.addSep(outPathPrefix);
 				}
-				cufflinksGTF.setOutPathPrefix(outPathPrefix);
+				String resultPath = FoldeCreate.createAndInFold(outPathPrefix, "ReconstructTranscriptome_result");//TODO
+				cufflinksGTF.setOutPathPrefix(resultPath);
 				cufflinksGTF.setReconstructTranscriptome(chckbxReconstructtrancsriptome.isSelected());
 				cufflinksGTF.setThreadNum((Integer) spinThreadNum.getValue());
 				cufflinksGTF.run();

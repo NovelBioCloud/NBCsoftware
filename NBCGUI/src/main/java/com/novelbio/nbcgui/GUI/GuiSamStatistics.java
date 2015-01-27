@@ -14,12 +14,12 @@ import javax.swing.JTextField;
 
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
+import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.database.model.species.Species;
-import com.novelbio.database.service.SpringFactory;
 import com.novelbio.nbcgui.controlseq.CtrlSamPPKMint;
 import com.novelbio.nbcgui.controlseq.CtrlSamRPKMLocate;
 
@@ -130,7 +130,17 @@ public class GuiSamStatistics extends JPanel {
 				
 				ctrlSamRPKMLocate.setTssRange(tss);
 				ctrlSamRPKMLocate.setTesRange(tes);
-				ctrlSamRPKMLocate.setResultPrefix(txtSaveTo.getText());
+				
+				String resultPath = txtSaveTo.getText();
+				String resultSamPrefix = FoldeCreate.createAndInFold(resultPath, "SamStatistic_result");
+				String resultExpPrefix = FoldeCreate.createAndInFold(resultPath, "GeneExpression_result");
+				String resultGeneStructure = FoldeCreate.createAndInFold(resultPath, "GeneStructure_result");
+				ctrlSamRPKMLocate.setResultExpPrefix(resultExpPrefix);
+				ctrlSamRPKMLocate.setResultSamPrefix(resultSamPrefix);
+				ctrlSamRPKMLocate.setResultGeneStructure(resultGeneStructure);
+				ctrlSamRPKMLocate.setResultPath(resultPath);
+				
+//				ctrlSamRPKMLocate.setResultPrefix(txtSaveTo.getText());
 				
 				Species species = layeredPane.getSelectSpecies();
 				if (species.getTaxID() == 0 && !txtGTF.getText().equals("")) {

@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 import com.novelbio.analysis.annotation.cog.COGanno;
 import com.novelbio.analysis.annotation.cog.EnumCogType;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
+import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
@@ -513,7 +514,9 @@ public class GuiGoMultiJPanel extends JPanel{
 		ctrlGO.setLsBG(backGroundFile);
 		ctrlGO.setLsAccID2Value(lsAccID);
 		ctrlGO.run();
-		ctrlGO.saveExcel(outFile);
+		String resultPath = FoldeCreate.createAndInFold(outFile, "GOAnalysis_result");
+		ctrlGO.saveExcel(resultPath);// TODO 加路径
+//		ctrlGO.saveExcel(outFile, "");// TODO 加路径
 	}
 	
 	/**
@@ -571,7 +574,10 @@ public class GuiGoMultiJPanel extends JPanel{
 		}
 		ctrlPath.setLsAccID2Value(lsAccID);
 		ctrlPath.run();
-		ctrlPath.saveExcel(outFile);
+		
+		String resultPath = FoldeCreate.createAndInFold(outFile, "PathWayAnalysis_result");
+		ctrlPath.saveExcel(resultPath);// TODO 加路径
+//		ctrlPath.saveExcel(outFile, ""); // TODO 加路径
 	}
 	/**
 	 * analysis按下去后得到结果
@@ -640,7 +646,9 @@ public class GuiGoMultiJPanel extends JPanel{
 		}
 		ctrlCOG.setLsAccID2Value(lsAccID);
 		ctrlCOG.run();
-		ctrlCOG.saveExcel(outFile);
+		String resultPath = FoldeCreate.createAndInFold(outFile, "COGAnalysis_result");
+		ctrlCOG.saveExcel(resultPath);// TODO 加路径
+//		ctrlCOG.saveExcel(outFile, "");// TODO 加路径
 	}
 	
 	private void selectCmbGoAlgorithm() {

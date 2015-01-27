@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 
 import com.novelbio.analysis.seq.fastq.FastQ;
 import com.novelbio.analysis.seq.mapping.MapLibrary;
+import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
@@ -25,6 +26,7 @@ import com.novelbio.database.service.SpringFactory;
 import com.novelbio.nbcgui.GUI.GuiLayeredPanSpeciesVersion.SpeciesSelect;
 import com.novelbio.nbcgui.controlseq.CtrlDNAMapping;
 import com.novelbio.nbcgui.controlseq.CtrlFastQ;
+
 import javax.swing.JSpinner;
 
 public class GuiFastQFanwei extends JPanel {
@@ -222,6 +224,7 @@ public class GuiFastQFanwei extends JPanel {
 				ctrlFastQ.setFilter(false);
 				ctrlFastQ.setCheckFormat(true);
 				ctrlFastQ.setJustFastqc(chkJustQC.isSelected());
+				String outFilePrefix = FoldeCreate.createAndInFold(txtSavePathAndPrefix.getText(), "QualityControl_result");//TODO
 				
 				if (chckbxFilterreads.isSelected()) {
 					ctrlFastQ.setFilter(true);
@@ -230,7 +233,8 @@ public class GuiFastQFanwei extends JPanel {
 					ctrlFastQ.setAdaptorLowercase(chckbxLowcaseAdaptor.isSelected());
 					ctrlFastQ.setFastqQuality(cmbReadsQuality.getSelectedValue());
 					ctrlFastQ.setTrimNNN(chckbxTrimEnd.isSelected(), (int)spnTrimNNNcutoff.getValue());
-					ctrlFastQ.setOutFilePrefix(txtSavePathAndPrefix.getText());
+					ctrlFastQ.setOutFilePrefix(outFilePrefix);
+//					ctrlFastQ.setOutFilePrefix(txtSavePathAndPrefix.getText());
 					ctrlFastQ.setFastQC(chckbxQcbeforefilter.isSelected(), chckbxQcafterFilter.isSelected());
 					try { ctrlFastQ.setReadsLenMin(Integer.parseInt(txtMinReadsLen.getText())); } catch (Exception e2) { }
 					ctrlFastQ.running();
@@ -247,7 +251,8 @@ public class GuiFastQFanwei extends JPanel {
 					ctrlDNAMapping.setSoftMapping(cmbMappingSoftware.getSelectedValue());
 					Species species = speciesLayOut.getSelectSpecies();
 					ctrlDNAMapping.setSpecies(species, CtrlDNAMapping.MAP_TO_CHROM);
-					ctrlDNAMapping.setOutFilePrefix(txtSavePathAndPrefix.getText());
+					ctrlDNAMapping.setOutFilePrefix(outFilePrefix);
+//					ctrlDNAMapping.setOutFilePrefix(txtSavePathAndPrefix.getText());
 					ctrlDNAMapping.running();
 				}
 				JOptionPane.showConfirmDialog(null, "Finished", "ok", JOptionPane.CLOSED_OPTION);

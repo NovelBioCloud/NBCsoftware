@@ -23,7 +23,6 @@ import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.database.domain.geneanno.EnumSpeciesFile;
 import com.novelbio.database.model.modgeneid.GeneID;
 import com.novelbio.database.model.species.Species;
-import com.novelbio.nbcReport.EnumTableType;
 /**
  * 考虑添加进度条
  * @author zong0jie
@@ -436,21 +435,21 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	
 	protected abstract void clear();
 	
-	/** 根据指定的字符串，返回xdoc的枚举 */
-	public static EnumTableType getXdocGoPath(String sheetName) {
-		if (sheetName.contains(StatisticTestResult.titleGO)) {
-			return EnumTableType.GO_Result;
-		} else if (sheetName.contains(StatisticTestResult.titlePath)) {
-			return EnumTableType.Pathway_Result;
-		} else if (sheetName.contains(StatisticTestGene2Item.titleGO)) {
-			return EnumTableType.GO_Gene2GO;
-		} else if (sheetName.contains(StatisticTestItem2Gene.titleGO)) {
-			return EnumTableType.GO_GO2Gene;
-		} else if (sheetName.contains(StatisticTestGene2Item.titlePath)) {
-			return EnumTableType.Pathway_Gene2Path;
-		}
-		return null;
-	}
+//	/** 根据指定的字符串，返回xdoc的枚举 */
+//	public static EnumTableType getXdocGoPath(String sheetName) {
+//		if (sheetName.contains(StatisticTestResult.titleGO)) {
+//			return EnumTableType.GO_Result;
+//		} else if (sheetName.contains(StatisticTestResult.titlePath)) {
+//			return EnumTableType.Pathway_Result;
+//		} else if (sheetName.contains(StatisticTestGene2Item.titleGO)) {
+//			return EnumTableType.GO_Gene2GO;
+//		} else if (sheetName.contains(StatisticTestItem2Gene.titleGO)) {
+//			return EnumTableType.GO_GO2Gene;
+//		} else if (sheetName.contains(StatisticTestGene2Item.titlePath)) {
+//			return EnumTableType.Pathway_Gene2Path;
+//		}
+//		return null;
+//	}
 	
 }
 

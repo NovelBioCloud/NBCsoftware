@@ -66,11 +66,6 @@
 			<version>0.0.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-		   <groupId>com.novelbio</groupId>
-  			<artifactId>service</artifactId>
-  			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>com.novelbio</groupId>
 			<artifactId>jacob</artifactId>
 			<version>1.17</version>

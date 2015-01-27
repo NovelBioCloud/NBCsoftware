@@ -17,12 +17,14 @@ import javax.swing.JTextField;
 
 import com.novelbio.analysis.diffexpress.DiffExpAbs;
 import com.novelbio.analysis.diffexpress.EnumDifGene;
+import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.nbcgui.controltest.CtrlDifGene;
+
 import javax.swing.JCheckBox;
 
 public class GuiDifGeneJpanel extends JPanel {
@@ -161,7 +163,9 @@ public class GuiDifGeneJpanel extends JPanel {
 					if (!fileName.endsWith("txt") && !fileName.endsWith("xls") && !fileName.endsWith("xlsx")) {
 						fileName = FileOperate.changeFileSuffix(fileName, "", "xls");
 					}
-					diffExpAbs.addFileName2Compare(fileName, pair);
+					String resultPath = FoldeCreate.createAndInFold(fileName, "DifferenceExpression_result");
+					diffExpAbs.addFileName2Compare(resultPath, pair); // TODO 加路径
+//					diffExpAbs.addFileName2Compare(fileName, pair); // TODO 加路径
 				}
 				diffExpAbs.calculateResult();
 				diffExpAbs.getResultFileName();
