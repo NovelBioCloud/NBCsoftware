@@ -168,7 +168,7 @@ public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 			return;
 		}
 		
-		outStatistics =  outPrefix + "novelTranscriptomStatistics.txt";
+		outStatistics =  outPrefix + "NBCTranscriptomStatistics.txt";
 		String resultGtf = null;
 		String outMergePrefix = outPrefix + "tmpMerge";
 		if (lsResultGTF.size() > 1) {
@@ -190,10 +190,10 @@ public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 			resultGtf = lsResultGTF.get(0);
 		}
 		if (gffChrAbs.getGffHashGene() == null) {
-			FileOperate.copyFile(resultGtf, outPrefix + "novelTranscriptom.gtf", true);
+			FileOperate.copyFile(resultGtf, outPrefix + "CuffMerge.gtf", true);
 		}
 		if (isModifyNewGTF) {
-			modifyCufflinksGtf(resultGtf, outPrefix + "novelTranscriptom.gtf");
+			modifyCufflinksGtf(resultGtf, outPrefix + "NBCTranscriptom.gtf");
 		}
 		if (isAddUtrToRefGtf) {
 			modifyOldGtf(resultGtf, outPrefix + "RefAddUtrTranscriptom.gtf");
@@ -309,21 +309,21 @@ public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 		gffChrAbs.close();
 	}
 	
-	/** 返回预测的文件名
-	 * @param isFilter 是否过滤，如果不过滤就直接合并
-	 * @return
-	 */
-	public static HashMultimap<String, String> getPredictMapPrefix2FilteredFQ(String resultPath, boolean isReconstruct) {
-		HashMultimap<String, String> mapPrefix2File = HashMultimap.create();
-		if (!isReconstruct) return mapPrefix2File;
-			
+//	/** 返回预测的文件名
+//	 * @param isFilter 是否过滤，如果不过滤就直接合并
+//	 * @return
+//	 */
+//	public static HashMultimap<String, String> getPredictMapPrefix2FilteredFQ(String outPrefix, boolean isReconstruct) {
+//		HashMultimap<String, String> mapPrefix2File = HashMultimap.create();
+//		if (!isReconstruct) return mapPrefix2File;
+//			
 //		String outFoldPrefix = FoldeCreate.getInFold(outPrefix, EnumReport.ReconstructTranscriptome.getResultFolder());
-		String outGtf = resultPath + "novelTranscriptom.gtf";
-		String outStatistics = resultPath + "novelTranscriptomStatistics.txt";
-		mapPrefix2File.put("reconstruct_gtf", outGtf);
-		mapPrefix2File.put("reconstruct_statistics", outStatistics);
-		return mapPrefix2File;
-	}
+//		String outGtf = outFoldPrefix + "novelTranscriptom.gtf";
+//		String outStatistics = outFoldPrefix + "novelTranscriptomStatistics.txt";
+//		mapPrefix2File.put("reconstruct_gtf", outGtf);
+//		mapPrefix2File.put("reconstruct_statistics", outStatistics);
+//		return mapPrefix2File;
+//	}
 	@Override
 	public List<String> getCmdExeStr() {
 		return lsCmd;

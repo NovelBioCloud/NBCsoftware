@@ -10,6 +10,7 @@ import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.analysis.annotation.functiontest.NovelGOFunTest;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.base.PathDetail;
+import com.novelbio.base.StringOperate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.geneanno.GOtype;
 
@@ -18,6 +19,8 @@ public class CtrlGO extends CtrlGOPath {
 	
 	GOtype GOClass = GOtype.BP;
 	GoAlgorithm goAlgorithm = GoAlgorithm.novelgo;
+	String goAnnoFile;
+	boolean isCombine;
 	
 	int goLevel = -1;
 	public GOtype getGOType() {
@@ -64,6 +67,8 @@ public class CtrlGO extends CtrlGOPath {
 	 */
 	public void setGOanno(String goAnnoFile, boolean isCombine) {
 		((NovelGOFunTest) functionTest).setGoAnnoFile(goAnnoFile, isCombine);
+		this.goAnnoFile = goAnnoFile;
+		this.isCombine = isCombine;
 	}
 	
 	public void setGOType(GOtype goType) {
@@ -82,6 +87,12 @@ public class CtrlGO extends CtrlGOPath {
 	
 	@Override
 	String getGene2ItemFileName(String fileName) {
+		String goAnno = "";
+		if (!StringOperate.isRealNull(goAnnoFile)) {
+			goAnno = FileOperate.getFileName(goAnnoFile);
+			goAnno += isCombine;
+		}
+		
 		String suffix = "_GO_Item";
 		List<Integer> blastTaxID = functionTest.getBlastTaxID();
 		if (functionTest.isBlast()) {
@@ -95,6 +106,7 @@ public class CtrlGO extends CtrlGOPath {
 		if (goLevel > 0) {
 			suffix = suffix + "_" + goLevel + "Level";
 		}
+		suffix += goAnno;
 		String bgName = FileOperate.changeFileSuffix(fileName, suffix, "txt");
 		bgName = FileOperate.changeFilePrefix(bgName, ".", null);
 		return bgName;

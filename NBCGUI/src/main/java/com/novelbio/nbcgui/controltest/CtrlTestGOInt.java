@@ -20,7 +20,7 @@ public interface CtrlTestGOInt {
 	
 	public void setBlastInfo(double blastevalue, List<Integer> lsBlastTaxID);
 	/**
-	 * <b>在这之前要先设定GOlevel</b>
+	 * <b>在这之前要先设定GOlevel和GOannotation的文件</b>
 	 * 简单的判断下输入的是geneID还是geneID2Item表
 	 * @param fileName
 	 */
