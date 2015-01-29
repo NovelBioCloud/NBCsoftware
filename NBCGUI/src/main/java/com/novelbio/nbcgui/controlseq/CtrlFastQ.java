@@ -72,6 +72,11 @@ public class CtrlFastQ {
 	public void setFastqQuality(String fastqQuality) {
 		fastQfilter.setQualityFilter(fastqQuality);
 	}
+	
+	public void getFastqQuality() {
+		return fastQfilter.getQualityFilter();
+	}
+	
 	/** 是否过滤，如果不过滤则直接合并 */
 	public void setFilter(boolean filter) {
 		fastQfilter.setIsFiltered(filter);
