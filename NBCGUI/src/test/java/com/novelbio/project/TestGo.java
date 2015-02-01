@@ -15,7 +15,7 @@ import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.fileOperate.FileHadoop;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.model.species.Species;
-import com.novelbio.database.service.SpringFactory;
+import com.novelbio.database.service.SpringFactoryBioinfo;
 import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportAll;
 import com.novelbio.nbcgui.controltest.CtrlTestGOInt;
@@ -48,7 +48,7 @@ public class TestGo {
 		String[] excelFiles = mapParams.get("inputData");
 		String[] excelPrefixs = mapParams.get("inputDataPrefix");
 		for (int i = 0; i < excelFiles.length; i++) {
-			CtrlTestGOInt ctrlGO = (CtrlTestGOInt)SpringFactory.getFactory().getBean("ctrlGOall");
+			CtrlTestGOInt ctrlGO = (CtrlTestGOInt)SpringFactoryBioinfo.getFactory().getBean("ctrlGOall");
 			Assert.assertNotNull(ctrlGO);
 			ctrlGO.clearParam();
 			GoAlgorithm goAlgorithm = GoAlgorithm.valueOf(mapParams.get("goAlgorithm")[0]);

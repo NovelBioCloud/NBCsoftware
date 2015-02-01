@@ -11,7 +11,7 @@ import org.junit.Test;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.database.model.species.Species;
-import com.novelbio.database.service.SpringFactory;
+import com.novelbio.database.service.SpringFactoryBioinfo;
 import com.novelbio.nbcgui.controlseq.CtrlSamPPKMint;
 
 
@@ -44,7 +44,7 @@ public class TestSamAndRPKM {
 	
 	@Test
 	public void runTest() {
-		CtrlSamPPKMint ctrlSamRPKMLocate = (CtrlSamPPKMint)SpringFactory.getFactory().getBean("ctrlSamRPKMLocate");
+		CtrlSamPPKMint ctrlSamRPKMLocate = (CtrlSamPPKMint)SpringFactoryBioinfo.getFactory().getBean("ctrlSamRPKMLocate");
 		int speciesId = Integer.parseInt(mapParams.get("species")[0]);
 		String expressCount =  mapParams.get("expressCount")[0];
 		String strandType = mapParams.get("strandType")[0];

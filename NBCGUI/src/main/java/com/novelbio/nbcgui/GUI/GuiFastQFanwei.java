@@ -22,7 +22,7 @@ import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
 import com.novelbio.database.model.species.Species;
-import com.novelbio.database.service.SpringFactory;
+import com.novelbio.database.service.SpringFactoryBioinfo;
 import com.novelbio.nbcgui.GUI.GuiLayeredPanSpeciesVersion.SpeciesSelect;
 import com.novelbio.nbcgui.controlseq.CtrlDNAMapping;
 import com.novelbio.nbcgui.controlseq.CtrlFastQ;
@@ -205,7 +205,7 @@ public class GuiFastQFanwei extends JPanel {
 		btnRun.setBounds(653, 556, 118, 24);
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ctrlFastQ = (CtrlFastQ)SpringFactory.getFactory().getBean("ctrlFastQ");
+				ctrlFastQ = (CtrlFastQ)SpringFactoryBioinfo.getFactory().getBean("ctrlFastQ");
 				ArrayList<String[]> lsInfoLeftAndPrefix = scrollPaneFastqLeft.getLsDataInfo();
 				ArrayList<String[]> lsInfoRight = scrollPaneFastqRight.getLsDataInfo();
 				ArrayList<String> lsLeftFq = new ArrayList<String>();

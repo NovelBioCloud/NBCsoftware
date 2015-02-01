@@ -33,7 +33,7 @@ import com.novelbio.base.gui.JTextFieldData;
 import com.novelbio.database.domain.geneanno.GOtype;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.database.model.species.Species.EnumSpeciesType;
-import com.novelbio.database.service.SpringFactory;
+import com.novelbio.database.service.SpringFactoryBioinfo;
 import com.novelbio.nbcgui.controltest.CtrlGO;
 import com.novelbio.nbcgui.controltest.CtrlTestGOInt;
 
@@ -442,7 +442,7 @@ public class GuiGoJPanel extends JPanel{
 		
 		String backGroundFile = jTxtBGGo.getText();
 		double evalue = 1e-10;
-		ctrlGO = (CtrlTestGOInt)SpringFactory.getFactory().getBean("ctrlGOall");
+		ctrlGO = (CtrlTestGOInt)SpringFactoryBioinfo.getFactory().getBean("ctrlGOall");
 		ctrlGO.clearParam();
 		ctrlGO.setGoAlgorithm(cmbGoAlgorithm.getSelectedValue());
 //		ctrlGO.setGoAlgorithm(GoAlgorithm.novelgo);

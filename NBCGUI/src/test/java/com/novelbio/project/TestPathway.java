@@ -15,7 +15,7 @@ import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.fileOperate.FileHadoop;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.model.species.Species;
-import com.novelbio.database.service.SpringFactory;
+import com.novelbio.database.service.SpringFactoryBioinfo;
 import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportGOAll;
 import com.novelbio.nbcReport.Params.ReportPathWay;
@@ -74,7 +74,7 @@ public class TestPathway {
 					lsStaxID.add(Integer.parseInt(taxIDString));
 				}
 			}
-			CtrlTestPathInt ctrlPath = (CtrlTestPathInt)SpringFactory.getFactory().getBean("ctrlPath");
+			CtrlTestPathInt ctrlPath = (CtrlTestPathInt)SpringFactoryBioinfo.getFactory().getBean("ctrlPath");
 			ctrlPath.clearParam();
 			Species species = new Species(taxID);
 			ctrlPath.setTaxID(species);

@@ -29,7 +29,7 @@ import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.base.gui.JTextFieldData;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.database.model.species.Species.EnumSpeciesType;
-import com.novelbio.database.service.SpringFactory;
+import com.novelbio.database.service.SpringFactoryBioinfo;
 import com.novelbio.nbcgui.controltest.CtrlTestPathInt;
 
 
@@ -357,7 +357,7 @@ public class GuiPathJpanel extends JPanel{
 		} else {
 			lsAccID = ExcelTxtRead.readLsExcelTxt(geneFileXls, new int[]{colAccID}, 1, 0);
 		}
-		ctrlPath = (CtrlTestPathInt)SpringFactory.getFactory().getBean("ctrlPath");
+		ctrlPath = (CtrlTestPathInt)SpringFactoryBioinfo.getFactory().getBean("ctrlPath");
 		ctrlPath.clearParam();
 		int taxID = -1;
 		Species species = jCombSelSpePath.getSelectedValue();

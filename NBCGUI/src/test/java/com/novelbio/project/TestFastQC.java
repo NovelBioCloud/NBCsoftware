@@ -14,7 +14,7 @@ import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.dataStructure.ArrayOperate;
 import com.novelbio.base.fileOperate.FileHadoop;
 import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.database.service.SpringFactory;
+import com.novelbio.database.service.SpringFactoryBioinfo;
 import com.novelbio.nbcReport.Params.EnumReport;
 import com.novelbio.nbcReport.Params.ReportAll;
 import com.novelbio.nbcReport.Params.ReportQC;
@@ -43,7 +43,7 @@ public class TestFastQC {
 	
 	@Test
 	public void pathWayRun(){
-		CtrlFastQ ctrlFastQ = (CtrlFastQ)SpringFactory.getFactory().getBean("ctrlFastQ");
+		CtrlFastQ ctrlFastQ = (CtrlFastQ)SpringFactoryBioinfo.getFactory().getBean("ctrlFastQ");
 		ArrayList<String> lsLeftFq = ArrayOperate.converArray2List(mapParams.get("leftFqs")[0].split(","));
 		ArrayList<String> lsPrefix = ArrayOperate.converArray2List(mapParams.get("prefixs")[0].split(","));
 		ArrayList<String> lsRightFq = ArrayOperate.converArray2List(mapParams.get("rightFq")[0].split(","));

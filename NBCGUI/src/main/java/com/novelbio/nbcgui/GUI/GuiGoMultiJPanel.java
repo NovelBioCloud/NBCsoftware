@@ -26,7 +26,7 @@ import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.base.gui.JTextFieldData;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.database.model.species.Species.EnumSpeciesType;
-import com.novelbio.database.service.SpringFactory;
+import com.novelbio.database.service.SpringFactoryBioinfo;
 import com.novelbio.nbcgui.controltest.CtrlCOG;
 import com.novelbio.nbcgui.controltest.CtrlTestCOGInt;
 import com.novelbio.nbcgui.controltest.CtrlTestGOInt;
@@ -487,7 +487,7 @@ public class GuiGoMultiJPanel extends JPanel{
 			}
 		}
 		
-		CtrlTestGOInt ctrlGO = (CtrlTestGOInt)SpringFactory.getFactory().getBean("ctrlGOall");
+		CtrlTestGOInt ctrlGO = (CtrlTestGOInt)SpringFactoryBioinfo.getFactory().getBean("ctrlGOall");
 		ctrlGO.clearParam();
 		ctrlGO.setGoAlgorithm(cmbGoAlgorithm.getSelectedValue());
 		ctrlGO.setTaxID(species);
@@ -554,7 +554,7 @@ public class GuiGoMultiJPanel extends JPanel{
 			}
 		}
 	
-		CtrlTestPathInt ctrlPath = (CtrlTestPathInt)SpringFactory.getFactory().getBean("ctrlPath");
+		CtrlTestPathInt ctrlPath = (CtrlTestPathInt)SpringFactoryBioinfo.getFactory().getBean("ctrlPath");
 		ctrlPath.clearParam();
 		ctrlPath.setTaxID(species);
 
@@ -614,7 +614,7 @@ public class GuiGoMultiJPanel extends JPanel{
 			}
 		}
 	
-		CtrlTestCOGInt ctrlCOG = (CtrlTestCOGInt)SpringFactory.getFactory().getBean("ctrlCOG");
+		CtrlTestCOGInt ctrlCOG = (CtrlTestCOGInt)SpringFactoryBioinfo.getFactory().getBean("ctrlCOG");
 		ctrlCOG.clearParam();
 		ctrlCOG.setTaxID(species);
 		

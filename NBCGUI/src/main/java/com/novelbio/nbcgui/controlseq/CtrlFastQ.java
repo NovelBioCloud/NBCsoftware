@@ -16,10 +16,9 @@ import com.google.common.collect.HashMultimap;
 import com.novelbio.analysis.seq.fastq.FastQ;
 import com.novelbio.analysis.seq.fastq.FastQC;
 import com.novelbio.analysis.seq.fastq.FastQFilter;
-import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.database.service.SpringFactory;
+import com.novelbio.database.service.SpringFactoryBioinfo;
 
 @Component
 @Scope("prototype")
@@ -73,8 +72,8 @@ public class CtrlFastQ {
 		fastQfilter.setQualityFilter(fastqQuality);
 	}
 	
-	public void getFastqQuality() {
-		return fastQfilter.getQualityFilter();
+	public String getFastqQuality() {
+		return fastQfilter.getQuality();
 	}
 	
 	/** 是否过滤，如果不过滤则直接合并 */
@@ -183,7 +182,7 @@ public class CtrlFastQ {
 				mapCondition2LRFiltered.put(prefix, copeFastq.getMapCondition2LslsFastq().get(prefix));
 				continue;
 			}
-			CtrlFastQfilter ctrlFastQfilter = (CtrlFastQfilter)SpringFactory.getFactory().getBean("ctrlFastQfilter");
+			CtrlFastQfilter ctrlFastQfilter = (CtrlFastQfilter)SpringFactoryBioinfo.getFactory().getBean("ctrlFastQfilter");
 			boolean isRunFilter = false;
 			if (!isJustFastqc) {
 				ctrlFastQfilter.setFastQfilterParam(fastQfilter);
@@ -290,7 +289,7 @@ public class CtrlFastQ {
 			if (!fastQfilter.isNeedFilter() && lsFastQLR.size() < 2) {
 				continue;
 			}
-			CtrlFastQfilter ctrlFastQfilter = (CtrlFastQfilter)SpringFactory.getFactory().getBean("ctrlFastQfilter");
+			CtrlFastQfilter ctrlFastQfilter = (CtrlFastQfilter)SpringFactoryBioinfo.getFactory().getBean("ctrlFastQfilter");
 			boolean isRunFilter = false;
 			if (!isJustFastqc) {
 				ctrlFastQfilter.setFastQfilterParam(fastQfilter);
