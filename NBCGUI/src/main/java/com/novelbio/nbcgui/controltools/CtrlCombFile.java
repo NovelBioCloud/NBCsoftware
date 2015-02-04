@@ -16,6 +16,11 @@ public class CtrlCombFile {
 	public void setOufFile(String oufFile) {
 		this.oufFile = oufFile;
 	}
+	
+	public CombineTab getCombineTab() {
+		return combineTab;
+	}
+	
 	/**
 	 * 比较哪几列
 	 * @param colNum

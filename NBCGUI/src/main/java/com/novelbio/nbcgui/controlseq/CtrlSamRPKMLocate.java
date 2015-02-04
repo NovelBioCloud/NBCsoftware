@@ -305,6 +305,10 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		return mapPrefix2Statistics;
 	}
 	
+	public void setMapPrefix2Statistics(Map<String, SamFileStatistics> mapPrefix2Statistics) {
+		this.mapPrefix2Statistics = mapPrefix2Statistics;
+	}
+	
 	private int getFileSize() {
 		long fileSizeLong = 0;
 		for (String[] fileName : lsReadFile) {

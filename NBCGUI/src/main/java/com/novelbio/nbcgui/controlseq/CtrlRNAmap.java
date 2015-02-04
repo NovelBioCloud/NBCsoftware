@@ -288,5 +288,9 @@ public class CtrlRNAmap implements IntCmdSoft {
 	public List<String> getCmdExeStr() {
 		return lsCmd;
 	}
+	
+	public void setCmdExeStr(List<String> lsCmd) {
+		this.lsCmd = lsCmd;
+	}
 
 }
