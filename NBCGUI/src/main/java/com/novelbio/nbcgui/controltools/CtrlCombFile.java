@@ -1,6 +1,7 @@
 package com.novelbio.nbcgui.controltools;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import com.novelbio.analysis.tools.compare.CombineTab;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
@@ -10,6 +11,7 @@ import com.novelbio.base.fileOperate.FileOperate;
 public class CtrlCombFile {
 	CombineTab combineTab = new CombineTab();
 	String oufFile = "";
+	String imgPath = "";
 	public void clean() {
 		combineTab = new CombineTab();
 	}
@@ -19,6 +21,15 @@ public class CtrlCombFile {
 	
 	public CombineTab getCombineTab() {
 		return combineTab;
+	}
+	
+	public String getImgPath() {
+		return imgPath;
+	}
+	
+	public Map<String, Integer> getMapSample2GeneNum() {
+		// TODO 添加方法获取样本及其对应的基因数
+		return combineTab.getMapSample2GeneNum();
 	}
 	
 	/**
@@ -64,7 +75,8 @@ public class CtrlCombFile {
 			txtWriteOneLine.ExcelWrite(combineTab.getLsResultFromImage());
 			txtWriteOneLine.close();
 			
-			combineTab.renderScriptAndDrawImage(FileOperate.changeFileSuffix(oufFile, null, "tiff"),"","");
+			imgPath = FileOperate.changeFileSuffix(oufFile, null, "tiff");
+			combineTab.renderScriptAndDrawImage(imgPath,"","");
 			
 			return;
 //		}
