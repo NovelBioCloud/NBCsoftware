@@ -31,8 +31,7 @@ public interface CtrlSamPPKMint extends RunGetInfo<GuiAnnoInfo>, Runnable {
 	public void setTesRange(int[] tes);
 		
 	public Map<String, SamFileStatistics> getMapPrefix2Statistics();
-	/** 设定输出文件路径前缀 */
-	public void setResultPrefix(String resultPrefix);
+
 	public void setResultSamPrefix(String resultSamPrefix);
 	public void setResultExpPrefix(String resultExpPrefix);
 	public void setResultGeneStructure(String resultGeneStructure);
@@ -40,7 +39,6 @@ public interface CtrlSamPPKMint extends RunGetInfo<GuiAnnoInfo>, Runnable {
 	
 	public void run();
 	
-	public void aop();
 	void clear();
 	Map<String, Long> getMapChrID2Len();
 

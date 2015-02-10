@@ -319,6 +319,5 @@ public class GuiSamStatistics extends JPanel {
 	}
 	
 	public void done() {
-		ctrlSamRPKMLocate.aop();
 	}
 }

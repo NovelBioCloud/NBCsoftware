@@ -102,7 +102,7 @@ public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 		this.gtfRefFile = gtfFile;
 	}
 	public void setLsBamFile2Prefix(ArrayList<String[]> lsBamFile2Prefix) {
-		cufflinksGTF.setBam(lsBamFile2Prefix);
+		cufflinksGTF.setLsBamFile2Prefix(lsBamFile2Prefix);
 	}
 	public void setThreadNum(int threadNum) {
 		this.thread = threadNum;
