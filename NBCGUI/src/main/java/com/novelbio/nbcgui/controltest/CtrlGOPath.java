@@ -10,13 +10,17 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import com.google.common.collect.HashMultimap;
+import com.novelbio.analysis.annotation.functiontest.CogFunTest;
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
+import com.novelbio.analysis.annotation.functiontest.KEGGPathwayFunTest;
+import com.novelbio.analysis.annotation.functiontest.NovelGOFunTest;
 import com.novelbio.analysis.annotation.functiontest.StatisticTestGene2Item;
 import com.novelbio.analysis.annotation.functiontest.StatisticTestItem2Gene;
 import com.novelbio.analysis.annotation.functiontest.StatisticTestResult;
 import com.novelbio.analysis.seq.genome.GffSpeciesInfo;
 import com.novelbio.base.StringOperate;
 import com.novelbio.base.dataOperate.ExcelOperate;
+import com.novelbio.base.dataOperate.ExcelStyle;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunProcess;
@@ -341,6 +345,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 
 		for (String prefix : mapPrefix2FunTest.keySet()) {
 			FunctionTest functionTest = mapPrefix2FunTest.get(prefix);
+			
 			Map<String,   List<String[]>> mapSheetName2LsInfo = functionTest.getMapWriteToExcel();
 			if (mapPrefix2FunTest.size() > 1 && prefix.equals("All")) {
 				if (excelResultAll == null) {
@@ -349,11 +354,15 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 					lsResultExcel.add(excelAllPath);
 				}				
 				for (String sheetName : mapSheetName2LsInfo.keySet()) {
-					excelResultAll.WriteExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName));
+					int endRowNum = mapSheetName2LsInfo.get(sheetName).size();
+					ExcelStyle style = ExcelStyle.getThreeLineTable(1, endRowNum);
+					excelResultAll.WriteExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName), style);
 				}
 			} else {
 				for (String sheetName : mapSheetName2LsInfo.keySet()) {
-					excelResult.WriteExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName));
+					int endRowNum = mapSheetName2LsInfo.get(sheetName).size();
+					ExcelStyle style = ExcelStyle.getThreeLineTable(1, endRowNum);
+					excelResult.WriteExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName),style);
 				}
 			}
 			copeFile(prefix, excelPath);
@@ -362,6 +371,24 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		if (excelResultAll != null) excelResultAll.close();
 		return lsResultExcel;
 	}
+	
+	/** 获得显著的go或pathway的数量 */
+	private int getSigItemNum(FunctionTest functionTest) {
+		int num = 1;//表示title也要占一行
+		if (functionTest instanceof CogFunTest) {
+			num += functionTest.getTestResult().size();
+			return num;
+		}
+		for (StatisticTestResult statInfo : functionTest.getTestResult()) {
+			if (functionTest instanceof NovelGOFunTest && statInfo.getPvalue() < 0.01
+					|| functionTest instanceof KEGGPathwayFunTest && statInfo.getPvalue() < 0.05
+					) {
+				num++;
+			}
+		}
+		return num;
+	}
+	
 	
 	/**
 	 * 统计结果，返回筛选条件
@@ -406,7 +433,9 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			lsResultExcel.add(excelPathOut);
 			Map<String, List<String[]>> mapSheetName2LsInfo = mapPrefix2FunTest.get(prefix).getMapWriteToExcel();
 			for (String sheetName : mapSheetName2LsInfo.keySet()) {
-				excelResult.WriteExcel(sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName));
+				int endRowNum = mapSheetName2LsInfo.get(sheetName).size();
+				ExcelStyle style = ExcelStyle.getThreeLineTable(1, endRowNum);
+				excelResult.WriteExcel(sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName), style);
 			}
 			excelResult.close();
 			copeFile(prefix, excelPath);
