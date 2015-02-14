@@ -347,6 +347,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			FunctionTest functionTest = mapPrefix2FunTest.get(prefix);
 			
 			Map<String,   List<String[]>> mapSheetName2LsInfo = functionTest.getMapWriteToExcel();
+			Map<String, Integer> mapSheetName2EndLine = functionTest.getMapSheetName2EndLine();
 			if (mapPrefix2FunTest.size() > 1 && prefix.equals("All")) {
 				if (excelResultAll == null) {
 					excelResultAll = new ExcelOperate();
@@ -354,13 +355,13 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 					lsResultExcel.add(excelAllPath);
 				}				
 				for (String sheetName : mapSheetName2LsInfo.keySet()) {
-					int endRowNum = mapSheetName2LsInfo.get(sheetName).size();
+					int endRowNum = mapSheetName2EndLine.get(sheetName) + 1;
 					ExcelStyle style = ExcelStyle.getThreeLineTable(1, endRowNum);
 					excelResultAll.WriteExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName), style);
 				}
 			} else {
 				for (String sheetName : mapSheetName2LsInfo.keySet()) {
-					int endRowNum = mapSheetName2LsInfo.get(sheetName).size();
+					int endRowNum = mapSheetName2EndLine.get(sheetName) + 1;
 					ExcelStyle style = ExcelStyle.getThreeLineTable(1, endRowNum);
 					excelResult.WriteExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName),style);
 				}
