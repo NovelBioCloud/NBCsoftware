@@ -1,6 +1,6 @@
 package com.novelbio.nbcgui.controlquery;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.novelbio.analysis.annotation.genAnno.AnnoQuery;
 import com.novelbio.analysis.annotation.genAnno.AnnoQuery.AnnoQueryDisplayInfo;
@@ -10,7 +10,7 @@ import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.nbcgui.GUI.GuiAnnoPeak;
 
-public class CtrlBatchAnnoPeak implements RunGetInfo<AnnoQuery.AnnoQueryDisplayInfo>{
+public class CtrlBatchAnnoPeak implements RunGetInfo<AnnoQuery.AnnoQueryDisplayInfo> {
 	GuiAnnoPeak guiAnnoPeak;
 	GffChrAnno gffChrAnno = new GffChrAnno();
 	Species species;
@@ -21,6 +21,8 @@ public class CtrlBatchAnnoPeak implements RunGetInfo<AnnoQuery.AnnoQueryDisplayI
 	boolean filterIntron = false;
 	boolean filter5UTR = false;
 	boolean filter3UTR = false;
+	
+	public CtrlBatchAnnoPeak() {}
 	
 	public CtrlBatchAnnoPeak(GuiAnnoPeak guiAnnoPeak) {
 		this.guiAnnoPeak = guiAnnoPeak;
@@ -34,9 +36,11 @@ public class CtrlBatchAnnoPeak implements RunGetInfo<AnnoQuery.AnnoQueryDisplayI
 		this.species = new Species(taxID);
 		gffChrAnno.setSpecies(taxID);
 	}
-	public void setListQuery(ArrayList<String[]> lsGeneInfo) {
-		guiAnnoPeak.getProcessBar().setMinimum(0);
-		guiAnnoPeak.getProcessBar().setMaximum(lsGeneInfo.size() - 1);
+	public void setListQuery(List<String[]> lsGeneInfo) {
+		if (guiAnnoPeak != null) {
+			guiAnnoPeak.getProcessBar().setMinimum(0);
+			guiAnnoPeak.getProcessBar().setMaximum(lsGeneInfo.size() - 1);
+		}
 		gffChrAnno.setLsGeneInfo(lsGeneInfo);
 	}
 	public void setColChrID(int colChrID) {
@@ -65,10 +69,11 @@ public class CtrlBatchAnnoPeak implements RunGetInfo<AnnoQuery.AnnoQueryDisplayI
 		gffChrAnno.setTes(filterTes);
 		gffChrAnno.setFilterGeneBody(filterGeneBody, filterExon, filterIntron);
 		gffChrAnno.setFilterUTR(filter5UTR, filter3UTR);
-		Thread thread = new Thread(gffChrAnno);
-		thread.start();
+		gffChrAnno.run();
 	}
-	public ArrayList<String[]> getResult() {
+	
+	/** 包含title */
+	public List<String[]> getResult() {
 		return gffChrAnno.getLsResult();
 	}
 
@@ -79,27 +84,37 @@ public class CtrlBatchAnnoPeak implements RunGetInfo<AnnoQuery.AnnoQueryDisplayI
 	
 	@Override
 	public void setRunningInfo(AnnoQueryDisplayInfo info) {
-		guiAnnoPeak.getProcessBar().setValue((int) info.getCountNum());
-		guiAnnoPeak.getJScrollPaneDataResult().addItem(info.getTmpInfo());
+		if (guiAnnoPeak != null) {
+			guiAnnoPeak.getProcessBar().setValue((int) info.getCountNum());
+			guiAnnoPeak.getJScrollPaneDataResult().addItem(info.getTmpInfo());
+		}
 	}
 	
 	@Override
 	public void done(RunProcess<AnnoQueryDisplayInfo> runProcess) {
-		guiAnnoPeak.getProcessBar().setValue(guiAnnoPeak.getProcessBar().getMaximum());
-		guiAnnoPeak.getBtnSave().setEnabled(true);
-		guiAnnoPeak.getBtnRun().setEnabled(true);
+		if (guiAnnoPeak != null) {
+			guiAnnoPeak.getProcessBar().setValue(guiAnnoPeak.getProcessBar().getMaximum());
+			guiAnnoPeak.getBtnSave().setEnabled(true);
+			guiAnnoPeak.getBtnRun().setEnabled(true);
+		}
 	}
 	@Override
 	public void threadSuspended(RunProcess<AnnoQueryDisplayInfo> runProcess) {
-		guiAnnoPeak.getBtnRun().setEnabled(true);
+		if (guiAnnoPeak != null) {
+			guiAnnoPeak.getBtnRun().setEnabled(true);
+		}
 	}
 	@Override
 	public void threadResumed(RunProcess<AnnoQueryDisplayInfo> runProcess) {
-		guiAnnoPeak.getBtnRun().setEnabled(false);
+		if (guiAnnoPeak != null) {
+			guiAnnoPeak.getBtnRun().setEnabled(false);
+		}
 	}
 	@Override
 	public void threadStop(RunProcess<AnnoQueryDisplayInfo> runProcess) {
-		guiAnnoPeak.getBtnRun().setEnabled(true);
+		if (guiAnnoPeak != null) {
+			guiAnnoPeak.getBtnRun().setEnabled(true);
+		}
 	}
 	
 }

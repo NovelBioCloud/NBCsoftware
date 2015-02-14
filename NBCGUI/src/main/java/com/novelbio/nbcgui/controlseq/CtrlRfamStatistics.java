@@ -18,7 +18,6 @@ import com.novelbio.analysis.seq.rnaseq.RPKMcomput.EnumExpression;
 import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.analysis.seq.sam.SamFileStatistics;
 import com.novelbio.analysis.seq.sam.SamMapRate;
-import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.model.species.Species;
@@ -59,6 +58,7 @@ public class CtrlRfamStatistics implements IntCmdSoft {
 		expRfamID.addLsTitle(RfamStatistic.getLsTitleRfamIDAnno());
 		expRfamClass.addLsGeneName(rfamStatistic.getLsRfamClass(lsRfamNameRaw));
 	}
+	
 	public void setThreadNum(int threadNum) {
 		this.threadNum = threadNum;
 	}

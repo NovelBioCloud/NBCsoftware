@@ -116,6 +116,7 @@ public class GuiAnnoPeak extends JPanel implements GuiNeedOpenFile {
 				String fileName = guiFileOpen.saveFileName("txt", "");
 				TxtReadandWrite txtOut = new TxtReadandWrite(fileName, true);
 				txtOut.ExcelWrite(ctrlBatchAnno.getResult());
+				txtOut.close();
 			}
 		});
 		btnSave.setBounds(717, 561, 118, 24);
