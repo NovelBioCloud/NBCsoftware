@@ -28,7 +28,6 @@ public class CtrlCombFile {
 	}
 	
 	public Map<String, Integer> getMapSample2GeneNum() {
-		// TODO 添加方法获取样本及其对应的基因数
 		return combineTab.getMapSample2GeneNum();
 	}
 	

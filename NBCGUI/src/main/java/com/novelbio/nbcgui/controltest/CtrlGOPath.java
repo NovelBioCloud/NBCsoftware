@@ -373,24 +373,6 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		return lsResultExcel;
 	}
 	
-	/** 获得显著的go或pathway的数量 */
-	private int getSigItemNum(FunctionTest functionTest) {
-		int num = 1;//表示title也要占一行
-		if (functionTest instanceof CogFunTest) {
-			num += functionTest.getTestResult().size();
-			return num;
-		}
-		for (StatisticTestResult statInfo : functionTest.getTestResult()) {
-			if (functionTest instanceof NovelGOFunTest && statInfo.getPvalue() < 0.01
-					|| functionTest instanceof KEGGPathwayFunTest && statInfo.getPvalue() < 0.05
-					) {
-				num++;
-			}
-		}
-		return num;
-	}
-	
-	
 	/**
 	 * 统计结果，返回筛选条件
 	 * 
@@ -432,9 +414,11 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			String excelPathOut = FileOperate.changeFileSuffix(excelPath, "_" + prefix, null);
 			excelResult.newExcelOpen(excelPathOut);
 			lsResultExcel.add(excelPathOut);
+			
+			Map<String, Integer> mapSheetName2EndLine = functionTest.getMapSheetName2EndLine();
 			Map<String, List<String[]>> mapSheetName2LsInfo = mapPrefix2FunTest.get(prefix).getMapWriteToExcel();
 			for (String sheetName : mapSheetName2LsInfo.keySet()) {
-				int endRowNum = mapSheetName2LsInfo.get(sheetName).size();
+				int endRowNum = mapSheetName2EndLine.get(sheetName) + 1;
 				ExcelStyle style = ExcelStyle.getThreeLineTable(1, endRowNum);
 				excelResult.WriteExcel(sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName), style);
 			}
