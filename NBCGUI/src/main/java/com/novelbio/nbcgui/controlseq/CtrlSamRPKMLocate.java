@@ -432,7 +432,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			SamFile alignSeq = new SamFile(samFileName);
 			mapChrId2Len = alignSeq.getMapChrID2Length();
 		}
-		
+		rpkMcomput.setGffChrAbs(gffChrAbs);
 		for (String prefix : setPrefix) {
 			if (isCountExpression && gffChrAbs.getGffHashGene() != null) {
 				rpkMcomput.setAndAddCurrentCondition(prefix);
