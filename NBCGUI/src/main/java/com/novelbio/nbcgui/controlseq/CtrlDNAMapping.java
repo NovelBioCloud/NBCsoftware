@@ -222,26 +222,6 @@ public class CtrlDNAMapping implements IntCmdSoft {
 		return samFile;
 	}
 	
-	/**
-	 * 预判结果文件<br>
-	 * key: 文件类型<br>
-	 * value：结果文件名
-	 * @return
-	 */
-	public HashMultimap<String, String> getPredictMapPrefix2Result(boolean isNeedSort, List<String> lsPrefix) {
-		HashMultimap<String, String> mapFileFormat2FileName = HashMultimap.create();
-		softWareInfo.setName(softMapping);
-		MapDNAint mapSoftware = MapDNA.creatMapDNA(softMapping);
-		mapSoftware.setSortNeed(isNeedSort);
-		for (String prefix : lsPrefix) {
-			mapSoftware.setOutFileName(outFilePrefix + prefix);
-			mapFileFormat2FileName.put(FormatSeq.BAM.toString(), mapSoftware.getOutNameCope());
-			mapFileFormat2FileName.put("Excel", SamFileStatistics.getSaveExcel(outFilePrefix + prefix));
-			mapFileFormat2FileName.put("Pic", SamFileStatistics.getSavePic(outFilePrefix + prefix));
-		}
-		return mapFileFormat2FileName;
-	}
-	
 	public Map<String, String> getMapPrefix2Bam() {
 		return mapPrefix2Bam;
 	}
