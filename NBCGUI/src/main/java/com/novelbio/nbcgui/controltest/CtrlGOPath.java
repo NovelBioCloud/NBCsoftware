@@ -356,13 +356,19 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 				}				
 				for (String sheetName : mapSheetName2LsInfo.keySet()) {
 					int endRowNum = mapSheetName2EndLine.get(sheetName) + 1;
-					ExcelStyle style = ExcelStyle.getThreeLineTable(1, endRowNum);
+					ExcelStyle style = null;
+					if (endRowNum > 0) {
+						style = ExcelStyle.getThreeLineTable(1, endRowNum);
+					}
 					excelResultAll.WriteExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName), style);
 				}
 			} else {
 				for (String sheetName : mapSheetName2LsInfo.keySet()) {
 					int endRowNum = mapSheetName2EndLine.get(sheetName) + 1;
-					ExcelStyle style = ExcelStyle.getThreeLineTable(1, endRowNum);
+					ExcelStyle style = null;
+					if (endRowNum > 0) {
+						style = ExcelStyle.getThreeLineTable(1, endRowNum);
+					}
 					excelResult.WriteExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName),style);
 				}
 			}
