@@ -57,7 +57,7 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 			saveParentPath = resultPath;
 		} else {
 			saveParentPath = FileOperate.getParentPathNameWithSep(resultPath);
-			savePrefix = FileOperate.getFileName(saveParentPath);
+			savePrefix = FileOperate.getFileName(resultPath);
 		}
 		
 		if (resultPath.endsWith("\\") || resultPath.endsWith("/")) {
