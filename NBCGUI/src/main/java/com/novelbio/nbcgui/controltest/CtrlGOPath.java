@@ -421,11 +421,14 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			excelResult.newExcelOpen(excelPathOut);
 			lsResultExcel.add(excelPathOut);
 			
-			Map<String, Integer> mapSheetName2EndLine = functionTest.getMapSheetName2EndLine();
+			Map<String, Integer> mapSheetName2EndLine = mapPrefix2FunTest.get(prefix).getMapSheetName2EndLine();
 			Map<String, List<String[]>> mapSheetName2LsInfo = mapPrefix2FunTest.get(prefix).getMapWriteToExcel();
 			for (String sheetName : mapSheetName2LsInfo.keySet()) {
 				int endRowNum = mapSheetName2EndLine.get(sheetName) + 1;
-				ExcelStyle style = ExcelStyle.getThreeLineTable(1, endRowNum);
+				ExcelStyle style = null;
+				if (endRowNum > 0) {
+					style = ExcelStyle.getThreeLineTable(1, endRowNum);
+				}
 				excelResult.WriteExcel(sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName), style);
 			}
 			excelResult.close();
