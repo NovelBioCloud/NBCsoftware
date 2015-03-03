@@ -3,7 +3,6 @@ package com.novelbio.nbcgui.controltest;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.collect.HashMultimap;
 import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.diffexpress.DiffExpAbs;
 import com.novelbio.analysis.diffexpress.DiffExpDESeq;
@@ -14,16 +13,21 @@ import com.novelbio.generalConf.TitleFormatNBC;
 public class CtrlDifGene implements IntCmdSoft {
 	DiffExpAbs diffExpAbs;
 	String outPath;
-
+	EnumDifGene algorithm;
 	/**
 	 * @param diffGeneID {@link DiffExpAbs#DEGSEQ} 等
 	 */
-	public CtrlDifGene(EnumDifGene diffGeneID) {
-		diffExpAbs = (DiffExpAbs) DiffExpAbs.createDiffExp(diffGeneID);
+	public CtrlDifGene(EnumDifGene algorithm) {
+		this.algorithm = algorithm;
+		diffExpAbs = (DiffExpAbs) DiffExpAbs.createDiffExp(algorithm);
 	}
 	
 	public DiffExpAbs getDiffExpAbs() {
 		return diffExpAbs;
+	}
+	
+	public EnumDifGene getAlgorithm() {
+		return algorithm;
 	}
 	
 	public void setCol2Sample(List<String[]> lsSampleColumn2GroupName) {
@@ -138,17 +142,6 @@ public class CtrlDifGene implements IntCmdSoft {
 //		return reportDifGene;
 //	}
 	
-	/**
-	 * 输入比较的文件名和组后，
-	 * 返回预测的文件名
-	 * @param copeFastq
-	 * @param isFilter 是否过滤，如果不过滤就直接合并
-	 * @return
-	 */
-	public HashMultimap<String, String> getPredictMapPrefix2Result() {
-		return diffExpAbs.getPredictMapPrefix2Result();
-	}
-
 	@Override
 	public List<String> getCmdExeStr() {
 		return diffExpAbs.getCmdExeStr();
