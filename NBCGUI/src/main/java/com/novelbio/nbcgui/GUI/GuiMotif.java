@@ -141,13 +141,8 @@ public class GuiMotif extends JPanel {
 		motifEmboss.generateMatrix();
 		for (String[] strings : lsFileInfo) {
 			motifEmboss.setSeqFilePath(strings[0]);
-			String[] result = motifEmboss.scanMotif();
-			if (result.length == 1) {
-				FileOperate.moveFile(true, result[0], strings[1]);
-			} else {
-				FileOperate.moveFile(true, result[0], strings[1]);
-				FileOperate.moveFile(true, result[1], FileOperate.changeFileSuffix(strings[1], "_reverse", null));
-			}
+			motifEmboss.setOutFile(strings[1]);
+			 motifEmboss.scanMotif();
 		}
 	}
 	
@@ -164,6 +159,7 @@ public class GuiMotif extends JPanel {
 				}
 			}
 			txtWrite.close();
+			seqFastaHash.close();
 		}
 	}
 	
