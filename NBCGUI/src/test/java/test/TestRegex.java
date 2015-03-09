@@ -1,29 +1,6 @@
 package test;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import com.novelbio.base.StringOperate;
 import com.novelbio.base.dataOperate.DateUtil;
-import com.novelbio.base.dataStructure.PatternOperate;
-import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.dbInfo.model.project.NBCFile;
-import com.novelbio.dbInfo.model.project.NBCTask;
-import com.novelbio.nbcReport.Params.ReportBase;
-import com.novelbio.report.ReportImage;
-import com.novelbio.report.Params.EnumAnalysisType;
-import com.novelbio.report.Params.ReportGOResult;
-import com.novelbio.report.generateReport.GenerateReport;
 
 public class TestRegex {
 	

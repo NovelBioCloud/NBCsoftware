@@ -2,27 +2,19 @@ package com.novelbio.project;
 
 import java.util.ArrayList;
 
-import com.novelbio.analysis.diffexpress.DiffExpAbs;
+import com.novelbio.analysis.diffexpress.EnumDifGene;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.nbcgui.controltest.CtrlDifGene;
 
 public class TestDifGene {
-	ReportDifGeneAll reportDifGeneAll;
 
 	public static void main(String[] args) {
 		System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
-		int DiffExpID = DiffExpAbs.LIMMA;
-		CtrlDifGene ctrlDifGene = new CtrlDifGene(DiffExpID);
+		CtrlDifGene ctrlDifGene = new CtrlDifGene(EnumDifGene.Limma);
 		int colId = 1;
 		ctrlDifGene.setColID(colId);
-		if (DiffExpID == DiffExpAbs.LIMMA) {
-			if ("1" == null) {
-				ctrlDifGene.setLogTheValue(true);
-			} else {
-				ctrlDifGene.setLogTheValue(false);
-			}
-		}
+		ctrlDifGene.setLogTheValue(true);
 		ArrayList<String[]> lsSampleColumn2GroupName = new ArrayList<String[]>();
 		String[] sampleColArray = { "3", "4", "5", "6", "7", "8" };
 		String[] groupNameArray = { "C", "C", "C", "D", "D", "D" };

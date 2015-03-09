@@ -1,19 +1,8 @@
 package test;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.hg.xdoc.model.Path;
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
-import com.novelbio.base.PathDetail;
-import com.novelbio.base.dataOperate.DateUtil;
-import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.nbcReport.Params.EnumReport;
-import com.novelbio.nbcReport.Params.ReportAll;
-import com.novelbio.nbcReport.Params.ReportBase;
-import com.novelbio.word.NBCWord;
 
 public class TestWord {
 	
