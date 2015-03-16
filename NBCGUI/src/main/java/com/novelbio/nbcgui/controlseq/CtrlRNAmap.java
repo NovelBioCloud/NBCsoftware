@@ -259,31 +259,6 @@ public class CtrlRNAmap implements IntCmdSoft {
 		return mapName2Type;
 	}
 	
-	public static HashMultimap<String, String> getPredictMapPrefix2File(String outPrefix, SoftWare softWare, List<String> lsPrefix) {
-//		outPrefix = FoldeCreate.getInFold(outPrefix, EnumReport.RNASeqMap.getResultFolder());
-		HashMultimap<String, String> mapPrefix2Value = HashMultimap.create();
-		if (softWare == SoftWare.rsem) {
-			mapPrefix2Value.put("resultFPKM", outPrefix + "ResultFPKM.xls");
-			mapPrefix2Value.put("resultFPKM", outPrefix + "ResultCounts.xls");
-			for (String prefix : lsPrefix) {
-				Map<String, String> mapInfo2Value = MapRsem.mapPredictPrefix2File(outPrefix + prefix);
-				for (String info : mapInfo2Value.keySet()) {
-					mapPrefix2Value.put(prefix + "_" + info, mapInfo2Value.get(info));
-				}
-			}
-		} else if (softWare == SoftWare.tophat) {
-			for (String prefix : lsPrefix) {
-				Map<String, String> mapInfo2Value = MapTophat.mapPredictPrefix2File(outPrefix + prefix);
-				for (String info : mapInfo2Value.keySet()) {
-					mapPrefix2Value.put(prefix + "_" + info, mapInfo2Value.get(info));
-				}
-			}
-		} else if (softWare == SoftWare.mapsplice) {
-			//TODO
-		}
-		return mapPrefix2Value;
-	}
-	
 	@Override
 	public List<String> getCmdExeStr() {
 		return lsCmd;
