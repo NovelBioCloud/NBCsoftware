@@ -1,5 +1,7 @@
 package com.novelbio.nbcgui.GUI;
 
+import htsjdk.samtools.SAMFileHeader.SortOrder;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -17,8 +19,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-
-import net.sf.samtools.SAMFileHeader.SortOrder;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.novelbio.analysis.seq.bed.BedSeq;
