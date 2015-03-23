@@ -240,7 +240,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	private void calculateSub() {
 		ArrayListMultimap<String, AlignSeqReading> mapPrefix2AlignSeqReadings = getMapPrefix2LsAlignSeqReadings();
 		double readByte = 0;
-		
+		//TODO 跳过机制还不完善，现在只能跳过rpkm的计算，未来需要添加判定让其可以跳过全部计算
 		for (String prefix : mapPrefix2AlignSeqReadings.keySet()) {
 			List<AlignSeqReading> lsAlignSeqReadings = mapPrefix2AlignSeqReadings.get(prefix);
 			List<AlignmentRecorder> lsAlignmentRecorders = new ArrayList<AlignmentRecorder>();
@@ -402,7 +402,9 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	
 	private void writeToFileCurrent(String prefix) {
 		if (isCountExpression && gffChrAbs.getGffHashGene() != null) {
-			rpkMcomput.writeToFileCurrent(resultExpPrefix, isCountNCrna);
+			if (!rpkMcomput.isExistTmpResultAndReadExp(resultExpPrefix, isCountNCrna)) {
+				rpkMcomput.writeToFileCurrent(resultExpPrefix, isCountNCrna);
+			}
 		}
 		
 		if (isGeneStructureStatistics) {
