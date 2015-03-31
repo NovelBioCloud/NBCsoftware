@@ -121,7 +121,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		if (flagGeneID) {
 			functionTest.setLsBGItem(bgFile);
 		} else {
-			if (FileOperate.isFileExist( getGene2ItemFileName(bgFile))) {
+			if (FileOperate.isFileExistAndBigThanSize( getGene2ItemFileName(bgFile), 10)) {
 				functionTest.setLsBGItem(getGene2ItemFileName(bgFile));
 			} else {
 				functionTest.setLsBGAccID(bgFile, 1, getGene2ItemFileName(bgFile));
