@@ -51,10 +51,14 @@ public class CtrlSnpAnnotation implements RunGetInfo<SnpFilterDetailInfo> {
 			guiSnpCalling.getBtnRun().setEnabled(false);
 			guiSnpCalling.getProgressBar().setMinimum(0);
 			guiSnpCalling.getProgressBar().setMaximum((int) snpAnnotation.getFileSizeEvaluateK());
+			
+			Thread thread = new Thread(snpAnnotation);
+			thread.start();
+		} else {
+			snpAnnotation.run();
 		}
+		
 
-		Thread thread = new Thread(snpAnnotation);
-		thread.start();
 	}
 
 	@Override
