@@ -30,8 +30,8 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	StrandSpecific strandSpecific = StrandSpecific.NONE;
 	boolean memoryLow = false;
 	boolean isReconstruceIso = false;
-	/** 是否合并文件--也就是不考虑重复，默认为true，也就是合并文件 **/
-	boolean isCombine = true;
+	/** 是否合并文件--也就是不考虑重复，默认为false，也就是考虑为重复 **/
+	boolean isCombine = false;
 	/** 是否选择unique mapped reads */
 	boolean isUniqueMappedReads = false;
 	
@@ -146,7 +146,16 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			}
 		}
 		
-		ctrlSplicing.setReconstructIso(true);
+		if (mapParam2Value.containsKey("Reconstruct")) {
+			String isReconstruct = mapParam2Value.get("Reconstruct").toLowerCase();
+			if (isReconstruct.equals("true") || isReconstruct.equals("t")) {
+				ctrlSplicing.setReconstructIso(true);
+			} else if (isReconstruct.equals("false") || isReconstruct.equals("f")) {
+				ctrlSplicing.setReconstructIso(false);
+			}
+		}
+		
+	
 		if (mapParam2Value.containsKey("StrandSpecific")) {
 			String strand = mapParam2Value.get("StrandSpecific").toLowerCase();
 			if (strand.equals("f") || strand.toLowerCase().equals("f")) {
@@ -162,10 +171,42 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	private static List<String> getHelp() {
 		List<String> lsHelp = new ArrayList<>();
 		lsHelp.add("Usage: java -jar -Xmx10000m <--options> --Case:prefixCase file1.bam,file2.bam --Control:prefixControl file3.bam,file4.bam --GTF gtfFile.gtf --Output outPath");
-		lsHelp.add("Example: java -jar -Xmx10000m --DisplayAllEvent True --StrandSpecific F  --Case:prefixCase file1.bam,file2.bam --Control:prefixControl file3.bam,file4.bam --GTF hg19.gtf --Output outPath");
+		lsHelp.add("Example: java -jar -Xmx10000m --DisplayAllEvent True --StrandSpecific F  --Case:Mutation file1.bam,file2.bam --Control:WildType file3.bam,file4.bam --GTF hg19.gtf --Output outPath");
 		lsHelp.add("Input:");
-		lsHelp.add("--Case:prefixCase  case bam files, using comma to seperate files. prefixCase");
-		lsHelp.add("--Control:prefixControl  control bam files, using comma to seperate files. prefixControl");
+		lsHelp.add("--Case:prefixCase  case bam files, using comma to seperate files");
+		lsHelp.add("  just like --Case:Treatment  /home/user/case1.bam,/home/user/case2.bam");
+		lsHelp.add("--Control:prefixControl  control bam files, using comma to seperate file");
+		lsHelp.add("  just like --Control:WT  /home/user/wt1.bam,/home/user/wt2.bam");
+		lsHelp.add("--GTF file.gtf");
+		lsHelp.add("  ASD need gtf/gff file to construct the gene model.");
+		
+		lsHelp.add("");
+		lsHelp.add("Output:");
+		lsHelp.add("--Output outFilePrefix");
+		lsHelp.add("  output prefix, example:  --Output /home/user/myresult");
+		
+		
+		lsHelp.add("");
+		lsHelp.add("Options:");
+		lsHelp.add("--Combine True/False  default is False");
+		lsHelp.add("  True: if here are several case(control) bam files, ASD can combine case(control) bam files together and just treat them as one big bam file");
+		lsHelp.add("  False: if here are several case(control) bam files, ASD will treat them as biological replicates");
+		
+		lsHelp.add("--DisplayAllEvent  True/False  default is True");
+		lsHelp.add("  a gene may have several splicing events on different exons, ASD can display all events of a gene, or just show only one most significant events");
+		lsHelp.add("  True: show all splicing events");
+		lsHelp.add("  False: show only one most significant splicing events");
+		
+		lsHelp.add("--StrandSpecific F/R/NONE  default is NONE");
+		lsHelp.add("  if the sequence library is strand specific, ASD can use this option to gain more precise result");
+		lsHelp.add("  F: first read of the pair-end reads represent the strand of the fragment, just like ion proton");
+		lsHelp.add("  R: second read of the pair-end reads represent the strand of the fragment");
+		
+		lsHelp.add("--Reconstruct True/False  default is False");
+		lsHelp.add("  ASD can reconstruct the gene structure and can detect splicing events not include in gff/gtf file. The reconstruct process may take a little more time");
+		lsHelp.add("  True: reconstruct gene structure. Notice, even the Reconstruct option is true, ASD still need the gtf file input");
+		lsHelp.add("  False: not reconstruct gene structure");
+
 		return lsHelp;
 	}
 	
