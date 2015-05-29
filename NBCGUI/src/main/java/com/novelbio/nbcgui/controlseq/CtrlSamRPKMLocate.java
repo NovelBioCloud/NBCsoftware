@@ -144,6 +144,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		resultSamPrefix = null;
 	}
 	
+	/** fileName2Prefix */
 	public void setQueryFile(List<String[]> lsReadFile) {
 		this.lsReadFile = lsReadFile;
 	}
