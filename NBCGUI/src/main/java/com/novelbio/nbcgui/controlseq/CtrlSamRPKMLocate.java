@@ -351,6 +351,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 				alignSeqReading = new AlignSamReading((SamFile)alignSeq);
 				if (isCalculateExp()) {
 					rpkMcomput.setIsPairend(((SamFile) alignSeq).isPairend());
+					rpkMcomput.setSorted(SamFile.isSorted((SamFile) alignSeq));
 					if (strandSpecific == StrandSpecific.UNKNOWN) {
 						BamReadsInfo bamReadsInfo = new BamReadsInfo();
 						bamReadsInfo.setGffHashGene(gffChrAbs.getGffHashGene());
