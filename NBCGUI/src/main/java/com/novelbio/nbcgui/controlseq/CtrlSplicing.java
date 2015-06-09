@@ -127,7 +127,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 		ctrlSplicing.setLsCompareGroup(lsCompare);
 		
 		ctrlSplicing.setGffHashGene(new GffHashGene(gtfFile));
-		
+//		ctrlSplicing.setSeqHash(seqHash);
 		if (mapParam2Value.containsKey("Combine")) {
 			String combine = mapParam2Value.get("Combine").toLowerCase();
 			if (combine.equals("true") || combine.equals("t")) {
@@ -185,28 +185,32 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 		lsHelp.add("--Output outFilePrefix");
 		lsHelp.add("  output prefix, example:  --Output /home/user/myresult");
 		
-		
+		lsHelp.add("");
 		lsHelp.add("");
 		lsHelp.add("Options:");
-		lsHelp.add("--Combine True/False  default is False");
+		lsHelp.add("--Combine True/False,  default is False");
 		lsHelp.add("  True: if here are several case(control) bam files, ASD can combine case(control) bam files together and just treat them as one big bam file");
 		lsHelp.add("  False: if here are several case(control) bam files, ASD will treat them as biological replicates");
-		
-		lsHelp.add("--DisplayAllEvent  True/False  default is True");
+		lsHelp.add("");
+		lsHelp.add("--DisplayAllEvent  True/False,  default is True");
 		lsHelp.add("  a gene may have several splicing events on different exons, ASD can display all events of a gene, or just show only one most significant events");
 		lsHelp.add("  True: show all splicing events");
 		lsHelp.add("  False: show only one most significant splicing events");
-		
-		lsHelp.add("--StrandSpecific F/R/NONE  default is NONE");
+		lsHelp.add("");
+		lsHelp.add("--StrandSpecific F/R/NONE,  default is NONE");
 		lsHelp.add("  if the sequence library is strand specific, ASD can use this option to gain more precise result");
 		lsHelp.add("  F: first read of the pair-end reads represent the strand of the fragment, just like ion proton");
 		lsHelp.add("  R: second read of the pair-end reads represent the strand of the fragment");
-		
-		lsHelp.add("--Reconstruct True/False  default is False");
+		lsHelp.add("");
+		lsHelp.add("--Reconstruct True/False,  default is False");
 		lsHelp.add("  ASD can reconstruct the gene structure and can detect splicing events not include in gff/gtf file. The reconstruct process may take a little more time");
 		lsHelp.add("  True: reconstruct gene structure. Notice, even the Reconstruct option is true, ASD still need the gtf file input");
 		lsHelp.add("  False: not reconstruct gene structure");
-
+//		lsHelp.add("");
+//		lsHelp.add("--GetSeq /path/to/chromesome/file,  default is null");
+//		lsHelp.add("  ASD can extract sequences near the splicing site, set the chromosome file correspondance to the gfffile(make sure the chrId equals to gff file)");
+//		lsHelp.add("  True: reconstruct gene structure. Notice, even the Reconstruct option is true, ASD still need the gtf file input");
+//		lsHelp.add("  False: not reconstruct gene structure");
 		return lsHelp;
 	}
 	
@@ -327,7 +331,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			exonJunction.setCompareGroups(treat, ctrl);
 			exonJunction.setResultFile(outFile);
 			exonJunction.setRunGetInfo(this);
-			exonJunction.setSeqHash(seqHash);
+			
 			exonJunction.setCombine(isCombine);
 			exonJunction.setUseUniqueMappedReads(isUniqueMappedReads);
 			if (isReconstruceIso) {
