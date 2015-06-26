@@ -74,7 +74,7 @@ public class CtrlCombFile {
 			txtWriteOneLine.ExcelWrite(combineTab.getLsResultFromImage());
 			txtWriteOneLine.close();
 			
-			imgPath = FileOperate.changeFileSuffix(oufFile, null, "tiff");
+			imgPath = FileOperate.changeFileSuffix(oufFile, null, "png");
 			combineTab.renderScriptAndDrawImage(imgPath,"","");
 			
 			return;
