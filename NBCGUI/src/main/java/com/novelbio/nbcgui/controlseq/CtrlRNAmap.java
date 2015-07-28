@@ -207,7 +207,7 @@ public class CtrlRNAmap implements IntCmdSoft {
 			indexUnmap = indexFile;
 		} else {
 			//用bwa的mem方法来进行二次mapping
-			indexUnmap = gffChrAbs.getSpecies().getIndexChr(SoftWare.bwa_men);
+			indexUnmap = gffChrAbs.getSpecies().getIndexChr(SoftWare.bwa_mem);
 		}
 		
 		if (softWare == SoftWare.tophat) {
