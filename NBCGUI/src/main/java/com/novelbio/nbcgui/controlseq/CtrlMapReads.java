@@ -58,8 +58,9 @@ public class CtrlMapReads implements RunGetInfo<MapReadsAbs.MapReadsProcessInfo>
 	 * @param booUniqueMapping 重复的reads是否只选择一条
 	 * @param cis5to3 是否仅选取某一方向的reads，null不考虑
 	 */
-	public void setFilter(boolean uniqReads, int startCod, boolean booUniqueMapping, Boolean FilteredStrand) {
-		mapReads.setFilter(uniqReads, startCod, booUniqueMapping, FilteredStrand);
+	public void setFilter(boolean uniqReads, int startCod, boolean booUniqueMapping) {
+		mapReads.setisUniqueMapping(booUniqueMapping);
+		mapReads.setFilter(uniqReads, startCod);
 	}
 	/**
 	 * 用于校正reads数的方程，默认设定基因组上reads的最小值为0，凡是校正小于0的都改为0

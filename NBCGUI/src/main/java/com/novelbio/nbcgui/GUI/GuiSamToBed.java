@@ -493,7 +493,7 @@ public class GuiSamToBed extends JPanel {
 			if (chckbxAdduniqmapflag.isSelected()) {
 				if (samFile.getHeader().getSortOrder() == SortOrder.unsorted ) {
 					String outName = FileOperate.changeFileSuffix(samFile.getFileName(), "_UniqMapFlag", null);
-					SamToBamSort samToBamSort = new SamToBamSort(outName, samFile, samFile.isPairend());
+					SamToBamSort samToBamSort = new SamToBamSort(outName, samFile);
 					samToBamSort.setAddMultiHitFlag(true);
 					samToBamSort.convert();
 					samFile = samToBamSort.getSamFileBam();

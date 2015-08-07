@@ -21,7 +21,7 @@ import com.novelbio.nbcgui.GUI.volcanoPlot.GuiVolcanoPlot;
 * THIS MACHINE, SO JIGLOO OR THIS CODE CANNOT BE USED
 * LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
 */
-public class GUIanalysisFW extends javax.swing.JFrame {
+public class GUIanalysisAMF extends javax.swing.JFrame {
 	private static final long serialVersionUID = 6809702573230604814L;
 	private JTabbedPane jTabbedPane1;
 	private GuiGoJPanel guiGoJPanel;
@@ -75,7 +75,7 @@ public class GUIanalysisFW extends javax.swing.JFrame {
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				GUIanalysisFW inst = new GUIanalysisFW();
+				GUIanalysisAMF inst = new GUIanalysisAMF();
 				inst.setLocationRelativeTo(null);
 				inst.setVisible(true);
 //				inst.setTitle("CASH v 1.0.12");
@@ -87,7 +87,7 @@ public class GUIanalysisFW extends javax.swing.JFrame {
 		});
 	}
 	
-	public GUIanalysisFW() {
+	public GUIanalysisAMF() {
 		super();
 		initGUI();
 	}

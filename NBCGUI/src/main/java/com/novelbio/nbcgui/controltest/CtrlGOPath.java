@@ -337,6 +337,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	
 	/** 返回保存的文件名 */
 	protected List<String> saveExcelNorm(String excelPath) {
+		FileOperate.DeleteFileFolder(excelPath);
 		ExcelOperate excelResult = new ExcelOperate();
 		excelResult.newExcelOpen(excelPath);
 		lsResultExcel.add(excelPath);

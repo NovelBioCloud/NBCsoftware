@@ -76,7 +76,7 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 			saveParentPath = resultPath;
 		} else {
 			saveParentPath = FileOperate.getParentPathNameWithSep(resultPath);
-			savePrefix = FileOperate.getFileName(saveParentPath);
+			savePrefix = FileOperate.getFileName(resultPath);
 		}
 		
 		if (resultPath.endsWith("\\") || resultPath.endsWith("/")) {
@@ -96,9 +96,10 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 	
 	private void savePic() {
 		lsResultPic.clear();
+		
 		for (Entry<String, FunctionTest> entry : getMapResult_Prefix2FunTest().entrySet()) {
 			String prix = entry.getKey();
-			BufferedImage bfImageLog2Pic = entry.getValue().getImagePvalue();;
+			BufferedImage bfImageLog2Pic = entry.getValue().getImagePvalue();
 			if (bfImageLog2Pic == null) continue;
 			String picPvalueName = getSavePicPvalueName(prix);
 			ImageUtils.saveBufferedImage(bfImageLog2Pic,picPvalueName );
@@ -131,7 +132,7 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 	}
 	/** 返回文件的名字，用于excel和画图 */
 	public String getResultBaseTitle() {
-		return "COG-Analysis";
+		return cogType.toString() + "-Analysis";
 	}
 	@Override
 	public void setTeamName(String teamName) {}

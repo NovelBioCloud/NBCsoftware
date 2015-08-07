@@ -28,7 +28,7 @@ import com.novelbio.analysis.seq.sam.AlignSamReading;
 import com.novelbio.analysis.seq.sam.AlignSeqReading;
 import com.novelbio.analysis.seq.sam.AlignmentRecorder;
 import com.novelbio.analysis.seq.sam.BamReadsInfo;
-import com.novelbio.analysis.seq.sam.SamErrorException;
+import com.novelbio.analysis.seq.sam.ExceptionSamError;
 import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.analysis.seq.sam.SamFileStatistics;
 import com.novelbio.base.ExceptionNullParam;
@@ -358,7 +358,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 						bamReadsInfo.setSamFile((SamFile) alignSeq);
 						bamReadsInfo.calculate();
 						if (bamReadsInfo.getStrandSpecific() == StrandSpecific.UNKNOWN) {
-							throw new SamErrorException("unknown strand type:\n" + alignSeq.getFileName() + "\t" + bamReadsInfo.toString());
+							throw new ExceptionSamError("unknown strand type:\n" + alignSeq.getFileName() + "\t" + bamReadsInfo.toString());
 						}
 						txtWrite.writefileln(FileOperate.getFileName(alignSeq.getFileName()) + "\t" + bamReadsInfo.toString());
 						txtWrite.flush();
@@ -444,7 +444,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 				rpkMcomput.setCalculateFPKM(isCalculateFPKM);
 				rpkMcomput.setUniqueMapped(isJustUseUniqueMappedReads);
 				if (!rpkMcomput.isExistTmpResultAndReadExp(resultExpPrefix, isCountNCrna)) {
-					throw new SamErrorException(prefix);
+					throw new ExceptionSamError(prefix);
 				}
 			}
 			
@@ -455,7 +455,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 				String tmpFile = resultSamPrefix + prefix;
 				tmpFile = SamFileStatistics.getSaveExcel(tmpFile);
 				if (!FileOperate.isFileExistAndBigThanSize(tmpFile, 0)) {
-					throw new SamErrorException(prefix);
+					throw new ExceptionSamError(prefix);
 				}
 				samFileStatistics.readTable(tmpFile);
 				mapPrefix2Statistics.put(prefix, samFileStatistics);

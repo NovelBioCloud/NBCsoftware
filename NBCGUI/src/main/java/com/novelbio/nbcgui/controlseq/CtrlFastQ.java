@@ -48,13 +48,14 @@ public class CtrlFastQ {
 	
 	boolean isJustFastqc = false;
 	boolean isCheckFormat = true;
-	/**
-	 * 得到所有的报告
-	 * @return
-	 */
-//	public List<ReportQC> getLsReportQCs() {
-//		return lsReportQCs;
-//	}
+	/** 是否将fastq的左右端合并为一个 */
+	boolean isOutInterleaved = true;
+	
+	/** 是否将双端结果输出为交错的文件 */
+	public void setOutInterleaved(boolean isOutInterleaved) {
+		this.isOutInterleaved = isOutInterleaved;
+	}
+	
 	public void setCheckFormat(boolean isCheckFormat) {
 		this.isCheckFormat = isCheckFormat;
 	}
@@ -186,12 +187,12 @@ public class CtrlFastQ {
 			boolean isRunFilter = false;
 			if (!isJustFastqc) {
 				ctrlFastQfilter.setFastQfilterParam(fastQfilter);
-				String[] fileName = createCombineFQname(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR, false);
+				String[] fileName = createCombineFQname(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR, false, isOutInterleaved);
 				//文件存在则跳过
 				if (!FileOperate.isFileExistAndBigThanSize(fileName[0], 10)) {
 					isRunFilter = true;
 				}
-				ctrlFastQfilter.setFastQLRfilteredOut(createCombineFastq(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR));
+				ctrlFastQfilter.setFastQLRfilteredOut(createCombineFastq(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR, isOutInterleaved));
 			} else {
 				String filePic = CtrlFastQfilter.getFastQCPicName(outFilePrefix + prefix);
 				//文件存在则跳过
@@ -201,7 +202,7 @@ public class CtrlFastQ {
 			}
 			
 			if (!isRunFilter) {
-				String[] fileNameFinal = createCombineFQname(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR, false);
+				String[] fileNameFinal = createCombineFQname(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR, false, isOutInterleaved);
 				List<List<String>> lsLR = new ArrayList<>();
 				List<String> lsLeft = new ArrayList<>();
 				lsLeft.add(fileNameFinal[0]);
@@ -229,8 +230,8 @@ public class CtrlFastQ {
 			ctrlFastQfilter.filteredAndCombineReads();
 			List<List<String>> lsLR = new ArrayList<>();
 			if (!isJustFastqc) {
-				String[] fileNameTmp = createCombineFQname(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR, true);
-				String[] fileNameFinal = createCombineFQname(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR, false);
+				String[] fileNameTmp = createCombineFQname(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR, true, isOutInterleaved);
+				String[] fileNameFinal = createCombineFQname(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR, false, isOutInterleaved);
 				FileOperate.moveFile(true, fileNameTmp[0], fileNameFinal[0]);
 				List<String> lsLeft = new ArrayList<>();
 				lsLeft.add(fileNameFinal[0]);
@@ -293,12 +294,12 @@ public class CtrlFastQ {
 			boolean isRunFilter = false;
 			if (!isJustFastqc) {
 				ctrlFastQfilter.setFastQfilterParam(fastQfilter);
-				String[] fileName = createCombineFQname(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR, false);
+				String[] fileName = createCombineFQname(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR, false, isOutInterleaved);
 				//文件存在则跳过
 				if (!FileOperate.isFileExistAndBigThanSize(fileName[0], 10)) {
 					isRunFilter = true;
 				}
-				ctrlFastQfilter.setFastQLRfilteredOut(createCombineFastq(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR));
+				ctrlFastQfilter.setFastQLRfilteredOut(createCombineFastq(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR, isOutInterleaved));
 			} else {
 				String filePic = CtrlFastQfilter.getFastQCPicName(outFilePrefix + prefix);
 				//文件存在则跳过
@@ -321,8 +322,8 @@ public class CtrlFastQ {
 			
 			ctrlFastQfilter.filteredAndCombineReads();
 			if (!isJustFastqc) {
-				String[] fileNameTmp = createCombineFQname(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR, true);
-				String[] fileNameFinal = createCombineFQname(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR, false);
+				String[] fileNameTmp = createCombineFQname(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR, true, isOutInterleaved);
+				String[] fileNameFinal = createCombineFQname(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR, false, isOutInterleaved);
 				FileOperate.moveFile(true, fileNameTmp[0], fileNameFinal[0]);
 				if (FileOperate.isFileExistAndBigThanSize(fileNameTmp[1], 0)) {
 					FileOperate.moveFile(true, fileNameTmp[1], fileNameFinal[1]);
@@ -476,9 +477,9 @@ public class CtrlFastQ {
 		return fastQCs;
 	}
 	
-	private static FastQ[] createCombineFastq(boolean filtered, String outFilePrefix, String condition, List<String[]> lsFastq) {
+	private static FastQ[] createCombineFastq(boolean filtered, String outFilePrefix, String condition, List<String[]> lsFastq, boolean isOutInterleaved) {
 		FastQ[] fastQs = new FastQ[2];
-		String[] fileName = createCombineFQname(filtered, outFilePrefix, condition, lsFastq, true);
+		String[] fileName = createCombineFQname(filtered, outFilePrefix, condition, lsFastq, true, isOutInterleaved);
 		fastQs[0] = new FastQ(fileName[0], true);
 		if (fileName[1] != null) {
 			fastQs[1] = new FastQ(fileName[1], true);
@@ -486,13 +487,18 @@ public class CtrlFastQ {
 		return fastQs;
 	}
 	
-	private static String[] createCombineFQname(boolean filtered, String outFilePrefix, String condition, List<String[]> lsFastq, boolean isTmp) {
+	private static String[] createCombineFQname(boolean filtered, String outFilePrefix, String condition, List<String[]> lsFastq, boolean isTmp, boolean isOutInterleaved) {
 		String[] fastQs = new String[2];
 		if (filtered) condition = condition + "_filtered";
 		if (lsFastq.size() > 1) condition = condition + "_Combine";
 		
 		if (lsFastq.get(0).length == 1 || lsFastq.get(0)[1] == null) {
 			fastQs[0] = outFilePrefix + condition + ".fq.gz";
+			if (isTmp) {
+				fastQs[0] = FileOperate.changeFileSuffix(fastQs[0], "_tmpFilter", null);	
+			}
+		} else if (isOutInterleaved) {
+			fastQs[0] = outFilePrefix + condition + FastQ.FASTQ_Interleaved_Suffix+ ".fq.gz";
 			if (isTmp) {
 				fastQs[0] = FileOperate.changeFileSuffix(fastQs[0], "_tmpFilter", null);	
 			}
@@ -510,31 +516,5 @@ public class CtrlFastQ {
 	public HashMultimap<String, String> getMapPrefix2ResultQC() {
 		return mapPrefix2ResultQC;
 	}
-	/** 返回预测的文件名
-	 * @param copeFastq
-	 * @param isFilter 是否过滤，如果不过滤就直接合并
-	 * @return
-	 */
-	public static HashMultimap<String, String> getPredictMapPrefix2FilteredFQ(CopeFastq copeFastq, String outPrefix, boolean isFilter) {
-		copeFastq.setMapCondition2LsFastQLR();
-
-		HashMultimap<String, String> mapPrefix2LsFilteredFile = HashMultimap.create();
-//		outPrefix = FoldeCreate.getInFold(outPrefix, EnumReport.FastQC.getResultFolder());
-		for (String prefix : copeFastq.getLsPrefix()) {
-			List<String[]> lsFastQLR = copeFastq.getMapCondition2LsFastQLR().get(prefix);
-			if (!isFilter && lsFastQLR.size() < 2) {
-				mapPrefix2LsFilteredFile.put(prefix, lsFastQLR.get(0)[0]);
-				if (lsFastQLR.get(0).length > 1) {
-					mapPrefix2LsFilteredFile.put(prefix, lsFastQLR.get(0)[1]);
-				}
-				continue;
-			}
-			String[] fastqName = createCombineFQname(isFilter, outPrefix, prefix, lsFastQLR, false);
-			mapPrefix2LsFilteredFile.put(prefix, fastqName[0]);
-			if (fastqName != null) {
-				mapPrefix2LsFilteredFile.put(prefix, fastqName[1]);
-			}
-		}
-		return mapPrefix2LsFilteredFile;
-	}
+	
 }

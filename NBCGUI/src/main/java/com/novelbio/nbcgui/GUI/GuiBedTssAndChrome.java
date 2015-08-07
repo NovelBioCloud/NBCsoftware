@@ -19,7 +19,6 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
 import com.novelbio.analysis.seq.genome.GffChrAbs;
-import com.novelbio.analysis.seq.genome.GffChrMap;
 import com.novelbio.analysis.seq.genome.gffOperate.GffDetailGene.GeneStructure;
 import com.novelbio.analysis.seq.genome.mappingOperate.EnumMapNormalizeType;
 import com.novelbio.analysis.seq.genome.mappingOperate.MapReadsAbs;
@@ -199,7 +198,7 @@ public class GuiBedTssAndChrome extends JPanel implements GuiRunningBarAbs, GuiN
 			public void actionPerformed(ActionEvent e) {
 				ctrlMapReads.setBamBedFile(txtBedFile.getText());
 				Boolean FilteredStrand = cmbReadsFilter.getSelectedValue();
-				ctrlMapReads.setFilter(chckOneSiteOneReads.isSelected(), (Integer)spinLoadFirstBp.getValue(), chckUniqueMapping.isSelected(), FilteredStrand);
+				ctrlMapReads.setFilter(chckOneSiteOneReads.isSelected(), (Integer)spinLoadFirstBp.getValue(), chckUniqueMapping.isSelected());
 				ctrlMapReads.setInvNum((Integer)spinInvNum.getValue());
 				ctrlMapReads.setSpecies(layeredPaneSpecies.getSelectSpecies());
 				gffChrMap.setMapReads(ctrlMapReads.getMapReads());

@@ -1,7 +1,5 @@
 package com.novelbio.nbcgui.GUI;
 
-import htsjdk.samtools.SAMFileHeader.SortOrder;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -16,17 +14,10 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.novelbio.analysis.seq.bed.BedSeq;
-import com.novelbio.analysis.seq.sam.AlignSamReading;
 import com.novelbio.analysis.seq.sam.BamFilterUnique;
 import com.novelbio.analysis.seq.sam.SamFile;
-import com.novelbio.analysis.seq.sam.SamToBamSort;
-import com.novelbio.analysis.seq.sam.SamToBed;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
