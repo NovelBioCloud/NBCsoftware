@@ -76,7 +76,7 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 			saveParentPath = resultPath;
 		} else {
 			saveParentPath = FileOperate.getParentPathNameWithSep(resultPath);
-			savePrefix = FileOperate.getFileName(resultPath);
+			savePrefix = FileOperate.getFileName(saveParentPath);
 		}
 		
 		if (resultPath.endsWith("\\") || resultPath.endsWith("/")) {
@@ -96,7 +96,6 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 	
 	private void savePic() {
 		lsResultPic.clear();
-		
 		for (Entry<String, FunctionTest> entry : getMapResult_Prefix2FunTest().entrySet()) {
 			String prix = entry.getKey();
 			BufferedImage bfImageLog2Pic = entry.getValue().getImagePvalue();
@@ -112,10 +111,10 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 	}
 	
 	public String getSavePicPvalueName(String prefix) {
-		return FileOperate.addSep(getSaveParentPath()) + "COG-Analysis-Log2P_" + prefix + "_" + getSavePrefix() + ".png";
+		return FileOperate.addSep(getSaveParentPath()) + getResultBaseTitle() + "-Log2P_" + prefix + "_" + getSavePrefix() + ".png";
 	}
 	public String getSavePicEnrichmentName(String prefix) {
-		return FileOperate.addSep(getSaveParentPath()) + "COG-Analysis-Enrichment_" + prefix + "_" + getSavePrefix() + ".png";
+		return FileOperate.addSep(getSaveParentPath()) + getResultBaseTitle() +  "-Enrichment_" + prefix + "_" + getSavePrefix() + ".png";
 	}
 	@Override
 	protected void clear() {
@@ -132,7 +131,7 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 	}
 	/** 返回文件的名字，用于excel和画图 */
 	public String getResultBaseTitle() {
-		return cogType.toString() + "-Analysis";
+		return cogType + "-Analysis";
 	}
 	@Override
 	public void setTeamName(String teamName) {}

@@ -55,7 +55,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 		//将输入的参数放到这个map里面
 		Map<String, String> mapParam2Value = new LinkedHashMap<>();
 		String param = null, value = null;
-		if (args == null || (args.length == 1 && (args[0].equals("-h") || args[0].equals("--help")))) {
+		if (args == null || args.length == 0 || (args.length == 1 && (args[0].equals("-h") || args[0].equals("--help")))) {
 			for (String content:getHelp()) {
 				System.out.println(content.toString());
 			}
@@ -170,15 +170,15 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	
 	private static List<String> getHelp() {
 		List<String> lsHelp = new ArrayList<>();
-		lsHelp.add("Usage: java -jar -Xmx10000m <--options> --Case:prefixCase file1.bam,file2.bam --Control:prefixControl file3.bam,file4.bam --GTF gtfFile.gtf --Output outPath");
-		lsHelp.add("Example: java -jar -Xmx10000m --DisplayAllEvent True --StrandSpecific F  --Case:Mutation file1.bam,file2.bam --Control:WildType file3.bam,file4.bam --GTF hg19.gtf --Output outPath");
+		lsHelp.add("Usage: java -jar -Xmx10000m cash.jar <--options> --Case:prefixCase file1.bam,file2.bam --Control:prefixControl file3.bam,file4.bam --GTF gtfFile.gtf --Output outPath");
+		lsHelp.add("Example: java -jar -Xmx10000m cash.jar --DisplayAllEvent True --StrandSpecific F  --Case:Mutation file1.bam,file2.bam --Control:WildType file3.bam,file4.bam --GTF hg19.gtf --Output outPath");
 		lsHelp.add("Input:");
 		lsHelp.add("--Case:prefixCase  case bam files, using comma to seperate files");
 		lsHelp.add("  just like --Case:Treatment  /home/user/case1.bam,/home/user/case2.bam");
 		lsHelp.add("--Control:prefixControl  control bam files, using comma to seperate file");
 		lsHelp.add("  just like --Control:WT  /home/user/wt1.bam,/home/user/wt2.bam");
 		lsHelp.add("--GTF file.gtf");
-		lsHelp.add("  ASD need gtf/gff file to construct the gene model.");
+		lsHelp.add("  CASH needs reference gene annotation (eg. gtf/gff file) to construct alternative splicing (AS) model within genes");
 		
 		lsHelp.add("");
 		lsHelp.add("Output:");
@@ -189,27 +189,27 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 		lsHelp.add("");
 		lsHelp.add("Options:");
 		lsHelp.add("--Combine True/False,  default is False");
-		lsHelp.add("  True: if here are several case(control) bam files, ASD can combine case(control) bam files together and just treat them as one big bam file");
-		lsHelp.add("  False: if here are several case(control) bam files, ASD will treat them as biological replicates");
+		lsHelp.add("  True: if here are several case(control) bam files, CASH can combine case(control) bam files together and just treat them as one big bam file");
+		lsHelp.add("  False: if here are several case(control) bam files, CASH will treat them as biological replicates");
 		lsHelp.add("");
 		lsHelp.add("--DisplayAllEvent  True/False,  default is True");
-		lsHelp.add("  a gene may have several splicing events on different exons, ASD can display all events of a gene, or just show only one most significant events");
-		lsHelp.add("  True: show all splicing events");
-		lsHelp.add("  False: show only one most significant splicing events");
+		lsHelp.add("  a gene may have several splicing events on different exons, CASH can display all events of a gene, or just show only one most significant event");
+		lsHelp.add("  True: show all splicing event");
+		lsHelp.add("  False: show only one most significant splicing event");
 		lsHelp.add("");
 		lsHelp.add("--StrandSpecific F/R/NONE,  default is NONE");
-		lsHelp.add("  if the sequence library is strand specific, ASD can use this option to gain more precise result");
+		lsHelp.add("  if the sequence library is strand specific, CASH can use this option to gain more precise result");
 		lsHelp.add("  F: first read of the pair-end reads represent the strand of the fragment, just like ion proton");
 		lsHelp.add("  R: second read of the pair-end reads represent the strand of the fragment");
 		lsHelp.add("");
 		lsHelp.add("--Reconstruct True/False,  default is False");
-		lsHelp.add("  ASD can reconstruct the gene structure and can detect splicing events not include in gff/gtf file. The reconstruct process may take a little more time");
-		lsHelp.add("  True: reconstruct gene structure. Notice, even the Reconstruct option is true, ASD still need the gtf file input");
-		lsHelp.add("  False: not reconstruct gene structure");
+		lsHelp.add("  CASH can reconstruct AS gene model and detect AS events not included in gff/gtf file.");
+		lsHelp.add("  True: reconstruct AS gene model based on the input gtf/gff file and the mapping bam files. The process needs more time.");
+		lsHelp.add("  False: employ AS gene model inferred from the input gtf/gff file.");
 //		lsHelp.add("");
 //		lsHelp.add("--GetSeq /path/to/chromesome/file,  default is null");
-//		lsHelp.add("  ASD can extract sequences near the splicing site, set the chromosome file correspondance to the gfffile(make sure the chrId equals to gff file)");
-//		lsHelp.add("  True: reconstruct gene structure. Notice, even the Reconstruct option is true, ASD still need the gtf file input");
+//		lsHelp.add("  CASH can extract sequences near the splicing site, set the chromosome file correspondance to the gfffile(make sure the chrId equals to gff file)");
+//		lsHelp.add("  True: reconstruct gene structure. Notice, even the Reconstruct option is true, CASH still need the gtf file input");
 //		lsHelp.add("  False: not reconstruct gene structure");
 		return lsHelp;
 	}
