@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.hg.doc.ex;
 import com.novelbio.GuiAnnoInfo;
 import com.novelbio.analysis.ExceptionNBCsoft;
 import com.novelbio.analysis.seq.fasta.SeqHash;
@@ -34,12 +35,16 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	boolean isCombine = false;
 	/** 是否选择unique mapped reads */
 	boolean isUniqueMappedReads = false;
-	
+	int juncAllReadsNum = 25;
+	int juncSampleReadsNum = 10;
+	double fdrCutoff = 0.95;
 	//java -jar -Xmx10g xxx.jar --Case:aaa file1.bam -GTF file.gtf --Control:bbb file2.bam --Output sssss
 	/**
 	 * --Case:aaa (或者 -T:aaa) file1.bam,file2.bam
 	 * --Control:bbb (或者 -C:bbb) file1.bam,file2.bam
 	 * --Combine  (或者 -M )  true可选
+	 * --JuncAllSample 样本全体junction reads 之和必须大于该值
+	 * --JuncSample 单个样本junction reads必须大于该值
 	 * --DisplayAllEvent  (或者 -D) true 可选
 	 * --StrandSpecific (或者 -S) F R
 	 * --Reconstruct (或者 -R)
@@ -89,6 +94,12 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 					param = "Output";
 				} else if (param.equals("G")) {
 					param = "GTF";
+				} else if (param.equals("JuncAllSample")) {
+					param = "JuncAllSample";
+				} else if (param.equals("JuncOneGroup")) {
+					param = "JuncOneGroup";
+				} else if (param.equals("FdrCutoff")) {
+					param = "FdrCutoff";
 				}
 			} else {
 				value = args[i];
@@ -105,6 +116,15 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 				paramControl = paramInfo;
 			}
 		}
+		if (paramCase == null) {
+			System.err.println("Please set Case parameter!");
+			System.exit(1);
+        }
+		if (paramControl == null) {
+			System.err.println("Please set Control parameter!");
+			System.exit(1);
+        }
+		
 		List<String[]> lsBam2Prefix = new ArrayList<>();
 		
 		String prefixCase = paramCase.split(":")[1];
@@ -155,7 +175,51 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			}
 		}
 		
-	
+		if (mapParam2Value.containsKey("JuncAllSample")) {
+			String juncNum = mapParam2Value.get("JuncAllSample");
+			int juncAllReadsNum =0;
+			try {
+				juncAllReadsNum = Integer.parseInt(juncNum);
+			} catch (Exception e) {
+				System.err.println("paramater JuncAllSample error!");
+				System.exit(1);
+			}
+			if (juncAllReadsNum > 0) {
+				System.err.println("paramater JuncAllSample set to " + juncAllReadsNum);
+				ctrlSplicing.setJuncAllReadsNum(juncAllReadsNum);
+            }
+        }
+		if (mapParam2Value.containsKey("JuncOneGroup")) {
+			String juncNum = mapParam2Value.get("JuncOneGroup");
+			int juncSampleNum =0;
+			try {
+				juncSampleNum = Integer.parseInt(juncNum);
+			} catch (Exception e) {
+				System.err.println("paramater JuncOneGroup error!");
+				System.exit(1);
+			}
+			if (juncSampleNum > 0) {
+				System.err.println("paramater JuncOneGroup set to " + juncSampleNum);
+				ctrlSplicing.setJuncSampleReadsNum(juncSampleNum);
+            }
+        }
+		if (mapParam2Value.containsKey("FdrCutoff")) {
+			String fdrCutoffStr = mapParam2Value.get("FdrCutoff");
+			double fdrCutoff = 0;
+			try {
+				fdrCutoff = Integer.parseInt(fdrCutoffStr);
+			} catch (Exception e) {
+				System.err.println("paramater FdrCutoff error!");
+				System.exit(1);
+			}
+			if (fdrCutoff > 0 && fdrCutoff <=1) {
+				System.err.println("paramater FdrCutoff set to " + fdrCutoff);
+				ctrlSplicing.setFdrCutoff(fdrCutoff);
+			} else {
+				System.err.println("paramater FdrCutoff error, should in range (0,1]");
+			}
+		}
+		
 		if (mapParam2Value.containsKey("StrandSpecific")) {
 			String strand = mapParam2Value.get("StrandSpecific").toLowerCase();
 			if (strand.equals("f") || strand.toLowerCase().equals("f")) {
@@ -206,6 +270,14 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 		lsHelp.add("  CASH can reconstruct AS gene model and detect AS events not included in gff/gtf file.");
 		lsHelp.add("  True: reconstruct AS gene model based on the input gtf/gff file and the mapping bam files. The process needs more time.");
 		lsHelp.add("  False: employ AS gene model inferred from the input gtf/gff file.");
+		lsHelp.add(" ");
+		lsHelp.add("--JuncAllSample int,  default is 25");
+		lsHelp.add("  doesn't calculate splicing event with the sum of all sample junction reads num less than JuncAllSample");
+		lsHelp.add("--JuncOneGroup int,  default is 10");
+		lsHelp.add("  doesn't calculate splicing event with the any group(such as Treatment or Control) of junction reads num less than JuncOneGroup");
+		lsHelp.add("");
+		lsHelp.add("--FdrCutoff double,  default is 0.95");
+		lsHelp.add("  in range (0,1]");
 //		lsHelp.add("");
 //		lsHelp.add("--GetSeq /path/to/chromesome/file,  default is null");
 //		lsHelp.add("  CASH can extract sequences near the splicing site, set the chromosome file correspondance to the gfffile(make sure the chrId equals to gff file)");
@@ -213,6 +285,17 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 //		lsHelp.add("  False: not reconstruct gene structure");
 		return lsHelp;
 	}
+	
+	public void setFdrCutoff(double fdrCutoff) {
+	    this.fdrCutoff = fdrCutoff;
+    }
+	
+	public void setJuncAllReadsNum(int juncAllReadsNum) {
+	    this.juncAllReadsNum = juncAllReadsNum;
+    }
+	public void setJuncSampleReadsNum(int juncSampleReadsNum) {
+	    this.juncSampleReadsNum = juncSampleReadsNum;
+    }
 	
 	/** 是否仅选择unique mapped reads */
 	public void setUniqueMappedReads(boolean isUniqueMappedReads) {
@@ -318,9 +401,11 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			List<String> lsCtrlBam = mapPrefix2LsBam.get(ctrl);
 			ExonJunction exonJunction = new ExonJunction();
 			exonJunction.setStrandSpecific(strandSpecific);
+			exonJunction.setFdrCutoff(fdrCutoff);
 			exonJunction.setGffHashGene(gffHashGene);
 			exonJunction.setOneGeneOneSpliceEvent(!isDisplayAllEvent);
 			exonJunction.setRunGetInfo(this);
+			exonJunction.setJuncReadsNum(juncAllReadsNum, juncSampleReadsNum);
 			exonJunction.setIsLessMemory(memoryLow);
 			for (String bamFile : lsTreatBam) {
 				exonJunction.addBamSorted(treat, bamFile);
