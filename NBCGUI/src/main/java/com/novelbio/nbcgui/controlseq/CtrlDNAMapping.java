@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.HashMultimap;
 import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.seq.FormatSeq;
+import com.novelbio.analysis.seq.fasta.CopeFastq;
 import com.novelbio.analysis.seq.mapping.MapBowtie;
 import com.novelbio.analysis.seq.mapping.MapBwaAln;
 import com.novelbio.analysis.seq.mapping.MapDNA;
@@ -178,18 +179,10 @@ public class CtrlDNAMapping implements IntCmdSoft {
 	 */
 	private SamFile mapping(String prefix, List<List<String>> fastQsFile) {
 		MapDNAint mapSoftware = MapDNA.creatMapDNA(softMapping);		
-
-		if (species == null || species.getTaxID() == 0) {
-			mapSoftware.setChrIndex(chrIndexFile);
-		} else {
-			if (map2Index == MAP_TO_CHROM) {
-				mapSoftware.setChrIndex(species.getIndexChr(softMapping));
-			} else if (map2Index == MAP_TO_REFSEQ_ALL_ISO) {
-				mapSoftware.setChrIndex(species.getIndexRef(softMapping, true));
-			} else if (map2Index == MAP_TO_REFSEQ_LONGEST_ISO) {
-				mapSoftware.setChrIndex(species.getIndexRef(softMapping, false));
-			}
-		}
+		
+		String chrFile = getChrFile(chrIndexFile, species, softMapping, map2Index);
+		mapSoftware.setChrIndex(chrFile);
+	
 		if (softMapping == SoftWare.bwa_aln) {
 			MapBwaAln mapBwaAln = (MapBwaAln)mapSoftware;
 			mapBwaAln.setGapLength(gapLen);
@@ -220,6 +213,22 @@ public class CtrlDNAMapping implements IntCmdSoft {
 		alignSeqReading.addAlignmentRecorder(samFileStatistics);
 		alignSeqReading.run();
 		return samFile;
+	}
+	
+	public static String getChrFile(String chrFile, Species species, SoftWare softMapping, int map2Index) {
+		String chrFileResult = chrFile;
+		if (species == null || species.getTaxID() == 0) {
+			return chrFileResult;
+		} else {
+			if (map2Index == MAP_TO_CHROM) {
+				chrFileResult = species.getIndexChr(softMapping);
+			} else if (map2Index == MAP_TO_REFSEQ_ALL_ISO) {
+				chrFileResult = species.getIndexRef(softMapping, true);
+			} else if (map2Index == MAP_TO_REFSEQ_LONGEST_ISO) {
+				chrFileResult = species.getIndexRef(softMapping, false);
+			}
+		}
+		return chrFileResult;
 	}
 	
 	public Map<String, String> getMapPrefix2Bam() {
