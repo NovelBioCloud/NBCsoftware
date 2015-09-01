@@ -10,12 +10,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import com.google.common.collect.HashMultimap;
-import com.novelbio.analysis.annotation.functiontest.CogFunTest;
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
-import com.novelbio.analysis.annotation.functiontest.KEGGPathwayFunTest;
-import com.novelbio.analysis.annotation.functiontest.NovelGOFunTest;
-import com.novelbio.analysis.annotation.functiontest.StatisticTestGene2Item;
-import com.novelbio.analysis.annotation.functiontest.StatisticTestItem2Gene;
 import com.novelbio.analysis.annotation.functiontest.StatisticTestResult;
 import com.novelbio.analysis.seq.genome.GffSpeciesInfo;
 import com.novelbio.base.StringOperate;

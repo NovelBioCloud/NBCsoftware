@@ -3,6 +3,8 @@ package com.novelbio.nbcgui.controlseq;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
@@ -23,6 +25,8 @@ import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.model.species.Species;
 
 public class CtrlRseQC implements IntCmdSoft {
+	private static final Logger logger = Logger.getLogger(CtrlRseQC.class);
+	
 	List<String[]> lsPrefix2File;
 	String outPath;
 	String bedFile;
@@ -187,7 +191,12 @@ public class CtrlRseQC implements IntCmdSoft {
 			BamReadsInfo bamReadsInfo = new BamReadsInfo();
 			bamReadsInfo.setGffHashGene(gffHashGene);
 			bamReadsInfo.setSamFile(new SamFile(inFile));
-			bamReadsInfo.calculate();
+			try {
+				bamReadsInfo.calculate();
+			} catch (Exception e) {
+				logger.error(e);
+			}
+			
 			rpkmSat_library = bamReadsInfo.getMapLibrary();
 			rpkmSat_strandSpecific = bamReadsInfo.getStrandSpecific();
 			lsCmd.add(FileOperate.getFileName(inFile) + " library: " + rpkmSat_library.toString() + 

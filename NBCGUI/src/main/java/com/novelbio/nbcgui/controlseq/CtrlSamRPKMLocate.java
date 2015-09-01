@@ -356,7 +356,12 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 						BamReadsInfo bamReadsInfo = new BamReadsInfo();
 						bamReadsInfo.setGffHashGene(gffChrAbs.getGffHashGene());
 						bamReadsInfo.setSamFile((SamFile) alignSeq);
-						bamReadsInfo.calculate();
+						try {
+							bamReadsInfo.calculate();
+						} catch (Exception e) {
+							throw new ExceptionSamError(e.getMessage() + " please chose the correct Strand information");
+						}
+						
 						if (bamReadsInfo.getStrandSpecific() == StrandSpecific.UNKNOWN) {
 							throw new ExceptionSamError("unknown strand type:\n" + alignSeq.getFileName() + "\t" + bamReadsInfo.toString());
 						}
