@@ -493,19 +493,21 @@ public class CtrlFastQ {
 		if (filtered) condition = condition + "_filtered";
 		if (lsFastq.size() > 1) condition = condition + "_Combine";
 		
+		String suffix = isOutInterleaved? ".fq.bz2" : ".fq.gz";
+		
 		if (lsFastq.get(0).length == 1 || lsFastq.get(0)[1] == null) {
-			fastQs[0] = outFilePrefix + condition + ".fq.gz";
+			fastQs[0] = outFilePrefix + condition + suffix;
 			if (isTmp) {
 				fastQs[0] = FileOperate.changeFileSuffix(fastQs[0], "_tmpFilter", null);	
 			}
 		} else if (isOutInterleaved) {
-			fastQs[0] = outFilePrefix + condition + FastQ.FASTQ_Interleaved_Suffix+ ".fq.gz";
+			fastQs[0] = outFilePrefix + condition + FastQ.FASTQ_Interleaved_Suffix+ suffix;
 			if (isTmp) {
 				fastQs[0] = FileOperate.changeFileSuffix(fastQs[0], "_tmpFilter", null);	
 			}
 		} else {
-			fastQs[0] = outFilePrefix + condition + "_1.fq.gz";
-			fastQs[1] = outFilePrefix + condition + "_2.fq.gz";
+			fastQs[0] = outFilePrefix + condition + "_1" + suffix;
+			fastQs[1] = outFilePrefix + condition + "_2" + suffix;
 			if (isTmp) {
 				fastQs[0] = FileOperate.changeFileSuffix(fastQs[0], "_tmpFilter", null);
 				fastQs[1] = FileOperate.changeFileSuffix(fastQs[1], "_tmpFilter", null);
