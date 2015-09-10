@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.novelbio.analysis.seq.fasta.CopeFastq;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.mapping.MapBowtie;
 import com.novelbio.analysis.seq.mapping.MapLibrary;
@@ -26,7 +27,6 @@ import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.database.model.species.Species.EnumSpeciesType;
-import com.novelbio.nbcgui.controlseq.CopeFastq;
 import com.novelbio.nbcgui.controlseq.CtrlRNAmap;
 
 public class GuiRNASeqMapping extends JPanel {

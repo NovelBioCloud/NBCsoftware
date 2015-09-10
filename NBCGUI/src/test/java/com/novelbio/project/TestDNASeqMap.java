@@ -10,13 +10,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.novelbio.analysis.seq.fasta.CopeFastq;
 import com.novelbio.analysis.seq.mapping.MapLibrary;
 import com.novelbio.base.dataStructure.ArrayOperate;
 import com.novelbio.base.fileOperate.FileHadoop;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
 import com.novelbio.database.model.species.Species;
-import com.novelbio.nbcgui.controlseq.CopeFastq;
 import com.novelbio.nbcgui.controlseq.CtrlDNAMapping;
 
 public class TestDNASeqMap {

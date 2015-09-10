@@ -12,11 +12,11 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
+import com.novelbio.analysis.seq.fasta.CopeFastq;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
-import com.novelbio.nbcgui.controlseq.CopeFastq;
 import com.novelbio.nbcgui.controlseq.CtrlTrinity;
 
 public class GuiRNAAssembly extends JPanel {

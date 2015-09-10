@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.seq.denovo.N50AndSeqLen;
+import com.novelbio.analysis.seq.fasta.CopeFastq;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.rnaseq.Trinity;
 import com.novelbio.analysis.seq.rnaseq.TrinityCopeIso;
