@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.hg.doc.ex;
 import com.novelbio.GuiAnnoInfo;
 import com.novelbio.analysis.ExceptionNBCsoft;
 import com.novelbio.analysis.seq.fasta.SeqHash;
@@ -39,8 +38,10 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	int juncSampleReadsNum = 10;
 	double fdrCutoff = 0.95;
 	
-	int minAdaptorLen = 5;
+	int minAnchorLen = 5;
 	int minIntronLen = 25;
+	
+	int newIsoReadsNum = 15;
 	//java -jar -Xmx10g xxx.jar --Case:aaa file1.bam -GTF file.gtf --Control:bbb file2.bam --Output sssss
 	/**
 	 * --Case:aaa (或者 -T:aaa) file1.bam,file2.bam
@@ -104,9 +105,11 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 				} else if (param.equals("FdrCutoff")) {
 					param = "FdrCutoff";
 				} else if (param.equals("A")) {
-					param = "minAdaptorLen";
+					param = "minAnchorLen";
 				} else if (param.equals("I")) {
 					param = "minIntronLen";
+				} else if (param.equals("J")) {
+					param = "minJuncReadsForNewIso";
 				}
 			} else {
 				value = args[i];
@@ -164,10 +167,10 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			}
 		}
 
-		if (mapParam2Value.containsKey("minAdaptorLen")) {
-			int minAdaptorLen = Integer.parseInt(mapParam2Value.get("minAdaptorLen"));
-			if (minAdaptorLen >= 0) {
-				ctrlSplicing.setMinAdaptorLen(minAdaptorLen);
+		if (mapParam2Value.containsKey("minAnchorLen")) {
+			int minAnchorLen = Integer.parseInt(mapParam2Value.get("minAnchorLen"));
+			if (minAnchorLen >= 0) {
+				ctrlSplicing.setminAnchorLen(minAnchorLen);
 			}
 		}
 		if (mapParam2Value.containsKey("minIntronLen")) {
@@ -176,7 +179,12 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 				ctrlSplicing.setMinIntronLen(minIntronLen);
 			}
 		}
-		
+		if (mapParam2Value.containsKey("minJuncReadsForNewIso")) {
+			int minJuncReadsForNewIso = Integer.parseInt(mapParam2Value.get("minJuncReadsForNewIso"));
+			if (minJuncReadsForNewIso >= 0) {
+				ctrlSplicing.setNewIsoReadsNum(minJuncReadsForNewIso);
+			}
+		}
 		if (mapParam2Value.containsKey("DisplayAllEvent")) {
 			String combine = mapParam2Value.get("DisplayAllEvent").toLowerCase();
 			if (combine.equals("true") || combine.equals("t")) {
@@ -296,12 +304,13 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 		lsHelp.add("--JuncOneGroup int,  default is 10");
 		lsHelp.add("  doesn't calculate splicing event with the any group(such as Treatment or Control) of junction reads num less than JuncOneGroup");
 		lsHelp.add("");
-		lsHelp.add("--minAdaptorLen/-A  int,  default is 5");
+		lsHelp.add("--minAnchorLen/-A  int,  default is 5");
 		lsHelp.add("  when counts junction reads, reads with junction adaptor less than 5bp was passed");
 		lsHelp.add("--minIntronLen/-I  int,  default is 25");
 		lsHelp.add("  reads with junction length less than 25bp is consider as deletion instead of intron");
+		lsHelp.add("--minJuncReadsForNewIso/-J  int,  default is 15");
+		lsHelp.add("  min junction reads for reconstruct splicing site");
 		lsHelp.add("");
-
 		
 		lsHelp.add("--FdrCutoff double,  default is 0.95");
 		lsHelp.add("  in range (0,1]");
@@ -311,6 +320,11 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 //		lsHelp.add("  True: reconstruct gene structure. Notice, even the Reconstruct option is true, CASH still need the gtf file input");
 //		lsHelp.add("  False: not reconstruct gene structure");
 		return lsHelp;
+	}
+	
+	/** 至少有多少条reads支持的junction才会用于重建转录本 */
+	public void setNewIsoReadsNum(int newIsoReadsNum) {
+		this.newIsoReadsNum = newIsoReadsNum;
 	}
 	
 	public void setFdrCutoff(double fdrCutoff) {
@@ -370,8 +384,8 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 		}
 	}
 	
-	public void setMinAdaptorLen(int minAdaptorLen) {
-	    this.minAdaptorLen = minAdaptorLen;
+	public void setminAnchorLen(int minAnchorLen) {
+	    this.minAnchorLen = minAnchorLen;
     }
 	public void setMinIntronLen(int minIntronLen) {
 	    this.minIntronLen = minIntronLen;
@@ -435,7 +449,8 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			ExonJunction exonJunction = new ExonJunction();
 			exonJunction.setStrandSpecific(strandSpecific);
 			exonJunction.setIntronMinLen(minIntronLen);
-			exonJunction.setJunctionMinAdaptor(minAdaptorLen);
+			exonJunction.setJunctionMinAnchorLen(minAnchorLen);
+			exonJunction.setNewIsoReadsNum(newIsoReadsNum);
 			exonJunction.setFdrCutoff(fdrCutoff);
 			exonJunction.setGffHashGene(gffHashGene);
 			exonJunction.setOneGeneOneSpliceEvent(!isDisplayAllEvent);

@@ -188,8 +188,8 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 				guiGetSeq = new GuiGetSeq();
 				jTabbedPane1.add("GetSeq", guiGetSeq);
 				
-				guiBedTssAndChrome = new GuiBedTssAndChrome();
-				jTabbedPane1.add("Tss", guiBedTssAndChrome);
+//				guiBedTssAndChrome = new GuiBedTssAndChrome();
+//				jTabbedPane1.add("Tss", guiBedTssAndChrome);
 				
 
 				
