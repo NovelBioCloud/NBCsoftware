@@ -36,7 +36,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	boolean isUniqueMappedReads = false;
 	int juncAllReadsNum = 25;
 	int juncSampleReadsNum = 10;
-	double fdrCutoff = 0.95;
+	double fdrCutoff = 0.999;
 	
 	int minAnchorLen = 5;
 	int minIntronLen = 25;
@@ -235,7 +235,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			String fdrCutoffStr = mapParam2Value.get("FdrCutoff");
 			double fdrCutoff = 0;
 			try {
-				fdrCutoff = Integer.parseInt(fdrCutoffStr);
+				fdrCutoff = Double.parseDouble(fdrCutoffStr);
 			} catch (Exception e) {
 				System.err.println("paramater FdrCutoff error!");
 				System.exit(1);
