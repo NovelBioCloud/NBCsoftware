@@ -61,7 +61,7 @@
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>com.novelBio</groupId>
+			<groupId>com.novelbio</groupId>
 			<artifactId>bioinfo-platform</artifactId>
 			<version>0.0.3-SNAPSHOT</version>
 		</dependency>
