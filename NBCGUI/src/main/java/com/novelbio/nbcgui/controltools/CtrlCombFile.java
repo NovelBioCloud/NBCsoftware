@@ -74,8 +74,11 @@ public class CtrlCombFile {
 			txtWriteOneLine.ExcelWrite(combineTab.getLsResultFromImage());
 			txtWriteOneLine.close();
 			
-			imgPath = FileOperate.changeFileSuffix(oufFile, null, "png");
-			combineTab.renderScriptAndDrawImage(imgPath,"","");
+			/** 超过5个取交集就画不出图了 */
+			if (combineTab.getAllFileNum() <= 5) {
+				imgPath = FileOperate.changeFileSuffix(oufFile, null, "png");
+				combineTab.renderScriptAndDrawImage(imgPath,"",""); 
+            }
 			
 			return;
 //		}
