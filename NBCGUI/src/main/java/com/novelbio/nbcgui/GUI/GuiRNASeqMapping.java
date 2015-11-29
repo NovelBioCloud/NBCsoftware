@@ -15,11 +15,10 @@ import javax.swing.JTextField;
 
 import com.novelbio.analysis.seq.fasta.CopeFastq;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
-import com.novelbio.analysis.seq.mapping.MapBowtie;
+import com.novelbio.analysis.seq.mapping.MapBowtie2;
 import com.novelbio.analysis.seq.mapping.MapLibrary;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.base.FoldeCreate;
-import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
@@ -114,7 +113,7 @@ public class GuiRNASeqMapping extends JPanel {
 		
 		cmbSensitive = new JComboBoxData<>();
 		cmbSensitive.setBounds(500, 328, 225, 27);
-		cmbSensitive.setMapItem(MapBowtie.getMapSensitive());
+		cmbSensitive.setMapItem(MapBowtie2.getMapSensitive());
 		add(cmbSensitive);
 
 		

@@ -42,7 +42,6 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 	private GuiAnnoPeak guiAnnoPeak;
 	private GuiPeakStatistics guiPeakStatistics;
 	private GuiGetSeq guiGetSeq;
-	private GuiBedTssAndChrome guiBedTssAndChrome;
 	private GuiRNASeqMapping guiRNASeqMapping;
 	private GuiAffyCelNormJpanel guiCelNormJpanel;
 	private GuiSamToBed guiSamToBed;

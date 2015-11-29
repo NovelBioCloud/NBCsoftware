@@ -9,11 +9,9 @@ import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.google.common.collect.HashMultimap;
 import com.novelbio.analysis.IntCmdSoft;
-import com.novelbio.analysis.seq.FormatSeq;
 import com.novelbio.analysis.seq.fasta.CopeFastq;
-import com.novelbio.analysis.seq.mapping.MapBowtie;
+import com.novelbio.analysis.seq.mapping.MapBowtie2;
 import com.novelbio.analysis.seq.mapping.MapBwaAln;
 import com.novelbio.analysis.seq.mapping.MapDNA;
 import com.novelbio.analysis.seq.mapping.MapDNAint;
@@ -22,7 +20,6 @@ import com.novelbio.analysis.seq.sam.AlignSeqReading;
 import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.analysis.seq.sam.SamFileStatistics;
 import com.novelbio.base.ExceptionNullParam;
-import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.information.SoftWareInfo;
 import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
@@ -43,7 +40,7 @@ public class CtrlDNAMapping implements IntCmdSoft {
 	MapLibrary libraryType = MapLibrary.SingleEnd;
 	int gapLen = 5;
 	double mismatch = 2;
-	int sensitive = MapBowtie.Sensitive_Sensitive;
+	int sensitive = MapBowtie2.Sensitive_Sensitive;
 	boolean isLocal = true;
 	int thread = 4;
 	boolean isNeedSort = false;
@@ -200,9 +197,9 @@ public class CtrlDNAMapping implements IntCmdSoft {
 		
 		mapSoftware.setLeftFq(CopeFastq.convertFastqFile(fastQsFile.get(0)));
 		mapSoftware.setRightFq(CopeFastq.convertFastqFile(fastQsFile.get(1)));
-		if (mapSoftware instanceof MapBowtie) {
-			((MapBowtie)mapSoftware).setSensitive(sensitive);
-			((MapBowtie)mapSoftware).setLocal(isLocal);
+		if (mapSoftware instanceof MapBowtie2) {
+			((MapBowtie2)mapSoftware).setSensitive(sensitive);
+			((MapBowtie2)mapSoftware).setLocal(isLocal);
 		}
 
 		lsCmd.addAll(mapSoftware.getCmdExeStr());

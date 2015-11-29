@@ -17,6 +17,7 @@ import com.novelbio.base.StringOperate;
 import com.novelbio.base.dataOperate.ExcelOperate;
 import com.novelbio.base.dataOperate.ExcelStyle;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
+import com.novelbio.base.fileOperate.ExceptionFile;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.database.domain.geneanno.EnumSpeciesFile;
@@ -61,6 +62,10 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	String bgFile = "";
 	String saveExcelPrefix;
 	
+	String gene2itemAnnoFile;
+	/** true表示与数据库的注释合并，false表示仅用该注释文件进行go注释 */
+	boolean isCombine = true;
+	
 	public void setTaxID(Species species) {
 		this.species = species;
 		functionTest.setTaxID(species.getTaxID());
@@ -90,7 +95,13 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	public void setBlastInfo(double blastevalue, List<Integer> lsBlastTaxID) {
 		functionTest.setBlastInfo(blastevalue, lsBlastTaxID);
 	}
-	
+	public void setGene2itemAnnoFile(String gene2itemAnnoFile, boolean isCombine) {
+		if (!FileOperate.isFileExistAndBigThanSize(gene2itemAnnoFile, 0)) {
+			throw new ExceptionFile("gene to item file " + gene2itemAnnoFile + " is not exist");
+		}
+		this.gene2itemAnnoFile = gene2itemAnnoFile;
+		this.isCombine = isCombine;
+	}
 	/**
 	 * 必须设定<br>
 	 * <b>在这之前要先设定GOlevel</b><br>
@@ -112,8 +123,13 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	}
 	
 	private void setBG() {
-		boolean flagGeneID = testBGfile(bgFile);
-		if (flagGeneID) {
+		if (!isCombine && FileOperate.isFileExistAndBigThanSize(gene2itemAnnoFile, 0)) {
+			functionTest.readGene2ItemAnnoFile(gene2itemAnnoFile);
+			return;
+		}
+		
+		boolean isGene2LsItem = testBGfile(bgFile);
+		if (isGene2LsItem) {
 			functionTest.setLsBGItem(bgFile);
 		} else {
 			if (FileOperate.isFileExistAndBigThanSize( getGene2ItemFileName(bgFile), 10)) {
@@ -121,6 +137,10 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			} else {
 				functionTest.setLsBGAccID(bgFile, 1, getGene2ItemFileName(bgFile));
 			}
+		}
+		
+		if (FileOperate.isFileExistAndBigThanSize(gene2itemAnnoFile, 0)) {
+			functionTest.readGene2ItemAnnoFile(gene2itemAnnoFile);
 		}
 	}
 	/**

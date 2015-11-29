@@ -229,7 +229,7 @@ public class GuiUpdateDB extends JPanel {
 			KGML2DB.readKGML(strings[0]);
 			List<String> lsKGML=FileOperate.getFoldFileNameLs(strings[0], "*", "list");
 			try {
-				KeggIDcvt.upDateGen2Keg(lsKGML.get(0));
+				KeggIDcvt.upDateGen2Keg(lsKGML.get(0), null);
 			} catch (Exception e1) { e1.printStackTrace(); }
 		}
 	}

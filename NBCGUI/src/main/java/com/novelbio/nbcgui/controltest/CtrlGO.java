@@ -87,12 +87,6 @@ public class CtrlGO extends CtrlGOPath {
 	
 	@Override
 	String getGene2ItemFileName(String fileName) {
-		String goAnno = "";
-		if (!StringOperate.isRealNull(goAnnoFile)) {
-			goAnno = FileOperate.getFileName(goAnnoFile);
-			goAnno += isCombine;
-		}
-		
 		String suffix = "_GO_Item";
 		List<Integer> blastTaxID = functionTest.getBlastTaxID();
 		if (functionTest.isBlast()) {
@@ -106,7 +100,6 @@ public class CtrlGO extends CtrlGOPath {
 		if (goLevel > 0) {
 			suffix = suffix + "_" + goLevel + "Level";
 		}
-		suffix += goAnno;
 		String bgName = FileOperate.changeFileSuffix(fileName, suffix, "txt");
 		bgName = FileOperate.changeFilePrefix(bgName, ".", null);
 		return bgName;

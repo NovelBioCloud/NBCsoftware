@@ -6,24 +6,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.google.common.collect.HashMultimap;
 import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.seq.GeneExpTable;
 import com.novelbio.analysis.seq.fasta.CopeFastq;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
-import com.novelbio.analysis.seq.mapping.MapBowtie;
+import com.novelbio.analysis.seq.mapping.MapBowtie2;
 import com.novelbio.analysis.seq.mapping.MapLibrary;
 import com.novelbio.analysis.seq.mapping.MapRNA;
+import com.novelbio.analysis.seq.mapping.MapRNAfactory;
 import com.novelbio.analysis.seq.mapping.MapRsem;
 import com.novelbio.analysis.seq.mapping.MapSplice;
 import com.novelbio.analysis.seq.mapping.MapTophat;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.rnaseq.RPKMcomput.EnumExpression;
 import com.novelbio.base.ExceptionNullParam;
-import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.database.domain.information.SoftWareInfo;
 import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.generalConf.TitleFormatNBC;
@@ -63,7 +61,7 @@ public class CtrlRNAmap implements IntCmdSoft {
 	/** 保存最终结果，只有rsem才会有 */
 	GeneExpTable rsemExpFPKM;
 	
-	int sensitive = MapBowtie.Sensitive_Sensitive;
+	int sensitive = MapBowtie2.Sensitive_Sensitive;
 	
 	public CtrlRNAmap(SoftWare softWare) {
 		this.softWare = softWare;
@@ -145,10 +143,7 @@ public class CtrlRNAmap implements IntCmdSoft {
 		rsemExpCounts = new GeneExpTable(TitleFormatNBC.AccID);
 		rsemExpFPKM = new GeneExpTable(TitleFormatNBC.AccID);
 		for (Entry<String, List<List<String>>> entry : mapPrefix2LsFastq.entrySet()) {
-			creatMapRNA();
-			
-			mapRNA.setGffChrAbs(gffChrAbs);
-			setRefFile();
+			mapRNA = MapRNAfactory.generateMapRNA(softWare, gffChrAbs);
 			String prefix = entry.getKey();
 			List<List<String>> lsFastqFR = entry.getValue();
 
@@ -172,7 +167,7 @@ public class CtrlRNAmap implements IntCmdSoft {
 				}
 				mapRNA.setGtf_Gene2Iso(gtfAndGene2Iso);
 			}
-			
+			setRefFile();
 			try {
 				mapRNA.mapReads();
 			} catch (Exception e) {
@@ -185,16 +180,7 @@ public class CtrlRNAmap implements IntCmdSoft {
 			setExpResult(prefix, mapRNA);
 		}
 	}
-	
-	private void creatMapRNA() {
-		if (softWare == SoftWare.tophat) {
-			mapRNA = new MapTophat();
-		} else if (softWare == SoftWare.rsem) {
-			mapRNA = new MapRsem();
-		} else if (softWare == SoftWare.mapsplice) {
-			mapRNA = new MapSplice();
-		}
-	}
+
 	private void setRefFile() {
 		boolean isThrdPartIndex = false;
 		if (gffChrAbs == null || FileOperate.isFileExist(indexFile)) {
@@ -211,12 +197,12 @@ public class CtrlRNAmap implements IntCmdSoft {
 		}
 		
 		if (softWare == SoftWare.tophat) {
-			mapRNA.setRefIndex(gffChrAbs.getSpecies().getIndexChr(mapRNA.getBowtieVersion()));
+			mapRNA.setRefIndex(gffChrAbs.getSpecies().getIndexChr(mapRNA.getSoftWare()));
 			((MapTophat)mapRNA).setMapUnmapedReads(mapUnmapedReads, indexUnmap);
 		} else if (softWare == SoftWare.rsem) {
 			mapRNA.setRefIndex(gffChrAbs.getSpecies().getIndexRef(SoftWare.rsem, true));
 		} else if (softWare == SoftWare.mapsplice) {
-			mapRNA.setRefIndex(gffChrAbs.getSpecies().getIndexChr(mapRNA.getBowtieVersion()));
+			mapRNA.setRefIndex(gffChrAbs.getSpecies().getIndexChr(mapRNA.getSoftWare()));
 			((MapSplice)mapRNA).setMapUnmapedReads(mapUnmapedReads, indexUnmap);
 		}
 	}

@@ -16,7 +16,6 @@ import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.base.Computer;
 import com.novelbio.base.ExceptionNullParam;
-import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunProcess.RunThreadStat;
 import com.novelbio.base.plot.ImageUtils;
@@ -55,7 +54,7 @@ public class CtrlGOall implements CtrlTestGOInt {
 	@Override
 	public void setGOanno(String goAnnoFile, boolean isCombine) {
 		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
-			ctrlGO.setGOanno(goAnnoFile, isCombine);
+			ctrlGO.setGene2itemAnnoFile(goAnnoFile, isCombine);
 		}
 	}
 
