@@ -484,7 +484,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			
 			exonJunction.run();
 			if (!exonJunction.isFinishedNormal()) {
-				throw new ExceptionNBCsoft("Autonative Splicing Error:" + comparePrefix[0] + " vs " + comparePrefix[1]);
+				throw new ExceptionNBCsoft("Alternative Splicing Error:" + comparePrefix[0] + " vs " + comparePrefix[1], exonJunction.getException());
 			}
 		}
 		if (guiRNAautoSplice != null) {

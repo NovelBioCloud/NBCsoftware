@@ -359,7 +359,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 						try {
 							bamReadsInfo.calculate();
 						} catch (Exception e) {
-							throw new ExceptionSamError(e.getMessage() + " please chose the correct Strand information");
+							throw new ExceptionSamError(e.getMessage() + ", please chose the correct Strand information");
 						}
 						
 						if (bamReadsInfo.getStrandSpecific() == StrandSpecific.UNKNOWN) {

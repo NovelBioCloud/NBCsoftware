@@ -353,8 +353,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	/** 返回保存的文件名 */
 	protected List<String> saveExcelNorm(String excelPath) {
 		FileOperate.DeleteFileFolder(excelPath);
-		ExcelOperate excelResult = new ExcelOperate();
-		excelResult.newExcelOpen(excelPath);
+		ExcelOperate excelResult = new ExcelOperate(excelPath);
 		lsResultExcel.add(excelPath);
 		ExcelOperate excelResultAll = null;
 		String excelAllPath = FileOperate.changeFileSuffix(excelPath, "_All",null);
@@ -366,8 +365,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			Map<String, Integer> mapSheetName2EndLine = functionTest.getMapSheetName2EndLine();
 			if (mapPrefix2FunTest.size() > 1 && prefix.equals("All")) {
 				if (excelResultAll == null) {
-					excelResultAll = new ExcelOperate();
-					excelResultAll.newExcelOpen(excelAllPath);
+					excelResultAll = new ExcelOperate(excelAllPath);
 					lsResultExcel.add(excelAllPath);
 				}				
 				for (String sheetName : mapSheetName2LsInfo.keySet()) {
@@ -376,7 +374,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 					if (endRowNum > 0) {
 						style = ExcelStyle.getThreeLineTable(1, endRowNum);
 					}
-					excelResultAll.WriteExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName), style);
+					excelResultAll.writeExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName), style);
 				}
 			} else {
 				for (String sheetName : mapSheetName2LsInfo.keySet()) {
@@ -385,7 +383,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 					if (endRowNum > 0) {
 						style = ExcelStyle.getThreeLineTable(1, endRowNum);
 					}
-					excelResult.WriteExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName),style);
+					excelResult.writeExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName),style);
 				}
 			}
 			copeFile(prefix, excelPath);
@@ -432,9 +430,8 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	
 	protected List<String> saveExcelCluster(String excelPath) {
 		for (String prefix : mapPrefix2FunTest.keySet()) {
-			ExcelOperate excelResult = new ExcelOperate();
 			String excelPathOut = FileOperate.changeFileSuffix(excelPath, "_" + prefix, null);
-			excelResult.newExcelOpen(excelPathOut);
+			ExcelOperate excelResult = new ExcelOperate(excelPathOut);
 			lsResultExcel.add(excelPathOut);
 			
 			Map<String, Integer> mapSheetName2EndLine = mapPrefix2FunTest.get(prefix).getMapSheetName2EndLine();
@@ -445,7 +442,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 				if (endRowNum > 0) {
 					style = ExcelStyle.getThreeLineTable(1, endRowNum);
 				}
-				excelResult.WriteExcel(sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName), style);
+				excelResult.writeExcel(sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName), style);
 			}
 			excelResult.close();
 			copeFile(prefix, excelPath);

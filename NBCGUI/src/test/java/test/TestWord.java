@@ -1,46 +1,17 @@
 package test;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
 
 public class TestWord {
-	
+	private static final Logger logger = LoggerFactory.getLogger(TestWord.class);
 	public static void main(String[] args) {
 		
-//		ActiveXComponent wordApp;
-//		wordApp = new ActiveXComponent("Word.Application");
-//		wordApp.setProperty("Visible", new Variant(true));
-//		
-//		ActiveXComponent wordApp2 = new ActiveXComponent("Word.Application");
-//		wordApp2.setProperty("Visible", new Variant(true));
-//		
-//		Dispatch dispatchWord = wordApp.getProperty("Documents").toDispatch();
-//		Dispatch dispatchWord2 = wordApp2.getProperty("Documents").toDispatch();
-//		
-//		Dispatch dispatch1 = Dispatch.call(dispatchWord, "Open", "C:\\Documents and Settings\\Administrator\\桌面\\a.doc").toDispatch();
-//		Dispatch dispatch2 = Dispatch.call(dispatchWord, "Open", "C:\\Documents and Settings\\Administrator\\桌面\\b.doc").toDispatch();
-//		Dispatch dispatch3 = Dispatch.call(dispatchWord2, "Open", "C:\\Documents and Settings\\Administrator\\桌面\\c.doc").toDispatch();
-//		
-//		Dispatch selected = Dispatch.call(wordApp, "Selection").toDispatch();
-//		Dispatch selected2 = Dispatch.call(wordApp2, "Selection").toDispatch();
-//		
-//		TestWord test = new TestWord();
-//		test.copy(dispatch2, selected2);
-		String path1 = "C:\\Documents and Settings\\Administrator\\桌面\\a.doc";
-		String path2 = "C:\\Documents and Settings\\Administrator\\桌面\\b.doc";
-		String path3 = "C:\\Documents and Settings\\Administrator\\桌面\\c.doc";
-		String path4 = "C:\\Documents and Settings\\Administrator\\桌面\\d.doc";
-		String pathTo1 = "C:\\Documents and Settings\\Administrator\\桌面\\e.doc";
-		String pathTo2 = "C:\\Documents and Settings\\Administrator\\桌面\\f.doc";
-		String pathTo3 = "C:\\Documents and Settings\\Administrator\\桌面\\g.doc";
-		String pathTo4 = "C:\\Documents and Settings\\Administrator\\桌面\\h.doc";
-		Thread thread1 = new Thread(new WordTest(path1, pathTo1));
-		Thread thread2 = new Thread(new WordTest(path2, pathTo2));
-//		Thread thread3 = new Thread(new WordTest(path3, pathTo3));
-//		Thread thread4 = new Thread(new WordTest(path4, pathTo4));
-		thread1.start();
-		thread2.start();
+		logger.info("first {} second {}", "fse" ,"kk");
 		
 	}
 	

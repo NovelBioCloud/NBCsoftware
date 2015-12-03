@@ -26,7 +26,7 @@ public class GuiVolcanoPlot extends JPanel {
 	GUIFileOpen guiFileOpen = new GUIFileOpen();
 	String inFileString;
 	JScrollPaneData scrollPaneInFile;
-	List<List<String>> lsInfo;
+	List<String[]> lsInfo;
 	JComboBoxData<Integer> comboBoxLogFC;
 	JComboBoxData<Integer> comboBoxP_Value;
 	/**
@@ -45,15 +45,15 @@ public class GuiVolcanoPlot extends JPanel {
 		btnInfile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String inFileString = guiFileOpen.openFileName("", "");
-				lsInfo = ExcelTxtRead.readLsExcelTxtls(inFileString, 0);
-				List<String> lsTitle = lsInfo.get(0);
+				lsInfo = ExcelTxtRead.readLsExcelTxt(inFileString, 0);
+				String[] titles = lsInfo.get(0);
 				Map<String, Integer> mapColName2Value = new HashMap<String, Integer>();
 				int i = 1;
-				for (String string : lsTitle) {
+				for (String string : titles) {
 					mapColName2Value.put(string, i);
 					i++;
 				}
-				scrollPaneInFile.setItemLsLs(lsInfo);
+				scrollPaneInFile.setItemLs(lsInfo);
 				comboBoxLogFC.setMapItem(mapColName2Value);
 				comboBoxP_Value.setMapItem(mapColName2Value);
 			}

@@ -60,11 +60,9 @@ public class CtrlMedian {
 		return lsResult;
 	}
 	
-	public void saveFile(String excelFile)
-	{
-		ExcelOperate excel = new ExcelOperate();
-		excel.newExcelOpen(excelFile);
-		excel.WriteExcel(1, 1, lsResult);
+	public void saveFile(String excelFile) {
+		ExcelOperate excel = new ExcelOperate(excelFile);
+		excel.writeExcel(1, 1, lsResult);
 		excel.close();
 	}
 }

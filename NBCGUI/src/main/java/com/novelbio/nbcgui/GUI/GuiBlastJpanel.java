@@ -544,15 +544,18 @@ public class GuiBlastJpanel extends JPanel {
 			if(result != JOptionPane.OK_OPTION)
 				return;
 		}
-		ExcelOperate excelSave = new ExcelOperate();
+		
 		if (!filePath.endsWith(".xls")) {
 			filePath=filePath+".xls";
 		}
-		excelSave.newExcelOpen(filePath);
+		
+		ExcelOperate excelSave = new ExcelOperate(filePath);
 		lsResult.add(0, title);
-		boolean save = excelSave.WriteExcel( 1, 1, lsResult);
-		excelSave.close();
-		if (save) {
+		
+		try {
+			excelSave.writeExcel( 1, 1, lsResult);
+			excelSave.close();
+		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Your Data Was Saved!", "Save Finished", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}

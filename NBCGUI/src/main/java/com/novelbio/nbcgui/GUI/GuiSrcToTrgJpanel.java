@@ -293,10 +293,10 @@ public class GuiSrcToTrgJpanel extends JPanel{
 	 * 查看文件的鼠标或键盘事件响应时调用
 	 */
 	private void setPathProview(String filePath) {
-		ExcelOperate excelOperate = new ExcelOperate();
-		excelOperate.openExcel(filePath);
-		ArrayList<String[]> PathRawData = excelOperate.ReadLsExcel(1, 1, excelOperate.getRowCount(), excelOperate.getColCount());
+		ExcelOperate excelOperate = new ExcelOperate(filePath);
+		ArrayList<String[]> PathRawData = excelOperate.readLsExcel();
 		jScrollPaneInputPath.setItemLsWithTitle(PathRawData);
+		excelOperate.close();
 	}
 	
 }
