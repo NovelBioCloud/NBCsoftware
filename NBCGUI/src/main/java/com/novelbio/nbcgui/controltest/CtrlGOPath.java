@@ -302,7 +302,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 			Set<String> setAccID = mapPrefix2SetAccID.get(prefix);
 			for (String accID : setAccID) {
 				GeneID geneID = new GeneID(accID, functionTest.getTaxID());
-				if (geneID.getIDtype() != GeneID.IDTYPE_ACCID || geneID.getLsBlastGeneID().size() > 0) {
+				if (geneID.getIDtype() != GeneID.IDTYPE_ACCID || geneID.getLsBlastGeneID().size() > 0 || functionTest.isContainGeneName(geneID.getGeneUniID())) {
 					mapPrefix2SetGeneID.put(prefix, geneID);
 				}
 			}
