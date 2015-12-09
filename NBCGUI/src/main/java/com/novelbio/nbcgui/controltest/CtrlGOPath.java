@@ -2,6 +2,7 @@ package com.novelbio.nbcgui.controltest;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import com.google.common.collect.HashMultimap;
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
+import com.novelbio.analysis.annotation.functiontest.FunctionTest.FunctionDrawResult;
 import com.novelbio.analysis.annotation.functiontest.StatisticTestResult;
 import com.novelbio.analysis.seq.genome.GffSpeciesInfo;
 import com.novelbio.base.StringOperate;
@@ -54,13 +56,11 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	 */
 	ArrayList<String[]> lsAccID2Value;
 	Species species;
-	/**
-	 * 结果,key： 时期等
-	 * value：相应的结果
-	 */	
-	Map<String, FunctionTest> mapPrefix2FunTest = new LinkedHashMap<String, FunctionTest>();
+
+	Map<String, FunctionDrawResult> mapPrefix2FunDrawTest = new LinkedHashMap<String, FunctionDrawResult>();
+
 	String bgFile = "";
-	String saveExcelPrefix;
+	private String saveExcelPrefix;
 	
 	String gene2itemAnnoFile;
 	/** true表示与数据库的注释合并，false表示仅用该注释文件进行go注释 */
@@ -180,15 +180,9 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		this.isCluster = isCluster;
 	}
 	
-	/**
-	 * 运行完后获得结果<br>
-	 * 结果,key： 时期等<br>
-	 * value：具体的结果<br>
-	 */
-	public Map<String, FunctionTest> getMapResult_Prefix2FunTest() {
-		return mapPrefix2FunTest;
+	public Map<String, FunctionDrawResult> getMapPrefix2FunDrawTest() {
+		return mapPrefix2FunDrawTest;
 	}
-	
 	
 	/**
 	 * 获得上下调数
@@ -207,6 +201,10 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		}
 	}
 	
+	protected void setSaveExcelPrefix(String saveExcelPrefix) {
+		this.saveExcelPrefix = saveExcelPrefix;
+	}
+	
 	/** 返回文件的名字，用于excel和画图 */
 	public abstract String getResultBaseTitle();
 	
@@ -219,7 +217,6 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	 */
 	private void runNorm() {
 		isCluster = false;
-		mapPrefix2FunTest.clear();
 		HashMultimap<String, String> mapPrefix2AccID = HashMultimap.create();
 		for (String[] strings : lsAccID2Value) {
 			if (strings[0] == null || strings[0].trim().equals("")) {
@@ -242,9 +239,36 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		}
 		HashMultimap<String, GeneID> mapPrefix2SetAccID = addBG_And_Convert2GeneID(mapPrefix2AccID);
 		setGeneNum(mapPrefix2AccID);
-		for (String prefix : mapPrefix2SetAccID.keySet()) {
-			getResult(prefix, mapPrefix2SetAccID.get(prefix));
+		
+		Set<String> setResultFile = new HashSet<>();
+		
+		ExcelOperate excelResult = new ExcelOperate(saveExcelPrefix);
+		String excelAllPath = FileOperate.changeFileSuffix(saveExcelPrefix, "_All",null);
+		ExcelOperate excelResultAll = null;
+		if (mapPrefix2SetAccID.keySet().contains(All) && mapPrefix2SetAccID.size() > 0) {
+			excelResultAll = new ExcelOperate(excelAllPath);
 		}
+		for (String prefix : mapPrefix2SetAccID.keySet()) {
+			FunctionTest functionTest = getResult(prefix, mapPrefix2SetAccID.get(prefix));
+			if (functionTest == null) {
+				TxtReadandWrite txtWrite = new TxtReadandWrite(FileOperate.changeFileSuffix(saveExcelPrefix, "_NoResult", null), true);
+				txtWrite.close();
+				continue;
+			}
+			if (prefix.equals(All) && excelResultAll != null) {
+				setResultFile.add(excelAllPath);
+				saveExcelNorm(prefix, functionTest, excelResultAll);
+			} else {
+				setResultFile.add(saveExcelPrefix);
+				saveExcelNorm(prefix, functionTest, excelResult);
+			}
+			copeFile(prefix, saveExcelPrefix);
+			mapPrefix2FunDrawTest.put(prefix, functionTest.getFunctionDrawResult());
+		}
+		excelResult.close();
+		if (excelResultAll != null) excelResultAll.close();
+		
+		lsResultExcel.addAll(setResultFile);
 	}
 	
 	private Double getDoubleValue(String valueStr) {
@@ -284,14 +308,26 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	 */
 	private void runCluster() {
 		isCluster = true;
-		mapPrefix2FunTest.clear();
 		HashMultimap<String, String> mapCluster2SetAccID = HashMultimap.create();
 		for (String[] accID2prefix : lsAccID2Value) {
 			mapCluster2SetAccID.put(accID2prefix[1], accID2prefix[0]);
 		}
 		HashMultimap<String, GeneID> mapCluster2SetGeneID = addBG_And_Convert2GeneID(mapCluster2SetAccID);
 		for (String prefix : mapCluster2SetGeneID.keySet()) {
-			getResult(prefix, mapCluster2SetGeneID.get(prefix));
+			FunctionTest functionTest = getResult(prefix, mapCluster2SetGeneID.get(prefix));
+			String excelPathOut = FileOperate.changeFileSuffix(saveExcelPrefix, "_" + prefix, null);
+
+			if (functionTest == null) {
+				TxtReadandWrite txtWrite = new TxtReadandWrite(FileOperate.changeFileSuffix(excelPathOut, "_NoResult", null), true);
+				txtWrite.close();
+				continue;
+			}
+			ExcelOperate excelResult = new ExcelOperate(excelPathOut);
+			saveExcelCluster(prefix, functionTest, excelResult);
+			excelResult.close();
+			copeFile(prefix, saveExcelPrefix);
+			lsResultExcel.add(excelPathOut);
+			mapPrefix2FunDrawTest.put(prefix, functionTest.getFunctionDrawResult());
 		}
 	}
 	
@@ -301,10 +337,13 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		for (String prefix : mapPrefix2SetAccID.keySet()) {
 			Set<String> setAccID = mapPrefix2SetAccID.get(prefix);
 			for (String accID : setAccID) {
+				if (StringOperate.isRealNull(accID)) continue;
+				
 				GeneID geneID = new GeneID(accID, functionTest.getTaxID());
 				if (geneID.getIDtype() != GeneID.IDTYPE_ACCID || geneID.getLsBlastGeneID().size() > 0 || functionTest.isContainGeneName(geneID.getGeneUniID())) {
 					mapPrefix2SetGeneID.put(prefix, geneID);
 				}
+
 			}
 		}//*1
 		//以下是打算将输入的testID补充进入BG，不过我觉得没必要了
@@ -323,26 +362,16 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	 * @return
 	 * 没有就返回null   
 	 */
-	private void getResult(String prix, Collection<GeneID>lsCopedIDs) {
+	private FunctionTest getResult(String prix, Collection<GeneID>lsCopedIDs) {
 		if (limitGeneNum > 100 && lsCopedIDs.size() > limitGeneNum) {
 			throw new RuntimeException("GOPath condition: " + prix + " contains " + lsCopedIDs.size() + " genes, GO Pathway Error, cannot calculate so much gene");
 		}
 		functionTest.setLsTestGeneID(lsCopedIDs);
 		ArrayList<StatisticTestResult> lsResultTest = functionTest.getTestResult();
 		if (lsResultTest == null || lsResultTest.size() == 0) {
-			return;
+			return null;
 		}
-		mapPrefix2FunTest.put(prix, functionTest.clone());
-	}
-
-	public List<String> saveExcel(String excelPath) {
-		saveExcelPrefix = excelPath;
-		lsResultExcel.clear();
-		if (isCluster) {
-			return saveExcelCluster(excelPath);
-		} else {
-			return saveExcelNorm(excelPath);
-		}
+		return functionTest.clone();
 	}
 	
 	/** 返回 保存的路径，注意如果是cluster，则返回的是前缀 */
@@ -351,104 +380,68 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	}
 	
 	/** 返回保存的文件名 */
-	protected List<String> saveExcelNorm(String excelPath) {
-		FileOperate.DeleteFileFolder(excelPath);
-		ExcelOperate excelResult = new ExcelOperate(excelPath);
-		lsResultExcel.add(excelPath);
-		ExcelOperate excelResultAll = null;
-		String excelAllPath = FileOperate.changeFileSuffix(excelPath, "_All",null);
+	protected void saveExcelNorm(String prefix, FunctionTest functionTest, ExcelOperate excelResult) {
+		Map<String,   List<String[]>> mapSheetName2LsInfo = functionTest.getMapWriteToExcel();
+		Map<String, Integer> mapSheetName2EndLine = functionTest.getMapSheetName2EndLine();
 
-		for (String prefix : mapPrefix2FunTest.keySet()) {
-			FunctionTest functionTest = mapPrefix2FunTest.get(prefix);
-			
-			Map<String,   List<String[]>> mapSheetName2LsInfo = functionTest.getMapWriteToExcel();
-			Map<String, Integer> mapSheetName2EndLine = functionTest.getMapSheetName2EndLine();
-			if (mapPrefix2FunTest.size() > 1 && prefix.equals("All")) {
-				if (excelResultAll == null) {
-					excelResultAll = new ExcelOperate(excelAllPath);
-					lsResultExcel.add(excelAllPath);
-				}				
-				for (String sheetName : mapSheetName2LsInfo.keySet()) {
-					int endRowNum = mapSheetName2EndLine.get(sheetName) + 1;
-					ExcelStyle style = null;
-					if (endRowNum > 0) {
-						style = ExcelStyle.getThreeLineTable(1, endRowNum);
-					}
-					excelResultAll.writeExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName), style);
-				}
-			} else {
-				for (String sheetName : mapSheetName2LsInfo.keySet()) {
-					int endRowNum = mapSheetName2EndLine.get(sheetName) + 1;
-					ExcelStyle style = null;
-					if (endRowNum > 0) {
-						style = ExcelStyle.getThreeLineTable(1, endRowNum);
-					}
-					excelResult.writeExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName),style);
-				}
+		for (String sheetName : mapSheetName2LsInfo.keySet()) {
+			int endRowNum = mapSheetName2EndLine.get(sheetName) + 1;
+			ExcelStyle style = null;
+			if (endRowNum > 0) {
+				style = ExcelStyle.getThreeLineTable(1, endRowNum);
 			}
-			copeFile(prefix, excelPath);
+			excelResult.writeExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName),style);
 		}
-		excelResult.close();
-		if (excelResultAll != null) excelResultAll.close();
-		return lsResultExcel;
+	}
+		
+//	/**
+//	 * 统计结果，返回筛选条件
+//	 * 
+//	 * @param lsTestResults
+//	 * @param knownCondition
+//	 *            已知条件，用来比较返回更宽松的条件
+//	 * @return
+//	 */
+//	public String getFinderCondition() {
+//		int fdrSum1 = 0;
+//		int fdrSum5 = 0;
+//		int pValueSum1 = 0;
+////		String[] result = { "FDR&lt;0.01", "FDR&lt;0.05", "P-value&lt;0.01", "P-value&lt;0.05" };
+//		String[] result = { "FDR<0.01", "FDR<0.05", "P-value<0.01", "P-value<0.05" };
+//		if (mapPrefix2FunTest.size() == 0) {
+//			return result[1];
+//		}
+//		FunctionTest functionTest = mapPrefix2FunTest.values().iterator().next();
+//		for (StatisticTestResult testResult : functionTest.getTestResult()) {
+//			if (testResult.getPvalue() < 0.01) {
+//				pValueSum1++;
+//			}
+//			if (testResult.getPvalue() < 0.05) {
+//			}
+//			if (testResult.getFdr() < 0.01) {
+//				fdrSum1++;
+//			}
+//			if (testResult.getFdr() < 0.05) {
+//				fdrSum5++;
+//			}
+//		}
+//		int currentConditionNum = fdrSum1 > 8 ? 0 : (fdrSum5 > 8 ? 1 : (pValueSum1 > 8 ? 2 : 3));
+//		return result[currentConditionNum];
+//	}
+		
+	protected void saveExcelCluster(String prefix, FunctionTest functionTest, ExcelOperate excelResult) {
+		Map<String, Integer> mapSheetName2EndLine = functionTest.getMapSheetName2EndLine();
+		Map<String, List<String[]>> mapSheetName2LsInfo = functionTest.getMapWriteToExcel();
+		for (String sheetName : mapSheetName2LsInfo.keySet()) {
+			int endRowNum = mapSheetName2EndLine.get(sheetName) + 1;
+			ExcelStyle style = null;
+			if (endRowNum > 0) {
+				style = ExcelStyle.getThreeLineTable(1, endRowNum);
+			}
+			excelResult.writeExcel(sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName), style);
+		}
 	}
 	
-	/**
-	 * 统计结果，返回筛选条件
-	 * 
-	 * @param lsTestResults
-	 * @param knownCondition
-	 *            已知条件，用来比较返回更宽松的条件
-	 * @return
-	 */
-	public String getFinderCondition() {
-		int fdrSum1 = 0;
-		int fdrSum5 = 0;
-		int pValueSum1 = 0;
-//		String[] result = { "FDR&lt;0.01", "FDR&lt;0.05", "P-value&lt;0.01", "P-value&lt;0.05" };
-		String[] result = { "FDR<0.01", "FDR<0.05", "P-value<0.01", "P-value<0.05" };
-		if (mapPrefix2FunTest.size() == 0) {
-			return result[1];
-		}
-		FunctionTest functionTest = mapPrefix2FunTest.values().iterator().next();
-		for (StatisticTestResult testResult : functionTest.getTestResult()) {
-			if (testResult.getPvalue() < 0.01) {
-				pValueSum1++;
-			}
-			if (testResult.getPvalue() < 0.05) {
-			}
-			if (testResult.getFdr() < 0.01) {
-				fdrSum1++;
-			}
-			if (testResult.getFdr() < 0.05) {
-				fdrSum5++;
-			}
-		}
-		int currentConditionNum = fdrSum1 > 8 ? 0 : (fdrSum5 > 8 ? 1 : (pValueSum1 > 8 ? 2 : 3));
-		return result[currentConditionNum];
-	}
-	
-	protected List<String> saveExcelCluster(String excelPath) {
-		for (String prefix : mapPrefix2FunTest.keySet()) {
-			String excelPathOut = FileOperate.changeFileSuffix(excelPath, "_" + prefix, null);
-			ExcelOperate excelResult = new ExcelOperate(excelPathOut);
-			lsResultExcel.add(excelPathOut);
-			
-			Map<String, Integer> mapSheetName2EndLine = mapPrefix2FunTest.get(prefix).getMapSheetName2EndLine();
-			Map<String, List<String[]>> mapSheetName2LsInfo = mapPrefix2FunTest.get(prefix).getMapWriteToExcel();
-			for (String sheetName : mapSheetName2LsInfo.keySet()) {
-				int endRowNum = mapSheetName2EndLine.get(sheetName) + 1;
-				ExcelStyle style = null;
-				if (endRowNum > 0) {
-					style = ExcelStyle.getThreeLineTable(1, endRowNum);
-				}
-				excelResult.writeExcel(sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName), style);
-			}
-			excelResult.close();
-			copeFile(prefix, excelPath);
-		}
-		return lsResultExcel;
-	}
 	public List<String> getLsResultExcel() {
 		return lsResultExcel;
 	}
@@ -465,7 +458,6 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		down = -1;
 		isCluster = false;
 		lsAccID2Value = null;
-		mapPrefix2FunTest = new LinkedHashMap<String, FunctionTest>();
 		clear();
 	}
 	

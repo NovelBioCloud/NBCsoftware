@@ -32,7 +32,7 @@ public interface CtrlTestGOInt {
 	 * 保存图片并返回保存的前缀和文件名
 	 * @return
 	 */
-	public void saveExcel(String excelPath);
+	public void setSavePathPrefix(String excelPath);
 	
 	/**
 	 * <b>GO用到</b><br>
@@ -65,13 +65,6 @@ public interface CtrlTestGOInt {
 	public int getTaxID();
 	/** 返回本次分析blast到的物种list */
 	public List<Integer> getBlastTaxID();
-	
-	/**
-	 * 运行完后获得结果<br>
-	 * 结果,key： 时期等<br>
-	 * value：具体的结果<br>
-	 */
-	public Map<GOtype, CtrlGO> getMapResult_Prefix2FunTest();
 	
 	public String getResultBaseTitle();
 	

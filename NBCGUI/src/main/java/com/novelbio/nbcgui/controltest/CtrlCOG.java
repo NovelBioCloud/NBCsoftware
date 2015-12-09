@@ -3,6 +3,7 @@ package com.novelbio.nbcgui.controltest;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
@@ -15,6 +16,7 @@ import com.novelbio.analysis.annotation.cog.COGanno;
 import com.novelbio.analysis.annotation.cog.EnumCogType;
 import com.novelbio.analysis.annotation.functiontest.CogFunTest;
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
+import com.novelbio.analysis.annotation.functiontest.FunctionTest.FunctionDrawResult;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.plot.ImageUtils;
 import com.novelbio.database.model.modgeneid.GeneID;
@@ -23,7 +25,7 @@ import com.novelbio.database.model.modgeneid.GeneID;
 public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 	private static final Logger logger = Logger.getLogger(CtrlCOG.class);
 	String saveParentPath = "";
-	String savePrefix = "";
+	String savePrefix;
 	List<String> lsResultPic = new ArrayList<>();
 	EnumCogType cogType;
 	
@@ -70,33 +72,31 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 	}
 	
 	@Override
-	public List<String> saveExcel(String resultPath) {
-		List<String> lsResultFile = new ArrayList<>();
+	public void setSavePathPrefix(String resultPath) {
 		if (resultPath.endsWith("\\") || resultPath.endsWith("/")) {
 			saveParentPath = resultPath;
+			savePrefix = "";
 		} else {
 			saveParentPath = FileOperate.getParentPathNameWithSep(resultPath);
-			savePrefix = FileOperate.getFileName(saveParentPath);
+			savePrefix = "_" + FileOperate.getFileName(resultPath);
 		}
-		
+		String saveExcelPrefix = null;
 		if (resultPath.endsWith("\\") || resultPath.endsWith("/")) {
 			saveExcelPrefix = resultPath + getResultBaseTitle() + ".xlsx";
 		} else {
 			saveExcelPrefix = FileOperate.changeFilePrefix(resultPath, getResultBaseTitle() + "_", "xlsx");
 		}
-		if (isCluster) {
-			lsResultFile =  saveExcelCluster(saveExcelPrefix);
-		} else {
-			lsResultFile =  saveExcelNorm(saveExcelPrefix);
-		}
+		setSaveExcelPrefix(saveExcelPrefix);
+	}
+	
+	public void running() {
+		super.running();
 		savePic();
-		
-		return lsResultFile;
 	}
 	
 	private void savePic() {
 		lsResultPic.clear();
-		for (Entry<String, FunctionTest> entry : getMapResult_Prefix2FunTest().entrySet()) {
+		for (Entry<String, FunctionDrawResult> entry : getMapPrefix2FunDrawTest().entrySet()) {
 			String prix = entry.getKey();
 			BufferedImage bfImageLog2Pic = entry.getValue().getImagePvalue();
 			if (bfImageLog2Pic == null) continue;
@@ -111,24 +111,16 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 	}
 	
 	public String getSavePicPvalueName(String prefix) {
-		return FileOperate.addSep(getSaveParentPath()) + getResultBaseTitle() + "-Log2P_" + prefix + "_" + getSavePrefix() + ".png";
+		return FileOperate.addSep(saveParentPath) + getResultBaseTitle() + "-Log2P_" + prefix + savePrefix + ".png";
 	}
 	public String getSavePicEnrichmentName(String prefix) {
-		return FileOperate.addSep(getSaveParentPath()) + getResultBaseTitle() +  "-Enrichment_" + prefix + "_" + getSavePrefix() + ".png";
+		return FileOperate.addSep(saveParentPath) + getResultBaseTitle() +  "-Enrichment_" + prefix + savePrefix + ".png";
 	}
 	@Override
 	protected void clear() {
 		functionTest = FunctionTest.getInstance(FunctionTest.FUNCTION_COG);
 	}
-	
-	/** 获得保存到文件夹的前缀，譬如保存到/home/zong0jie/stage10，那么前缀就是stage10 */
-	public String getSavePrefix() {
-		return savePrefix;
-	}
-	/** 获得保存到的文件夹路径 */
-	public String getSaveParentPath() {
-		return saveParentPath;
-	}
+
 	/** 返回文件的名字，用于excel和画图 */
 	public String getResultBaseTitle() {
 		return cogType + "-Analysis";
@@ -140,5 +132,6 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 	public List<String> getLsResultPic() {
 		return lsResultPic;
 	}
+
 
 }

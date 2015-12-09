@@ -1,26 +1,26 @@
 package com.novelbio.nbcgui.controltest;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
+import com.novelbio.analysis.annotation.functiontest.FunctionTest.FunctionDrawResult;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.plot.ImageUtils;
 @Service
 @Scope("prototype")
 public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
-	private static final Logger logger = Logger.getLogger(CtrlPath.class);
-	String saveParentPath = "";
+	private static final Logger logger = LoggerFactory.getLogger(CtrlPath.class);
+	String saveParentPath;
 	String savePrefix = "";
-	List<String> lsResultPic = new ArrayList<>();
 	
 	/** @param QtaxID */
 	public CtrlPath() {
@@ -51,33 +51,29 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 	}
 	
 	@Override
-	public List<String> saveExcel(String resultPath) {
-		List<String> lsResultFile = new ArrayList<>();
-		if (resultPath.endsWith("\\") || resultPath.endsWith("/")) {
-			saveParentPath = resultPath;
+	public void setSavePathPrefix(String excelPath) {
+		if (excelPath.endsWith("\\") || excelPath.endsWith("/")) {
+			saveParentPath = excelPath;
 		} else {
-			saveParentPath = FileOperate.getParentPathNameWithSep(resultPath);
-			savePrefix = FileOperate.getFileName(resultPath);
+			saveParentPath = FileOperate.getParentPathNameWithSep(excelPath);
+			savePrefix = FileOperate.getFileName(excelPath);
 		}
-		
-		if (resultPath.endsWith("\\") || resultPath.endsWith("/")) {
-			saveExcelPrefix = resultPath + getResultBaseTitle() + ".xlsx";
+		String saveExcelPrefix;
+		if (excelPath.endsWith("\\") || excelPath.endsWith("/")) {
+			saveExcelPrefix = excelPath + getResultBaseTitle() + ".xlsx";
 		} else {
-			saveExcelPrefix = FileOperate.changeFilePrefix(resultPath, getResultBaseTitle() + "_", "xlsx");
+			saveExcelPrefix = FileOperate.changeFilePrefix(excelPath, getResultBaseTitle() + "_", "xlsx");
 		}
-		if (isCluster) {
-			lsResultFile =  saveExcelCluster(saveExcelPrefix);
-		} else {
-			lsResultFile =  saveExcelNorm(saveExcelPrefix);
-		}
+		setSaveExcelPrefix(saveExcelPrefix);
+	}
+	
+	public void running() {
+		super.running();
 		savePic();
-		return lsResultFile;
-		
 	}
 	
 	private void savePic() {
-		lsResultPic.clear();
-		for (Entry<String, FunctionTest> entry : getMapResult_Prefix2FunTest().entrySet()) {
+		for (Entry<String, FunctionDrawResult> entry : getMapPrefix2FunDrawTest().entrySet()) {
 			String prix = entry.getKey();
 			BufferedImage bfImageLog2Pic = entry.getValue().getImagePvalue();;
 			if (bfImageLog2Pic == null) continue;
@@ -88,16 +84,15 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 			if (bfImageEnrichment == null) continue;
 			String picEnrichmentName = getSavePicEnrichmentName(prix);
 			ImageUtils.saveBufferedImage(bfImageEnrichment, picEnrichmentName);
-			lsResultPic.add(picEnrichmentName);
 //			reportPathWay.addXdocTempPic(xdocTmpltPic1);
 		}
 	}
 	
 	public String getSavePicPvalueName(String prefix) {
-		return FileOperate.addSep(getSaveParentPath()) + "Path-Analysis-Log2P_" + prefix + "_" + getSavePrefix() + ".png";
+		return FileOperate.addSep(getSaveParentPath()) + "Path-Analysis-Log2P_" + prefix + "_" + savePrefix + ".png";
 	}
 	public String getSavePicEnrichmentName(String prefix) {
-		return FileOperate.addSep(getSaveParentPath()) + "Path-Analysis-Enrichment_" + prefix + "_" + getSavePrefix() + ".png";
+		return FileOperate.addSep(getSaveParentPath()) + "Path-Analysis-Enrichment_" + prefix + "_" + savePrefix + ".png";
 	}
 	@Override
 	protected void clear() {
@@ -120,8 +115,5 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 	public void setTeamName(String teamName) {
 //		reportPathWay.setTeamName(teamName);
 	}
-	@Override
-	public List<String> getLsResultPic() {
-		return lsResultPic;
-	}
+
 }

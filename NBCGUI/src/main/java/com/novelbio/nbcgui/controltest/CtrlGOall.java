@@ -8,13 +8,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.novelbio.analysis.annotation.functiontest.FunctionTest;
+import com.novelbio.analysis.annotation.functiontest.FunctionTest.FunctionDrawResult;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
-import com.novelbio.base.Computer;
 import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunProcess.RunThreadStat;
@@ -26,7 +26,7 @@ import com.novelbio.database.model.species.Species;
 @Component
 @Scope("prototype")
 public class CtrlGOall implements CtrlTestGOInt {
-	private static Logger logger = Logger.getLogger(CtrlGOall.class);
+	private static Logger logger = LoggerFactory.getLogger(CtrlGOall.class);
 	public Map<GOtype, CtrlGO> mapGOtype2CtrlGO = new LinkedHashMap<GOtype, CtrlGO>();
 	public Map<String, String> mapPrefix2ResultPic = new LinkedHashMap<>();
 
@@ -47,6 +47,14 @@ public class CtrlGOall implements CtrlTestGOInt {
 		this.taxID = species.getTaxID();
 	}
 	
+	@Override
+	public void setSavePathPrefix(String savePathPrefix) {
+		this.savePathPrefix = savePathPrefix;
+		
+		if (!savePathPrefix.endsWith("\\") && !savePathPrefix.endsWith("/")) {
+			savePrefix = "_" + FileOperate.getFileName(savePathPrefix);
+		}
+	}
 	/** 设定自定义的GO注释文件
 	 * @param goAnnoFile GO注释文件，第一列为GeneName，第二列为GOIterm
 	 * @param isCombineDB 是否与数据库已有的数据进行合并，false表示仅用输入的文本来做go分析
@@ -156,6 +164,14 @@ public class CtrlGOall implements CtrlTestGOInt {
 	public void run() {
 		List<Thread> lsThreads = new ArrayList<Thread>();
 		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
+			String saveName;
+			if (savePathPrefix.endsWith("\\") || savePathPrefix.endsWith("/")) {
+				saveName = savePathPrefix + ctrlGO.getResultBaseTitle() + ".xlsx";
+			} else {
+				saveName = FileOperate.changeFilePrefix(savePathPrefix, ctrlGO.getResultBaseTitle() + "_", "xlsx");
+			}
+			ctrlGO.setSaveExcelPrefix(saveName);
+			
 			Thread thread = new Thread(ctrlGO);
 			thread.start();
 			lsThreads.add(thread);
@@ -170,41 +186,20 @@ public class CtrlGOall implements CtrlTestGOInt {
 		//程序是否顺利结束
 		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
 			if (ctrlGO.getRunThreadStat() == RunThreadStat.finishAbnormal) {
+				logger.error(ctrlGO.getSaveExcelPrefix() + " " + ctrlGO.getGOType() + " error");
 				Throwable throwable = ctrlGO.getException();
 				if (throwable != null) {
-					throw new RuntimeException(throwable);
+					throw new RuntimeException(ctrlGO.getSaveExcelPrefix() + " " + ctrlGO.getGOType() , throwable);
 				} else {
-					throw new RuntimeException("unknown error:" + ctrlGO.getGOType().toString());
+					throw new RuntimeException(ctrlGO.getSaveExcelPrefix() + " " + ctrlGO.getGOType());
 				}
 			}
 		}
-	}
-	
-	@Override
-	public void saveExcel(String resultPath) {
-//		savePathPrefix = FoldeCreate.createAndInFold(excelPath, EnumTaskReport.GOAnalysis.getResultFolder());
-		if (!resultPath.endsWith("\\") && !resultPath.endsWith("/")) {
-			savePrefix = FileOperate.getFileName(resultPath);
-		}
 		
-		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
-			String saveName;
-			if (resultPath.endsWith("\\") || resultPath.endsWith("/")) {
-				saveName = resultPath + ctrlGO.getResultBaseTitle() + ".xlsx";
-			} else {
-				saveName = FileOperate.changeFilePrefix(resultPath, ctrlGO.getResultBaseTitle() + "_", "xlsx");
-			}
-			ctrlGO.saveExcel(saveName);
-		}
-		logger.info(Computer.getInstance().getNameIP() + " draw go pic");
-		try {
-			savePic();
-			logger.info(Computer.getInstance().getNameIP() + " draw go pic sucess");
-		} catch (Exception e) {
-			logger.info(Computer.getInstance().getNameIP() + " draw go pic failed", e);
-		}
+		savePic();
+		
 	}
-	
+		
 	/** 获得保存到文件夹的前缀，譬如保存到/home/zong0jie/stage10，那么前缀就是stage10 */
 	@Override
 	public String getSavePrefix() {
@@ -217,8 +212,8 @@ public class CtrlGOall implements CtrlTestGOInt {
 		for (String prefix : getPrefix()) {
 			List<BufferedImage> lsGOimage = new ArrayList<BufferedImage>();
 			String excelSavePath = "";
-			for (CtrlGO ctrlGO : getMapResult_Prefix2FunTest().values()) {
-				FunctionTest functionTest = ctrlGO.getMapResult_Prefix2FunTest().get(prefix);
+			for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
+				FunctionDrawResult functionTest = ctrlGO.getMapPrefix2FunDrawTest().get(prefix);
 				if (functionTest == null) {
 					continue;
 				}
@@ -227,7 +222,7 @@ public class CtrlGOall implements CtrlTestGOInt {
 				excelSavePath = FileOperate.getParentPathNameWithSep(ctrlGO.getSaveExcelPrefix());
 			}
 			BufferedImage bfImageCombine = ImageUtils.combineBfImage(true, 30, lsGOimage);
-			String picNameLog2P = excelSavePath +  "GO-Analysis-Log2P_" + prefix + "_" + getSavePrefix() + ".png";
+			String picNameLog2P = excelSavePath +  "GO-Analysis-Log2P_" + prefix + getSavePrefix() + ".png";
 			logger.info("draw pic:" + picNameLog2P);
 
 			String picName = ImageUtils.saveBufferedImage(bfImageCombine, picNameLog2P);
@@ -239,11 +234,8 @@ public class CtrlGOall implements CtrlTestGOInt {
 	/** 将本次GO分析的前缀全部抓出来，方便画图 */
 	private Set<String> getPrefix() {
 		Set<String> setPrefix = new LinkedHashSet<String>();
-		for (CtrlGO ctrlGO : getMapResult_Prefix2FunTest().values()) {
-			Map<String, FunctionTest> map = ctrlGO.getMapResult_Prefix2FunTest();
-			for (String prefix : map.keySet()) {
-				setPrefix.add(prefix);
-			}
+		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
+			setPrefix.addAll(ctrlGO.getMapPrefix2FunDrawTest().keySet());
 		}
 		return setPrefix;
 	}
@@ -256,11 +248,6 @@ public class CtrlGOall implements CtrlTestGOInt {
 	@Override
 	public List<Integer> getBlastTaxID() {
 		return lsBlastTaxID;
-	}
-
-	@Override
-	public Map<GOtype, CtrlGO> getMapResult_Prefix2FunTest() {
-		return mapGOtype2CtrlGO;
 	}
 
 	@Override

@@ -2,9 +2,7 @@ package com.novelbio.nbcgui.controltest;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.database.model.species.Species;
 
 public interface CtrlTestCOGInt {
@@ -26,7 +24,7 @@ public interface CtrlTestCOGInt {
 		
 	public void setIsCluster(boolean isCluster);
 
-	public List<String> saveExcel(String excelPath);
+	public void setSavePathPrefix(String excelPath);
 	
 	public boolean isCluster();
 	
@@ -41,23 +39,7 @@ public interface CtrlTestCOGInt {
 	public int getTaxID();
 	/** 返回本次分析blast到的物种list */
 	public List<Integer> getBlastTaxID();
-	
-	/**
-	 * 运行完后获得结果<br>
-	 * 结果,key： 时期等<br>
-	 * value：具体的结果<br>
-	 */
-	public Map<String, FunctionTest> getMapResult_Prefix2FunTest();
-	
-	public String getResultBaseTitle();
-	
-	public String getSaveExcelPrefix();
-
-	/** 获得保存到的文件夹路径 */
-	public String getSaveParentPath();
-	 /** 获得保存到文件夹的前缀，譬如保存到/home/zong0jie/stage10，那么前缀就是stage10 */
-	 public String getSavePrefix();
-	 
+			 
 	public void setTeamName(String teamName);
 	public List<String> getLsResultExcel();
 	List<String> getLsResultPic();
