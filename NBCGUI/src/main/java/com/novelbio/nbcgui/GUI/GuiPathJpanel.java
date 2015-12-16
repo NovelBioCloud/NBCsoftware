@@ -283,7 +283,7 @@ public class GuiPathJpanel extends JPanel{
 					String savefilename = guiFileOpen.saveFileNameAndPath("excel2003", "");
 					if (ctrlPath != null) {
 						String resultPath = FoldeCreate.createAndInFold(savefilename, "PathWayAnalysis_result");
-						ctrlPath.saveExcel(resultPath);// TODO 加路径
+//						ctrlPath.saveExcel();// TODO 加路径
 //						ctrlPath.saveExcel(savefilename, ""); // TODO 加路径
 					}
 				}
@@ -408,19 +408,19 @@ public class GuiPathJpanel extends JPanel{
 		// jScrollPaneGOtest 标签里面的方框
 		// jTabFInputGo 方框里面的数据框
 		// jTabInputGo 具体数据
-		Map<String, FunctionTest> hashResult = ctrlPath.getMapResult_Prefix2FunTest();
-		jTabbedPanePathResult.removeAll();
-		int i = 0;
-		for (Entry<String, FunctionTest> entry : hashResult.entrySet()) {
-			if (i > 2) {
-				break;
-			}
-			Map<String, List<String[]>> mapSheetName2LsInfo = entry.getValue().getMapWriteToExcel();
-			for (String sheetName : mapSheetName2LsInfo.keySet()) {
-				settab(jTabbedPanePathResult, entry.getKey() + sheetName, mapSheetName2LsInfo.get(sheetName));
-			}
-			i++;
-		}
+//		Map<String, FunctionTest> hashResult = ctrlPath.getMapResult_Prefix2FunTest();
+//		jTabbedPanePathResult.removeAll();
+//		int i = 0;
+//		for (Entry<String, FunctionTest> entry : hashResult.entrySet()) {
+//			if (i > 2) {
+//				break;
+//			}
+//			Map<String, List<String[]>> mapSheetName2LsInfo = entry.getValue().getMapWriteToExcel();
+//			for (String sheetName : mapSheetName2LsInfo.keySet()) {
+//				settab(jTabbedPanePathResult, entry.getKey() + sheetName, mapSheetName2LsInfo.get(sheetName));
+//			}
+//			i++;
+//		}
 	}
 	
 	private void settab(JTabbedPane jTabbedPaneGoResult, String tabName , List<String[]> lsResult) {

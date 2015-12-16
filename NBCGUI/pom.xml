@@ -71,12 +71,6 @@
 			<version>1.17</version>
 		</dependency>
 		<dependency>
-			<groupId>com.taobao.metamorphosis</groupId>
-			<artifactId>metamorphosis-all</artifactId>
-			<version>1.4.6.2</version>
-			<type>pom</type>
-		</dependency>
-				<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-api-mockito</artifactId>
 			<version>1.5.1</version>
@@ -93,6 +87,14 @@
 			<artifactId>powermock-api-easymock</artifactId>
 			<version>1.5.1</version>
 			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>4.0.5.RELEASE</version>
+			<type>jar</type>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 </project>

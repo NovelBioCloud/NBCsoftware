@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 import com.novelbio.GuiAnnoInfo;
 import com.novelbio.analysis.seq.fasta.SeqHash;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
+import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
@@ -27,6 +28,8 @@ import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.nbcgui.GUIinfo;
 import com.novelbio.nbcgui.controlseq.CtrlSplicing;
+
+import javax.swing.JScrollPane;
 
 public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 	static final int progressLength = 10000;
@@ -46,6 +49,7 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 	JProgressBar progressBar;
 	JLabel lblInformation;
 	JLabel lblDetailInfo;
+	JComboBoxData<StrandSpecific> jComboBoxData;
 	
 	CtrlSplicing ctrlSplicing = new CtrlSplicing();
 	
@@ -178,11 +182,11 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 		add(progressBar);
 		
 		lblInformation = new JLabel("");
-		lblInformation.setBounds(18, 484, 217, 14);
+		lblInformation.setBounds(18, 484, 389, 14);
 		add(lblInformation);
 		
 		lblDetailInfo = new JLabel("");
-		lblDetailInfo.setBounds(253, 484, 496, 14);
+		lblDetailInfo.setBounds(419, 484, 496, 14);
 		add(lblDetailInfo);
 		
 		txtChromFaPath = new JTextField();
@@ -215,6 +219,11 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 		chckConsiderRepeat = new JCheckBox("Consider Replications");
 		chckConsiderRepeat.setBounds(638, 341, 185, 26);
 		add(chckConsiderRepeat);
+		
+		jComboBoxData = new JComboBoxData<>();
+		jComboBoxData.setMapItem(StrandSpecific.getMapStrandLibrary());
+		jComboBoxData.setBounds(301, 379, 229, 18);
+		add(jComboBoxData);
 		
 		initial();
 	}
@@ -282,14 +291,31 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 //		ctrlSplicing.setMemoryLow(chckbxLowMemoryUse.isSelected());
 		ctrlSplicing.setReconstructIso(chckbxReconstructIso.isSelected());
 		ctrlSplicing.setCombine(!chckConsiderRepeat.isSelected());
+		ctrlSplicing.setStrandSpecific(jComboBoxData.getSelectedValue());
 		//TODO
 		btnRun.setEnabled(false);
 		Thread thread = new Thread(ctrlSplicing);
 		thread.start();
 
 	}
+	
+	/** 添加 进度条的分块，有时候我们进度条需要分块，
+	 * 如 0-30% 比对
+	 * 31-50% 计算表达
+	 * 51-100% 汇总
+	 * 这时候我们就需要将分块信息写入进度条，那么这里可以将进度条分成三块，分别长度为 0.3, 0.2, 0.5
+	 * 这也就是我们这里 lsProgressBarLevel 中包含的信息
+	 * 
+	 */
 	public void setProgressBarLevelLs(List<Double> lsProgressBarLevel) {
-		this.lsProgressBarLevel = lsProgressBarLevel;
+		List<Double> lsResult = new ArrayList<>();
+		double sum = 0;
+		for (Double segment : lsProgressBarLevel) {
+			sum += segment;
+			lsResult.add(sum);
+		}
+		
+		this.lsProgressBarLevel = lsResult;
 	}
 	/**
 	 * 设定本次步骤里面将绘制progressBar的第几部分

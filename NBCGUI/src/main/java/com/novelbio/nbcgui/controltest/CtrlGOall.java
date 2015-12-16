@@ -162,7 +162,8 @@ public class CtrlGOall implements CtrlTestGOInt {
 
 	@Override
 	public void run() {
-		List<Thread> lsThreads = new ArrayList<Thread>();
+		// 去除多线程，降低内存使用
+//		List<Thread> lsThreads = new ArrayList<Thread>();
 		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
 			String saveName;
 			if (savePathPrefix.endsWith("\\") || savePathPrefix.endsWith("/")) {
@@ -171,18 +172,18 @@ public class CtrlGOall implements CtrlTestGOInt {
 				saveName = FileOperate.changeFilePrefix(savePathPrefix, ctrlGO.getResultBaseTitle() + "_", "xlsx");
 			}
 			ctrlGO.setSaveExcelPrefix(saveName);
-			
-			Thread thread = new Thread(ctrlGO);
-			thread.start();
-			lsThreads.add(thread);
+			ctrlGO.run();
+//			Thread thread = new Thread(ctrlGO);
+//			thread.start();
+//			lsThreads.add(thread);
 		}
-		for (Thread thread : lsThreads) {
-			try {
-				thread.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+//		for (Thread thread : lsThreads) {
+//			try {
+//				thread.join();
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
 		//程序是否顺利结束
 		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
 			if (ctrlGO.getRunThreadStat() == RunThreadStat.finishAbnormal) {

@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 
-import com.hg.doc.fa;
 import com.novelbio.analysis.annotation.genAnno.AnnoAbs;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.base.fileOperate.FileOperate;

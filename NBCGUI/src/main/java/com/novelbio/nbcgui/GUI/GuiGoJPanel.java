@@ -351,7 +351,7 @@ public class GuiGoJPanel extends JPanel{
 					String savefilename = guiFileOpen.saveFileNameAndPath("excel2007", "");
 					if (ctrlGO != null) {
 						String resultPath = FoldeCreate.createAndInFold(savefilename, "GOAnalysis_result");
-						ctrlGO.saveExcel(resultPath);// TODO 加路径
+//						ctrlGO.saveExcel(resultPath);// TODO 加路径
 					}
 				}
 			});
@@ -490,13 +490,13 @@ public class GuiGoJPanel extends JPanel{
 		// jScrollPaneGOtest 标签里面的方框
 		// jTabFInputGo 方框里面的数据框
 		// jTabInputGo 具体数据
-		Map<GOtype, CtrlGO> hashResult = ctrlGO.getMapResult_Prefix2FunTest();
-		jTabbedPaneGoResult.removeAll();
-		for (CtrlGO ctrlGOResult : hashResult.values()) {
-			for (Entry<String, FunctionTest> entry : ctrlGOResult.getMapResult_Prefix2FunTest().entrySet()) {
-				settab(jTabbedPaneGoResult, entry.getKey() + ctrlGOResult.getGOType().toString(), entry.getValue().getTestResult());
-			}
-		}
+//		Map<GOtype, CtrlGO> hashResult = ctrlGO.getMapResult_Prefix2FunTest();
+//		jTabbedPaneGoResult.removeAll();
+//		for (CtrlGO ctrlGOResult : hashResult.values()) {
+//			for (Entry<String, FunctionTest> entry : ctrlGOResult.getMapResult_Prefix2FunTest().entrySet()) {
+//				settab(jTabbedPaneGoResult, entry.getKey() + ctrlGOResult.getGOType().toString(), entry.getValue().getTestResult());
+//			}
+//		}
 	}
 	
 	private void settab(JTabbedPane jTabbedPaneGoResult, String tabName , List<StatisticTestResult> lsResultTest) {

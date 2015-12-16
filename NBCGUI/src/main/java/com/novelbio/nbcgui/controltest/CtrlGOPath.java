@@ -201,7 +201,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		}
 	}
 	
-	protected void setSaveExcelPrefix(String saveExcelPrefix) {
+	public void setSaveExcelPrefix(String saveExcelPrefix) {
 		this.saveExcelPrefix = saveExcelPrefix;
 	}
 	

@@ -515,7 +515,7 @@ public class GuiGoMultiJPanel extends JPanel{
 		ctrlGO.setLsAccID2Value(lsAccID);
 		ctrlGO.run();
 		String resultPath = FoldeCreate.createAndInFold(outFile, "GOAnalysis_result");
-		ctrlGO.saveExcel(resultPath);// TODO 加路径
+//		ctrlGO.saveExcel(resultPath);// TODO 加路径
 //		ctrlGO.saveExcel(outFile, "");// TODO 加路径
 	}
 	
@@ -576,7 +576,7 @@ public class GuiGoMultiJPanel extends JPanel{
 		ctrlPath.run();
 		
 		String resultPath = FoldeCreate.createAndInFold(outFile, "PathWayAnalysis_result");
-		ctrlPath.saveExcel(resultPath);// TODO 加路径
+//		ctrlPath.saveExcel(resultPath);// TODO 加路径
 //		ctrlPath.saveExcel(outFile, ""); // TODO 加路径
 	}
 	/**
@@ -647,7 +647,7 @@ public class GuiGoMultiJPanel extends JPanel{
 		ctrlCOG.setLsAccID2Value(lsAccID);
 		ctrlCOG.run();
 		String resultPath = FoldeCreate.createAndInFold(outFile, "COGAnalysis_result");
-		ctrlCOG.saveExcel(resultPath);// TODO 加路径
+//		ctrlCOG.saveExcel(resultPath);// TODO 加路径
 //		ctrlCOG.saveExcel(outFile, "");// TODO 加路径
 	}
 	

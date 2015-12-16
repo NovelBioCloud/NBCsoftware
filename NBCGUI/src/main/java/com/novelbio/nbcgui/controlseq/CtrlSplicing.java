@@ -13,10 +13,12 @@ import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.rnaseq.ExonJunction;
 import com.novelbio.base.ExceptionNullParam;
+import com.novelbio.base.StringOperate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.nbcgui.GUIinfo;
+import com.novelbio.nbcgui.GUI.GUIanalysisCASH;
 
 public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	GUIinfo guiRNAautoSplice;
@@ -42,6 +44,16 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	int minIntronLen = 25;
 	
 	int newIsoReadsNum = 15;
+	
+	public static void main(String[] args) {
+		if (args == null || args.length == 0 || args.length == 1 && StringOperate.isRealNull(args[0])) {
+			GUIanalysisCASH guIanalysisCASH = new GUIanalysisCASH();
+			guIanalysisCASH.main(args);
+		} else {
+			mainCmd(args);
+		}
+	}
+	
 	//java -jar -Xmx10g xxx.jar --Case:aaa file1.bam -GTF file.gtf --Control:bbb file2.bam --Output sssss
 	/**
 	 * --Case:aaa (或者 -T:aaa) file1.bam,file2.bam
@@ -56,11 +68,8 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	 * --Output (或者 -O) outfile
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void mainCmd(String[] args) {
 		
-		for (String testString : args) {
-			System.out.println(testString);
-		}
 		//将输入的参数放到这个map里面
 		Map<String, String> mapParam2Value = new LinkedHashMap<>();
 		String param = null, value = null;
@@ -312,8 +321,8 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 		lsHelp.add("  min junction reads for reconstruct splicing site");
 		lsHelp.add("");
 		
-		lsHelp.add("--FdrCutoff double,  default is 0.95");
-		lsHelp.add("  in range (0,1]");
+//		lsHelp.add("--FdrCutoff double,  default is 0.95");
+//		lsHelp.add("  in range (0,1]");
 //		lsHelp.add("");
 //		lsHelp.add("--GetSeq /path/to/chromesome/file,  default is null");
 //		lsHelp.add("  CASH can extract sequences near the splicing site, set the chromosome file correspondance to the gfffile(make sure the chrId equals to gff file)");
@@ -473,15 +482,15 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 				exonJunction.setgenerateNewIso(true);
 			}
 			System.out.println(exonJunction.getFileLength());
-			long fileLength = exonJunction.getFileLength();   
-			ArrayList<Double> lsLevels = new ArrayList<Double>();
-			lsLevels.add(0.3);
-			lsLevels.add(0.4);
-			lsLevels.add(0.7);
-			lsLevels.add(1.0);
-			setProgressBarLevelLs(lsLevels);
-			setProcessBarStartEndBarNum(0, 0, fileLength);
+			long fileLength = exonJunction.getFileLength();
 			
+			Map<String, Long> mapChrId2Len = exonJunction.getMapChrId2Len();
+			ArrayList<Double> lsLevels = new ArrayList<Double>();
+			long allLen = getChrAll(mapChrId2Len);
+			for (String chrId : mapChrId2Len.keySet()) {
+				lsLevels.add((double)mapChrId2Len.get(chrId)/allLen);
+			}
+			setProgressBarLevelLs(lsLevels);
 			exonJunction.run();
 			if (!exonJunction.isFinishedNormal()) {
 				throw new ExceptionNBCsoft("Alternative Splicing Error:" + comparePrefix[0] + " vs " + comparePrefix[1], exonJunction.getException());
@@ -493,7 +502,15 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 		}
 		
 	}
-
+	
+	private long getChrAll(Map<String, Long> mapChrId2Len) {
+		long summary = 0;
+		for (String chrId : mapChrId2Len.keySet()) {
+			summary += mapChrId2Len.get(chrId);
+		}
+		return summary;
+	}
+	
 	public void setProgressBarLevelLs(ArrayList<Double> lsLevels) {
 		if (guiRNAautoSplice == null) return;
 		
