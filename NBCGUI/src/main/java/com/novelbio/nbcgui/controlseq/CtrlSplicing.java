@@ -1,5 +1,6 @@
 package com.novelbio.nbcgui.controlseq;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,8 +13,10 @@ import com.novelbio.analysis.seq.fasta.SeqHash;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.rnaseq.ExonJunction;
+import com.novelbio.analysis.seq.sam.ExceptionSamError;
 import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.StringOperate;
+import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.base.multithread.RunProcess;
@@ -31,7 +34,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	List<String[]> lsCompareGroup;
 	StrandSpecific strandSpecific = StrandSpecific.NONE;
 	boolean memoryLow = false;
-	boolean isReconstruceIso = false;
+	boolean isReconstruceIso = true;
 	/** 是否合并文件--也就是不考虑重复，默认为false，也就是考虑为重复 **/
 	boolean isCombine = false;
 	/** 是否选择unique mapped reads */
@@ -43,7 +46,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	int minAnchorLen = 5;
 	int minIntronLen = 25;
 	
-	int newIsoReadsNum = 15;
+	int newIsoReadsNum = 10;
 	
 	public static void main(String[] args) {
 		if (args == null || args.length == 0 || args.length == 1 && StringOperate.isRealNull(args[0])) {
@@ -266,60 +269,23 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			}
 		}
 		ctrlSplicing.setOutFile(mapParam2Value.get("Output"));
-		ctrlSplicing.run();
+		try {
+			ctrlSplicing.run();
+		} catch (ExceptionSamError e) {
+			System.err.println("input sam file error " + e.getMessage());
+			throw e;
+        }
+	
 	}
 	
 	private static List<String> getHelp() {
+		InputStream in = CtrlSplicing.class.getClassLoader().getResourceAsStream("resources/altersplice/help");
+		TxtReadandWrite txtRead = new TxtReadandWrite(in);
 		List<String> lsHelp = new ArrayList<>();
-		lsHelp.add("Usage: java -jar -Xmx10000m cash.jar <--options> --Case:prefixCase file1.bam,file2.bam --Control:prefixControl file3.bam,file4.bam --GTF gtfFile.gtf --Output outPath");
-		lsHelp.add("Example: java -jar -Xmx10000m cash.jar --DisplayAllEvent True --StrandSpecific F  --Case:Mutation file1.bam,file2.bam --Control:WildType file3.bam,file4.bam --GTF hg19.gtf --Output outPath");
-		lsHelp.add("Input:");
-		lsHelp.add("--Case:prefixCase  case bam files, using comma to seperate files");
-		lsHelp.add("  just like --Case:Treatment  /home/user/case1.bam,/home/user/case2.bam");
-		lsHelp.add("--Control:prefixControl  control bam files, using comma to seperate file");
-		lsHelp.add("  just like --Control:WT  /home/user/wt1.bam,/home/user/wt2.bam");
-		lsHelp.add("--GTF file.gtf");
-		lsHelp.add("  CASH needs reference gene annotation (eg. gtf/gff file) to construct alternative splicing (AS) model within genes");
+		for (String content : txtRead.readlines()) {
+			lsHelp.add(content);
+        }
 		
-		lsHelp.add("");
-		lsHelp.add("Output:");
-		lsHelp.add("--Output outFilePrefix");
-		lsHelp.add("  output prefix, example:  --Output /home/user/myresult");
-		
-		lsHelp.add("");
-		lsHelp.add("");
-		lsHelp.add("Options:");
-		lsHelp.add("--Combine True/False,  default is False");
-		lsHelp.add("  True: if here are several case(control) bam files, CASH can combine case(control) bam files together and just treat them as one big bam file");
-		lsHelp.add("  False: if here are several case(control) bam files, CASH will treat them as biological replicates");
-		lsHelp.add("");
-		lsHelp.add("--DisplayAllEvent  True/False,  default is True");
-		lsHelp.add("  a gene may have several splicing events on different exons, CASH can display all events of a gene, or just show only one most significant event");
-		lsHelp.add("  True: show all splicing event");
-		lsHelp.add("  False: show only one most significant splicing event");
-		lsHelp.add("");
-		lsHelp.add("--StrandSpecific F/R/NONE,  default is NONE");
-		lsHelp.add("  if the sequence library is strand specific, CASH can use this option to gain more precise result");
-		lsHelp.add("  F: first read of the pair-end reads represent the strand of the fragment, just like ion proton");
-		lsHelp.add("  R: second read of the pair-end reads represent the strand of the fragment");
-		lsHelp.add("");
-		lsHelp.add("--Reconstruct True/False,  default is False");
-		lsHelp.add("  CASH can reconstruct AS gene model and detect AS events not included in gff/gtf file.");
-		lsHelp.add("  True: reconstruct AS gene model based on the input gtf/gff file and the mapping bam files. The process needs more time.");
-		lsHelp.add("  False: employ AS gene model inferred from the input gtf/gff file.");
-		lsHelp.add(" ");
-		lsHelp.add("--JuncAllSample int,  default is 25");
-		lsHelp.add("  doesn't calculate splicing event with the sum of all sample junction reads num less than JuncAllSample");
-		lsHelp.add("--JuncOneGroup int,  default is 10");
-		lsHelp.add("  doesn't calculate splicing event with the any group(such as Treatment or Control) of junction reads num less than JuncOneGroup");
-		lsHelp.add("");
-		lsHelp.add("--minAnchorLen/-A  int,  default is 5");
-		lsHelp.add("  when counts junction reads, reads with junction adaptor less than 5bp was passed");
-		lsHelp.add("--minIntronLen/-I  int,  default is 25");
-		lsHelp.add("  reads with junction length less than 25bp is consider as deletion instead of intron");
-		lsHelp.add("--minJuncReadsForNewIso/-J  int,  default is 15");
-		lsHelp.add("  min junction reads for reconstruct splicing site");
-		lsHelp.add("");
 		
 //		lsHelp.add("--FdrCutoff double,  default is 0.95");
 //		lsHelp.add("  in range (0,1]");
