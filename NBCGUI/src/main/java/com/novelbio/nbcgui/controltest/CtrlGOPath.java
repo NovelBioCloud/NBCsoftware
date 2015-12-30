@@ -19,7 +19,7 @@ import com.novelbio.base.StringOperate;
 import com.novelbio.base.dataOperate.ExcelOperate;
 import com.novelbio.base.dataOperate.ExcelStyle;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
-import com.novelbio.base.fileOperate.ExceptionFile;
+import com.novelbio.base.fileOperate.ExceptionNbcFile;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunProcess;
 import com.novelbio.database.domain.geneanno.EnumSpeciesFile;
@@ -97,7 +97,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	}
 	public void setGene2itemAnnoFile(String gene2itemAnnoFile, boolean isCombine) {
 		if (!FileOperate.isFileExistAndBigThanSize(gene2itemAnnoFile, 0)) {
-			throw new ExceptionFile("gene to item file " + gene2itemAnnoFile + " is not exist");
+			throw new ExceptionNbcFile("gene to item file " + gene2itemAnnoFile + " is not exist");
 		}
 		this.gene2itemAnnoFile = gene2itemAnnoFile;
 		this.isCombine = isCombine;

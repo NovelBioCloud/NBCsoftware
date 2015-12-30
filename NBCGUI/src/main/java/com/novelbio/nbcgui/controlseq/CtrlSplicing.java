@@ -49,9 +49,10 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	int newIsoReadsNum = 10;
 	
 	public static void main(String[] args) {
-		if (args == null || args.length == 0 || args.length == 1 && StringOperate.isRealNull(args[0])) {
+		if (args != null && args.length == 1 && args[0] != null 
+				&& (args[0].trim().toLowerCase().equals("--gui") || args[0].trim().toLowerCase().equals("-gui"))) {
 			GUIanalysisCASH guIanalysisCASH = new GUIanalysisCASH();
-			guIanalysisCASH.main(args);
+			guIanalysisCASH.main(new String[]{getVersion()});
 		} else {
 			mainCmd(args);
 		}
@@ -81,6 +82,9 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 				System.out.println(content.toString());
 			}
 			return;
+		} else if (args != null && (args.length == 1 && (args[0].equals("-v") || args[0].equals("--version")))) {
+			System.out.println(getVersion());
+			return;
 		}
 		
 		for (int i = 0; i < args.length; i++) {
@@ -104,8 +108,8 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 					param = "DisplayAllEven";
 				} else if (param.equals("S")) {
 					param = "StrandSpecific";
-				} else if (param.equals("R")) {
-					param = "Reconstruct";
+				} else if (param.equals("s")) {
+					param = "SpliceCons";
 				} else if (param.equals("O")) {
 					param = "Output";
 				} else if (param.equals("G")) {
@@ -206,8 +210,8 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			}
 		}
 		
-		if (mapParam2Value.containsKey("Reconstruct")) {
-			String isReconstruct = mapParam2Value.get("Reconstruct").toLowerCase();
+		if (mapParam2Value.containsKey("SpliceCons")) {
+			String isReconstruct = mapParam2Value.get("SpliceCons").toLowerCase();
 			if (isReconstruct.equals("true") || isReconstruct.equals("t")) {
 				ctrlSplicing.setReconstructIso(true);
 			} else if (isReconstruct.equals("false") || isReconstruct.equals("f")) {
@@ -278,22 +282,29 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	
 	}
 	
+	private static String getVersion() {
+		String version = "cash";
+		for (String content:getHelp()) {
+			if (content.toLowerCase().contains("cash version")) {
+				version = content;
+				break;
+            }
+		}
+		return version;
+	}
+	
 	private static List<String> getHelp() {
 		InputStream in = CtrlSplicing.class.getClassLoader().getResourceAsStream("resources/altersplice/help");
+		if (in == null) {
+			in = CtrlSplicing.class.getClassLoader().getResourceAsStream("altersplice/help");
+        }
+		
 		TxtReadandWrite txtRead = new TxtReadandWrite(in);
 		List<String> lsHelp = new ArrayList<>();
 		for (String content : txtRead.readlines()) {
 			lsHelp.add(content);
         }
-		
-		
-//		lsHelp.add("--FdrCutoff double,  default is 0.95");
-//		lsHelp.add("  in range (0,1]");
-//		lsHelp.add("");
-//		lsHelp.add("--GetSeq /path/to/chromesome/file,  default is null");
-//		lsHelp.add("  CASH can extract sequences near the splicing site, set the chromosome file correspondance to the gfffile(make sure the chrId equals to gff file)");
-//		lsHelp.add("  True: reconstruct gene structure. Notice, even the Reconstruct option is true, CASH still need the gtf file input");
-//		lsHelp.add("  False: not reconstruct gene structure");
+		txtRead.close();
 		return lsHelp;
 	}
 	

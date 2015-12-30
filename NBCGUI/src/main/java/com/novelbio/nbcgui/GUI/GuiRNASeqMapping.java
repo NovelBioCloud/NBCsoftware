@@ -204,7 +204,6 @@ public class GuiRNASeqMapping extends JPanel {
 					ctrlRNAmap.setGtfAndGene2Iso(txtGtfGene2Iso.getText());
 					ctrlRNAmap.setIndexFile(txtMappingIndex.getText());
 				} else {
-					ctrlRNAmap.setGffChrAbs(new GffChrAbs(species));
 					ctrlRNAmap.setSpecies(species);
 				}
 				

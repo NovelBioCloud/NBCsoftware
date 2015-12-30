@@ -172,7 +172,7 @@ public class CtrlGOall implements CtrlTestGOInt {
 				saveName = FileOperate.changeFilePrefix(savePathPrefix, ctrlGO.getResultBaseTitle() + "_", "xlsx");
 			}
 			ctrlGO.setSaveExcelPrefix(saveName);
-			ctrlGO.run();
+			ctrlGO.running();
 //			Thread thread = new Thread(ctrlGO);
 //			thread.start();
 //			lsThreads.add(thread);
@@ -185,17 +185,17 @@ public class CtrlGOall implements CtrlTestGOInt {
 //			}
 //		}
 		//程序是否顺利结束
-		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
-			if (ctrlGO.getRunThreadStat() == RunThreadStat.finishAbnormal) {
-				logger.error(ctrlGO.getSaveExcelPrefix() + " " + ctrlGO.getGOType() + " error");
-				Throwable throwable = ctrlGO.getException();
-				if (throwable != null) {
-					throw new RuntimeException(ctrlGO.getSaveExcelPrefix() + " " + ctrlGO.getGOType() , throwable);
-				} else {
-					throw new RuntimeException(ctrlGO.getSaveExcelPrefix() + " " + ctrlGO.getGOType());
-				}
-			}
-		}
+//		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
+//			if (ctrlGO.getRunThreadStat() == RunThreadStat.finishAbnormal) {
+//				logger.error(ctrlGO.getSaveExcelPrefix() + " " + ctrlGO.getGOType() + " error");
+//				Throwable throwable = ctrlGO.getException();
+//				if (throwable != null) {
+//					throw new RuntimeException(ctrlGO.getSaveExcelPrefix() + " " + ctrlGO.getGOType() , throwable);
+//				} else {
+//					throw new RuntimeException(ctrlGO.getSaveExcelPrefix() + " " + ctrlGO.getGOType());
+//				}
+//			}
+//		}
 		
 		savePic();
 		

@@ -10,6 +10,8 @@ import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.seq.GeneExpTable;
 import com.novelbio.analysis.seq.fasta.CopeFastq;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
+import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
+import com.novelbio.analysis.seq.genome.gffOperate.GffType;
 import com.novelbio.analysis.seq.mapping.MapBowtie2;
 import com.novelbio.analysis.seq.mapping.MapLibrary;
 import com.novelbio.analysis.seq.mapping.MapRNA;
@@ -20,9 +22,12 @@ import com.novelbio.analysis.seq.mapping.MapTophat;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.rnaseq.RPKMcomput.EnumExpression;
 import com.novelbio.base.ExceptionNullParam;
+import com.novelbio.base.StringOperate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
+import com.novelbio.base.fileOperate.ExceptionNbcFileInputNotExist;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
+import com.novelbio.database.model.species.ExceptionNbcSpeciesNotExist;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.generalConf.TitleFormatNBC;
 
@@ -37,7 +42,6 @@ public class CtrlRNAmap implements IntCmdSoft {
 	MapRNA mapRNA;
 	List<String> lsCmd = new ArrayList<>();
 	
-	GffChrAbs gffChrAbs;
 	Species species;
 	String indexFile = "";
 	/** ""表示使用GTF */
@@ -70,15 +74,7 @@ public class CtrlRNAmap implements IntCmdSoft {
 		copeFastq.setMapCondition2LsFastQLR();
 		this.mapPrefix2LsFastq = copeFastq.getMapCondition2LslsFastq();
 	}
-	
-//	/** 输入CopeFastq的对象，该对象设定完后直接传入本方法，即可完成项目配置 */
-//	public void setCopeFastq(CopeFastq copeFastq) {
-//		
-//	}
-	
-	public void setGffChrAbs(GffChrAbs gffChrAbs) {
-		this.gffChrAbs = gffChrAbs;
-	}
+
 	public void setSpecies(Species species) {
 		this.species = species;
 	}
@@ -131,9 +127,11 @@ public class CtrlRNAmap implements IntCmdSoft {
 	 * @param indexFile
 	 */
 	public void setIndexFile(String indexFile) {
+		validateFileExist(indexFile);
 		this.indexFile = indexFile;
 	}
 	public void setGtfAndGene2Iso(String gtfAndGene2Iso) {
+		validateFileExist(gtfAndGene2Iso);
 		this.gtfAndGene2Iso = gtfAndGene2Iso;
 	}
 	
@@ -143,7 +141,7 @@ public class CtrlRNAmap implements IntCmdSoft {
 		rsemExpCounts = new GeneExpTable(TitleFormatNBC.AccID);
 		rsemExpFPKM = new GeneExpTable(TitleFormatNBC.AccID);
 		for (Entry<String, List<List<String>>> entry : mapPrefix2LsFastq.entrySet()) {
-			mapRNA = MapRNAfactory.generateMapRNA(softWare, gffChrAbs);
+			mapRNA = MapRNAfactory.generateMapRNA(softWare);
 			String prefix = entry.getKey();
 			List<List<String>> lsFastqFR = entry.getValue();
 
@@ -158,15 +156,13 @@ public class CtrlRNAmap implements IntCmdSoft {
 			mapRNA.setLeftFq(CopeFastq.convertFastqFile(lsFastqFR.get(0)));
 			mapRNA.setRightFq(CopeFastq.convertFastqFile(lsFastqFR.get(1)));
 			
-			if (softWare == SoftWare.tophat && !useGTF) {
-				mapRNA.setGtf_Gene2Iso(null);
+			if (softWare == SoftWare.tophat) {
 				((MapTophat)mapRNA).setSensitiveLevel(sensitive);
+				if (useGTF) setGtf();
 			} else {
-				if (gtfAndGene2Iso == null) {
-					gtfAndGene2Iso = "";
-				}
-				mapRNA.setGtf_Gene2Iso(gtfAndGene2Iso);
+				setGtf();
 			}
+			
 			setRefFile();
 			try {
 				mapRNA.mapReads();
@@ -180,29 +176,43 @@ public class CtrlRNAmap implements IntCmdSoft {
 			setExpResult(prefix, mapRNA);
 		}
 	}
-
+	
+	private void setGtf() {
+		if (!StringOperate.isRealNull(gtfAndGene2Iso)) {
+			mapRNA.setGtf_Gene2Iso(gtfAndGene2Iso);
+		} else if (species != null && !(mapRNA instanceof MapRsem) && FileOperate.isFileExistAndBigThan0(species.getGffFile())) {
+			String gtfFile = GffHashGene.convertToOtherFile(species.getGffFile(), GffType.GTF);
+			mapRNA.setGtf_Gene2Iso(gtfFile);
+		}
+	}
+	
 	private void setRefFile() {
 		boolean isThrdPartIndex = false;
-		if (gffChrAbs == null || FileOperate.isFileExist(indexFile)) {
+		if (FileOperate.isFileExist(indexFile)) {
 			isThrdPartIndex = true;
 			mapRNA.setRefIndex(indexFile);
 			return;
 		}
+		
+		if (species == null || species.getTaxID() == 0) {
+			throw new ExceptionNbcSpeciesNotExist("species doesn't exist, so cannot set refgenome");
+        }
+		
 		String indexUnmap = null;
 		if (isThrdPartIndex) {
 			indexUnmap = indexFile;
 		} else {
 			//用bwa的mem方法来进行二次mapping
-			indexUnmap = gffChrAbs.getSpecies().getIndexChr(SoftWare.bwa_mem);
+			indexUnmap = species.getIndexChr(SoftWare.bwa_mem);
 		}
 		
 		if (softWare == SoftWare.tophat) {
-			mapRNA.setRefIndex(gffChrAbs.getSpecies().getIndexChr(mapRNA.getSoftWare()));
+			mapRNA.setRefIndex(species.getIndexChr(mapRNA.getSoftWare()));
 			((MapTophat)mapRNA).setMapUnmapedReads(mapUnmapedReads, indexUnmap);
 		} else if (softWare == SoftWare.rsem) {
-			mapRNA.setRefIndex(gffChrAbs.getSpecies().getIndexRef(SoftWare.rsem, true));
+			mapRNA.setRefIndex(species.getIndexRef(SoftWare.rsem, true));
 		} else if (softWare == SoftWare.mapsplice) {
-			mapRNA.setRefIndex(gffChrAbs.getSpecies().getIndexChr(mapRNA.getSoftWare()));
+			mapRNA.setRefIndex(species.getIndexChr(mapRNA.getSoftWare()));
 			((MapSplice)mapRNA).setMapUnmapedReads(mapUnmapedReads, indexUnmap);
 		}
 	}
@@ -253,5 +263,15 @@ public class CtrlRNAmap implements IntCmdSoft {
 	public void setCmdExeStr(List<String> lsCmd) {
 		this.lsCmd = lsCmd;
 	}
-
+	
+	/** 如果文件名不为空，那么判断该文件是否存在<br>
+	 * 如果文件名为空，则不判断
+	 * @param fileName
+	 */
+	private void validateFileExist(String fileName) {
+		if (!StringOperate.isRealNull(fileName) && !FileOperate.isFileExistAndBigThan0(fileName)) {
+			throw new ExceptionNbcFileInputNotExist("input file " + FileOperate.getFileName(fileName) + " is not exist");
+        }
+	}
+	
 }

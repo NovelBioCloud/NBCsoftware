@@ -2,12 +2,14 @@ package com.novelbio.nbcgui.GUI;
 import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
-
-import com.novelbio.nbcgui.GUI.volcanoPlot.GuiVolcanoPlot;
 
 /**
 * This code was edited or generated using CloudGarden's Jigloo
@@ -27,11 +29,10 @@ public class GUIanalysisCASH extends javax.swing.JFrame {
 	
 	private GuiRNAalterSpliceSimple guiRNAalterSpliceSimple;
 
-
 	/**
 	* Auto-generated main method to display this JFrame
 	*/
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
 		
 		SwingUtilities.invokeLater(new Runnable() {
@@ -39,7 +40,12 @@ public class GUIanalysisCASH extends javax.swing.JFrame {
 				GUIanalysisCASH inst = new GUIanalysisCASH();
 				inst.setLocationRelativeTo(null);
 				inst.setVisible(true);
-				inst.setTitle("CASH v 2.01");
+				if (args == null || args.length == 0) {
+					inst.setTitle("cash");
+				} else {
+					inst.setTitle(args[0]);
+				}
+				
 //				inst.setTitle("AgroMarker Finder");
 				Image im = Toolkit.getDefaultToolkit().getImage("/home/zong0jie/desktop/logo.png");
 				inst.setIconImage(im);
@@ -72,6 +78,17 @@ public class GUIanalysisCASH extends javax.swing.JFrame {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				int a = JOptionPane.showConfirmDialog(null, "sure to leave?", "warning!", JOptionPane.YES_NO_OPTION);
+				if (a == 0) {
+					System.exit(0); //关闭
+				} else {
+					setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // 这个是关键
+				}
+			}
+		});
 	}
 	
 }
