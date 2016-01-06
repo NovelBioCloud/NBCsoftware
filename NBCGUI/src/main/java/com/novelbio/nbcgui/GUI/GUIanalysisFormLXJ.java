@@ -49,7 +49,7 @@ public class GUIanalysisFormLXJ extends javax.swing.JFrame {
 	private GuiSamToBam guiSamToBam;
 	private GuiSnpCalling guiSnpCalling;
 	private GuiTranscriptomeCufflinks guiTranscriptomeCufflinks;
-	private GuiRNAautoSplice guiRNAautoSplice;
+	private GuiRNAalterSplice guiRNAautoSplice;
 	private GuiDGEgetvalue guiDGEgetvalue;
 	private GuiFilterDifGene guiFilterDifGene;
 	private GuiCuffdiff guiCuffdiff;

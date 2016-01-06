@@ -48,7 +48,7 @@ public class GUIanalysisAMF extends javax.swing.JFrame {
 	private GuiSamToBam guiSamToBam;
 	private GuiSnpCallingFW guiSnpCalling;
 	private GuiTranscriptomeCufflinks guiTranscriptomeCufflinks;
-	private GuiRNAautoSplice guiRNAautoSplice;
+	private GuiRNAalterSplice guiRNAautoSplice;
 	private GuiDGEgetvalue guiDGEgetvalue;
 	private GuiFilterDifGene guiFilterDifGene;
 	private GuiCuffdiff guiCuffdiff;

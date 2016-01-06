@@ -31,7 +31,7 @@ import com.novelbio.database.model.species.Species;
 import com.novelbio.nbcgui.GUIinfo;
 import com.novelbio.nbcgui.controlseq.CtrlSplicing;
 
-public class GuiRNAautoSplice extends JPanel implements GUIinfo {
+public class GuiRNAalterSplice extends JPanel implements GUIinfo {
 	static final int progressLength = 10000;
 	private JTextField txtGff;
 	JScrollPaneData scrlBam;
@@ -72,7 +72,7 @@ public class GuiRNAautoSplice extends JPanel implements GUIinfo {
 	/**
 	 * Create the panel.
 	 */
-	public GuiRNAautoSplice() {
+	public GuiRNAalterSplice() {
 		setLayout(null);
 
 		scrlBam = new JScrollPaneData();

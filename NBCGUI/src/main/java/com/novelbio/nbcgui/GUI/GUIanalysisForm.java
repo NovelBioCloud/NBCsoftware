@@ -25,45 +25,67 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 	private static final long serialVersionUID = 6809702573230604814L;
 	private JTabbedPane jTabbedPane1;
 	private GuiGoJPanel guiGoJPanel;
+	//
 	private GuiKegArrayDownload guiKegArrayDownload;
 	private GuiPathJpanel guiPathJpanel;
+	//
 	private GuiBlastJpanel guiBlastJpanel;
 	private GuiSrcToTrgJpanel guiSrcToTrg;
 	private GuiDegreeAddJpanel guiDegreeAdd;
 	private GuiPearsonJpanel guiPearson;
 	private GuiToolsJpanel guiTools;
 	private GuiFastQJpanel guiFastQ;
+	//
 	private GuiFastQFanwei guiFastQFanwei;
 	private GuiDifGeneJpanel guiDifGene;
+	//
 	private GuiBlast guiBlast;
 	private GuiMiRNASeq guiMiRNASeq;
 	private GuiMirnaTargetPredict guiMirnaTargetPredict;
 	private GuiAnnoGene guiAnnoGene;
+	//
 	private GuiAnnoPeak guiAnnoPeak;
+	//
 	private GuiPeakStatistics guiPeakStatistics;
+	//
 	private GuiGetSeq guiGetSeq;
 	private GuiRNASeqMapping guiRNASeqMapping;
 	private GuiAffyCelNormJpanel guiCelNormJpanel;
+	//
 	private GuiSamToBed guiSamToBed;
 	private GuiSamToBam guiSamToBam;
 	private GuiSnpCalling guiSnpCalling;
+	//
 	private GuiTranscriptomeCufflinks guiTranscriptomeCufflinks;
-	private GuiRNAautoSplice guiRNAautoSplice;
+	//
+	private GuiRNAalterSplice guiRNAalterSplice;
+	//
 	private GuiDGEgetvalue guiDGEgetvalue;
+	//
 	private GuiFilterDifGene guiFilterDifGene;
+	//
 	private GuiCuffdiff guiCuffdiff;
+	//
 	private GuiPeakCalling guiPeakCalling;
+	//
 	private GuiSpeciesInfo guiSpeciesInfo;
 	private GuiSamStatistics guiSamStatistics;
+	//
 	private GuiSnpFiltering guiSnpFiltering;
+	//
 	private GuiSnpFilterSimple guiSnpFilterSimple;
-	private GuiRNAalterSpliceSimple guiRNAautoSpliceSimple;
+	//
+	private GuiRNAalterSpliceSimple guiRNAalterSpliceSimple;
+	//
 	private GuiRNAalterSpliceASD guiRNAautoSpliceASD;
 	private GuiUpdateDB guiUpdateDB;
 	private GuiVolcanoPlot guiVolcanoPlot;
 	private GuiGeneNetWork guiGeneNetWork;
+	//
 	private GuilncLocation guilncLocation;
+	//
 	private GuiGoMultiJPanel guiGoMultiJPanel;
+	//
 	private GuiMotif guiMotif;
 	private GuiRNAAssembly guiRNAAssembly;
 
@@ -172,8 +194,8 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 				guiSamStatistics = new GuiSamStatistics();
 				jTabbedPane1.addTab("SamStatisticsAndRPKM", guiSamStatistics);
 				
-				guiRNAautoSplice = new GuiRNAautoSplice();
-				jTabbedPane1.addTab("RNAalterSplice", guiRNAautoSplice);
+				guiRNAalterSplice = new GuiRNAalterSplice();
+				jTabbedPane1.addTab("RNAalterSplice", guiRNAalterSplice);
 				
 				guiBlast = new GuiBlast();
 				jTabbedPane1.addTab("Blast", null, guiBlast, null);
@@ -210,8 +232,8 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 				guiSnpFiltering = new GuiSnpFiltering();
 				jTabbedPane1.addTab("snpFilter", guiSnpFiltering);
 				
-				guiRNAautoSpliceSimple = new GuiRNAalterSpliceSimple();
-				jTabbedPane1.addTab("CASH", guiRNAautoSpliceSimple);
+				guiRNAalterSpliceSimple = new GuiRNAalterSpliceSimple();
+				jTabbedPane1.addTab("CASH", guiRNAalterSpliceSimple);
 				
 				guiRNAautoSpliceASD = new GuiRNAalterSpliceASD();
 				jTabbedPane1.addTab("ASD", guiRNAautoSpliceASD);

@@ -645,7 +645,7 @@ public class GuiGoMultiJPanel extends JPanel{
 			ctrlCOG.setIsCluster(jChkCluster.isSelected());
 		}
 		ctrlCOG.setLsAccID2Value(lsAccID);
-		ctrlCOG.run();
+		ctrlCOG.running();
 		String resultPath = FoldeCreate.createAndInFold(outFile, "COGAnalysis_result");
 //		ctrlCOG.saveExcel(resultPath);// TODO 加路径
 //		ctrlCOG.saveExcel(outFile, "");// TODO 加路径

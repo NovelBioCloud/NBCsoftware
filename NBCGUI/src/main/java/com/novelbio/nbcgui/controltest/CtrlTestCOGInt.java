@@ -33,7 +33,7 @@ public interface CtrlTestCOGInt {
 	 */
 	public void clearParam();
 	/** 运行 */
-	public void run();
+	public void running();
 	
 	/** 返回本次分析的物种ID */
 	public int getTaxID();
