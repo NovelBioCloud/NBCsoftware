@@ -225,7 +225,7 @@ public class GuiToolsJpanel extends JPanel {
 				for (String[] strings : lsFileName) {
 					String[] tmpResult = new String[2];
 					tmpResult[0] = strings[0];
-					tmpResult[1] = MD5generate.getFileMD5String(strings[0]);
+					tmpResult[1] = MD5generate.getFileMD5(strings[0]);
 					lsResultMD5.add(tmpResult);
 					if (chckbxSaveToFile.isSelected()) {
 						if (chckbxChangeFileName.isSelected()) {

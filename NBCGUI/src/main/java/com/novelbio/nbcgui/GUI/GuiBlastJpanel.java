@@ -27,6 +27,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.novelbio.base.dataOperate.ExcelOperate;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
+import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.database.domain.geneanno.GOtype;
@@ -537,9 +538,8 @@ public class GuiBlastJpanel extends JPanel {
 		System.out.println(filePath);
 		if (filePath == null)
 			return;
-		File file = new File(filePath);
 		int result = -100;
-		if (file.exists()) {
+		if (FileOperate.isFileFolderExist(filePath)) {
 			result = JOptionPane.showConfirmDialog(null, "Are you sure to overwrite the file?", "File Already exist", JOptionPane.YES_NO_OPTION);
 			if(result != JOptionPane.OK_OPTION)
 				return;

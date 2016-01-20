@@ -227,7 +227,7 @@ public class GuiUpdateDB extends JPanel {
 		List<String[]> lsUpdateKegg = sclUpdateKegg.getLsDataInfo();
 		for (String[] strings : lsUpdateKegg) {
 			KGML2DB.readKGML(strings[0]);
-			List<String> lsKGML=FileOperate.getFoldFileNameLs(strings[0], "*", "list");
+			List<String> lsKGML=FileOperate.getLsFoldFileName(strings[0], "*", "list");
 			try {
 				KeggIDcvt.upDateGen2Keg(lsKGML.get(0), null);
 			} catch (Exception e1) { e1.printStackTrace(); }

@@ -125,7 +125,7 @@ public class CtrlFastQfilter {
 		}
 		
 		fastQReadingChannel.setThreadNum(8);
-		fastQReadingChannel.run();
+		fastQReadingChannel.running();
 		if (fastQReadingChannel.getRunThreadStat() == RunThreadStat.finishAbnormal) {
 			throw new RuntimeException(fastQReadingChannel.getException());
 		}
