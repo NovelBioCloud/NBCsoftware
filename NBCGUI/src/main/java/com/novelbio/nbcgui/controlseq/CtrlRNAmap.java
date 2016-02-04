@@ -9,10 +9,10 @@ import java.util.Map.Entry;
 import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.seq.GeneExpTable;
 import com.novelbio.analysis.seq.fasta.CopeFastq;
-import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.genome.gffOperate.GffType;
 import com.novelbio.analysis.seq.mapping.MapBowtie2;
+import com.novelbio.analysis.seq.mapping.MapHisat;
 import com.novelbio.analysis.seq.mapping.MapLibrary;
 import com.novelbio.analysis.seq.mapping.MapRNA;
 import com.novelbio.analysis.seq.mapping.MapRNAfactory;
@@ -54,6 +54,13 @@ public class CtrlRNAmap implements IntCmdSoft {
 	/** 将没有比对上的reads用bowtie2再次比对上去 */
 	boolean mapUnmapedReads = true;
 	
+	int intronLenMin = 20;
+	int intronLenMax = 500000;
+	
+	int hisatTrim5 = 0;
+	int hisatTrim3 = 0;
+	boolean  hisatDta = true;
+	
 	/** 保存最终结果，只有rsem才会有
 	 * 第一行为标题
 	 * 之后每一行为基因表达情况
@@ -74,7 +81,7 @@ public class CtrlRNAmap implements IntCmdSoft {
 		copeFastq.setMapCondition2LsFastQLR();
 		this.mapPrefix2LsFastq = copeFastq.getMapCondition2LslsFastq();
 	}
-
+	
 	public void setSpecies(Species species) {
 		this.species = species;
 	}
@@ -83,6 +90,28 @@ public class CtrlRNAmap implements IntCmdSoft {
 	}
 	public void setOutPathPrefix(String outPrefix) {
 		this.outPrefix = outPrefix;
+	}
+	
+	public void setIntronLenMin(int intronLenMin) {
+		if (intronLenMin > 0) {
+			this.intronLenMin = intronLenMin;
+		}
+	}
+	public void setIntronLenMax(int intronLenMax) {
+		if (intronLenMax > 0) {
+			this.intronLenMax = intronLenMax;
+		}
+	}
+	public void setHisatTrim3(int hisatTrim3) {
+		if (hisatTrim3 < 0) return;
+		this.hisatTrim3 = hisatTrim3;
+	}
+	public void setHisatTrim5(int hisatTrim5) {
+		if (hisatTrim5 < 0) return;
+		this.hisatTrim5 = hisatTrim5;
+	}
+	public void setHisatDta(boolean hisatDta) {
+		this.hisatDta = hisatDta;
 	}
 	
 	public String getOutPrefix() {
@@ -146,21 +175,23 @@ public class CtrlRNAmap implements IntCmdSoft {
 			List<List<String>> lsFastqFR = entry.getValue();
 
 			setMapLibrary(mapLibrary);
+			setIntronLen(intronLenMax, intronLenMin);
 			mapRNA.setStrandSpecifictype(strandSpecific);
 			mapRNA.setThreadNum(threadNum);
 			mapRNA.setOutPathPrefix(outPrefix + prefix);
 			if (FileOperate.isFileExistAndBigThanSize(mapRNA.getFinishName(), 0)) {
 				continue;
 			}
-			
+			setHisatParam();
 			mapRNA.setLeftFq(CopeFastq.convertFastqFile(lsFastqFR.get(0)));
 			mapRNA.setRightFq(CopeFastq.convertFastqFile(lsFastqFR.get(1)));
 			
 			if (softWare == SoftWare.tophat) {
 				((MapTophat)mapRNA).setSensitiveLevel(sensitive);
 				if (useGTF) setGtf();
-			} else {
-				setGtf();
+			} else if (softWare == SoftWare.hisat2) {
+				((MapHisat)mapRNA).setSensitiveLevel(sensitive);
+				if (useGTF) setGtf();
 			}
 			
 			setRefFile();
@@ -174,6 +205,15 @@ public class CtrlRNAmap implements IntCmdSoft {
 			}
 			lsCmd.addAll(mapRNA.getCmdExeStr());
 			setExpResult(prefix, mapRNA);
+		}
+	}
+	
+	private void setHisatParam() {
+		if (mapRNA instanceof MapHisat) {
+			MapHisat mapHisat = (MapHisat)mapRNA;
+			mapHisat.setTrim3(hisatTrim3);
+			mapHisat.setTrim5(hisatTrim5);
+			mapHisat.setDownstreamTranscriptomeAssembly(hisatDta);
 		}
 	}
 	
@@ -214,6 +254,8 @@ public class CtrlRNAmap implements IntCmdSoft {
 		} else if (softWare == SoftWare.mapsplice) {
 			mapRNA.setRefIndex(species.getIndexChr(mapRNA.getSoftWare()));
 			((MapSplice)mapRNA).setMapUnmapedReads(mapUnmapedReads, indexUnmap);
+		} else if (softWare == SoftWare.hisat2) {
+			mapRNA.setRefIndex(species.getIndexChr(mapRNA.getSoftWare()));
 		}
 	}
 	
@@ -222,12 +264,18 @@ public class CtrlRNAmap implements IntCmdSoft {
 			return;
 		}
 		else if (mapLibrary == MapLibrary.PairEnd) {
-			mapRNA.setInsert(450);
+			mapRNA.setInsert(250);
 		}
 		else if (mapLibrary == MapLibrary.MatePair) {
 			mapRNA.setInsert(4500);
 		}
 	}
+	
+	private void setIntronLen(int intronLenMax, int intronLenMin) {
+		mapRNA.setIntronLenMin(intronLenMin);
+		mapRNA.setIntronLenMax(intronLenMax);
+	}
+	
 	/** 获得基因表达 */
 	private void setExpResult(String prefix, MapRNA mapRNA) {
 		if (softWare != SoftWare.rsem) return;
@@ -251,7 +299,9 @@ public class CtrlRNAmap implements IntCmdSoft {
 		Map<String, SoftWare> mapName2Type = new LinkedHashMap<>();
 		mapName2Type.put("Tophat", SoftWare.tophat);
 		mapName2Type.put("MapSplice", SoftWare.mapsplice);
-		mapName2Type.put("RSEM", SoftWare.rsem);
+		mapName2Type.put("hisat2", SoftWare.hisat2);
+//		mapName2Type.put("RSEM", SoftWare.rsem);
+
 		return mapName2Type;
 	}
 	
