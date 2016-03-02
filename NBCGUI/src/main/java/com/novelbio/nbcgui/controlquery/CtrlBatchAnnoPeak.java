@@ -36,6 +36,8 @@ public class CtrlBatchAnnoPeak implements RunGetInfo<AnnoQuery.AnnoQueryDisplayI
 		this.species = new Species(taxID);
 		gffChrAnno.setSpecies(taxID);
 	}
+	
+	@Deprecated
 	public void setListQuery(List<String[]> lsGeneInfo) {
 		if (guiAnnoPeak != null) {
 			guiAnnoPeak.getProcessBar().setMinimum(0);
@@ -64,6 +66,8 @@ public class CtrlBatchAnnoPeak implements RunGetInfo<AnnoQuery.AnnoQueryDisplayI
 	public void setFilterGeneBody(boolean filterGeneBody) {
 		this.filterGeneBody = filterGeneBody;
 	}
+	
+	@Deprecated
 	public void execute() {
 		gffChrAnno.setTss(filterTss);
 		gffChrAnno.setTes(filterTes);
@@ -72,11 +76,21 @@ public class CtrlBatchAnnoPeak implements RunGetInfo<AnnoQuery.AnnoQueryDisplayI
 		gffChrAnno.run();
 	}
 	
+	public void execute(String infile, String outFile) {
+		gffChrAnno.setTss(filterTss);
+		gffChrAnno.setTes(filterTes);
+		gffChrAnno.setFilterGeneBody(filterGeneBody, filterExon, filterIntron);
+		gffChrAnno.setFilterUTR(filter5UTR, filter3UTR);
+		gffChrAnno.annoFileTxt(infile, outFile);
+	}
+	
+	@Deprecated
 	/** 包含title */
 	public List<String[]> getResult() {
 		return gffChrAnno.getLsResult();
 	}
-
+	
+	@Deprecated
 	public String[] getTitle() {
 		return gffChrAnno.getTitleGeneInfoFilterAnno();
 	}

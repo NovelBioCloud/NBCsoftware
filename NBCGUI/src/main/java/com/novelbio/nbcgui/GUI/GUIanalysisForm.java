@@ -7,6 +7,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
+import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.nbcgui.GUI.volcanoPlot.GuiVolcanoPlot;
 
 /**
@@ -93,21 +94,29 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 	* Auto-generated main method to display this JFrame
 	*/
 	public static void main(String[] args) {
-		System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
 		
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				GUIanalysisForm inst = new GUIanalysisForm();
-				inst.setLocationRelativeTo(null);
-				inst.setVisible(true);
-//				inst.setTitle("ASD v 1.2");
-				inst.setTitle("NovelBio Analysis Platform Build 402");
-//				inst.setTitle("AgroMarker Finder");
-				Image im = Toolkit.getDefaultToolkit().getImage("/home/zong0jie/desktop/logo.png");
-				inst.setIconImage(im);
-				inst.setResizable(false); 
-			}
-		});
+		System.setProperty("java.io.tmpdir", "/home/novelbio/tmp");
+
+		SamFile samFile = new SamFile("/hdfs:/nbCloud/subBam.bam");
+		samFile.sort();
+		
+		
+		
+//		System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
+//		
+//		SwingUtilities.invokeLater(new Runnable() {
+//			public void run() {
+//				GUIanalysisForm inst = new GUIanalysisForm();
+//				inst.setLocationRelativeTo(null);
+//				inst.setVisible(true);
+////				inst.setTitle("ASD v 1.2");
+//				inst.setTitle("NovelBio Analysis Platform Build 402");
+////				inst.setTitle("AgroMarker Finder");
+//				Image im = Toolkit.getDefaultToolkit().getImage("/home/zong0jie/desktop/logo.png");
+//				inst.setIconImage(im);
+//				inst.setResizable(false); 
+//			}
+//		});
 	}
 	
 	public GUIanalysisForm() {

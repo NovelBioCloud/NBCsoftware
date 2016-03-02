@@ -1,39 +1,30 @@
 package com.novelbio.nbcgui.GUI;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import javax.swing.JRadioButton;
-import javax.swing.SwingConstants;
-
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Window;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.JTextField;
-import javax.swing.JSpinner;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 import com.novelbio.analysis.seq.chipseq.peakcalling.Macs14control;
-import com.novelbio.analysis.seq.chipseq.peakcalling.PeakCallingSicer;
-import com.novelbio.analysis.seq.chipseq.peakcalling.SicerControl;
 import com.novelbio.analysis.seq.chipseq.peakcalling.PeakCallingSicer.PeakCallingSicerType;
+import com.novelbio.analysis.seq.chipseq.peakcalling.SicerControl;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.database.model.species.Species;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JComboBox;
-import javax.swing.border.EmptyBorder;
-
-import org.apache.commons.collections.map.LinkedMap;
-import javax.swing.SpinnerNumberModel;
 
 public class GuiPeakCalling extends JPanel {
 	private static final long serialVersionUID = 1L;

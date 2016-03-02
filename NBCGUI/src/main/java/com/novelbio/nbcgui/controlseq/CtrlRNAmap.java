@@ -54,6 +54,9 @@ public class CtrlRNAmap implements IntCmdSoft {
 	/** 将没有比对上的reads用bowtie2再次比对上去 */
 	boolean mapUnmapedReads = true;
 	
+	/** 仅供 hisat2 使用 */
+	int alignNum = 5;
+	
 	int intronLenMin = 20;
 	int intronLenMax = 500000;
 	
@@ -92,6 +95,10 @@ public class CtrlRNAmap implements IntCmdSoft {
 		this.outPrefix = outPrefix;
 	}
 	
+	public void setAlignNum(String outPrefix) {
+		this.outPrefix = outPrefix;
+	}
+	
 	public void setIntronLenMin(int intronLenMin) {
 		if (intronLenMin > 0) {
 			this.intronLenMin = intronLenMin;
@@ -112,6 +119,10 @@ public class CtrlRNAmap implements IntCmdSoft {
 	}
 	public void setHisatDta(boolean hisatDta) {
 		this.hisatDta = hisatDta;
+	}
+	/** 默认为5 */
+	public void setHisatAlignNum(int alignNum) {
+		this.alignNum = alignNum;
 	}
 	
 	public String getOutPrefix() {
@@ -183,17 +194,19 @@ public class CtrlRNAmap implements IntCmdSoft {
 				continue;
 			}
 			setHisatParam();
-			mapRNA.setLeftFq(CopeFastq.convertFastqFile(lsFastqFR.get(0)));
-			mapRNA.setRightFq(CopeFastq.convertFastqFile(lsFastqFR.get(1)));
-			
+
 			if (softWare == SoftWare.tophat) {
 				((MapTophat)mapRNA).setSensitiveLevel(sensitive);
 				if (useGTF) setGtf();
 			} else if (softWare == SoftWare.hisat2) {
 				((MapHisat)mapRNA).setSensitiveLevel(sensitive);
+				((MapHisat)mapRNA).setAlignNum(alignNum);
 				if (useGTF) setGtf();
+				
 			}
 			
+			mapRNA.setLeftFq(CopeFastq.convertFastqFile(lsFastqFR.get(0)));
+			mapRNA.setRightFq(CopeFastq.convertFastqFile(lsFastqFR.get(1)));
 			setRefFile();
 			try {
 				mapRNA.mapReads();
@@ -219,10 +232,13 @@ public class CtrlRNAmap implements IntCmdSoft {
 	
 	private void setGtf() {
 		if (!StringOperate.isRealNull(gtfAndGene2Iso)) {
-			mapRNA.setGtf_Gene2Iso(gtfAndGene2Iso);
+			mapRNA.setGtfFiles(gtfAndGene2Iso);
 		} else if (species != null && !(mapRNA instanceof MapRsem) && FileOperate.isFileExistAndBigThan0(species.getGffFile())) {
 			String gtfFile = GffHashGene.convertToOtherFile(species.getGffFile(), GffType.GTF);
-			mapRNA.setGtf_Gene2Iso(gtfFile);
+			if (mapRNA instanceof MapHisat) {
+				gtfFile = MapHisat.convert2SpliceTxt(gtfFile, FileOperate.getPathName(outPrefix));
+			}
+			mapRNA.setGtfFiles(gtfFile);
 		}
 	}
 	
