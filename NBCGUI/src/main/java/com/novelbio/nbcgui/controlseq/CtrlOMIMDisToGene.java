@@ -3,18 +3,6 @@ package com.novelbio.nbcgui.controlseq;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.hadoop.classification.InterfaceAudience.Public;
-
-import com.esotericsoftware.kryo.io.Input;
-import com.novelbio.base.dataOperate.TxtReadandWrite;
-import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.database.domain.geneanno.GeneInfo;
-import com.novelbio.database.domain.omim.MIMInfo;
-import com.novelbio.database.domain.omim.MorbidMap;
-import com.novelbio.database.model.modgeneid.GeneID;
-import com.novelbio.database.model.modomim.MgmtMorbidMap;
-import com.novelbio.database.model.modomim.MgmtOMIMUnit;
-
 public class CtrlOMIMDisToGene {
 
 	private static int TAXID = 9606;
