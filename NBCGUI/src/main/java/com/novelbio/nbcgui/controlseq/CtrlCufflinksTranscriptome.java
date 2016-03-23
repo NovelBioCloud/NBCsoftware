@@ -102,7 +102,7 @@ public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 		this.gtfRefFile = gtfFile;
 	}
 	public void setLsBamFile2Prefix(ArrayList<String[]> lsBamFile2Prefix) {
-		cufflinksGTF.setLsBamFile2Prefix(lsBamFile2Prefix);
+//		cufflinksGTF.setLsBamFile2Prefix(lsBamFile2Prefix);
 	}
 	public void setThreadNum(int threadNum) {
 		this.thread = threadNum;
@@ -119,10 +119,6 @@ public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 	public void setReconstructTranscriptome(boolean reconstructTranscriptome) {
 		this.reconstructTranscriptome = reconstructTranscriptome;
 	}
-	/** 是否根据prefix合并bam文件，然后再做cufflinks分析 默认false */
-	public void setIsMergeBamByPrefix(boolean isMergeBamByPrefix) {
-		cufflinksGTF.setIsMergeBamByPrefix(isMergeBamByPrefix);
-	}
 	/** 在junction 的一头搭上exon的最短比例 0-1之间，默认0.09 */
 	public void setSmallAnchorFraction(double anchorLength) {
 		cufflinksGTF.setSmallAnchorFraction(anchorLength);
@@ -137,7 +133,7 @@ public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 //		this.outPrefix = FoldeCreate.createAndInFold(outPathPrefix, EnumReport.ReconstructTranscriptome.getResultFolder());
 		String tmpCufflinksResult = FileOperate.getPathName(outPrefix) + "tmpCufflinks/";
 		FileOperate.createFolders(tmpCufflinksResult);
-		cufflinksGTF.setOutPathPrefix(tmpCufflinksResult);
+		cufflinksGTF.setOutPath(tmpCufflinksResult);
 	}
 	
 	public void run() {
@@ -153,17 +149,16 @@ public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 		cufflinksGTF.setChrFile(getChromFaFile());
 		cufflinksGTF.setGtfFile(getGtfFileName(), reconstructTranscriptome);
 		cufflinksGTF.setIntronLen(getIntronSmall2Big());
-		cufflinksGTF.setSkipErrorMode(true);
 		cufflinksGTF.setIsUseOldResult(isUseOldResult);
 		try {
-			cufflinksGTF.runCufflinks();
+//			cufflinksGTF.runCufflinks();
 		} catch (Throwable e) {
 			lsCmd.addAll(cufflinksGTF.getCmdExeStr());
 			throw e;
 		}
 		lsCmd.addAll(cufflinksGTF.getCmdExeStr());
-		List<String> lsResultGTF = cufflinksGTF.getLsCufflinksResult();
-
+//		List<String> lsResultGTF = cufflinksGTF.getLsCufflinksResult();
+		List<String> lsResultGTF = null;
 		if (!reconstructTranscriptome) {
 			return;
 		}

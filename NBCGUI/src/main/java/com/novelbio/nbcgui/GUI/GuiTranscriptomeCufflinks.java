@@ -115,7 +115,6 @@ public class GuiTranscriptomeCufflinks extends JPanel {
 					GffChrAbs gffChrAbs = new GffChrAbs(species);
 					cufflinksGTF.setGffChrAbs(gffChrAbs);
 				}
-				cufflinksGTF.setIsMergeBamByPrefix(false);
 				cufflinksGTF.setUpQuartileNormalized(chkCalculateUQfpkm.isSelected());
 				cufflinksGTF.setChrSeq(txtChrFile.getText());
 				cufflinksGTF.setStrandSpecifictype(cmbStrandSpecific.getSelectedValue());

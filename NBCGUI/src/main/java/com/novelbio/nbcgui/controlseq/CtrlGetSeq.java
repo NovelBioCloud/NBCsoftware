@@ -100,6 +100,7 @@ public class CtrlGetSeq implements RunGetInfo<GffChrSeq.GffChrSeqProcessInfo>{
 		}
 
 		Thread thread = new Thread(gffChrSeq);
+		thread.setDaemon(true);
 		thread.start();
 	}
 	

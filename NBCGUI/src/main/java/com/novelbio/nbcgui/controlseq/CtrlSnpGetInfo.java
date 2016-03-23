@@ -50,6 +50,7 @@ public class CtrlSnpGetInfo implements RunGetInfo<SnpFilterDetailInfo>{
 		guiSnpCalling.getProgressBar().setMaximum((int) snpDetailGet.getFileSizeEvaluateK());
 		
 		Thread thread = new Thread(snpDetailGet);
+		thread.setDaemon(true);
 		thread.start();
 	}
 	

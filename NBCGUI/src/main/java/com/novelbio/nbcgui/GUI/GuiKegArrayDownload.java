@@ -91,6 +91,7 @@ public class GuiKegArrayDownload extends JPanel implements RunGetInfo<Integer> {
 		progressBar.setMaximum(downKeggPng.getDownloadPicNum());
 		
 		Thread thread = new Thread(downKeggPng);
+		thread.setDaemon(true);
 		thread.start();
 	}
 	

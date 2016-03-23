@@ -129,6 +129,7 @@ public class CtrlMapReads implements RunGetInfo<MapReadsAbs.MapReadsProcessInfo>
 		
 		mapReads.setRunGetInfo(this);
 		Thread thread = new Thread(mapReads);
+		thread.setDaemon(true);
 		thread.start();
 	}
 

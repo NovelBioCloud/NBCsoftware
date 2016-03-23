@@ -49,7 +49,7 @@ public class CtrlRNAmap implements IntCmdSoft {
 	
 	/** tophat是否用GTF文件进行校正，默认为true，如果出错就要考虑不用GTF */
 	boolean useGTF = true;
-	String outPrefix;
+	String outPath;
 	
 	/** 将没有比对上的reads用bowtie2再次比对上去 */
 	boolean mapUnmapedReads = true;
@@ -91,12 +91,12 @@ public class CtrlRNAmap implements IntCmdSoft {
 	public void setMapUnmapedReads(boolean mapUnmapedReads) {
 		this.mapUnmapedReads = mapUnmapedReads;
 	}
-	public void setOutPathPrefix(String outPrefix) {
-		this.outPrefix = outPrefix;
+	public void setOutPath(String outPath) {
+		this.outPath = outPath;
 	}
 	
 	public void setAlignNum(String outPrefix) {
-		this.outPrefix = outPrefix;
+		this.outPath = outPrefix;
 	}
 	
 	public void setIntronLenMin(int intronLenMin) {
@@ -126,7 +126,7 @@ public class CtrlRNAmap implements IntCmdSoft {
 	}
 	
 	public String getOutPrefix() {
-		return outPrefix;
+		return outPath;
 	}
 	/** MapTop里面的参数 */
 	public void setStrandSpecifictype(StrandSpecific strandSpecifictype) {
@@ -189,7 +189,7 @@ public class CtrlRNAmap implements IntCmdSoft {
 			setIntronLen(intronLenMax, intronLenMin);
 			mapRNA.setStrandSpecifictype(strandSpecific);
 			mapRNA.setThreadNum(threadNum);
-			mapRNA.setOutPathPrefix(outPrefix + prefix);
+			mapRNA.setOutPathPrefix(outPath + prefix);
 			if (FileOperate.isFileExistAndBigThanSize(mapRNA.getFinishName(), 0)) {
 				continue;
 			}
@@ -232,13 +232,23 @@ public class CtrlRNAmap implements IntCmdSoft {
 	
 	private void setGtf() {
 		if (!StringOperate.isRealNull(gtfAndGene2Iso)) {
-			mapRNA.setGtfFiles(gtfAndGene2Iso);
-		} else if (species != null && !(mapRNA instanceof MapRsem) && FileOperate.isFileExistAndBigThan0(species.getGffFile())) {
-			String gtfFile = GffHashGene.convertToOtherFile(species.getGffFile(), GffType.GTF);
+			String gtfFile = gtfAndGene2Iso;
 			if (mapRNA instanceof MapHisat) {
-				gtfFile = MapHisat.convert2SpliceTxt(gtfFile, FileOperate.getPathName(outPrefix));
+				gtfFile = MapHisat.convert2SpliceTxt(gtfAndGene2Iso, FileOperate.getPathName(outPath));
 			}
 			mapRNA.setGtfFiles(gtfFile);
+			return;
+		}
+		if (species == null || !FileOperate.isFileExistAndBigThan0(species.getGffFile())) {
+			return;
+		}
+		
+		if (mapRNA instanceof MapTophat || mapRNA instanceof MapSplice) {
+			String gtfFile = GffHashGene.convertToOtherFile(species.getGffFile(), GffType.GTF);
+			mapRNA.setGtfFiles(gtfFile);
+		} else if (mapRNA instanceof MapHisat) {
+			String spliceFile = MapHisat.convert2SpliceTxt(species.getGffFile(), FileOperate.getPathName(outPath));
+			mapRNA.setGtfFiles(spliceFile);
 		}
 	}
 	
@@ -302,8 +312,8 @@ public class CtrlRNAmap implements IntCmdSoft {
 	
 	public void writeToResult() {
 		if (softWare == SoftWare.rsem) {
-			TxtReadandWrite txtWriteRpkm = new TxtReadandWrite(outPrefix + "ResultFPKM.xls", true);
-			TxtReadandWrite txtWriteCounts = new TxtReadandWrite(outPrefix + "ResultCounts.xls", true);
+			TxtReadandWrite txtWriteRpkm = new TxtReadandWrite(outPath + "ResultFPKM.xls", true);
+			TxtReadandWrite txtWriteCounts = new TxtReadandWrite(outPath + "ResultCounts.xls", true);
 			txtWriteRpkm.ExcelWrite(rsemExpFPKM.getLsCountsNum(EnumExpression.RawValue));
 			txtWriteCounts.ExcelWrite(rsemExpFPKM.getLsCountsNum(EnumExpression.Counts));
 			txtWriteRpkm.close();

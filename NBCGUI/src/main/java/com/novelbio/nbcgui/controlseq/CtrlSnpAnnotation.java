@@ -53,6 +53,7 @@ public class CtrlSnpAnnotation implements RunGetInfo<SnpFilterDetailInfo> {
 			guiSnpCalling.getProgressBar().setMaximum((int) snpAnnotation.getFileSizeEvaluateK());
 			
 			Thread thread = new Thread(snpAnnotation);
+			thread.setDaemon(true);
 			thread.start();
 		} else {
 			snpAnnotation.run();

@@ -66,6 +66,7 @@ public class CtrlSnpCalling implements RunGetInfo<SnpFilterDetailInfo> {
 		guiSnpCalling.getProgressBar().setMaximum((int) snpCalling.getFileSizeEvaluateK());
 		
 		Thread thread = new Thread(snpCalling);
+		thread.setDaemon(true);
 		thread.start();
 	}
 	@Override

@@ -58,6 +58,7 @@ public class CtrlPeakStatistics implements RunGetInfo<GffChrStatistics.GffChrSta
 		gffChrStatistics.setFileName(readFile);
 		
 		Thread thread = new Thread(gffChrStatistics);
+		thread.setDaemon(true);
 		thread.start();
 	}
 	public ArrayList<String[]> getResult() {

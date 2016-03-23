@@ -214,7 +214,7 @@ public class GuiRNASeqMapping extends JPanel {
 				ctrlRNAmap.setSensitive(cmbSensitive.getSelectedValue());
 				
 				String outPathPrefix = FoldeCreate.createAndInFold(out, "RNASeqMap_result");//TODO
-				ctrlRNAmap.setOutPathPrefix(outPathPrefix);
+				ctrlRNAmap.setOutPath(outPathPrefix);
 //				ctrlRNAmap.setOutPathPrefix(out);
 				ctrlRNAmap.mapping();
 				if (cmbRNAsoftware.getSelectedValue() == SoftWare.rsem) {

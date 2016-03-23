@@ -152,6 +152,7 @@ public class GuiSamStatistics extends JPanel {
 				}
 				
 				Thread thread = new Thread(ctrlSamRPKMLocate);
+				thread.setDaemon(true);
 				thread.start();
 				btnSave.setEnabled(false);
 			}

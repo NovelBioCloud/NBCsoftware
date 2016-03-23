@@ -285,6 +285,7 @@ public class GuiRNAalterSpliceASD extends JPanel implements GUIinfo {
 		//TODO
 		btnRun.setEnabled(false);
 		Thread thread = new Thread(ctrlSplicing);
+		thread.setDaemon(true);
 		thread.start();
 
 	}
