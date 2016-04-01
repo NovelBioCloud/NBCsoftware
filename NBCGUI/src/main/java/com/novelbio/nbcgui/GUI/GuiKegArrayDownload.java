@@ -24,47 +24,47 @@ public class GuiKegArrayDownload extends JPanel implements RunGetInfo<Integer> {
 	GUIFileOpen guiFileOpen = new GUIFileOpen();
 	JButton btnNewButton;
 	private JTextField txtPngNum;
+
 	/**
 	 * Create the panel.
 	 */
 	public GuiKegArrayDownload() {
 		setLayout(null);
-		
+
 		JLabel lblDownloadPng = new JLabel("DOWNLOAD  PNG");
 		lblDownloadPng.setFont(new Font("Dialog", Font.BOLD, 17));
 		lblDownloadPng.setBounds(120, 46, 214, 44);
 		add(lblDownloadPng);
-		
+
 		txtKegArrayUrl = new JTextField();
 		txtKegArrayUrl.setBounds(100, 115, 325, 35);
 		add(txtKegArrayUrl);
 		txtKegArrayUrl.setColumns(10);
-		
+
 		JButton outFileNewButton = new JButton("OUT FILE");
 		outFileNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				btnNewButton.setEnabled(true);
-				String outFile =  guiFileOpen.saveFileNameAndPath("", "");
+				String outFile = guiFileOpen.saveFileNameAndPath("", "");
 				txtOutPath.setText(outFile);
 			}
 		});
 		outFileNewButton.setBounds(65, 162, 118, 35);
 		add(outFileNewButton);
-		
+
 		JLabel lblUrl = new JLabel("URL");
 		lblUrl.setBounds(65, 115, 33, 34);
 		add(lblUrl);
-		
+
 		txtOutPath = new JTextField();
 		txtOutPath.setBounds(195, 162, 230, 35);
 		add(txtOutPath);
 		txtOutPath.setColumns(10);
-		
+
 		progressBar = new JProgressBar();
 		progressBar.setBounds(100, 209, 325, 25);
 		add(progressBar);
 
-		
 		btnNewButton = new JButton("StartDownLoad");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -72,47 +72,48 @@ public class GuiKegArrayDownload extends JPanel implements RunGetInfo<Integer> {
 			}
 		});
 		btnNewButton.setBounds(65, 247, 360, 41);
-		add(btnNewButton);		
-		
+		add(btnNewButton);
+
 		txtPngNum = new JTextField();
 		txtPngNum.setBounds(65, 209, 33, 26);
 		add(txtPngNum);
 		txtPngNum.setColumns(10);
 	}
-	
+
 	private void download() {
 		btnNewButton.setEnabled(false);
-		DownKeggPng downKeggPng =new DownKeggPng();
+		DownKeggPng downKeggPng = new DownKeggPng(txtKegArrayUrl.getText().trim(),
+				txtOutPath.getText());
 		downKeggPng.setRunGetInfo(this);
-		downKeggPng.setDownLoadPng(txtKegArrayUrl.getText().trim(), txtOutPath.getText());
-		downKeggPng.querKegArrayUrl();
-		
 		progressBar.setMinimum(0);
+		downKeggPng.querKegArrayUrl();
 		progressBar.setMaximum(downKeggPng.getDownloadPicNum());
-		
 		Thread thread = new Thread(downKeggPng);
-		thread.setDaemon(true);
 		thread.start();
 	}
-	
+
 	@Override
 	public void setRunningInfo(Integer info) {
 		progressBar.setValue(info);
 		txtPngNum.setText(info + "");
 	}
+
 	@Override
 	public void done(RunProcess<Integer> runProcess) {
 		progressBar.setValue(progressBar.getMaximum());
 		btnNewButton.setEnabled(true);
 	}
+
 	@Override
 	public void threadSuspended(RunProcess<Integer> runProcess) {
 		btnNewButton.setEnabled(true);
 	}
+
 	@Override
 	public void threadResumed(RunProcess<Integer> runProcess) {
 		btnNewButton.setEnabled(false);
 	}
+
 	@Override
 	public void threadStop(RunProcess<Integer> runProcess) {
 	}
