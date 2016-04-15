@@ -265,7 +265,7 @@ public class GuiRNAalterSpliceASD extends JPanel implements GUIinfo {
 			
 		ctrlSplicing.setGffHashGene(getGffhashGene());
 		String seqFile = txtChromFaPath.getText();
-		if (FileOperate.isFileOrDirectoryExist(seqFile)) {
+		if (FileOperate.isFileFolderExist(seqFile)) {
 			try {
 				SeqHash seqHash = new SeqHash(seqFile, "");
 				ctrlSplicing.setSeqHash(seqHash);
