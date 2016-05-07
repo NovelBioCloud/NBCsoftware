@@ -40,11 +40,11 @@ public class CtrlGOall implements CtrlTestGOInt {
 	String savePrefix = "";
 	
 	@Override
-	public void setTaxID(Species species) {
+	public void setTaxID(int taxId) {
 		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
-			ctrlGO.setTaxID(species);
+			ctrlGO.setTaxID(taxId);
 		}
-		this.taxID = species.getTaxID();
+		this.taxID = taxId;
 	}
 	
 	@Override
@@ -103,7 +103,14 @@ public class CtrlGOall implements CtrlTestGOInt {
 			ctrlGO.setLsBG(fileName);
 		}
 	}
-
+	/** 只能是最初的一列基因那个BG文件，不能是gene_P_Item那种文件 */
+	@Override
+	public void setLsBG(Species species) {
+		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
+			ctrlGO.setLsBG(species);
+		}
+	}
+	
 	@Override
 	public void setIsCluster(boolean isCluster) {
 		this.isCluster = isCluster;

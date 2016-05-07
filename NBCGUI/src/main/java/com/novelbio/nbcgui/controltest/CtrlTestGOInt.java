@@ -10,7 +10,7 @@ import com.novelbio.database.model.species.Species;
 
 /** 不是单例 */
 public interface CtrlTestGOInt {
-	public void setTaxID(Species species);
+	public void setTaxID(int taxId);
 	/** lsAccID2Value  arraylist-string[] 若为string[2],则第二个为上下调关系，判断上下调
 	 * 若为string[1] 则跑全部基因作分析
 	 */
@@ -19,12 +19,19 @@ public interface CtrlTestGOInt {
 	public void setUpDown(double up, double down);
 	
 	public void setBlastInfo(double blastevalue, List<Integer> lsBlastTaxID);
+	
 	/**
 	 * <b>在这之前要先设定GOlevel和GOannotation的文件</b>
 	 * 简单的判断下输入的是geneID还是geneID2Item表
 	 * @param fileName
 	 */
 	public void setLsBG(String fileName);
+	/**
+	 * <b>在这之前要先设定GOlevel和GOannotation的文件</b>
+	 * 简单的判断下输入的是geneID还是geneID2Item表
+	 * @param fileName
+	 */
+	public void setLsBG(Species species);
 	
 	public void setIsCluster(boolean isCluster);
 	

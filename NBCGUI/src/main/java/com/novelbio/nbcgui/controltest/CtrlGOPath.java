@@ -55,7 +55,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	 * 若为string[1] 则跑全部基因作分析
 	 */
 	ArrayList<String[]> lsAccID2Value;
-	Species species;
+//	Species species;
 
 	Map<String, FunctionDrawResult> mapPrefix2FunDrawTest = new LinkedHashMap<String, FunctionDrawResult>();
 
@@ -66,9 +66,8 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	/** true表示与数据库的注释合并，false表示仅用该注释文件进行go注释 */
 	boolean isCombine = true;
 	
-	public void setTaxID(Species species) {
-		this.species = species;
-		functionTest.setTaxID(species.getTaxID());
+	public void setTaxID(int taxId) {
+		functionTest.setTaxID(taxId);
 	}
 	
 	public int getTaxID() {
@@ -111,13 +110,22 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 	 * @param fileName
 	 */
 	public void setLsBG(String fileName) {
-		if (StringOperate.isRealNull(fileName)) {
-			fileName = EnumSpeciesFile.bgGeneFile.getSavePath(species.getTaxID(), species.getSelectSpeciesFile());
-			if (!FileOperate.isFileExistAndBigThanSize(fileName, 0)) {
-				GffSpeciesInfo specieInformation = new GffSpeciesInfo();
-				specieInformation.setSpecies(species);
-				specieInformation.writeGeneBG(fileName);
-			}
+		this.bgFile = fileName;
+	}
+	/**
+	 * 必须设定<br>
+	 * <b>在这之前要先设定GOlevel</b><br>
+	 * 如果输入的是空值，就会自动设定BG
+	 * 
+	 * 简单的判断下输入的是geneID还是geneID2Item表
+	 * @param fileName
+	 */
+	public void setLsBG(Species species) {
+		String fileName = EnumSpeciesFile.bgGeneFile.getSavePath(species.getTaxID(), species.getSelectSpeciesFile());
+		if (!FileOperate.isFileExistAndBigThanSize(fileName, 0)) {
+			GffSpeciesInfo specieInformation = new GffSpeciesInfo();
+			specieInformation.setSpecies(species);
+			specieInformation.writeGeneBG(fileName);
 		}
 		this.bgFile = fileName;
 	}

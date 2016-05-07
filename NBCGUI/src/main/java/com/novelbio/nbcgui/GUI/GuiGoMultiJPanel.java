@@ -490,7 +490,7 @@ public class GuiGoMultiJPanel extends JPanel{
 		CtrlTestGOInt ctrlGO = (CtrlTestGOInt)SpringFactoryBioinfo.getFactory().getBean("ctrlGOall");
 		ctrlGO.clearParam();
 		ctrlGO.setGoAlgorithm(cmbGoAlgorithm.getSelectedValue());
-		ctrlGO.setTaxID(species);
+		ctrlGO.setTaxID(species.getTaxID());
 
 		ctrlGO.setBlastInfo(evalue, lsStaxID);
 				
@@ -556,7 +556,7 @@ public class GuiGoMultiJPanel extends JPanel{
 	
 		CtrlTestPathInt ctrlPath = (CtrlTestPathInt)SpringFactoryBioinfo.getFactory().getBean("ctrlPath");
 		ctrlPath.clearParam();
-		ctrlPath.setTaxID(species);
+		ctrlPath.setTaxID(species.getTaxID());
 
 		ctrlPath.setBlastInfo(evalue, lsStaxID);
 
@@ -616,7 +616,7 @@ public class GuiGoMultiJPanel extends JPanel{
 	
 		CtrlTestCOGInt ctrlCOG = (CtrlTestCOGInt)SpringFactoryBioinfo.getFactory().getBean("ctrlCOG");
 		ctrlCOG.clearParam();
-		ctrlCOG.setTaxID(species);
+		ctrlCOG.setTaxID(species.getTaxID());
 		
 		COGanno cogAnno = new COGanno(cmbCogType.getSelectedValue());
 		try { cogAnno.setEvalueCutoff(Double.parseDouble(txtEvalueCutoff.getText())); 

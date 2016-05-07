@@ -273,15 +273,15 @@ public class CtrlRNAmap implements IntCmdSoft {
 		}
 		
 		if (softWare == SoftWare.tophat) {
-			mapRNA.setRefIndex(species.getIndexChr(mapRNA.getSoftWare()));
+			mapRNA.setRefIndex(species.getIndexChr(softWare));
 			((MapTophat)mapRNA).setMapUnmapedReads(mapUnmapedReads, indexUnmap);
 		} else if (softWare == SoftWare.rsem) {
-			mapRNA.setRefIndex(species.getIndexRef(SoftWare.rsem, true));
+			mapRNA.setRefIndex(species.getIndexRef(softWare, true));
 		} else if (softWare == SoftWare.mapsplice) {
-			mapRNA.setRefIndex(species.getIndexChr(mapRNA.getSoftWare()));
+			mapRNA.setRefIndex(species.getIndexChr(softWare));
 			((MapSplice)mapRNA).setMapUnmapedReads(mapUnmapedReads, indexUnmap);
 		} else if (softWare == SoftWare.hisat2) {
-			mapRNA.setRefIndex(species.getIndexChr(mapRNA.getSoftWare()));
+			mapRNA.setRefIndex(species.getIndexChr(softWare));
 		}
 	}
 	

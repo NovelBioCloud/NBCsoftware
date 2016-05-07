@@ -8,7 +8,7 @@ import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.database.model.species.Species;
 
 public interface CtrlTestPathInt {
-	public void setTaxID(Species taxID);
+	public void setTaxID(int taxID);
 	/** lsAccID2Value  arraylist-string[] 若为string[2],则第二个为上下调关系，判断上下调
 	 * 若为string[1] 则跑全部基因作分析
 	 */
@@ -23,6 +23,12 @@ public interface CtrlTestPathInt {
 	 * @param fileName
 	 */
 	public void setLsBG(String fileName);
+	/**
+	 * <b>在这之前要先设定GOlevel</b>
+	 * 简单的判断下输入的是geneID还是geneID2Item表
+	 * @param fileName
+	 */
+	public void setLsBG(Species species);
 	
 	public void setIsCluster(boolean isCluster);
 
