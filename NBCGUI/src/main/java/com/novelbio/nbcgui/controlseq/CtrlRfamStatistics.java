@@ -156,7 +156,7 @@ public class CtrlRfamStatistics implements IntCmdSoft {
 	/** 删除临时文件 */
 	public void clean() {
 		for (String tmpFile : lsFileTobeDelete) {
-			FileOperate.DeleteFileFolder(tmpFile);
+			FileOperate.deleteFileFolder(tmpFile);
 		}
 	}
 	

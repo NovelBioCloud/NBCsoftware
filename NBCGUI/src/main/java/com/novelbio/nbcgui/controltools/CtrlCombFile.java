@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import com.novelbio.analysis.tools.compare.CombineTab;
+import com.novelbio.base.StringOperate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.dataStructure.PatternOperate;
 import com.novelbio.base.fileOperate.FileOperate;
@@ -51,9 +52,12 @@ public class CtrlCombFile {
 	 *  可以连续不断的设定
 	 * @param condTxt 文件全名
 	 * @param codName 给该文件起个名字，最后在列中显示
-	 * @param colDetai 选择该文件的哪几列
+	 * @param colStrDetail 选择该文件的哪几列
 	 */
 	public void setColDetail(String condTxt, String codName, String colStrDetail) {
+		if (StringOperate.isRealNull(colStrDetail) || colStrDetail.trim().equals("0")) {
+			colStrDetail = "";
+		}
 		ArrayList<String[]> lsResult = PatternOperate.getPatLoc(colStrDetail, "\\d+", false);
 		int[] colDetail = new int[lsResult.size()];
 		for (int i = 0; i < colDetail.length; i++) {

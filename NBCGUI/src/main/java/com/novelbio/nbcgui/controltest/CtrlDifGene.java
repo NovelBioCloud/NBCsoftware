@@ -30,6 +30,11 @@ public class CtrlDifGene implements IntCmdSoft {
 		return algorithm;
 	}
 	
+	/**
+	 * 一系列的表示基因分组的列<br>
+	 * 0: colNum, 实际number，从1开始计数<br>
+	 * 1: SampleGroupName
+	 */
 	public void setCol2Sample(List<String[]> lsSampleColumn2GroupName) {
 		diffExpAbs.setCol2Sample(lsSampleColumn2GroupName);
 	}
