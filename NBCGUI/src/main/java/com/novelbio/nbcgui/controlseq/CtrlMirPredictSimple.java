@@ -67,7 +67,7 @@ public class CtrlMirPredictSimple {
 		lsCmd.clear();
 		String novelMiRNAPathDeep = outPathSample + prefix + "/miRNApredictDeep/";
 		FileOperate.createFolders(novelMiRNAPathDeep);
-		String outFile = outPath + prefix + "_align.txt";
+		String outFile = outPath + prefix + ".align.txt";
 		if (FileOperate.isFileExistAndBigThanSize(outFile, 0)) {
 			return;
 		}

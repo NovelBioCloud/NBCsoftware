@@ -78,7 +78,7 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 			savePrefix = "";
 		} else {
 			saveParentPath = FileOperate.getParentPathNameWithSep(resultPath);
-			savePrefix = "_" + FileOperate.getFileName(resultPath);
+			savePrefix = FileOperate.getFileName(resultPath) + ".";
 		}
 		String saveExcelPrefix = null;
 		if (resultPath.endsWith("\\") || resultPath.endsWith("/")) {
@@ -111,10 +111,10 @@ public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {
 	}
 	
 	public String getSavePicPvalueName(String prefix) {
-		return FileOperate.addSep(saveParentPath) + getResultBaseTitle() + "-Log2P_" + prefix + savePrefix + ".png";
+		return FileOperate.addSep(saveParentPath) + savePrefix + getResultBaseTitle() + "-Log2P."  + prefix + ".png";
 	}
 	public String getSavePicEnrichmentName(String prefix) {
-		return FileOperate.addSep(saveParentPath) + getResultBaseTitle() +  "-Enrichment_" + prefix + savePrefix + ".png";
+		return FileOperate.addSep(saveParentPath) + savePrefix + getResultBaseTitle() +  "-Enrichment." + prefix + ".png";
 	}
 	@Override
 	protected void clear() {

@@ -52,7 +52,7 @@ public class CtrlGOall implements CtrlTestGOInt {
 		this.savePathPrefix = savePathPrefix;
 		
 		if (!savePathPrefix.endsWith("\\") && !savePathPrefix.endsWith("/")) {
-			savePrefix = "_" + FileOperate.getFileName(savePathPrefix);
+			savePrefix = FileOperate.getFileName(savePathPrefix) + ".";
 		}
 	}
 	/** 设定自定义的GO注释文件
@@ -169,43 +169,54 @@ public class CtrlGOall implements CtrlTestGOInt {
 
 	@Override
 	public void run() {
-		// 去除多线程，降低内存使用
-//		List<Thread> lsThreads = new ArrayList<Thread>();
 		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
 			String saveName;
 			if (savePathPrefix.endsWith("\\") || savePathPrefix.endsWith("/")) {
 				saveName = savePathPrefix + ctrlGO.getResultBaseTitle() + ".xlsx";
 			} else {
-				saveName = FileOperate.changeFilePrefix(savePathPrefix, ctrlGO.getResultBaseTitle() + "_", "xlsx");
+				saveName = FileOperate.changeFileSuffix(savePathPrefix, "." + ctrlGO.getResultBaseTitle(), "xlsx");
 			}
 			ctrlGO.setSaveExcelPrefix(saveName);
 			ctrlGO.running();
-//			Thread thread = new Thread(ctrlGO);
-//			thread.start();
-//			lsThreads.add(thread);
 		}
-//		for (Thread thread : lsThreads) {
-//			try {
-//				thread.join();
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//		}
-		//程序是否顺利结束
-//		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
-//			if (ctrlGO.getRunThreadStat() == RunThreadStat.finishAbnormal) {
-//				logger.error(ctrlGO.getSaveExcelPrefix() + " " + ctrlGO.getGOType() + " error");
-//				Throwable throwable = ctrlGO.getException();
-//				if (throwable != null) {
-//					throw new RuntimeException(ctrlGO.getSaveExcelPrefix() + " " + ctrlGO.getGOType() , throwable);
-//				} else {
-//					throw new RuntimeException(ctrlGO.getSaveExcelPrefix() + " " + ctrlGO.getGOType());
-//				}
-//			}
-//		}
+		savePic();
+	}
+	
+	private void runMultiThread() {
+		List<Thread> lsThreads = new ArrayList<Thread>();
+		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
+			String saveName;
+			if (savePathPrefix.endsWith("\\") || savePathPrefix.endsWith("/")) {
+				saveName = savePathPrefix + ctrlGO.getResultBaseTitle() + ".xlsx";
+			} else {
+				saveName = FileOperate.changeFileSuffix(savePathPrefix, "." + ctrlGO.getResultBaseTitle(), "xlsx");
+			}
+			ctrlGO.setSaveExcelPrefix(saveName);
+			Thread thread = new Thread(ctrlGO);
+			thread.start();
+			lsThreads.add(thread);
+		}
+		for (Thread thread : lsThreads) {
+			try {
+				thread.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+//		程序是否顺利结束
+		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
+			if (ctrlGO.getRunThreadStat() == RunThreadStat.finishAbnormal) {
+				logger.error(ctrlGO.getSaveExcelPrefix() + " " + ctrlGO.getGOType() + " error");
+				Throwable throwable = ctrlGO.getException();
+				if (throwable != null) {
+					throw new RuntimeException(ctrlGO.getSaveExcelPrefix() + " " + ctrlGO.getGOType() , throwable);
+				} else {
+					throw new RuntimeException(ctrlGO.getSaveExcelPrefix() + " " + ctrlGO.getGOType());
+				}
+			}
+		}
 		
 		savePic();
-		
 	}
 		
 	/** 获得保存到文件夹的前缀，譬如保存到/home/zong0jie/stage10，那么前缀就是stage10 */
@@ -230,7 +241,7 @@ public class CtrlGOall implements CtrlTestGOInt {
 				excelSavePath = FileOperate.getParentPathNameWithSep(ctrlGO.getSaveExcelPrefix());
 			}
 			BufferedImage bfImageCombine = ImageUtils.combineBfImage(true, 30, lsGOimage);
-			String picNameLog2P = excelSavePath +  "GO-Analysis-Log2P_" + prefix + getSavePrefix() + ".png";
+			String picNameLog2P = excelSavePath + savePrefix + "GO-Analysis-Log2P_" + prefix + ".png";
 			logger.info("draw pic:" + picNameLog2P);
 
 			String picName = ImageUtils.saveBufferedImage(bfImageCombine, picNameLog2P);

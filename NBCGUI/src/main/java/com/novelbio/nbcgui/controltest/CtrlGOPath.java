@@ -323,7 +323,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		HashMultimap<String, GeneID> mapCluster2SetGeneID = addBG_And_Convert2GeneID(mapCluster2SetAccID);
 		for (String prefix : mapCluster2SetGeneID.keySet()) {
 			FunctionTest functionTest = getResult(prefix, mapCluster2SetGeneID.get(prefix));
-			String excelPathOut = FileOperate.changeFileSuffix(saveExcelPrefix, "_" + prefix, null);
+			String excelPathOut = FileOperate.changeFilePrefix(saveExcelPrefix, prefix + ".", null);
 
 			if (functionTest == null) {
 				TxtReadandWrite txtWrite = new TxtReadandWrite(FileOperate.changeFileSuffix(excelPathOut, "_NoResult", null), true);

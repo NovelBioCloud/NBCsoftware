@@ -269,7 +269,7 @@ public class CtrlFastQ {
 	
 	private void addSupQCresult(String prefix, HashMultimap<String, String> mapPrefix2File) {
 		if (prefix == null) prefix = "";
-		String sep = (prefix.equals("")) ? "" : "_";
+		String sep = (prefix.equals("")) ? "" : ".";
 		for (String subPrefix : mapPrefix2File.keySet()) {
 			String prefixFinal = prefix + sep + subPrefix;
 			mapPrefix2ResultQC.putAll(prefixFinal, mapPrefix2File.get(subPrefix));
@@ -282,6 +282,7 @@ public class CtrlFastQ {
 		filterSubPrefix();
 	}
 	
+	/** 仅跑部分的过滤工作 */
 	private void filterSubPrefix() {
 		mapPrefix2ResultQC.clear();
 		mapCond2FastQCBefore = new LinkedHashMap<String, FastQC[]>();
@@ -472,15 +473,15 @@ public class CtrlFastQ {
 		if (lsFastQLR.get(0).length == 1) {
 			fastQCs[0] = new FastQC(prefix, qc);
 		} else {
-			fastQCs[0] = new FastQC(prefix + "_Left", qc);
-			fastQCs[1] = new FastQC(prefix + "_Right", qc);
+			fastQCs[0] = new FastQC(prefix + ".Left", qc);
+			fastQCs[1] = new FastQC(prefix + ".Right", qc);
 		}
 		return fastQCs;
 	}
 	
-	private static FastQ[] createCombineFastq(boolean filtered, String outFilePrefix, String condition, List<String[]> lsFastq, boolean isOutInterleaved) {
+	private static FastQ[] createCombineFastq(boolean filtered, String outFilePrefix, String prefix, List<String[]> lsFastq, boolean isOutInterleaved) {
 		FastQ[] fastQs = new FastQ[2];
-		String[] fileName = createCombineFQname(filtered, outFilePrefix, condition, lsFastq, true, isOutInterleaved);
+		String[] fileName = createCombineFQname(filtered, outFilePrefix, prefix, lsFastq, true, isOutInterleaved);
 		fastQs[0] = new FastQ(fileName[0], true);
 		if (fileName[1] != null) {
 			fastQs[1] = new FastQ(fileName[1], true);
@@ -488,29 +489,29 @@ public class CtrlFastQ {
 		return fastQs;
 	}
 	
-	private static String[] createCombineFQname(boolean filtered, String outFilePrefix, String condition, List<String[]> lsFastq, boolean isTmp, boolean isOutInterleaved) {
+	private static String[] createCombineFQname(boolean filtered, String outFilePrefix, String prefix, List<String[]> lsFastq, boolean isTmp, boolean isOutInterleaved) {
 		String[] fastQs = new String[2];
-		if (filtered) condition = condition + "_filtered";
-		if (lsFastq.size() > 1) condition = condition + "_Combine";
+		if (filtered) prefix = prefix + ".filtered";
+		if (lsFastq.size() > 1) prefix = prefix + ".Combine";
 		
 		String suffix = isOutInterleaved? ".fq.bz2" : ".fq.gz";
 		
 		if (lsFastq.get(0).length == 1 || lsFastq.get(0)[1] == null) {
-			fastQs[0] = outFilePrefix + condition + suffix;
+			fastQs[0] = outFilePrefix + prefix + suffix;
 			if (isTmp) {
 				fastQs[0] = FileOperate.changeFileSuffix(fastQs[0], "_tmpFilter", null);	
 			}
 		} else if (isOutInterleaved) {
-			fastQs[0] = outFilePrefix + condition + FastQ.FASTQ_Interleaved_Suffix+ suffix;
+			fastQs[0] = outFilePrefix + prefix + FastQ.FASTQ_Interleaved_Suffix+ suffix;
 			if (isTmp) {
-				fastQs[0] = FileOperate.changeFileSuffix(fastQs[0], "_tmpFilter", null);	
+				fastQs[0] = FileOperate.changeFileSuffix(fastQs[0], ".tmpFilter", null);	
 			}
 		} else {
-			fastQs[0] = outFilePrefix + condition + "_1" + suffix;
-			fastQs[1] = outFilePrefix + condition + "_2" + suffix;
+			fastQs[0] = outFilePrefix + prefix + ".1" + suffix;
+			fastQs[1] = outFilePrefix + prefix + ".2" + suffix;
 			if (isTmp) {
-				fastQs[0] = FileOperate.changeFileSuffix(fastQs[0], "_tmpFilter", null);
-				fastQs[1] = FileOperate.changeFileSuffix(fastQs[1], "_tmpFilter", null);
+				fastQs[0] = FileOperate.changeFileSuffix(fastQs[0], ".tmpFilter", null);
+				fastQs[1] = FileOperate.changeFileSuffix(fastQs[1], ".tmpFilter", null);
 			}
 		}
 		return fastQs;

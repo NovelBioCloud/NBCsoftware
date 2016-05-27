@@ -22,6 +22,7 @@ import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.genome.GffChrStatistics;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGeneAbs;
+import com.novelbio.analysis.seq.mapping.MapTophat;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.rnaseq.RPKMcomput;
 import com.novelbio.analysis.seq.sam.AlignSamReading;
@@ -77,6 +78,8 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	StrandSpecific strandSpecific;
 	
 	/**
+	 * 非unique mapping的reads仅取第一条来统计
+	 * ====================================
 	 * 由于非unique mapped reads的存在，为了精确统计reads在染色体上的分布，每个染色体上的reads数量用double来记数<br>
 	 * 这样如果一个reads在bam文本中出现多次--也就是mapping至多个位置，就会将每个记录(reads)除以其mapping number,<br>
 	 * 从而变成一个小数，然后加到染色体上。
@@ -89,8 +92,12 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	 *   so the result "All Chr Reads Number" will not equal to "All Map Reads Number",
 		so we make a correction here.
 	 */
+	@Deprecated
 	boolean chrReadsCorrect = false;
 	/**
+	 * 
+	 * 非unique mapping的reads仅取第一条来统计
+	 * ====================================
 	 * 由于非unique mapped reads的存在，为了精确统计reads在染色体上的分布，每个染色体上的reads数量用double来记数<br>
 	 * 这样如果一个reads在bam文本中出现多次--也就是mapping至多个位置，就会将每个记录(reads)除以其mapping number,<br>
 	 * 从而变成一个小数，然后加到染色体上。
@@ -103,6 +110,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	 *   so the result "All Chr Reads Number" will not equal to "All Map Reads Number",
 		so we make a correction here.
 	 */
+	@Deprecated
 	public void setChrReadsCorrect(boolean chrReadsCorrect) {
 		this.chrReadsCorrect = chrReadsCorrect;
 	}
@@ -378,8 +386,8 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			} else {
 				continue;
 			}
-			if (alignSeq.getFileName().endsWith("tophat_sorted.bam")) {
-				String unmapFileName = alignSeq.getFileName().replace("_sorted.bam", "_unmapped.bam");
+			if (alignSeq.getFileName().endsWith(MapTophat.TophatSuffix)) {
+				String unmapFileName = alignSeq.getFileName().replace(MapTophat.TophatSuffix, MapTophat.UnmapSuffix);
 				if (FileOperate.isFileExistAndBigThanSize(unmapFileName, 0)) {
 					alignSeqReading.addSeq(new SamFile(unmapFileName));
 				}
@@ -418,7 +426,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			if (gffChrAbs.getGffHashGene() != null) {
 				GffChrStatistics gffChrStatistics = mapPrefix2LocStatistics.get(prefix);
 
-				String outStatistics =tmpGeneStructure + "_GeneStructure.txt";
+				String outStatistics =tmpGeneStructure + GffChrStatistics.GeneStructureSuffix;
 				TxtReadandWrite txtWrite = new TxtReadandWrite(outStatistics, true);
 				txtWrite.ExcelWrite(gffChrStatistics.getStatisticsResultWithBG());
 				txtWrite.close();

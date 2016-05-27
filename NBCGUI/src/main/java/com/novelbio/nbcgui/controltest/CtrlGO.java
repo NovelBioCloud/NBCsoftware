@@ -2,6 +2,7 @@ package com.novelbio.nbcgui.controltest;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.prefs.PreferenceChangeEvent;
 
 import org.apache.log4j.Logger;
 
@@ -80,8 +81,8 @@ public class CtrlGO extends CtrlGOPath {
 	protected void copeFile(String prix, String excelPath) {
 		if (goAlgorithm != GoAlgorithm.novelgo) {
 			String goMapFileSource = FileOperate.changeFileSuffix(PathDetail.getRworkspace() + "topGO/tGOall_elim_10_def.pdf", "_"+prix, null);
-			String goMapFileTargetName = FileOperate.getFileNameSep(excelPath)[0] + prix + "GoMap.pdf";
-			FileOperate.moveFile(goMapFileSource, FileOperate.getParentPathNameWithSep(excelPath), goMapFileTargetName, true);
+			String goMapFileTargetName = FileOperate.changeFileSuffix(excelPath, "." + prix + ".GoMap", "pdf");
+			FileOperate.moveFile(goMapFileSource, goMapFileTargetName, true);
 		}
 	}
 	

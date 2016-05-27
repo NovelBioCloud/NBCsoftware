@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.analysis.annotation.functiontest.FunctionTest.FunctionDrawResult;
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
+import com.novelbio.base.StringOperate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.plot.ImageUtils;
 @Service
@@ -56,13 +57,13 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 			saveParentPath = excelPath;
 		} else {
 			saveParentPath = FileOperate.getParentPathNameWithSep(excelPath);
-			savePrefix = FileOperate.getFileName(excelPath);
+			savePrefix = FileOperate.getFileName(excelPath) + ".";
 		}
 		String saveExcelPrefix;
 		if (excelPath.endsWith("\\") || excelPath.endsWith("/")) {
 			saveExcelPrefix = excelPath + getResultBaseTitle() + ".xlsx";
 		} else {
-			saveExcelPrefix = FileOperate.changeFilePrefix(excelPath, getResultBaseTitle() + "_", "xlsx");
+			saveExcelPrefix = FileOperate.changeFileSuffix(excelPath, "." + getResultBaseTitle(), "xlsx");
 		}
 		setSaveExcelPrefix(saveExcelPrefix);
 	}
@@ -89,10 +90,10 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 	}
 	
 	public String getSavePicPvalueName(String prefix) {
-		return FileOperate.addSep(getSaveParentPath()) + "Path-Analysis-Log2P_" + prefix + "_" + savePrefix + ".png";
+		return FileOperate.addSep(getSaveParentPath()) + savePrefix + "Path-Analysis-Log2P."  + prefix + ".png";
 	}
 	public String getSavePicEnrichmentName(String prefix) {
-		return FileOperate.addSep(getSaveParentPath()) + "Path-Analysis-Enrichment_" + prefix + "_" + savePrefix + ".png";
+		return FileOperate.addSep(getSaveParentPath()) + savePrefix + "Path-Analysis-Enrichment." + prefix + ".png";
 	}
 	@Override
 	protected void clear() {
