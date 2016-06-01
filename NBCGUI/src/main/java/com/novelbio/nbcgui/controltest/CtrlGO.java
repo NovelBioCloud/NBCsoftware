@@ -34,6 +34,7 @@ public class CtrlGO extends CtrlGOPath {
 	 * @param goAlgorithm
 	 */
 	public void setGoAlgorithm(GoAlgorithm goAlgorithm) {
+		this.goAlgorithm = goAlgorithm;
 		if (goAlgorithm != GoAlgorithm.novelgo) {
 			functionTest = FunctionTest.getInstance(FunctionTest.FUNCTION_GO_ELIM);
 			((ElimGOFunTest) functionTest).setAlgorithm(goAlgorithm);
@@ -80,9 +81,18 @@ public class CtrlGO extends CtrlGOPath {
 	@Override
 	protected void copeFile(String prix, String excelPath) {
 		if (goAlgorithm != GoAlgorithm.novelgo) {
-			String goMapFileSource = FileOperate.changeFileSuffix(PathDetail.getRworkspace() + "topGO/tGOall_elim_10_def.pdf", "_"+prix, null);
-			String goMapFileTargetName = FileOperate.changeFileSuffix(excelPath, "." + prix + ".GoMap", "pdf");
-			FileOperate.moveFile(goMapFileSource, goMapFileTargetName, true);
+			String goMapFileSource = ((ElimGOFunTest)functionTest).getTopGoPdfFile();
+			excelPath = FileOperate.changeFilePrefix(excelPath, prix + ".", null);
+			String goMapFileTargetName = FileOperate.changeFileSuffix(excelPath, ".GoMap", "pdf");
+			FileOperate.moveFile(true, goMapFileSource, goMapFileTargetName);
+			
+			String goScriptSource = ((ElimGOFunTest)functionTest).getTopGoScript();
+			String scriptPath = FileOperate.getPathName(excelPath) + "script/";
+			FileOperate.createFolders(scriptPath);
+			String scriptName = FileOperate.getFileName(excelPath);
+			String goScriptTarget = FileOperate.getPathName(excelPath) + "script/" + scriptName;
+			goScriptTarget = FileOperate.changeFileSuffix(goScriptTarget, "." + goAlgorithm, "R");
+			FileOperate.moveFile(true, goScriptSource, goScriptTarget);
 		}
 	}
 	

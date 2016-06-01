@@ -88,25 +88,25 @@ public class CtrlRfamStatistics implements IntCmdSoft {
 			expRfamClass.addAllReads(rfamStatistic.getAllReadsNum());
 			expRfamID.addAllReads(rfamStatistic.getAllReadsNum());
 			
-			expRfamID.writeFile(false, outTmp + TitleFormatNBC.Samples.toString() + prefix2Fq[0] + "_RfamID.txt", EnumExpression.Ratio);
-			expRfamClass.writeFile(false, outTmp + TitleFormatNBC.Samples.toString() + prefix2Fq[0] + "_RfamClass.txt", EnumExpression.Ratio);
+			expRfamID.writeFile(false, outTmp + TitleFormatNBC.Samples.toString() + prefix2Fq[0] + ".RfamID.txt", EnumExpression.Ratio);
+			expRfamClass.writeFile(false, outTmp + TitleFormatNBC.Samples.toString() + prefix2Fq[0] + ".RfamClass.txt", EnumExpression.Ratio);
 			if (testReadsNum > 0) {
 				lsFileTobeDelete.add(fastq);
 			}
 			lsFileTobeDelete.add(out);
 		}
 		List<String[]> lsResult = samMapRate.getLsResult();
-		TxtReadandWrite txtWrite = new TxtReadandWrite(outPath + "Rfam_Map_Statistics.txt", true);
+		TxtReadandWrite txtWrite = new TxtReadandWrite(outPath + "Rfam.Map.Statistics.txt", true);
 		txtWrite.ExcelWrite(lsResult);
 		txtWrite.close();
-		expRfamID.writeFile(true, outPath + "Rfam_ID_Statistics.txt", EnumExpression.Ratio);
-		expRfamClass.writeFile(true, outPath + "Rfam_Class_Statistics.txt.txt", EnumExpression.Ratio);
+		expRfamID.writeFile(true, outPath + "Rfam.ID.Statistics.txt", EnumExpression.Ratio);
+		expRfamClass.writeFile(true, outPath + "Rfam.Class.Statistics.txt.txt", EnumExpression.Ratio);
 	}
 	
 	private String getSampleFq(String fastqFile) {
 		String samplingFq = outPath + TitleFormatNBC.TmpMapping.toString() + FileOperate.getSepPath() + FileOperate.getFileName(fastqFile);
 		FileOperate.createFolders(FileOperate.getPathName(samplingFq));
-		samplingFq = FileOperate.changeFileSuffix(samplingFq,  "_sampling", "fastq|fq", "fq.gz");
+		samplingFq = FileOperate.changeFileSuffix(samplingFq,  ".sampling", "fastq|fq", "fq.gz");
 		if (isUseOldResult && FileOperate.isFileExistAndBigThanSize(samplingFq, 0)) {
 			return samplingFq;
 		}
