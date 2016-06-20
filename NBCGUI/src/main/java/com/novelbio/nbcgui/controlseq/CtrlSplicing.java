@@ -341,6 +341,8 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			mapPrefix2LsBam.put(bam2Prefix[1], bam2Prefix[0]);
 		}
 	}
+	
+	/** 三列，treat，ctrl，outprefix */
 	public void setLsCompareGroup(List<String[]> lsCompareGroup) {
 		this.lsCompareGroup = lsCompareGroup;
 	}
@@ -424,6 +426,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	public void run() {
 		for (String[] comparePrefix : lsCompareGroup) {
 			String treat = comparePrefix[0], ctrl = comparePrefix[1];
+			String outprefix = comparePrefix.length > 2 ?comparePrefix[2] : treat + "vs" + ctrl;
 			if (!mapPrefix2LsBam.containsKey(treat)) {
 				throw new ExceptionNullParam("No Group Name: " + treat);
 			}
@@ -449,7 +452,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			for (String bamFile : lsCtrlBam) {
 				exonJunction.addBamSorted(ctrl, bamFile);
 			}
-			exonJunction.setCompareGroups(treat, ctrl);
+			exonJunction.setCompareGroups(treat, ctrl, outprefix);
 			exonJunction.setResultFile(outFile);
 			exonJunction.setRunGetInfo(this);
 			
