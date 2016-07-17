@@ -1,8 +1,12 @@
 package com.novelbio.nbcgui.controltools;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import com.google.common.collect.Lists;
 import com.novelbio.analysis.tools.compare.CombineTab;
 import com.novelbio.base.StringOperate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
@@ -47,6 +51,7 @@ public class CtrlCombFile {
 		}
 		combineTab.setColCompareOverlapID(lsColID);
 	}
+	
 	/**
 	 *  获得每个文件名, 对于每个文件，设定它的ID列
 	 *  可以连续不断的设定
@@ -58,12 +63,61 @@ public class CtrlCombFile {
 		if (StringOperate.isRealNull(colStrDetail) || colStrDetail.trim().equals("0")) {
 			colStrDetail = "";
 		}
-		ArrayList<String[]> lsResult = PatternOperate.getPatLoc(colStrDetail, "\\d+", false);
-		int[] colDetail = new int[lsResult.size()];
-		for (int i = 0; i < colDetail.length; i++) {
-			colDetail[i] = Integer.parseInt(lsResult.get(i)[0]);
+		List<Integer> lsCols = getLsIntegers(colStrDetail);		
+		combineTab.setColExtractDetail(condTxt, codName, lsCols);
+	}
+	
+	protected static List<Integer> getLsIntegers(String colInfo) {
+		if (StringOperate.isRealNull(colInfo)) {
+			return Lists.newArrayList(0);
 		}
-		combineTab.setColExtractDetail(condTxt, codName, colDetail);
+		colInfo = colInfo.replace(",", " ").replace(";", " ");
+		
+		String[] ss = colInfo.split(" +");
+		Set<Integer> setCols = new LinkedHashSet<>();
+		for (String colTmp : ss) {
+			if (StringOperate.isRealNull(colTmp)) {
+				continue;
+			}
+			colTmp = colTmp.trim();
+			if (colTmp.contains("-")) {
+				setCols.addAll(getLsSequenceNum(colTmp));
+			} else {
+				try {
+					setCols.add(Integer.parseInt(colTmp));
+				} catch (Exception e) {
+					throw new RuntimeException("cannot contain " + colTmp);
+				}
+			}
+		}
+		return new ArrayList<>(setCols);
+	}
+	
+	private static List<Integer> getLsSequenceNum(String colSeq) {
+		String[] ss = colSeq.trim().split("-");
+		if (ss.length > 2) {
+			throw new RuntimeException("cannot contain " + colSeq);
+		}
+		int start = 0, end = 0;
+		try {
+			start = Integer.parseInt(ss[0]);
+			end = Integer.parseInt(ss[1]);
+		} catch (Exception e) {
+			throw new RuntimeException("cannot contain " + colSeq);
+		}
+		
+		List<Integer> lsCols = new ArrayList<>();
+		
+		if (start <= end) {
+			for (int i = start; i <= end; i++) {
+				lsCols.add(i);
+			}
+		} else {
+			for (int i = start; i >= end; i--) {
+				lsCols.add(i);
+			}
+		}
+		return lsCols;
 	}
 	
 	public void output() {

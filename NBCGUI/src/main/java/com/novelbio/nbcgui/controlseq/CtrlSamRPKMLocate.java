@@ -167,6 +167,12 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		this.isCountNCrna = isCountNCRNA;
 		this.isJustUseUniqueMappedReads = isJustUseUniqueMappedReads;
 	}
+	public void setIsGeneStructureStatistics(boolean isGeneStructureStatistics) {
+		this.isGeneStructureStatistics = isGeneStructureStatistics;
+	}
+	public void setIsSamStatistics(boolean isSamStatistics) {
+		this.isSamStatistics = isSamStatistics;
+	}
 	public void setTssRange(int[] tss) {
 		this.tss = tss;
 	}
