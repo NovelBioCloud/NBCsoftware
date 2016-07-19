@@ -19,8 +19,11 @@ import com.novelbio.analysis.seq.mapping.MapLibrary;
 import com.novelbio.analysis.seq.sam.AlignSeqReading;
 import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.analysis.seq.sam.SamFileStatistics;
+import com.novelbio.base.ExceptionNbcParamError;
 import com.novelbio.base.ExceptionNullParam;
+import com.novelbio.base.StringOperate;
 import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.database.domain.geneanno.SpeciesFile;
 import com.novelbio.database.domain.information.SoftWareInfo;
 import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
 import com.novelbio.database.model.species.Species;
@@ -29,15 +32,12 @@ import com.novelbio.database.model.species.Species;
 @Scope("prototype")
 public class CtrlDNAMapping implements IntCmdSoft {
 	private static final Logger logger = Logger.getLogger(CtrlDNAMapping.class);
-	public static final int MAP_TO_CHROM = 8;
-	public static final int MAP_TO_REFSEQ_ALL_ISO = 4;
-	public static final int MAP_TO_REFSEQ_LONGEST_ISO = 2;
 	
 	private String outFilePrefix = "";
 	
 	List<String> lsCmd = new ArrayList<>();
 	private Map<String, List<List<String>>> mapPrefix2LsFastq;
-	MapLibrary libraryType = MapLibrary.SingleEnd;
+	MapLibrary libraryType = MapLibrary.PairEnd;
 	int gapLen = 5;
 	double mismatch = 2;
 	int sensitive = MapBowtie2.Sensitive_Sensitive;
@@ -46,7 +46,7 @@ public class CtrlDNAMapping implements IntCmdSoft {
 	boolean isNeedSort = false;
 	String chrIndexFile;
 	Species species;
-	int map2Index = MAP_TO_CHROM;
+	int map2Index = Species.CHROM;
 	
 	SoftWare softMapping = SoftWare.bwa_aln;
 	
@@ -214,16 +214,11 @@ public class CtrlDNAMapping implements IntCmdSoft {
 	
 	public static String getChrFile(String chrFile, Species species, SoftWare softMapping, int map2Index) {
 		String chrFileResult = chrFile;
-		if (species == null || species.getTaxID() == 0) {
-			return chrFileResult;
-		} else {
-			if (map2Index == MAP_TO_CHROM) {
-				chrFileResult = species.getIndexChr(softMapping);
-			} else if (map2Index == MAP_TO_REFSEQ_ALL_ISO) {
-				chrFileResult = species.getIndexRef(softMapping, true);
-			} else if (map2Index == MAP_TO_REFSEQ_LONGEST_ISO) {
-				chrFileResult = species.getIndexRef(softMapping, false);
+		if (StringOperate.isRealNull(chrFileResult)) {
+			if (species == null || species.getTaxID() == 0) {
+				throw new ExceptionNbcParamError("species is not exist and chrSeq file is also not exist!");
 			}
+			chrFileResult = species.getIndexRef(softMapping, map2Index);
 		}
 		return chrFileResult;
 	}
@@ -244,11 +239,7 @@ public class CtrlDNAMapping implements IntCmdSoft {
 	}
 	
 	public static HashMap<String, Integer> getMapStr2Index() {
-		HashMap<String, Integer> mapStr2Index = new HashMap<String, Integer>();
-		mapStr2Index.put("chromosome", MAP_TO_CHROM);
-		mapStr2Index.put("refseq", MAP_TO_REFSEQ_ALL_ISO);
-		mapStr2Index.put("refseq Longest Iso", MAP_TO_REFSEQ_LONGEST_ISO);
-		return mapStr2Index;
+		return Species.getMapStr2Index();
 	}
 
 }

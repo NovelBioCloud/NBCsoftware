@@ -52,7 +52,7 @@ public class CtrlRNAmap implements IntCmdSoft {
 	String outPath;
 	
 	/** 将没有比对上的reads用bowtie2再次比对上去 */
-	boolean mapUnmapedReads = true;
+	boolean mapUnmapedReads = false;
 	
 	/** 仅供 hisat2 使用 */
 	int alignNum = 5;
@@ -279,6 +279,7 @@ public class CtrlRNAmap implements IntCmdSoft {
 			mapRNA.setRefIndex(species.getIndexRef(softWare, true));
 		} else if (softWare == SoftWare.mapsplice) {
 			mapRNA.setRefIndex(species.getIndexChr(softWare));
+			((MapSplice)mapRNA).setRefIndexFolder(species.getChromSeqSepFolder());
 			((MapSplice)mapRNA).setMapUnmapedReads(mapUnmapedReads, indexUnmap);
 		} else if (softWare == SoftWare.hisat2) {
 			mapRNA.setRefIndex(species.getIndexChr(softWare));

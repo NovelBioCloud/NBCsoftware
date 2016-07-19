@@ -250,7 +250,7 @@ public class GuiFastQFanwei extends JPanel {
 					ctrlDNAMapping.setLibraryType(cmbLibrary.getSelectedValue());
 					ctrlDNAMapping.setSoftMapping(cmbMappingSoftware.getSelectedValue());
 					Species species = speciesLayOut.getSelectSpecies();
-					ctrlDNAMapping.setSpecies(species, CtrlDNAMapping.MAP_TO_CHROM);
+					ctrlDNAMapping.setSpecies(species, Species.CHROM);
 					ctrlDNAMapping.setOutFilePrefix(outFilePrefix);
 //					ctrlDNAMapping.setOutFilePrefix(txtSavePathAndPrefix.getText());
 					ctrlDNAMapping.running();
