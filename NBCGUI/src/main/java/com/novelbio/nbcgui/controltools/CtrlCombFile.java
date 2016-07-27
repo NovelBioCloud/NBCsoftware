@@ -63,61 +63,8 @@ public class CtrlCombFile {
 		if (StringOperate.isRealNull(colStrDetail) || colStrDetail.trim().equals("0")) {
 			colStrDetail = "";
 		}
-		List<Integer> lsCols = getLsIntegers(colStrDetail);		
+		List<Integer> lsCols = CombineTab.getLsIntegers(colStrDetail);		
 		combineTab.setColExtractDetail(condTxt, codName, lsCols);
-	}
-	
-	protected static List<Integer> getLsIntegers(String colInfo) {
-		if (StringOperate.isRealNull(colInfo)) {
-			return Lists.newArrayList(0);
-		}
-		colInfo = colInfo.replace(",", " ").replace(";", " ");
-		
-		String[] ss = colInfo.split(" +");
-		Set<Integer> setCols = new LinkedHashSet<>();
-		for (String colTmp : ss) {
-			if (StringOperate.isRealNull(colTmp)) {
-				continue;
-			}
-			colTmp = colTmp.trim();
-			if (colTmp.contains("-")) {
-				setCols.addAll(getLsSequenceNum(colTmp));
-			} else {
-				try {
-					setCols.add(Integer.parseInt(colTmp));
-				} catch (Exception e) {
-					throw new RuntimeException("cannot contain " + colTmp);
-				}
-			}
-		}
-		return new ArrayList<>(setCols);
-	}
-	
-	private static List<Integer> getLsSequenceNum(String colSeq) {
-		String[] ss = colSeq.trim().split("-");
-		if (ss.length > 2) {
-			throw new RuntimeException("cannot contain " + colSeq);
-		}
-		int start = 0, end = 0;
-		try {
-			start = Integer.parseInt(ss[0]);
-			end = Integer.parseInt(ss[1]);
-		} catch (Exception e) {
-			throw new RuntimeException("cannot contain " + colSeq);
-		}
-		
-		List<Integer> lsCols = new ArrayList<>();
-		
-		if (start <= end) {
-			for (int i = start; i <= end; i++) {
-				lsCols.add(i);
-			}
-		} else {
-			for (int i = start; i >= end; i--) {
-				lsCols.add(i);
-			}
-		}
-		return lsCols;
 	}
 	
 	public void output() {

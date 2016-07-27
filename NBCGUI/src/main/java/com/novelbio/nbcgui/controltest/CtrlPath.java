@@ -90,7 +90,7 @@ public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {
 	}
 	
 	public String getSavePicPvalueName(String prefix) {
-		return FileOperate.addSep(getSaveParentPath()) + savePrefix + "Path-Analysis-Log2P."  + prefix + ".png";
+		return FileOperate.addSep(getSaveParentPath()) + savePrefix + "Path-Analysis-Log10P."  + prefix + ".png";
 	}
 	public String getSavePicEnrichmentName(String prefix) {
 		return FileOperate.addSep(getSaveParentPath()) + savePrefix + "Path-Analysis-Enrichment." + prefix + ".png";
