@@ -251,10 +251,12 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 		Set<String> setResultFile = new HashSet<>();
 		
 		ExcelOperate excelResult = new ExcelOperate(saveExcelPrefix);
+		excelResult.setWriteSheetToTxt(true);
 		String excelAllPath = FileOperate.changeFileSuffix(saveExcelPrefix, "_All",null);
 		ExcelOperate excelResultAll = null;
 		if (mapPrefix2SetAccID.keySet().contains(All) && mapPrefix2SetAccID.size() > 0) {
 			excelResultAll = new ExcelOperate(excelAllPath);
+			excelResultAll.setWriteSheetToTxt(true);
 		}
 		for (String prefix : mapPrefix2SetAccID.keySet()) {
 			FunctionTest functionTest = getResult(prefix, mapPrefix2SetAccID.get(prefix));
@@ -331,6 +333,7 @@ public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
 				continue;
 			}
 			ExcelOperate excelResult = new ExcelOperate(excelPathOut);
+			excelResult.setWriteSheetToTxt(true);
 			saveExcelCluster(prefix, functionTest, excelResult);
 			excelResult.close();
 			copeFile(prefix, saveExcelPrefix);

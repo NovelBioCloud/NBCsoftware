@@ -157,13 +157,12 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		this.lsReadFile = lsReadFile;
 	}
 	@Override
-	public void setIsCountRPKM(boolean isCountExpression, StrandSpecific strandSpecific, boolean isCountFPKM, boolean isCountNCRNA, boolean isJustUseUniqueMappedReads) {
+	public void setIsCountRPKM(boolean isCountExpression, StrandSpecific strandSpecific, boolean isCountNCRNA, boolean isJustUseUniqueMappedReads) {
 		this.isCountExpression = isCountExpression;
 		if (strandSpecific == null) {
 			throw new ExceptionNullParam("No Param StrandSpecific");
 		}
 		this.strandSpecific = strandSpecific;
-		this.isCalculateFPKM = isCountFPKM;
 		this.isCountNCrna = isCountNCRNA;
 		this.isJustUseUniqueMappedReads = isJustUseUniqueMappedReads;
 	}
@@ -261,7 +260,6 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			List<AlignmentRecorder> lsAlignmentRecorders = new ArrayList<AlignmentRecorder>();
 			if (isCountExpression && gffChrAbs.getGffHashGene() != null) {
 				rpkMcomput.setAndAddCurrentCondition(prefix);
-				rpkMcomput.setCalculateFPKM(isCalculateFPKM);
 				rpkMcomput.setUniqueMapped(isJustUseUniqueMappedReads);
 				if (!rpkMcomput.isExistTmpResultAndReadExp(resultExpPrefix, isCountNCrna)) {
 					lsAlignmentRecorders.add(rpkMcomput);
@@ -459,7 +457,6 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		for (String prefix : setPrefix) {
 			if (isCountExpression && gffChrAbs.getGffHashGene() != null) {
 				rpkMcomput.setAndAddCurrentCondition(prefix);
-				rpkMcomput.setCalculateFPKM(isCalculateFPKM);
 				rpkMcomput.setUniqueMapped(isJustUseUniqueMappedReads);
 				if (!rpkMcomput.isExistTmpResultAndReadExp(resultExpPrefix, isCountNCrna)) {
 					throw new ExceptionSamError(prefix);
@@ -473,7 +470,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 				String tmpFile = resultSamPrefix + prefix;
 				tmpFile = SamFileStatistics.getSaveExcel(tmpFile);
 				if (!FileOperate.isFileExistAndBigThanSize(tmpFile, 0)) {
-					throw new ExceptionSamError(prefix);
+					throw new ExceptionSamError(prefix + "error, file " + tmpFile + " is not exist or size is 0.");
 				}
 				samFileStatistics.readTable(tmpFile);
 				mapPrefix2Statistics.put(prefix, samFileStatistics);
