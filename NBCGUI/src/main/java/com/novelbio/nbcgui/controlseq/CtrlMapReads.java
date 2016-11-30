@@ -6,7 +6,7 @@ import javax.swing.JButton;
 
 import com.novelbio.analysis.seq.AlignSeq;
 import com.novelbio.analysis.seq.FormatSeq;
-import com.novelbio.analysis.seq.bed.BedSeq;
+import com.novelbio.analysis.seq.bed.BedFile;
 import com.novelbio.analysis.seq.genome.mappingOperate.EnumMapNormalizeType;
 import com.novelbio.analysis.seq.genome.mappingOperate.MapReads;
 import com.novelbio.analysis.seq.genome.mappingOperate.MapReadsAbs;
@@ -35,7 +35,7 @@ public class CtrlMapReads implements RunGetInfo<MapReadsAbs.MapReadsProcessInfo>
 		FormatSeq formatSeq = FormatSeq.getFileType(bedFileName);
 		AlignSeq alignSeq = null;
 		if (formatSeq == FormatSeq.BED) {
-			alignSeq = new BedSeq(bedFileName);
+			alignSeq = new BedFile(bedFileName);
 		} else if (formatSeq == FormatSeq.SAM || formatSeq == FormatSeq.BAM) {
 			alignSeq = new SamFile(bedFileName);
 		}

@@ -1,7 +1,5 @@
 package com.novelbio.nbcgui.GUI;
 
-import htsjdk.samtools.SAMFileHeader.SortOrder;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -21,7 +19,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.novelbio.analysis.seq.bed.BedSeq;
+import com.novelbio.analysis.seq.bed.BedFile;
 import com.novelbio.analysis.seq.sam.AlignSamReading;
 import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.analysis.seq.sam.SamToBamSort;
@@ -32,6 +30,8 @@ import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.database.model.species.Species;
 import com.novelbio.database.model.species.Species.EnumSpeciesType;
+
+import htsjdk.samtools.SAMFileHeader.SortOrder;
 
 public class GuiSamToBed extends JPanel {
 	private static final long serialVersionUID = 2596513239050914728L;
@@ -468,7 +468,7 @@ public class GuiSamToBed extends JPanel {
 		samToBed.setUniqueRandomSelectOneRead(chckbxNonUniqueMapping.isSelected());
 		alignSamReading.addAlignmentRecorder(samToBed);
 		alignSamReading.run();
-		BedSeq bedSeq = samToBed.getBedSeq();
+		BedFile bedSeq = samToBed.getBedFile();
 		bedSeq.close();
 	}
 
@@ -586,7 +586,7 @@ public class GuiSamToBed extends JPanel {
 	}
 	
 	private void convertBedFile(String bedFile) {
-		BedSeq bedSeq = new BedSeq(bedFile);
+		BedFile bedSeq = new BedFile(bedFile);
 		if (chckbxExtend.isSelected()) {
 			int extendLen = 250;
 			try { extendLen = Integer.parseInt(txtExtend.getText()); } catch (Exception e2) { }

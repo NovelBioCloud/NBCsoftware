@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.novelbio.analysis.seq.AlignSeq;
 import com.novelbio.analysis.seq.FormatSeq;
-import com.novelbio.analysis.seq.bed.BedSeq;
+import com.novelbio.analysis.seq.bed.BedFile;
 import com.novelbio.analysis.seq.rnaseq.Align2DGEvalue;
 import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.base.fileOperate.FileOperate;
@@ -24,7 +24,7 @@ public class CtrlDGEgetvalue {
 		ArrayList<String> lsTitles = new ArrayList<String>();
 		for (String[] strings : lsFile2Prefix) {
 			if (formatSeq == FormatSeq.BED) {
-				lsAlignSeqs.add(new BedSeq(strings[0]));
+				lsAlignSeqs.add(new BedFile(strings[0]));
 			}
 			else if (formatSeq == FormatSeq.SAM || formatSeq == formatSeq.BAM) {
 				lsAlignSeqs.add(new SamFile(strings[0]));

@@ -2,7 +2,6 @@ package com.novelbio.nbcgui.controlseq;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -13,11 +12,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.HashMultimap;
 import com.novelbio.GuiAnnoInfo;
 import com.novelbio.analysis.seq.AlignSeq;
 import com.novelbio.analysis.seq.FormatSeq;
-import com.novelbio.analysis.seq.bed.BedSeq;
+import com.novelbio.analysis.seq.bed.BedFile;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.genome.GffChrStatistics;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
@@ -385,7 +383,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 					}
 				}				
 			} else if (formatSeq == FormatSeq.BED) {
-				alignSeq = new BedSeq(fileName2Prefix[0]);
+				alignSeq = new BedFile(fileName2Prefix[0]);
 				alignSeqReading = new AlignSeqReading(alignSeq);
 			} else {
 				continue;

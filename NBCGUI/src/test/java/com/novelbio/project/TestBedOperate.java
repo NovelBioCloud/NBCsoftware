@@ -7,7 +7,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.novelbio.analysis.seq.bed.BedSeq;
+import com.novelbio.analysis.seq.bed.BedFile;
 
 public class TestBedOperate {
 	Map<String, String[]> mapParams;
@@ -29,7 +29,7 @@ public class TestBedOperate {
 	public void goRun(){
 		String[] inputFiles = mapParams.get("inputData");
 		for (int i = 0; i < inputFiles.length; i++) {
-			BedSeq bedSeq = new BedSeq(inputFiles[i]);
+			BedFile bedSeq = new BedFile(inputFiles[i]);
 			if (mapParams.get("extend") != null) {
 				int extendLen = Integer.parseInt(mapParams.get("extendValue")[0]);
 				if (extendLen > 0) {

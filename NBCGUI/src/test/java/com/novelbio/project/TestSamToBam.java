@@ -11,13 +11,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.novelbio.analysis.seq.bed.BedSeq;
+import com.novelbio.analysis.seq.bed.BedFile;
 import com.novelbio.analysis.seq.sam.AlignSamReading;
 import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.analysis.seq.sam.SamToBed;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.model.species.Species;
-import com.novelbio.nbcgui.controlseq.CtrlDNAMapping;
 
 public class TestSamToBam {
 	Map<String, String[]> mapParams;
@@ -187,7 +186,7 @@ public class TestSamToBam {
 		samToBed.setUniqueRandomSelectOneRead(mapParams.get("toBedOptionNoneUnique") != null);
 		alignSamReading.addAlignmentRecorder(samToBed);
 		alignSamReading.run();
-		BedSeq bedSeq = samToBed.getBedSeq();
+		BedFile bedSeq = samToBed.getBedFile();
 		bedSeq.close();
 	}
 	

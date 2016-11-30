@@ -19,7 +19,7 @@ import javax.swing.JTextField;
 
 import com.novelbio.analysis.seq.AlignSeq;
 import com.novelbio.analysis.seq.FormatSeq;
-import com.novelbio.analysis.seq.bed.BedSeq;
+import com.novelbio.analysis.seq.bed.BedFile;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.analysis.seq.mirna.CtrlMiRNApipeline;
 import com.novelbio.analysis.seq.sam.SamFile;
@@ -339,7 +339,7 @@ public class GuiMiRNASeq extends JPanel{
 				for (String[] strings : lsInfo) {
 					AlignSeq alignSeq = null;
 					if (FormatSeq.getFileType(strings[0]) == FormatSeq.BED) {
-						alignSeq = new BedSeq(strings[0]);
+						alignSeq = new BedFile(strings[0]);
 					} else if (FormatSeq.getFileType(strings[0]) == FormatSeq.BAM || FormatSeq.getFileType(strings[0]) == FormatSeq.SAM) {
 						alignSeq = new SamFile(strings[0]);
 					}
