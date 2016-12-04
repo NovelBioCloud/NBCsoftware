@@ -300,8 +300,8 @@ public class CtrlFastQ {
 				//文件存在则跳过
 				if (!FileOperate.isFileExistAndBigThanSize(fileName[0], 10)) {
 					isRunFilter = true;
+					ctrlFastQfilter.setFastQLRfilteredOut(createCombineFastq(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR, isOutInterleaved));
 				}
-				ctrlFastQfilter.setFastQLRfilteredOut(createCombineFastq(fastQfilter.isNeedFilter(), outFilePrefix, prefix, lsFastQLR, isOutInterleaved));
 			} else {
 				String filePic = CtrlFastQfilter.getFastQCPicName(outFilePrefix + prefix);
 				//文件存在则跳过
