@@ -458,9 +458,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			
 			exonJunction.setCombine(isCombine);
 			exonJunction.setUseUniqueMappedReads(isUniqueMappedReads);
-			if (isReconstruceIso) {
-				exonJunction.setgenerateNewIso(true);
-			}
+			exonJunction.setgenerateNewIso(isReconstruceIso);
 			System.out.println(exonJunction.getFileLength());
 			long fileLength = exonJunction.getFileLength();
 			
