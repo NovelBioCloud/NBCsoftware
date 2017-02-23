@@ -218,6 +218,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	
 	public void run() {
 		if (!isCountExpression && !isSamStatistics && !isGeneStructureStatistics) {
+			logger.info("because isCountExpression and isSamStatistics and isGeneStructureStat are all False, so without running, just quit.");
 			return;
 		}
 		FileOperate.createFolders(FileOperate.getPathName(resultSamPrefix));
@@ -274,6 +275,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			}
 			
 			for (AlignSeqReading alignSeqReading : lsAlignSeqReadings) {
+				logger.info("reading " + alignSeqReading.getFirstSamFile().getFileName());
 				alignSeqReading.setReadInfo(0L, readByte);
 				alignSeqReading.addColAlignmentRecorder(lsAlignmentRecorders);
 				alignSeqReading.setRunGetInfo(this);
