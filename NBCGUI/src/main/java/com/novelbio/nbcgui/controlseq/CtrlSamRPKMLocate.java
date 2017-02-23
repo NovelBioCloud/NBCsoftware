@@ -276,10 +276,16 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			
 			for (AlignSeqReading alignSeqReading : lsAlignSeqReadings) {
 				logger.info("reading " + alignSeqReading.getFirstSamFile().getFileName());
-				alignSeqReading.setReadInfo(0L, readByte);
-				alignSeqReading.addColAlignmentRecorder(lsAlignmentRecorders);
-				alignSeqReading.setRunGetInfo(this);
-				alignSeqReading.run();
+				try {
+					alignSeqReading.setReadInfo(0L, readByte);
+					alignSeqReading.addColAlignmentRecorder(lsAlignmentRecorders);
+					alignSeqReading.setRunGetInfo(this);
+					alignSeqReading.run();
+				} catch (Exception e) {
+					logger.error("error on: " + alignSeqReading.getFirstSamFile().getFileName(), e);
+					throw e;
+				}
+
 				logger.info("finish reading " + alignSeqReading.getFirstSamFile().getFileName());
 				readByte = alignSeqReading.getReadByte();
 			}
