@@ -247,7 +247,7 @@ public class GuiCuffdiff extends JPanel {
 			cuffcompare.setSeqFasta(species.getChromSeq());
 		}
 		String refGTF = txtGtfCuffdiff.getText();
-		if (FileOperate.isFileExist(refGTF)) {
+		if (FileOperate.isFileExistAndNotDir(refGTF)) {
 			cuffcompare.setRefGtfFile(refGTF);
 		}
 		

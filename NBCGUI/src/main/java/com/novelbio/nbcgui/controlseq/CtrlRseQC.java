@@ -156,7 +156,7 @@ public class CtrlRseQC implements IntCmdSoft {
 	
 	public void run() {
 		lsCmd.clear();
-		if (FileOperate.isFileExist(gtfFile)) {
+		if (FileOperate.isFileExistAndNotDir(gtfFile)) {
 			gffHashGene = new GffHashGene(GffType.GTF, gtfFile);
 			String bedFile = FileOperate.getPathName(outPath) + FileOperate.getFileName(gtfFile);
 			bedFile = FileOperate.changeFileSuffix(bedFile, "_toBed", "bed");

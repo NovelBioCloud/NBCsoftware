@@ -254,7 +254,7 @@ public class CtrlRNAmap implements IntCmdSoft {
 	
 	private void setRefFile() {
 		boolean isThrdPartIndex = false;
-		if (FileOperate.isFileExist(indexFile)) {
+		if (FileOperate.isFileExistAndNotDir(indexFile)) {
 			isThrdPartIndex = true;
 			mapRNA.setRefIndex(indexFile);
 			return;

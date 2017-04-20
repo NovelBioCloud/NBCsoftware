@@ -129,7 +129,7 @@ public class GuiToolsJpanel extends JPanel {
 					String fileName = strings[0].trim();
 					String filePrix = strings[1].trim();
 					String colID = strings[2].trim();
-					if (!FileOperate.isFileExist(fileName)) {
+					if (!FileOperate.isFileExistAndNotDir(fileName)) {
 						continue;
 					}
 					if (filePrix.equals("")) {

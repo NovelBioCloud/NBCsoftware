@@ -81,7 +81,7 @@ public class GuiSamToBam extends JPanel {
 				ArrayListMultimap<String, String> mapPrefix2FileName = ArrayListMultimap.create();
 				HashSet<String> setTmp = new HashSet<String>();
 				for (String[] strings : lsInfo) {
-					if (FileOperate.isFileExist(strings[0])) {
+					if (FileOperate.isFileExistAndNotDir(strings[0])) {
 						String prefix = getPrefix(strings[1], setTmp);
 						mapPrefix2FileName.put(prefix, strings[0]);
 					}

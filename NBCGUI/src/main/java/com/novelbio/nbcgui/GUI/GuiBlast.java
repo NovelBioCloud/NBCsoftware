@@ -75,7 +75,7 @@ public class GuiBlast extends JPanel implements GuiNeedOpenFile {
 			public void actionPerformed(ActionEvent e) {
 				String path = fileOpen.openFileName("txt", "");
 				textQueryFasta.setText(path);
-				if (FileOperate.isFileExist(path)) {
+				if (FileOperate.isFileExistAndNotDir(path)) {
 					queryType = SeqHash.getSeqType(path);
 				}
 				setCombBlastType();
@@ -93,7 +93,7 @@ public class GuiBlast extends JPanel implements GuiNeedOpenFile {
 			public void actionPerformed(ActionEvent e) {
 				String path = fileOpen.openFileName("txt", "");
 				textSubjectFasta.setText(path);
-				if (FileOperate.isFileExist(path)) {
+				if (FileOperate.isFileExistAndNotDir(path)) {
 					subjectType = SeqHash.getSeqType(path);
 				}
 				setCombBlastType();

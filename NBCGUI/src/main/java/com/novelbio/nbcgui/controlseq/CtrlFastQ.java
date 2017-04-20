@@ -256,7 +256,7 @@ public class CtrlFastQ {
 		List<String[]> lsSummary = getStatistics();
 		String totalExcelPath = outFilePrefix + "basicStatsAll.xls";
 		TxtReadandWrite txtWrite = null;
-		if (FileOperate.isFileExist(totalExcelPath)) {
+		if (FileOperate.isFileExistAndNotDir(totalExcelPath)) {
 			lsSummary.remove(0);
 		}else{
 			FileOperate.createFolders(FileOperate.getParentPathNameWithSep(totalExcelPath));

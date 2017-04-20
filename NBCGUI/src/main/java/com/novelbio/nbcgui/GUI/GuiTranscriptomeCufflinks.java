@@ -108,7 +108,7 @@ public class GuiTranscriptomeCufflinks extends JPanel {
 				ArrayList<String[]> lsSamFileName = scrollPaneSamBamFile.getLsDataInfo();
 				cufflinksGTF.setLsBamFile2Prefix(lsSamFileName);
 
-				if (chckbxModifythisRefGtf.isSelected() && FileOperate.isFileExist(txtRefGTF.getText())) {
+				if (chckbxModifythisRefGtf.isSelected() && FileOperate.isFileExistAndNotDir(txtRefGTF.getText())) {
 					cufflinksGTF.setGTFfile(txtRefGTF.getText());
 				} else {
 					Species species = guiSpeciesGff.getSelectSpecies();

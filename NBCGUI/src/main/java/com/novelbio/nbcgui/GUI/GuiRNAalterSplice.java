@@ -254,7 +254,7 @@ public class GuiRNAalterSplice extends JPanel implements GUIinfo {
 		GffHashGene gffHashGeneResult = null;
 
 		String gtfFile = txtGff.getText();
-		if (chkUseExternalGTF.isSelected() && FileOperate.isFileExist(gtfFile)) {
+		if (chkUseExternalGTF.isSelected() && FileOperate.isFileExistAndNotDir(gtfFile)) {
 			gffHashGeneResult = new GffHashGene(GffType.GTF, txtGff.getText());
 		} else {
 			Species species = guiLayeredPaneSpeciesVersionGff.getSelectSpecies();
