@@ -6,6 +6,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.collect.ArrayListMultimap;
 import com.novelbio.GuiAnnoInfo;
 import com.novelbio.analysis.ExceptionNBCsoft;
@@ -14,6 +17,7 @@ import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.rnaseq.ExonJunction;
 import com.novelbio.analysis.seq.sam.ExceptionSamError;
+import com.novelbio.analysis.seq.sam.ExceptionSamIndexError;
 import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.StringOperate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
@@ -24,6 +28,8 @@ import com.novelbio.nbcgui.GUIinfo;
 import com.novelbio.nbcgui.GUI.GUIanalysisCASH;
 
 public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
+	private static final Logger logger = LoggerFactory.getLogger(CtrlSplicing.class);
+	
 	GUIinfo guiRNAautoSplice;
 	GffHashGene gffHashGene;
 	SeqHash seqHash;
@@ -47,6 +53,8 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	int minIntronLen = 25;
 	
 	int newIsoReadsNum = 10;
+	
+	boolean runSepChr = true;
 	
 	public static void main(String[] args) {
 		if (args != null && args.length == 1 && args[0] != null 
@@ -172,9 +180,9 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 		ctrlSplicing.setLsBam2Prefix(lsBam2Prefix);
 		ctrlSplicing.setLsCompareGroup(lsCompare);
 		
-		ctrlSplicing.setGffHashGene(new GffHashGene(gtfFile));
 //		ctrlSplicing.setSeqHash(seqHash);
 		if (mapParam2Value.containsKey("Combine")) {
+			checkParam(mapParam2Value, "Combine");
 			String combine = mapParam2Value.get("Combine").toLowerCase();
 			if (combine.equals("true") || combine.equals("t")) {
 				ctrlSplicing.setCombine(true);
@@ -184,24 +192,42 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 		}
 
 		if (mapParam2Value.containsKey("minAnchorLen")) {
+			checkParam(mapParam2Value, "minAnchorLen");
+
 			int minAnchorLen = Integer.parseInt(mapParam2Value.get("minAnchorLen"));
 			if (minAnchorLen >= 0) {
 				ctrlSplicing.setminAnchorLen(minAnchorLen);
 			}
 		}
 		if (mapParam2Value.containsKey("minIntronLen")) {
+			checkParam(mapParam2Value, "minIntronLen");
+			
 			int minIntronLen = Integer.parseInt(mapParam2Value.get("minIntronLen"));
 			if (minIntronLen >= 0) {
 				ctrlSplicing.setMinIntronLen(minIntronLen);
 			}
 		}
 		if (mapParam2Value.containsKey("minJuncReadsForNewIso")) {
+			checkParam(mapParam2Value, "minJuncReadsForNewIso");
+
 			int minJuncReadsForNewIso = Integer.parseInt(mapParam2Value.get("minJuncReadsForNewIso"));
 			if (minJuncReadsForNewIso >= 0) {
 				ctrlSplicing.setNewIsoReadsNum(minJuncReadsForNewIso);
 			}
 		}
+		if (mapParam2Value.containsKey("runSepChr")) {
+			checkParam(mapParam2Value, "runSepChr");
+
+			String combine = mapParam2Value.get("runSepChr").toLowerCase();
+			if (combine.equals("true") || combine.equals("t")) {
+				ctrlSplicing.setRunSepChr(true);
+			} else if (combine.equals("false") || combine.equals("f")) {
+				ctrlSplicing.setRunSepChr(false);
+			}
+		}
 		if (mapParam2Value.containsKey("DisplayAllEvent")) {
+			checkParam(mapParam2Value, "DisplayAllEvent");
+
 			String combine = mapParam2Value.get("DisplayAllEvent").toLowerCase();
 			if (combine.equals("true") || combine.equals("t")) {
 				ctrlSplicing.setDisplayAllEvent(true);
@@ -211,6 +237,8 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 		}
 		
 		if (mapParam2Value.containsKey("SpliceCons")) {
+			checkParam(mapParam2Value, "SpliceCons");
+
 			String isReconstruct = mapParam2Value.get("SpliceCons").toLowerCase();
 			if (isReconstruct.equals("true") || isReconstruct.equals("t")) {
 				ctrlSplicing.setReconstructIso(true);
@@ -220,6 +248,8 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 		}
 		
 		if (mapParam2Value.containsKey("JuncAllSample")) {
+			checkParam(mapParam2Value, "JuncAllSample");
+
 			String juncNum = mapParam2Value.get("JuncAllSample");
 			int juncAllReadsNum =0;
 			try {
@@ -234,6 +264,8 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
             }
         }
 		if (mapParam2Value.containsKey("JuncOneGroup")) {
+			checkParam(mapParam2Value, "JuncOneGroup");
+
 			String juncNum = mapParam2Value.get("JuncOneGroup");
 			int juncSampleNum =0;
 			try {
@@ -248,6 +280,8 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
             }
         }
 		if (mapParam2Value.containsKey("FdrCutoff")) {
+			checkParam(mapParam2Value, "FdrCutoff");
+
 			String fdrCutoffStr = mapParam2Value.get("FdrCutoff");
 			double fdrCutoff = 0;
 			try {
@@ -265,6 +299,8 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 		}
 		
 		if (mapParam2Value.containsKey("StrandSpecific")) {
+			checkParam(mapParam2Value, "StrandSpecific");
+
 			String strand = mapParam2Value.get("StrandSpecific").toLowerCase();
 			if (strand.equals("f") || strand.toLowerCase().equals("f")) {
 				ctrlSplicing.setStrandSpecific(StrandSpecific.FIRST_READ_TRANSCRIPTION_STRAND);
@@ -272,14 +308,23 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 				ctrlSplicing.setStrandSpecific(StrandSpecific.SECOND_READ_TRANSCRIPTION_STRAND);
 			}
 		}
+		
 		ctrlSplicing.setOutFile(mapParam2Value.get("Output"));
-		try {
-			ctrlSplicing.run();
-		} catch (ExceptionSamError e) {
-			System.err.println("input sam file error " + e.getMessage());
-			throw e;
-        }
+		
+		logger.info("Start reading gtf file " + gtfFile);
+		ctrlSplicing.setGffHashGene(new GffHashGene(gtfFile));
+		logger.info("Finish reading gtf file " + gtfFile);
+		ctrlSplicing.run();
+	}
 	
+	private static void checkParam(Map<String, String> mapParam2Value, String param) {
+		String thisValue = mapParam2Value.get(param);
+		if (StringOperate.isRealNull(thisValue)) {
+			System.err.println("\n\n==========================================\n");
+			System.err.println("Warning, does not set parameter " + param+". Please check!");
+			System.err.println("\n==========================================\n");
+			System.exit(1);
+		}
 	}
 	
 	private static String getVersion() {
@@ -316,7 +361,9 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	public void setFdrCutoff(double fdrCutoff) {
 	    this.fdrCutoff = fdrCutoff;
     }
-	
+	public void setRunSepChr(boolean runSepChr) {
+		this.runSepChr = runSepChr;
+	}
 	public void setJuncAllReadsNum(int juncAllReadsNum) {
 	    this.juncAllReadsNum = juncAllReadsNum;
     }
@@ -446,6 +493,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			exonJunction.setRunGetInfo(this);
 			exonJunction.setJuncReadsNum(juncAllReadsNum, juncSampleReadsNum);
 			exonJunction.setIsLessMemory(memoryLow);
+			exonJunction.setRunSepChr(runSepChr);
 			for (String bamFile : lsTreatBam) {
 				exonJunction.addBamSorted(treat, bamFile);
 			}
@@ -459,8 +507,6 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			exonJunction.setCombine(isCombine);
 			exonJunction.setUseUniqueMappedReads(isUniqueMappedReads);
 			exonJunction.setgenerateNewIso(isReconstruceIso);
-			System.out.println(exonJunction.getFileLength());
-			long fileLength = exonJunction.getFileLength();
 			
 			Map<String, Long> mapChrId2Len = exonJunction.getMapChrId2Len();
 			ArrayList<Double> lsLevels = new ArrayList<Double>();
@@ -469,9 +515,18 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 				lsLevels.add((double)mapChrId2Len.get(chrId)/allLen);
 			}
 			setProgressBarLevelLs(lsLevels);
-			exonJunction.run();
-			if (!exonJunction.isFinishedNormal()) {
-				throw new ExceptionNBCsoft("Alternative Splicing Error:" + comparePrefix[0] + " vs " + comparePrefix[1], exonJunction.getException());
+			try {
+				exonJunction.running();
+			} catch (ExceptionSamIndexError e) {
+				String info = "\n\n==========================================\n"
+						+ e.getMessage()
+						+ "\nPlease try with \"--runSepChr False\" again."
+						+ "\n==========================================\n";
+				ExceptionSamIndexError exceptionSamIndexError = new ExceptionSamIndexError(info);
+				exceptionSamIndexError.setStackTrace(e.getStackTrace());
+				throw exceptionSamIndexError;
+			} catch (Exception e) {
+				throw new ExceptionNBCsoft("Alternative Splicing Error:" + comparePrefix[0] + " vs " + comparePrefix[1], e);
 			}
 		}
 		if (guiRNAautoSplice != null) {

@@ -1,5 +1,5 @@
 -----------------------------
-cash version 2.0.1
+cash version 2.0.2
 -----------------------------
 Usage: java -jar -Xmx10g cash.jar <options> --Case:prefix1 case.bam --Control:prefix2 Control.bam --GTF genes.gtf --Output outPath
 
@@ -55,3 +55,5 @@ Options:
 	The gaps between RNA-Seq reads with length > 25bp is considered to be intron
 --minJuncReadsForNewIso/-J int, default is 10
 	Min junction reads for reconstructing AS site
+--runSepChr True/False, default is True
+	In order to save the memory， cash detect splicing events for each chromosome seperately. It means cash detect one chromosome then clean the memory and detect another chromosome. So it needs index files of input bam files. However, some species such as Hordeum vulgare, have very long chromosome and now htsjdk(v2.9.0) can hardly support the index. So inorder to run cash normally, you can set this param to False and it can run without index files, but may needs some more memory.
