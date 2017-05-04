@@ -2,9 +2,11 @@ package com.novelbio.nbcgui.controlseq;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,11 +14,9 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ArrayListMultimap;
 import com.novelbio.GuiAnnoInfo;
 import com.novelbio.analysis.ExceptionNBCsoft;
-import com.novelbio.analysis.seq.fasta.SeqHash;
 import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.rnaseq.ExonJunction;
-import com.novelbio.analysis.seq.sam.ExceptionSamError;
 import com.novelbio.analysis.seq.sam.ExceptionSamIndexError;
 import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.StringOperate;
@@ -32,7 +32,6 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	
 	GUIinfo guiRNAautoSplice;
 	GffHashGene gffHashGene;
-	SeqHash seqHash;
 	
 	boolean isDisplayAllEvent = true; 
 	String outFile;
@@ -57,6 +56,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	boolean runSepChr = true;
 	
 	public static void main(String[] args) {
+		ExonJunction.isASD = true;
 		if (args != null && args.length == 1 && args[0] != null 
 				&& (args[0].trim().toLowerCase().equals("--gui") || args[0].trim().toLowerCase().equals("-gui"))) {
 			GUIanalysisCASH guIanalysisCASH = new GUIanalysisCASH();
@@ -81,7 +81,6 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	 * @param args
 	 */
 	public static void mainCmd(String[] args) {
-		
 		//将输入的参数放到这个map里面
 		Map<String, String> mapParam2Value = new LinkedHashMap<>();
 		String param = null, value = null;
@@ -94,7 +93,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			System.out.println(getVersion());
 			return;
 		}
-		
+		Set<String> setParam = getParam();
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].startsWith("--") || args[i].startsWith("-")) {
 				if(param != null) {
@@ -105,6 +104,19 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 				if (param.startsWith("-")) {
 					param = param.substring(1);
 				}
+				if (!param.startsWith("T:") && !param.startsWith("Case:") && !param.startsWith("C:") && !param.startsWith("Control:")) {
+					if (!setParam.contains(param.trim())) {
+						System.err.println("=================================");
+						System.err.println( "ERROR! " + param.trim() + " is not a valid parameter!");
+						System.err.println("=================================");
+						System.out.println();
+						for (String content:getHelp()) {
+							System.out.println(content.toString());
+						}
+						System.exit(1);
+					}
+				}
+				
 				value = null;
 				if (param.startsWith("T:")) {
 					param = param.replace("T:", "Case:");
@@ -138,8 +150,8 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			} else {
 				value = args[i];
 			}
-			
 		}
+		//循环结束后把最后一个值装进去
 		mapParam2Value.put(param, value);
 		
 		String paramCase = null, paramControl = null;
@@ -317,6 +329,28 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 		ctrlSplicing.run();
 	}
 	
+	private static Set<String> getParam() {
+		Set<String> setParam = new HashSet<>();
+		setParam.add("Case");
+		setParam.add("Control");
+		setParam.add("GTF");
+		setParam.add("Output");
+		setParam.add("Combine");
+		setParam.add("DisplayAllEvent");
+		setParam.add("StrandSpecific");
+		setParam.add("SpliceCons");
+		setParam.add("JuncAllSample");
+		setParam.add("JuncOneGroup");
+		setParam.add("minAnchorLen");
+		setParam.add("A");
+		setParam.add("minIntronLen");
+		setParam.add("I");
+		setParam.add("minJuncReadsForNewIso");
+		setParam.add("J");
+		setParam.add("runSepChr");
+		return setParam;
+	}
+	
 	private static void checkParam(Map<String, String> mapParam2Value, String param) {
 		String thisValue = mapParam2Value.get(param);
 		if (StringOperate.isRealNull(thisValue)) {
@@ -450,14 +484,6 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	
 	public void setGffHashGene(GffHashGene gffHashGene) {
 		this.gffHashGene = gffHashGene;
-	}
-	
-	/**
-	 * 如果seqhash
-	 * @param seqPath
-	 */
-	public void setSeqHash(SeqHash seqHash) {
-		this.seqHash = seqHash;
 	}
 	
 	public void setDisplayAllEvent(boolean isDisplayAllEvent) {

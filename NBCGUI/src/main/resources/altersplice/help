@@ -1,5 +1,5 @@
 -----------------------------
-cash version 2.0.2
+cash version 2.1.0-alpha
 -----------------------------
 Usage: java -jar -Xmx10g cash.jar <options> --Case:prefix1 case.bam --Control:prefix2 Control.bam --GTF genes.gtf --Output outPath
 
@@ -13,10 +13,10 @@ GUI:
 --GUI open the GUI interface
 
 Input:
---Case:prefix1 case bam files, using comma to seperate files
-	just like --Case:KO /home/user/ko1.bam,/home/user/ko2.bam
---Control:prefix2 control bam files, using comma to seperate files
-	just like --Control:WT /home/user/wt1.bam,/home/user/wt2.bam
+--Case:prefix1 sorted and indexed case bam files, using comma to seperate files. Index file(bai file) can be absent if parameter "--runSepChr" set to False. 
+	just like --Case:KO /home/user/ko1.bam,/home/user/ko2.sorted.bam
+--Control:prefix2 sorted and indexed control bam files, using comma to seperate files. Index file(bai file) can be absent if parameter "--runSepChr" set to False.
+	just like --Control:WT /home/user/wt1.bam,/home/user/wt2.sorted.bam
 --GTF file.gtf
 	CASH needs reference gene annotations (eg. gtf/gff file) and RNA-seq data to construct alternative splicing (AS) model within genes
 

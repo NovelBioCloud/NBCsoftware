@@ -61,7 +61,6 @@ public class GuiRNAalterSpliceASD extends JPanel implements GUIinfo {
 	int level;
 	
 	JComboBoxData<String> cmbGroup = new JComboBoxData<String>();
-	private JTextField txtChromFaPath;
 	private JLabel lblNewLabel;
 	
 	/**
@@ -185,20 +184,6 @@ public class GuiRNAalterSpliceASD extends JPanel implements GUIinfo {
 		lblDetailInfo.setBounds(253, 484, 496, 14);
 		add(lblDetailInfo);
 		
-		txtChromFaPath = new JTextField();
-		txtChromFaPath.setBounds(20, 454, 532, 18);
-		add(txtChromFaPath);
-		txtChromFaPath.setColumns(10);
-		
-		JButton btnOpenSeqPath = new JButton("GenomeSeq");
-		btnOpenSeqPath.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				txtChromFaPath.setText(guiFileOpen.openFilePathName("", ""));
-			}
-		});
-		btnOpenSeqPath.setBounds(583, 451, 140, 24);
-		add(btnOpenSeqPath);
-		
 		JLabel lblOptiontoFetchSeq = new JLabel("Option:To Fetch Seq");
 		lblOptiontoFetchSeq.setBounds(20, 439, 164, 14);
 		add(lblOptiontoFetchSeq);
@@ -264,15 +249,6 @@ public class GuiRNAalterSpliceASD extends JPanel implements GUIinfo {
 		}
 			
 		ctrlSplicing.setGffHashGene(getGffhashGene());
-		String seqFile = txtChromFaPath.getText();
-		if (FileOperate.isFileFolderExist(seqFile)) {
-			try {
-				SeqHash seqHash = new SeqHash(seqFile, "");
-				ctrlSplicing.setSeqHash(seqHash);
-			} catch (Exception e) { }
-
-		}
-
 
 		ctrlSplicing.setDisplayAllEvent(chckbxDisplayAllSplicing.isSelected());
 		String outFile = txtSaveTo.getText();

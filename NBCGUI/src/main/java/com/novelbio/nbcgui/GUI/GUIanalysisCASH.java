@@ -74,7 +74,7 @@ public class GUIanalysisCASH extends javax.swing.JFrame {
 				
 			}
 			pack();
-			this.setSize(1150, 750);
+			this.setSize(950, 600);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

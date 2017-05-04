@@ -65,7 +65,6 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 	int level;
 	
 	JComboBoxData<String> cmbGroup = new JComboBoxData<String>();
-	private JTextField txtChromFaPath;
 	private JLabel lblNewLabel;
 	
 	/**
@@ -116,7 +115,7 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 				run();
 			}
 		});
-		btnRun.setBounds(771, 409, 129, 63);
+		btnRun.setBounds(771, 406, 129, 24);
 		add(btnRun);
 		
 		btnOpengtf = new JButton("Open(GFF3/GTF)");
@@ -178,42 +177,24 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 		add(chckbxDisplayAllSplicing);
 		
 		progressBar = new JProgressBar();
-		progressBar.setBounds(18, 511, 882, 14);
+		progressBar.setBounds(18, 468, 882, 14);
 		add(progressBar);
 		
 		lblInformation = new JLabel("");
-		lblInformation.setBounds(18, 484, 389, 14);
+		lblInformation.setBounds(18, 441, 389, 14);
 		add(lblInformation);
 		
 		lblDetailInfo = new JLabel("");
-		lblDetailInfo.setBounds(419, 484, 496, 14);
+		lblDetailInfo.setBounds(419, 441, 496, 14);
 		add(lblDetailInfo);
-		
-		txtChromFaPath = new JTextField();
-		txtChromFaPath.setBounds(20, 454, 532, 18);
-		add(txtChromFaPath);
-		txtChromFaPath.setColumns(10);
-		
-		JButton btnOpenSeqPath = new JButton("GenomeSeq");
-		btnOpenSeqPath.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				txtChromFaPath.setText(guiFileOpen.openFilePathName("", ""));
-			}
-		});
-		btnOpenSeqPath.setBounds(583, 451, 140, 24);
-		add(btnOpenSeqPath);
-		
-		JLabel lblOptiontoFetchSeq = new JLabel("Option:To Fetch Seq");
-		lblOptiontoFetchSeq.setBounds(20, 439, 164, 14);
-		add(lblOptiontoFetchSeq);
 		
 		lblNewLabel = new JLabel("Annotation");
 		lblNewLabel.setBounds(642, 35, 115, 14);
 		add(lblNewLabel);
 		
-		chckbxReconstructIso = new JCheckBox("SpliceCons(needs about 8g memory for humans)");
+		chckbxReconstructIso = new JCheckBox("SpliceCons(needs 10g mem for 3vs3 human)");
 		chckbxReconstructIso.setSelected(true);
-		chckbxReconstructIso.setBounds(153, 341, 335, 26);
+		chckbxReconstructIso.setBounds(153, 341, 345, 26);
 		add(chckbxReconstructIso);
 		
 		chckConsiderRepeat = new JCheckBox("Consider Replications");
@@ -273,15 +254,6 @@ public class GuiRNAalterSpliceSimple extends JPanel implements GUIinfo {
 		}
 			
 		ctrlSplicing.setGffHashGene(getGffhashGene());
-		String seqFile = txtChromFaPath.getText();
-		if (FileOperate.isFileFolderExist(seqFile)) {
-			try {
-				SeqHash seqHash = new SeqHash(seqFile, "");
-				ctrlSplicing.setSeqHash(seqHash);
-			} catch (Exception e) { }
-
-		}
-
 
 		ctrlSplicing.setDisplayAllEvent(chckbxDisplayAllSplicing.isSelected());
 		String outFile = txtSaveTo.getText();
