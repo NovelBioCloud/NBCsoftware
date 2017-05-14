@@ -65,7 +65,7 @@ Options:
 	Min junction reads for reconstructing AS site
 	
 --runSepChr True/False, default is True
-	 Due to some species (e.g. Hordeum vulgare) chromosomes with a huge length of base pairs, the java module ‘htsjdk(v2.9.0)’ can hardly support the index of the chromosomes and to fix the issue, we added this parameter and users can set this parameter to False, which means CASH run without index files, but it will take more memory and more computing time.
+	 Due to some species (e.g. Hordeum vulgare) chromosomes with a huge length of base pairs, the java module 'htsjdk(v2.9.0)' can hardly support the index of the chromosomes and to fix the issue, we added this parameter and users can set this parameter to False, which means CASH run without index files, but it will take more memory and more computing time.
 	 
 --ChrRegion chrId/chrId:startPos-endPos
 	While runSepChr is True(default), one can set this parameter and CASH will only calculate this region.
