@@ -18,6 +18,7 @@ import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.rnaseq.ExonJunction;
 import com.novelbio.analysis.seq.sam.ExceptionSamIndexError;
+import com.novelbio.base.ExceptionNbcParamError;
 import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.StringOperate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
@@ -54,8 +55,14 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	int newIsoReadsNum = 10;
 	
 	boolean runSepChr = true;
-	
+	boolean isArithmeticPvalue = true;
+	String region;
 	public static void main(String[] args) {
+		String aa = "--MergePval A --Case:A /home/novelbio/tmp/Shared/MCF10a_run1_sorted_"
+				+ "chr11.bam --Control:B /home/novelbio/tmp/Shared/MCF10a_run1_sorted_chr11.bam --GTF"
+				+ " /home/novelbio/tmp/Shared/gtfsimple11.gtf --Output /home/novelbio/tmp/Shared/ss --ChrRegion 11";
+		args = aa.split(" ");
+		
 		ExonJunction.isASD = true;
 		if (args != null && args.length == 1 && args[0] != null 
 				&& (args[0].trim().toLowerCase().equals("--gui") || args[0].trim().toLowerCase().equals("-gui"))) {
@@ -98,6 +105,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			if (args[i].startsWith("--") || args[i].startsWith("-")) {
 				if(param != null) {
 					mapParam2Value.put(param, value);
+					value = null;
 				}
 				
 				param = args[i].substring(1);
@@ -314,11 +322,35 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			checkParam(mapParam2Value, "StrandSpecific");
 
 			String strand = mapParam2Value.get("StrandSpecific").toLowerCase();
-			if (strand.equals("f") || strand.toLowerCase().equals("f")) {
+			if (strand.toLowerCase().equals("f")) {
 				ctrlSplicing.setStrandSpecific(StrandSpecific.FIRST_READ_TRANSCRIPTION_STRAND);
-			} else if (strand.equals("r") || strand.toLowerCase().equals("r")) {
+			} else if (strand.toLowerCase().equals("r")) {
 				ctrlSplicing.setStrandSpecific(StrandSpecific.SECOND_READ_TRANSCRIPTION_STRAND);
+			} else if (strand.toLowerCase().equals("none")) {
+				ctrlSplicing.setStrandSpecific(StrandSpecific.NONE);
+			}else {
+				throw new ExceptionNbcParamError("unknown strand type, can only be  F/R/NONE");
 			}
+		}
+		
+		if (mapParam2Value.containsKey("MergePval")) {
+			checkParam(mapParam2Value, "MergePval");
+
+			String type = mapParam2Value.get("MergePval").toLowerCase();
+			if (type.toLowerCase().equals("a")) {
+				ctrlSplicing.setArithmeticPvalue(true);
+			} else if (type.toLowerCase().equals("g")) {
+				ctrlSplicing.setArithmeticPvalue(false);
+			} else {
+				throw new ExceptionNbcParamError("unknown MergePval, can only be  A/G");
+			}
+		}
+		
+		if (mapParam2Value.containsKey("ChrRegion")) {
+			checkParam(mapParam2Value, "ChrRegion");
+
+			String region = mapParam2Value.get("ChrRegion");
+			ctrlSplicing.setRegion(region);
 		}
 		
 		ctrlSplicing.setOutFile(mapParam2Value.get("Output"));
@@ -348,6 +380,8 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 		setParam.add("minJuncReadsForNewIso");
 		setParam.add("J");
 		setParam.add("runSepChr");
+		setParam.add("MergePval");
+		setParam.add("ChrRegion");
 		return setParam;
 	}
 	
@@ -391,7 +425,6 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	public void setNewIsoReadsNum(int newIsoReadsNum) {
 		this.newIsoReadsNum = newIsoReadsNum;
 	}
-	
 	public void setFdrCutoff(double fdrCutoff) {
 	    this.fdrCutoff = fdrCutoff;
     }
@@ -404,7 +437,12 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	public void setJuncSampleReadsNum(int juncSampleReadsNum) {
 	    this.juncSampleReadsNum = juncSampleReadsNum;
     }
-	
+	public void setArithmeticPvalue(boolean isArithmeticPvalue) {
+		this.isArithmeticPvalue = isArithmeticPvalue;
+	}
+	public void setRegion(String region) {
+		this.region = region;
+	}
 	/** 是否仅选择unique mapped reads */
 	public void setUniqueMappedReads(boolean isUniqueMappedReads) {
 		this.isUniqueMappedReads = isUniqueMappedReads;
@@ -497,6 +535,10 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	
 	@Override
 	public void run() {
+		if (!StringOperate.isRealNull(region) && runSepChr == false) {
+			throw new ExceptionNbcParamError("wile set ChrRegion, runSepChr must be true");
+		}
+		
 		for (String[] comparePrefix : lsCompareGroup) {
 			String treat = comparePrefix[0], ctrl = comparePrefix[1];
 			String outprefix = comparePrefix.length > 2 ?comparePrefix[2] : treat + "vs" + ctrl;
@@ -541,8 +583,10 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 				lsLevels.add((double)mapChrId2Len.get(chrId)/allLen);
 			}
 			setProgressBarLevelLs(lsLevels);
+			exonJunction.addRegion(region);
 			try {
 				exonJunction.running();
+				exonJunction.writeToFile(false, isArithmeticPvalue);
 			} catch (ExceptionSamIndexError e) {
 				String info = "\n\n==========================================\n"
 						+ e.getMessage()
