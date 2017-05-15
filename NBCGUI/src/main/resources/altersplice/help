@@ -1,5 +1,5 @@
 -----------------------------
-cash version 2.1.0-alpha
+cash version 2.1.0-alpha1
 -----------------------------
 Usage: java -jar -Xmx10g cash.jar <options> --Case:prefix1 case.bam --Control:prefix2 Control.bam --GTF genes.gtf --Output outPath
 
@@ -25,10 +25,10 @@ Output:
 	output directory and prefix, example: --Output /home/user/myresult
 
 Options:
---MergePval A/G, default is A
-		 It is recommend to use the default value, while the results showed a poor number of differentially AS events, the users can switch A to G
-	 A: arithmetic weighted mean of event-centric strategy and exon-centric strategy Pvalues
-	 G: geometric weighted mean of event-centric strategy and exon-centric strategy Pvalues
+--MergePval A/G, default is G
+	It is recommend to use the default value(G), while the results is more sensitive. Users can switch G to A and get a more specific result.
+	A: arithmetic weighted mean of event-centric strategy and exon-centric strategy Pvalues(more specific)
+	G: geometric weighted mean of event-centric strategy and exon-centric strategy Pvalues(more sensitive)
 
 --Combine True/False, default is False
 	False: if here are several replications, CASH treats them as biological replicates as usual
@@ -65,7 +65,7 @@ Options:
 	Min junction reads for reconstructing AS site
 	
 --runSepChr True/False, default is True
-	 Due to some species (e.g. Hordeum vulgare) chromosomes with a huge length of base pairs, the java module 'htsjdk(v2.9.0)' can hardly support the index of the chromosomes and to fix the issue, we added this parameter and users can set this parameter to False, which means CASH run without index files, but it will take more memory and more computing time.
+	Due to some species (e.g. Hordeum vulgare) chromosomes with a huge length of base pairs, the java module 'htsjdk(v2.9.0)' can hardly support the index of the chromosomes and to fix the issue, we added this parameter and users can set this parameter to False, which means CASH run without index files, but it will take more memory and more computing time.
 	 
 --ChrRegion chrId/chrId:startPos-endPos
 	While runSepChr is True(default), one can set this parameter and CASH will only calculate this region.

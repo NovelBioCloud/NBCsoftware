@@ -55,14 +55,10 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	int newIsoReadsNum = 10;
 	
 	boolean runSepChr = true;
-	boolean isArithmeticPvalue = true;
+	boolean isArithmeticPvalue = false;
 	String region;
+	
 	public static void main(String[] args) {
-		String aa = "--MergePval A --Case:A /home/novelbio/tmp/Shared/MCF10a_run1_sorted_"
-				+ "chr11.bam --Control:B /home/novelbio/tmp/Shared/MCF10a_run1_sorted_chr11.bam --GTF"
-				+ " /home/novelbio/tmp/Shared/gtfsimple11.gtf --Output /home/novelbio/tmp/Shared/ss --ChrRegion 11";
-		args = aa.split(" ");
-		
 		ExonJunction.isASD = true;
 		if (args != null && args.length == 1 && args[0] != null 
 				&& (args[0].trim().toLowerCase().equals("--gui") || args[0].trim().toLowerCase().equals("-gui"))) {
@@ -100,6 +96,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			System.out.println(getVersion());
 			return;
 		}
+		System.out.println(getVersion());
 		Set<String> setParam = getParam();
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].startsWith("--") || args[i].startsWith("-")) {
@@ -584,9 +581,10 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 			}
 			setProgressBarLevelLs(lsLevels);
 			exonJunction.addRegion(region);
+			exonJunction.setPvalueA(isArithmeticPvalue);
 			try {
 				exonJunction.running();
-				exonJunction.writeToFile(false, isArithmeticPvalue);
+				exonJunction.writeToFile(false);
 			} catch (ExceptionSamIndexError e) {
 				String info = "\n\n==========================================\n"
 						+ e.getMessage()
