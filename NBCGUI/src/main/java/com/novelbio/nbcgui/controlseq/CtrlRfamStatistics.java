@@ -51,7 +51,7 @@ public class CtrlRfamStatistics implements IntCmdSoft {
 		lsCmd.clear();
 		Species species = new Species(9606);
 		rfamFile = species.getRfamFile(false);
-		List<String> lsRfamNameRaw = SeqHash.getLsSeqName(rfamFile);
+		List<String> lsRfamNameRaw = SeqHash.getLsSeqNameFromFasta(rfamFile);
 		rfamStatistic.readRfamTab(PathDetailNBC.getRfamTab());
 		expRfamID.addLsGeneName(rfamStatistic.getLsRfamID(lsRfamNameRaw));
 		expRfamID.addAnnotationArray(rfamStatistic.getMapRfamID2Info());
