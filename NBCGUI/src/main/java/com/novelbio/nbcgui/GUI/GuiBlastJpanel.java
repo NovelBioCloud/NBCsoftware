@@ -539,7 +539,7 @@ public class GuiBlastJpanel extends JPanel {
 		if (filePath == null)
 			return;
 		int result = -100;
-		if (FileOperate.isFileFolderExist(filePath)) {
+		if (FileOperate.isFileExist(filePath)) {
 			result = JOptionPane.showConfirmDialog(null, "Are you sure to overwrite the file?", "File Already exist", JOptionPane.YES_NO_OPTION);
 			if(result != JOptionPane.OK_OPTION)
 				return;

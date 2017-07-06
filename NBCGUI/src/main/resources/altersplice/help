@@ -70,3 +70,5 @@ Options:
 --ChrRegion chrId/chrId:startPos-endPos
 	While runSepChr is True(default), one can set this parameter and CASH will only calculate this region.
 	You can set value as chromosome Id like "--ChrRegion chr1" or set a specific region like "--ChrRegion chr1:1-9527".
+	
+--LogDebug Print debug information of CASH

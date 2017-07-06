@@ -1,5 +1,6 @@
 package com.novelbio.nbcgui.controlseq;
 
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -10,6 +11,7 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Log4jConfigurer;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.novelbio.GuiAnnoInfo;
@@ -44,7 +46,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	/** 是否合并文件--也就是不考虑重复，默认为false，也就是考虑为重复 **/
 	boolean isCombine = false;
 	/** 是否选择unique mapped reads */
-	boolean isUniqueMappedReads = false;
+	boolean isUniqueMappedReads = true;
 	int juncAllReadsNum = 25;
 	int juncSampleReadsNum = 10;
 	double fdrCutoff = 0.999;
@@ -59,7 +61,16 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	String region;
 	
 	public static void main(String[] args) {
+		String ss = "--Case:A /media/nbfs/nbCloud/public/AllProject/@2016-12/project_584e3ded60b256c2864e17bc/task_5886bda460b2d6f392cbcb3c/SamConvert_result/KO20.hisat2.sorted.bam,"
+				+ "/media/nbfs/nbCloud/public/AllProject/@2016-12/project_584e3ded60b256c2864e17bc/task_5886bda460b2d6f392cbcb3c/SamConvert_result/KO37.hisat2.sorted.bam"
+				+ " --Control:B /media/nbfs/nbCloud/public/AllProject/@2016-12/project_584e3ded60b256c2864e17bc/task_5886bda460b2d6f392cbcb3c/SamConvert_result/WT.hisat2.sorted.bam,"
+				+ "/media/nbfs/nbCloud/public/AllProject/@2016-12/project_584e3ded60b256c2864e17bc/task_5886bda460b2d6f392cbcb3c/SamConvert_result/WT_2.hisat2.sorted.bam"
+				+ " --GTF /media/nbfs/nbCloud/public/nbcplatform/genome/species/9606/hg19_GRCh37/gff/ref_GRCh37.p13_top_level.gff3"// --ChrRegion chr1:5046215-7046215"
+				+ " --Output /home/novelbio/software/test/cash_v2.1.0-alpha1/all-new";
+		args = ss.split(" ");
 		ExonJunction.isASD = true;
+		
+
 		if (args != null && args.length == 1 && args[0] != null 
 				&& (args[0].trim().toLowerCase().equals("--gui") || args[0].trim().toLowerCase().equals("-gui"))) {
 			GUIanalysisCASH guIanalysisCASH = new GUIanalysisCASH();
@@ -348,6 +359,27 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 
 			String region = mapParam2Value.get("ChrRegion");
 			ctrlSplicing.setRegion(region);
+		}
+		
+		if (mapParam2Value.containsKey("LogDebug")) {
+			boolean isLogDebug = false;
+			try {
+				if (!isLogDebug) {
+					Log4jConfigurer.initLogging("src/main/java/log4j2.properties");
+					isLogDebug = true;
+				}
+			} catch (FileNotFoundException e) {
+			}
+			try {
+				if (!isLogDebug) {
+					Log4jConfigurer.initLogging("log4j2.properties");
+					isLogDebug = true;
+				}
+			} catch (FileNotFoundException e) {
+			}
+			if (!isLogDebug) {
+				logger.error("cannot set log to LogDebug, please check");
+			}
 		}
 		
 		ctrlSplicing.setOutFile(mapParam2Value.get("Output"));
