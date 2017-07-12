@@ -85,7 +85,7 @@ public class CtrlMapReads implements RunGetInfo<MapReadsAbs.MapReadsProcessInfo>
 	}
 
 	@Override
-	public void done(RunProcess<MapReadsProcessInfo> runProcess) {
+	public void done(RunProcess runProcess) {
 		guiRunningBarAbs.getProcessBar().setValue(guiRunningBarAbs.getProcessBar().getMaximum());
 		List<JButton> lsJButtons = guiRunningBarAbs.getLsBtn();
 		for (JButton jButton : lsJButtons) {
@@ -94,7 +94,7 @@ public class CtrlMapReads implements RunGetInfo<MapReadsAbs.MapReadsProcessInfo>
 	}
 
 	@Override
-	public void threadSuspended(RunProcess<MapReadsProcessInfo> runProcess) {
+	public void threadSuspended(RunProcess runProcess) {
 		List<JButton> lsJButtons = guiRunningBarAbs.getLsBtn();
 		for (JButton jButton : lsJButtons) {
 			jButton.setEnabled(true);
@@ -103,7 +103,7 @@ public class CtrlMapReads implements RunGetInfo<MapReadsAbs.MapReadsProcessInfo>
 	}
 
 	@Override
-	public void threadResumed(RunProcess<MapReadsProcessInfo> runProcess) {
+	public void threadResumed(RunProcess runProcess) {
 		List<JButton> lsJButtons = guiRunningBarAbs.getLsBtn();
 		for (JButton jButton : lsJButtons) {
 			jButton.setEnabled(false);
@@ -111,7 +111,7 @@ public class CtrlMapReads implements RunGetInfo<MapReadsAbs.MapReadsProcessInfo>
 	}
 
 	@Override
-	public void threadStop(RunProcess<MapReadsProcessInfo> runProcess) {
+	public void threadStop(RunProcess runProcess) {
 		List<JButton> lsJButtons = guiRunningBarAbs.getLsBtn();
 		for (JButton jButton : lsJButtons) {
 			jButton.setEnabled(true);

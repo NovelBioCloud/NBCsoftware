@@ -105,7 +105,7 @@ public class CtrlBatchAnnoPeak implements RunGetInfo<AnnoQuery.AnnoQueryDisplayI
 	}
 	
 	@Override
-	public void done(RunProcess<AnnoQueryDisplayInfo> runProcess) {
+	public void done(RunProcess runProcess) {
 		if (guiAnnoPeak != null) {
 			guiAnnoPeak.getProcessBar().setValue(guiAnnoPeak.getProcessBar().getMaximum());
 			guiAnnoPeak.getBtnSave().setEnabled(true);
@@ -113,19 +113,19 @@ public class CtrlBatchAnnoPeak implements RunGetInfo<AnnoQuery.AnnoQueryDisplayI
 		}
 	}
 	@Override
-	public void threadSuspended(RunProcess<AnnoQueryDisplayInfo> runProcess) {
+	public void threadSuspended(RunProcess runProcess) {
 		if (guiAnnoPeak != null) {
 			guiAnnoPeak.getBtnRun().setEnabled(true);
 		}
 	}
 	@Override
-	public void threadResumed(RunProcess<AnnoQueryDisplayInfo> runProcess) {
+	public void threadResumed(RunProcess runProcess) {
 		if (guiAnnoPeak != null) {
 			guiAnnoPeak.getBtnRun().setEnabled(false);
 		}
 	}
 	@Override
-	public void threadStop(RunProcess<AnnoQueryDisplayInfo> runProcess) {
+	public void threadStop(RunProcess runProcess) {
 		if (guiAnnoPeak != null) {
 			guiAnnoPeak.getBtnRun().setEnabled(true);
 		}

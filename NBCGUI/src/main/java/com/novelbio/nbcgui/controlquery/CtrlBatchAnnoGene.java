@@ -76,21 +76,21 @@ public class CtrlBatchAnnoGene implements RunGetInfo<AnnoQuery.AnnoQueryDisplayI
 	}
 	
 	@Override
-	public void done(RunProcess<AnnoQueryDisplayInfo> runProcess) {
+	public void done(RunProcess runProcess) {
 		guiAnnoBatch.getProcessBar().setValue(guiAnnoBatch.getProcessBar().getMaximum());
 		guiAnnoBatch.getBtnSave().setEnabled(true);
 		guiAnnoBatch.getBtnRun().setEnabled(true);
 	}
 	@Override
-	public void threadSuspended(RunProcess<AnnoQueryDisplayInfo> runProcess) {
+	public void threadSuspended(RunProcess runProcess) {
 		guiAnnoBatch.getBtnRun().setEnabled(true);
 	}
 	@Override
-	public void threadResumed(RunProcess<AnnoQueryDisplayInfo> runProcess) {
+	public void threadResumed(RunProcess runProcess) {
 		guiAnnoBatch.getBtnRun().setEnabled(false);
 	}
 	@Override
-	public void threadStop(RunProcess<AnnoQueryDisplayInfo> runProcess) {
+	public void threadStop(RunProcess runProcess) {
 		guiAnnoBatch.getBtnRun().setEnabled(true);
 	}
 

@@ -129,7 +129,7 @@ public class CtrlGetSeq implements RunGetInfo<GffChrSeq.GffChrSeqProcessInfo>{
 	}
 
 	@Override
-	public void done(RunProcess<GffChrSeqProcessInfo> runProcess) {
+	public void done(RunProcess runProcess) {
 		if (guiGetSeq != null) {
 			guiGetSeq.getProgressBar().setValue(guiGetSeq.getProgressBar().getMaximum());
 			guiGetSeq.getBtnOpen().setEnabled(true);
@@ -139,15 +139,15 @@ public class CtrlGetSeq implements RunGetInfo<GffChrSeq.GffChrSeqProcessInfo>{
 	}
 
 	@Override
-	public void threadSuspended(RunProcess<GffChrSeqProcessInfo> runProcess) {		
+	public void threadSuspended(RunProcess runProcess) {		
 	}
 
 	@Override
-	public void threadResumed(RunProcess<GffChrSeqProcessInfo> runProcess) {
+	public void threadResumed(RunProcess runProcess) {
 	}
 
 	@Override
-	public void threadStop(RunProcess<GffChrSeqProcessInfo> runProcess) {
+	public void threadStop(RunProcess runProcess) {
 	}
 	
 }

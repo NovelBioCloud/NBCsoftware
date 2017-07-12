@@ -89,7 +89,7 @@ public class CtrlSnpCalling implements RunGetInfo<SnpFilterDetailInfo> {
 	}
 	
 	@Override
-	public void done(RunProcess<SnpFilterDetailInfo> runProcess) {
+	public void done(RunProcess runProcess) {
 		guiSnpCalling.getTxtInfo().setText("Snp Calling Complete");
 		
 		guiSnpCalling.getBtnAddPileupFile().setEnabled(true);
@@ -101,17 +101,17 @@ public class CtrlSnpCalling implements RunGetInfo<SnpFilterDetailInfo> {
 	}
 
 	@Override
-	public void threadSuspended(RunProcess<SnpFilterDetailInfo> runProcess) {
+	public void threadSuspended(RunProcess runProcess) {
 		guiSnpCalling.getBtnRun().setEnabled(true);
 	}
 
 	@Override
-	public void threadResumed(RunProcess<SnpFilterDetailInfo> runProcess) {
+	public void threadResumed(RunProcess runProcess) {
 		guiSnpCalling.getBtnRun().setEnabled(false);
 	}
 
 	@Override
-	public void threadStop(RunProcess<SnpFilterDetailInfo> runProcess) {
+	public void threadStop(RunProcess runProcess) {
 		guiSnpCalling.getBtnRun().setEnabled(true);
 	}
 }

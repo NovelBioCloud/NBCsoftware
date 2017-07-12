@@ -314,19 +314,19 @@ public class GuiRNAalterSpliceASD extends JPanel implements GUIinfo {
 		}
 	}
 	
-	public void done(RunProcess<GuiAnnoInfo> runProcess) {
+	public void done(RunProcess runProcess) {
 		btnRun.setEnabled(true);
 		progressBar.setValue(progressBar.getMaximum());
 	}
-	public void threadSuspended(RunProcess<GuiAnnoInfo> runProcess) {
+	public void threadSuspended(RunProcess runProcess) {
 		// TODO Auto-generated method stub
 		
 	}
-	public void threadResumed(RunProcess<GuiAnnoInfo> runProcess) {
+	public void threadResumed(RunProcess runProcess) {
 		// TODO Auto-generated method stub
 		
 	}
-	public void threadStop(RunProcess<GuiAnnoInfo> runProcess) {
+	public void threadStop(RunProcess runProcess) {
 		btnRun.setEnabled(true);
 	}
 	public void setMessage(String string) {

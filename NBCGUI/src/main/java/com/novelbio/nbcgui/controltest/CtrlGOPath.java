@@ -30,7 +30,7 @@ import com.novelbio.database.model.species.Species;
  * @author zong0jie
  */
 
-public abstract class CtrlGOPath extends RunProcess<GoPathInfo> {
+public abstract class CtrlGOPath extends RunProcess {
 	private static final Logger logger = Logger.getLogger(CtrlGOPath.class);
 	public static final String All = "All";
 	public static final String Up = "Up";

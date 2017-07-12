@@ -61,23 +61,25 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	String region;
 	
 	public static void main(String[] args) {
-		String ss = "--Case:A /media/nbfs/nbCloud/public/AllProject/@2016-12/project_584e3ded60b256c2864e17bc/task_5886bda460b2d6f392cbcb3c/SamConvert_result/KO20.hisat2.sorted.bam,"
-				+ "/media/nbfs/nbCloud/public/AllProject/@2016-12/project_584e3ded60b256c2864e17bc/task_5886bda460b2d6f392cbcb3c/SamConvert_result/KO37.hisat2.sorted.bam"
-				+ " --Control:B /media/nbfs/nbCloud/public/AllProject/@2016-12/project_584e3ded60b256c2864e17bc/task_5886bda460b2d6f392cbcb3c/SamConvert_result/WT.hisat2.sorted.bam,"
-				+ "/media/nbfs/nbCloud/public/AllProject/@2016-12/project_584e3ded60b256c2864e17bc/task_5886bda460b2d6f392cbcb3c/SamConvert_result/WT_2.hisat2.sorted.bam"
-				+ " --GTF /media/nbfs/nbCloud/public/nbcplatform/genome/species/9606/hg19_GRCh37/gff/ref_GRCh37.p13_top_level.gff3"// --ChrRegion chr1:5046215-7046215"
-				+ " --Output /home/novelbio/software/test/cash_v2.1.0-alpha1/all-new";
-		args = ss.split(" ");
+//		String ss = "--Case:A /media/nbfs/nbCloud/public/AllProject/@2016-12/project_584e3ded60b256c2864e17bc/task_5886bda460b2d6f392cbcb3c/SamConvert_result/KO20.hisat2.sorted.bam,"
+//				+ "/media/nbfs/nbCloud/public/AllProject/@2016-12/project_584e3ded60b256c2864e17bc/task_5886bda460b2d6f392cbcb3c/SamConvert_result/KO37.hisat2.sorted.bam"
+//				+ " --Control:B /media/nbfs/nbCloud/public/AllProject/@2016-12/project_584e3ded60b256c2864e17bc/task_5886bda460b2d6f392cbcb3c/SamConvert_result/WT.hisat2.sorted.bam,"
+//				+ "/media/nbfs/nbCloud/public/AllProject/@2016-12/project_584e3ded60b256c2864e17bc/task_5886bda460b2d6f392cbcb3c/SamConvert_result/WT_2.hisat2.sorted.bam"
+//				+ " --GTF /media/nbfs/nbCloud/public/nbcplatform/genome/species/9606/hg19_GRCh37/gff/ref_GRCh37.p13_top_level.gff3"// --ChrRegion chr1:5046215-7046215"
+//				+ " --Output /home/novelbio/software/test/cash_v2.1.0-alpha1/all-new";
+//		args = ss.split(" ");
 		ExonJunction.isASD = true;
 		
+		GUIanalysisCASH guIanalysisCASH = new GUIanalysisCASH();
+		guIanalysisCASH.main(new String[]{getVersion()});
 
-		if (args != null && args.length == 1 && args[0] != null 
-				&& (args[0].trim().toLowerCase().equals("--gui") || args[0].trim().toLowerCase().equals("-gui"))) {
-			GUIanalysisCASH guIanalysisCASH = new GUIanalysisCASH();
-			guIanalysisCASH.main(new String[]{getVersion()});
-		} else {
-			mainCmd(args);
-		}
+//		if (args != null && args.length == 1 && args[0] != null 
+//				&& (args[0].trim().toLowerCase().equals("--gui") || args[0].trim().toLowerCase().equals("-gui"))) {
+//			GUIanalysisCASH guIanalysisCASH = new GUIanalysisCASH();
+//			guIanalysisCASH.main(new String[]{getVersion()});
+//		} else {
+//			mainCmd(args);
+//		}
 	}
 	
 	//java -jar -Xmx10g xxx.jar --Case:aaa file1.bam -GTF file.gtf --Control:bbb file2.bam --Output sssss
@@ -527,25 +529,25 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	    this.minIntronLen = minIntronLen;
     }
 	@Override
-	public void done(RunProcess<GuiAnnoInfo> runProcess) {
+	public void done(RunProcess runProcess) {
 		if (guiRNAautoSplice == null) return;
 		guiRNAautoSplice.done(runProcess);
 	}
 
 	@Override
-	public void threadSuspended(RunProcess<GuiAnnoInfo> runProcess) {
+	public void threadSuspended(RunProcess runProcess) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void threadResumed(RunProcess<GuiAnnoInfo> runProcess) {
+	public void threadResumed(RunProcess runProcess) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void threadStop(RunProcess<GuiAnnoInfo> runProcess) {
+	public void threadStop(RunProcess runProcess) {
 		// TODO Auto-generated method stub
 	}
 	

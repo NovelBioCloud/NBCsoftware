@@ -497,28 +497,28 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 	}
 	
 	@Override
-	public void done(RunProcess<GuiAnnoInfo> runProcess) {
+	public void done(RunProcess runProcess) {
 		if (guiSamStatistics != null) {
 			guiSamStatistics.done();
 		}
 	}
 	
 	@Override
-	public void threadSuspended(RunProcess<GuiAnnoInfo> runProcess) {
+	public void threadSuspended(RunProcess runProcess) {
 		if (guiSamStatistics != null) {
 			guiSamStatistics.getBtnRun().setEnabled(true);
 		}
 	}
 	
 	@Override
-	public void threadResumed(RunProcess<GuiAnnoInfo> runProcess) {
+	public void threadResumed(RunProcess runProcess) {
 		if (guiSamStatistics != null) {
 			guiSamStatistics.getBtnRun().setEnabled(false);
 		}
 	}
 	
 	@Override
-	public void threadStop(RunProcess<GuiAnnoInfo> runProcess) {
+	public void threadStop(RunProcess runProcess) {
 		if (guiSamStatistics != null) {
 			guiSamStatistics.getBtnRun().setEnabled(true);
 		}

@@ -9,7 +9,7 @@ public interface GUIinfo {
 	
 	void setRunningInfo(GuiAnnoInfo string);
 	
-	void done(RunProcess<GuiAnnoInfo> runProcess);
+	void done(RunProcess runProcess);
 
 	void setMessage(String string);
 

@@ -86,7 +86,7 @@ public class CtrlSnpAnnotation implements RunGetInfo<SnpFilterDetailInfo> {
 	}
 
 	@Override
-	public void done(RunProcess<SnpFilterDetailInfo> runProcess) {
+	public void done(RunProcess runProcess) {
 		if (guiSnpCalling != null) {
 			guiSnpCalling.getProgressBar().setValue(guiSnpCalling.getProgressBar().getMaximum());
 			guiSnpCalling.getTxtInfo().setText("Snp Annotation Complete");
@@ -98,21 +98,21 @@ public class CtrlSnpAnnotation implements RunGetInfo<SnpFilterDetailInfo> {
 	}
 
 	@Override
-	public void threadSuspended(RunProcess<SnpFilterDetailInfo> runProcess) {
+	public void threadSuspended(RunProcess runProcess) {
 		if (guiSnpCalling != null) {
 			guiSnpCalling.getBtnRun().setEnabled(true);
 		}
 	}
 
 	@Override
-	public void threadResumed(RunProcess<SnpFilterDetailInfo> runProcess) {
+	public void threadResumed(RunProcess runProcess) {
 		if (guiSnpCalling != null) {
 			guiSnpCalling.getBtnRun().setEnabled(false);
 		}
 	}
 
 	@Override
-	public void threadStop(RunProcess<SnpFilterDetailInfo> runProcess) {
+	public void threadStop(RunProcess runProcess) {
 		if (guiSnpCalling != null) {
 			guiSnpCalling.getBtnRun().setEnabled(true);
 		}

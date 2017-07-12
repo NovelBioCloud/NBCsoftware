@@ -99,22 +99,22 @@ public class GuiKegArrayDownload extends JPanel implements RunGetInfo<Integer> {
 	}
 
 	@Override
-	public void done(RunProcess<Integer> runProcess) {
+	public void done(RunProcess runProcess) {
 		progressBar.setValue(progressBar.getMaximum());
 		btnNewButton.setEnabled(true);
 	}
 
 	@Override
-	public void threadSuspended(RunProcess<Integer> runProcess) {
+	public void threadSuspended(RunProcess runProcess) {
 		btnNewButton.setEnabled(true);
 	}
 
 	@Override
-	public void threadResumed(RunProcess<Integer> runProcess) {
+	public void threadResumed(RunProcess runProcess) {
 		btnNewButton.setEnabled(false);
 	}
 
 	@Override
-	public void threadStop(RunProcess<Integer> runProcess) {
+	public void threadStop(RunProcess runProcess) {
 	}
 }
