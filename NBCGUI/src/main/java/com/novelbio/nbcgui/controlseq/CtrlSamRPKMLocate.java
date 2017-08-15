@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -41,7 +42,7 @@ import com.novelbio.nbcgui.GUI.GuiSamStatistics;
 @Component
 @Scope("prototype")
 public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
-	private static final Logger logger = Logger.getLogger(CtrlSamRPKMLocate.class);
+	private static final Logger logger = LoggerFactory.getLogger(CtrlSamRPKMLocate.class);
 	
 	
 	GuiSamStatistics guiSamStatistics;
@@ -361,7 +362,7 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		for (String[] fileName2Prefix : lsReadFile) {
 			setPrefix.add(fileName2Prefix[1]);
 			FormatSeq formatSeq = getFileFormat(fileName2Prefix[0]);
-
+			logger.info("reading file {} is {} format", fileName2Prefix[0], formatSeq.toString());
 			AlignSeq alignSeq = null;
 			AlignSeqReading alignSeqReading = null;
 			if (formatSeq == FormatSeq.SAM || formatSeq == FormatSeq.BAM) {

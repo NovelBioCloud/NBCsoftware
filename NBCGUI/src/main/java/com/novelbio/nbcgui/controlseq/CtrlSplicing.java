@@ -20,6 +20,7 @@ import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.rnaseq.ExonJunction;
 import com.novelbio.analysis.seq.sam.ExceptionSamIndexError;
+import com.novelbio.analysis.seq.sam.ExceptionSamNoIndexError;
 import com.novelbio.base.ExceptionNbcParamError;
 import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.StringOperate;
@@ -623,6 +624,14 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 				String info = "\n\n==========================================\n"
 						+ e.getMessage()
 						+ "\nPlease try with \"--runSepChr False\" again."
+						+ "\n==========================================\n";
+				ExceptionSamIndexError exceptionSamIndexError = new ExceptionSamIndexError(info);
+				exceptionSamIndexError.setStackTrace(e.getStackTrace());
+				throw exceptionSamIndexError;
+			} catch (ExceptionSamNoIndexError e) {
+				String info = "\n\n==========================================\n"
+						+ e.getMessage()
+						+ "\nPlease sort and index the bam file and try again."
 						+ "\n==========================================\n";
 				ExceptionSamIndexError exceptionSamIndexError = new ExceptionSamIndexError(info);
 				exceptionSamIndexError.setStackTrace(e.getStackTrace());
