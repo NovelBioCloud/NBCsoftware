@@ -54,7 +54,7 @@ public abstract class CtrlGOPath extends RunProcess {
 	 * lsAccID2Value  arraylist-string[] 若为string[2],则第二个为上下调关系，判断上下调
 	 * 若为string[1] 则跑全部基因作分析
 	 */
-	ArrayList<String[]> lsAccID2Value;
+	List<String[]> lsAccID2Value;
 //	Species species;
 
 	Map<String, FunctionDrawResult> mapPrefix2FunDrawTest = new LinkedHashMap<String, FunctionDrawResult>();
@@ -66,10 +66,15 @@ public abstract class CtrlGOPath extends RunProcess {
 	/** true表示与数据库的注释合并，false表示仅用该注释文件进行go注释 */
 	boolean isCombine = true;
 	
+	/** 输入的是accId还是GeneId */
+	boolean isGeneId = false;
+	
 	public void setTaxID(int taxId) {
 		functionTest.setTaxID(taxId);
 	}
-	
+	public void setIsGeneId(boolean isGeneId) {
+		this.isGeneId = isGeneId;
+	}
 	public int getTaxID() {
 		return functionTest.getTaxID();
 	}
@@ -82,7 +87,7 @@ public abstract class CtrlGOPath extends RunProcess {
 	/** lsAccID2Value  arraylist-string[] 若为string[2],则第二个为上下调关系，判断上下调
 	 * 若为string[1] 则跑全部基因作分析
 	 */
-	public void setLsAccID2Value(ArrayList<String[]> lsAccID2Value) {
+	public void setLsAccID2Value(List<String[]> lsAccID2Value) {
 		this.lsAccID2Value = lsAccID2Value;
 	}
 	
@@ -350,9 +355,17 @@ public abstract class CtrlGOPath extends RunProcess {
 			for (String accID : setAccID) {
 				if (StringOperate.isRealNull(accID)) continue;
 				
-				GeneID geneID = new GeneID(accID, functionTest.getTaxID());
-				if (geneID.getIDtype() != GeneID.IDTYPE_ACCID || geneID.getLsBlastGeneID().size() > 0 || functionTest.isContainGeneName(geneID.getGeneUniID())) {
-					mapPrefix2SetGeneID.put(prefix, geneID);
+				GeneID geneID = null;
+				if (isGeneId) {
+					geneID = new GeneID(GeneID.IDTYPE_GENEID, accID, functionTest.getTaxID());
+					if (geneID.getAccID_With_DefaultDB() != null || geneID.getLsBlastGeneID().size() > 0 || functionTest.isContainGeneName(geneID.getGeneUniID())) {
+						mapPrefix2SetGeneID.put(prefix, geneID);
+					}
+				} else {
+					geneID = new GeneID(accID, functionTest.getTaxID());
+					if (geneID.getIDtype() != GeneID.IDTYPE_ACCID || geneID.getLsBlastGeneID().size() > 0 || functionTest.isContainGeneName(geneID.getGeneUniID())) {
+						mapPrefix2SetGeneID.put(prefix, geneID);
+					}
 				}
 
 			}

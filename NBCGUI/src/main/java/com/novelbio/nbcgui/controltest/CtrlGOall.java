@@ -38,7 +38,11 @@ public class CtrlGOall implements CtrlTestGOInt {
 	
 	String savePathPrefix;
 	String savePrefix = "";
+	boolean isGeneId = false;
 	
+	public void setIsGeneId(boolean isGeneId) {
+		this.isGeneId = isGeneId;
+	}
 	@Override
 	public void setTaxID(int taxId) {
 		for (CtrlGO ctrlGO : mapGOtype2CtrlGO.values()) {
@@ -72,7 +76,7 @@ public class CtrlGOall implements CtrlTestGOInt {
 	}
 	
 	@Override
-	public void setLsAccID2Value(ArrayList<String[]> lsAccID2Value) {
+	public void setLsAccID2Value(List<String[]> lsAccID2Value) {
 		if (lsAccID2Value != null && lsAccID2Value.size() > 0 && lsAccID2Value.get(0).length > 1) {
 			isJustAll = false;
 		}
@@ -131,16 +135,19 @@ public class CtrlGOall implements CtrlTestGOInt {
 		}
 		
 		CtrlGO ctrlGO = new CtrlGO();
+		ctrlGO.setIsGeneId(isGeneId);
 		ctrlGO.setGoAlgorithm(goAlgorithm);
 		ctrlGO.setGOType(GOtype.BP);
 		mapGOtype2CtrlGO.put(GOtype.BP, ctrlGO);
 		
 		ctrlGO = new CtrlGO();
+		ctrlGO.setIsGeneId(isGeneId);
 		ctrlGO.setGoAlgorithm(goAlgorithm);
 		ctrlGO.setGOType(GOtype.MF);
 		mapGOtype2CtrlGO.put(GOtype.MF, ctrlGO);
 		
 		ctrlGO = new CtrlGO();
+		ctrlGO.setIsGeneId(isGeneId);
 		ctrlGO.setGoAlgorithm(goAlgorithm);
 		ctrlGO.setGOType(GOtype.CC);
 		mapGOtype2CtrlGO.put(GOtype.CC, ctrlGO);

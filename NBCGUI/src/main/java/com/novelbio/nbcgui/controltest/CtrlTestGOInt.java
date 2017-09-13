@@ -14,7 +14,7 @@ public interface CtrlTestGOInt {
 	/** lsAccID2Value  arraylist-string[] 若为string[2],则第二个为上下调关系，判断上下调
 	 * 若为string[1] 则跑全部基因作分析
 	 */
-	public void setLsAccID2Value(ArrayList<String[]> lsAccID2Value);
+	public void setLsAccID2Value(List<String[]> lsAccID2Value);
 	
 	public void setUpDown(double up, double down);
 	
