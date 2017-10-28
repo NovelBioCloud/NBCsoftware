@@ -495,7 +495,7 @@ public class GuiSamToBed extends JPanel {
 					String outName = FileOperate.changeFileSuffix(samFile.getFileName(), "_UniqMapFlag", null);
 					SamToBamSort samToBamSort = new SamToBamSort(outName, samFile);
 					samToBamSort.setAddMultiHitFlag(true);
-					samToBamSort.convert();
+					samToBamSort.convertAndFinish();
 					samFile = samToBamSort.getSamFileBam();
 					samFile.close();
 				}

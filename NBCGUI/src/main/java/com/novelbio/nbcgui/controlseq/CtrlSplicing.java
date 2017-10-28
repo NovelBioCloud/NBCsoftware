@@ -58,29 +58,24 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	int newIsoReadsNum = 10;
 	
 	boolean runSepChr = true;
-	boolean isArithmeticPvalue = false;
+	boolean isArithmeticPvalue = true;
 	String region;
 	
 	public static void main(String[] args) {
-//		String ss = "--Case:A /media/nbfs/nbCloud/public/AllProject/@2016-12/project_584e3ded60b256c2864e17bc/task_5886bda460b2d6f392cbcb3c/SamConvert_result/KO20.hisat2.sorted.bam,"
-//				+ "/media/nbfs/nbCloud/public/AllProject/@2016-12/project_584e3ded60b256c2864e17bc/task_5886bda460b2d6f392cbcb3c/SamConvert_result/KO37.hisat2.sorted.bam"
-//				+ " --Control:B /media/nbfs/nbCloud/public/AllProject/@2016-12/project_584e3ded60b256c2864e17bc/task_5886bda460b2d6f392cbcb3c/SamConvert_result/WT.hisat2.sorted.bam,"
-//				+ "/media/nbfs/nbCloud/public/AllProject/@2016-12/project_584e3ded60b256c2864e17bc/task_5886bda460b2d6f392cbcb3c/SamConvert_result/WT_2.hisat2.sorted.bam"
-//				+ " --GTF /media/nbfs/nbCloud/public/nbcplatform/genome/species/9606/hg19_GRCh37/gff/ref_GRCh37.p13_top_level.gff3"// --ChrRegion chr1:5046215-7046215"
-//				+ " --Output /home/novelbio/software/test/cash_v2.1.0-alpha1/all-new";
+//		String ss = "/home/novelbio/software/cash/cash_v2.2.0/cash_v2.2.0/cash.jar --MergePval A --ChrRegion chr1 --Case:Mutation /home/novelbio/NBCresource/www/grch38/Sample_7721SIPRPF3.sorted.bam --Control:WildType /home/novelbio/NBCresource/www/grch38/Sample_7721SINC.sorted.bam --GTF /home/novelbio/NBCresource/genome/species/9606/GRCh38/gff/ref_GRCh38_top_level.gtf --Output /home/novelbio/NBCresource/www/grch38/result-cash-chr1";
 //		args = ss.split(" ");
 		ExonJunction.isASD = true;
 		
-		GUIanalysisCASH guIanalysisCASH = new GUIanalysisCASH();
-		guIanalysisCASH.main(new String[]{getVersion()});
+//		GUIanalysisCASH guIanalysisCASH = new GUIanalysisCASH();
+//		guIanalysisCASH.main(new String[]{getVersion()});
 
-//		if (args != null && args.length == 1 && args[0] != null 
-//				&& (args[0].trim().toLowerCase().equals("--gui") || args[0].trim().toLowerCase().equals("-gui"))) {
-//			GUIanalysisCASH guIanalysisCASH = new GUIanalysisCASH();
-//			guIanalysisCASH.main(new String[]{getVersion()});
-//		} else {
-//			mainCmd(args);
-//		}
+		if (args != null && args.length == 1 && args[0] != null 
+				&& (args[0].trim().toLowerCase().equals("--gui") || args[0].trim().toLowerCase().equals("-gui"))) {
+			GUIanalysisCASH guIanalysisCASH = new GUIanalysisCASH();
+			guIanalysisCASH.main(new String[]{getVersion()});
+		} else {
+			mainCmd(args);
+		}
 	}
 	
 	//java -jar -Xmx10g xxx.jar --Case:aaa file1.bam -GTF file.gtf --Control:bbb file2.bam --Output sssss
@@ -388,7 +383,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 		ctrlSplicing.setOutFile(mapParam2Value.get("Output"));
 		
 		logger.info("Start reading gtf file " + gtfFile);
-		ctrlSplicing.setGffHashGene(new GffHashGene(gtfFile));
+		ctrlSplicing.setGffHashGene(new GffHashGene(false, gtfFile));
 		logger.info("Finish reading gtf file " + gtfFile);
 		ctrlSplicing.run();
 	}

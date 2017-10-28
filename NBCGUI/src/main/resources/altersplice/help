@@ -1,53 +1,50 @@
 -----------------------------
-cash version 2.1.0-alpha1
+cash version 2.2.0
 -----------------------------
-Usage: java -jar -Xmx10g cash.jar <options> --Case:prefix1 case.bam --Control:prefix2 Control.bam --GTF genes.gtf --Output outPath
+Usage: java -jar -Xmx10g cash.jar <options> --Case:prefix1 case.bam --Control:prefix2 Control.bam --GTF genes.gtf --Output outFilePrefix
 
-Example: java -jar -Xmx10g cash.jar --Case:Mutation file1.bam,file2.bam --Control:WildType file3.bam,file4.bam --GTF genes.gtf --Output outPath
+Example: java -jar -Xmx10g cash.jar --Case:Mutation file1.bam,file2.bam --Control:WildType file3.bam,file4.bam --GTF genes.gtf --Output outFilePrefix
 
-Or you can open GUI interface by run: java -jar -Xmx10g cash.jar --GUI
+Or GUI interface is obtained by running: java -jar -Xmx10g cash.jar --GUI
 
-Version:
---version print version information and quit
-GUI:
---GUI open the GUI interface
-
+-------------------------
+Required parameters 
+-------------------------
 Input:
---Case:prefix1 sorted and indexed case bam files, using comma to seperate files. Index file(bai file) can be absent if parameter "--runSepChr" set to False
-	just like --Case:KO /home/user/ko1.bam,/home/user/ko2.sorted.bam
---Control:prefix2 sorted and indexed control bam files, using comma to seperate files. Index file(bai file) can be absent if parameter "--runSepChr" set to False
-	just like --Control:WT /home/user/wt1.bam,/home/user/wt2.sorted.bam
---GTF file.gtf
-	CASH needs reference gene annotations (eg. gtf/gff file) and RNA-seq data to construct alternative splicing (AS) model within genes
-
-Output:
+--Case:prefix1 sorted and indexed case bam files, using comma to separate replicated samples. 
+	e.g. --Case:KO /home/user/ko1.bam,/home/user/ko2.sorted.bam
+--Control:prefix2 sorted and indexed control bam files, using comma to separate replicated samples. 
+	e.g. --Control:WT /home/user/wt1.bam,/home/user/wt2.sorted.bam
+　　Note: indexed file (bai file) can be absent if the parameter "--runSepChr" is set to be False.
+--GTF genes.gtf
+CASH needs reference gene annotations (eg. gtf/gff file) and RNA-seq data to construct alternative splicing (AS) model within genes
 --Output outFilePrefix
-	output directory and prefix, example: --Output /home/user/myresult
+	Output directory and prefix, e.g. --Output /home/user/myresult
 
-Options:
+-------------------------
+Optional parameters 
+-------------------------
 --MergePval A/G, default is G
-	It is recommend to use the default value(G), while the results is more sensitive. Users can switch G to A and get a more specific result.
-	A: arithmetic weighted mean of event-centric strategy and exon-centric strategy Pvalues(more specific)
-	G: geometric weighted mean of event-centric strategy and exon-centric strategy Pvalues(more sensitive)
+	Default value (G) reports more sensitive results and value A reports more specific results.
+	A: arithmetic weighted mean of event-centric strategy and exon-centric strategy Pvalues (more specific)
+	G: geometric weighted mean of event-centric strategy and exon-centric strategy Pvalues (more sensitive)
 
 --Combine True/False, default is False
 	False: if here are several replications, CASH treats them as biological replicates as usual
-	True: if here are several replications, CASH combines case(control) bam files to be one case(control) big bam file
+	True: if here are several replications, CASH combines case (control) bam files to be one case (control) big bam file
 
 --DisplayAllEvent True/False, default is True
-	A gene may have several AS events on different exons, CASH can display all events, or just show only one most significantly event
-	True: show all splicing event
-	False: show only one most significantly splicing event
+	A gene may have several AS events on different exons, CASH can display all events (True), or display only one most significantly differential one (False)
 
 --StrandSpecific F/R/NONE, default is NONE
-	when the sequence library is strand specific, the parameter is used
+	When the sequence library is strand specific, the parameter is used
 	F: first read of the pair-end reads represent the strand of the fragment, just like ion proton
 	R: second read of the pair-end reads represent the strand of the fragment
 
 --SpliceCons True/False, default is True
 	SpliceCons is used to construct AS model based on RNA-seq data and reference gene annotations, leading to detection of novel AS events in the samples
-	True: construct AS model based on RNA-seq data and gtf/gff files. The process needs more time
-	False: employ AS model inferred from gtf/gff file
+	True: constructing AS model based on RNA-seq data and gtf/gff files needs more time
+	False: employing AS model inferred from gtf/gff file 
 
 --JuncAllSample int, default is 25
 	Doesn't calculate AS event with the sum of all sample junction reads less than JuncAllSample
@@ -65,10 +62,14 @@ Options:
 	Min junction reads for reconstructing AS site
 	
 --runSepChr True/False, default is True
-	Due to some species (e.g. Hordeum vulgare) chromosomes with a huge length of base pairs, the java module 'htsjdk(v2.9.0)' can hardly support the index of the chromosomes and to fix the issue, we added this parameter and users can set this parameter to False, which means CASH run without index files, but it will take more memory and more computing time.
+	Due to some species (e.g. Hordeum vulgare) chromosomes with a huge length of base pairs, the java module 'htsjdk (v2.9.0)' can hardly support the index of the chromosomes and to fix the issue, we added this parameter and users can set this parameter to be False, which means CASH run without index files, but it will take more memory and more computing time.
 	 
---ChrRegion chrId/chrId:startPos-endPos
-	While runSepChr is True(default), one can set this parameter and CASH will only calculate this region.
-	You can set value as chromosome Id like "--ChrRegion chr1" or set a specific region like "--ChrRegion chr1:1-9527".
+--ChrRegion chrID/chrID:startPos-endPos
+	While runSepChr is True (default), the users can set this parameter and CASH will only calculate AS events within this chromosome/region. The parameter can be set like: "--ChrRegion chr1" or like: "--ChrRegion chr1:1-9527".
 	
 --LogDebug Print debug information of CASH
+
+-------------------------
+Show version
+-------------------------
+--version print version information and quit
