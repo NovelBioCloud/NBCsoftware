@@ -58,7 +58,7 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	int newIsoReadsNum = 10;
 	
 	boolean runSepChr = true;
-	boolean isArithmeticPvalue = true;
+	boolean isArithmeticPvalue = false;
 	String region;
 	
 	public static void main(String[] args) {
