@@ -55,7 +55,6 @@ public class GUIanalysisKeggDownLoad extends javax.swing.JFrame {
 	//
 	private GuiSamToBed guiSamToBed;
 	private GuiSamToBam guiSamToBam;
-	private GuiSnpCalling guiSnpCalling;
 	//
 	private GuiTranscriptomeCufflinks guiTranscriptomeCufflinks;
 	//
@@ -71,10 +70,6 @@ public class GUIanalysisKeggDownLoad extends javax.swing.JFrame {
 	//
 	private GuiSpeciesInfo guiSpeciesInfo;
 	private GuiSamStatistics guiSamStatistics;
-	//
-	private GuiSnpFiltering guiSnpFiltering;
-	//
-	private GuiSnpFilterSimple guiSnpFilterSimple;
 	//
 	private GuiRNAalterSpliceSimple guiRNAalterSpliceSimple;
 	//

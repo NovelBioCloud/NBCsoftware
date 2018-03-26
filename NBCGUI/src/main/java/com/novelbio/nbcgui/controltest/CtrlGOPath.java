@@ -19,6 +19,7 @@ import com.novelbio.base.StringOperate;
 import com.novelbio.base.dataOperate.ExcelOperate;
 import com.novelbio.base.dataOperate.ExcelStyle;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
+import com.novelbio.base.dataStructure.ArrayOperate;
 import com.novelbio.base.fileOperate.ExceptionNbcFile;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunProcess;
@@ -254,7 +255,7 @@ public abstract class CtrlGOPath extends RunProcess {
 		setGeneNum(mapPrefix2AccID);
 		
 		Set<String> setResultFile = new HashSet<>();
-		
+		logger.info("write to file " + saveExcelPrefix);
 		ExcelOperate excelResult = new ExcelOperate(saveExcelPrefix);
 		excelResult.setWriteSheetToTxt(true);
 		String excelAllPath = FileOperate.changeFileSuffix(saveExcelPrefix, "_All",null);
@@ -414,7 +415,9 @@ public abstract class CtrlGOPath extends RunProcess {
 			if (endRowNum > 0) {
 				style = ExcelStyle.getThreeLineTable(1, endRowNum);
 			}
-			excelResult.writeExcel(prefix + sheetName, 1, 1, mapSheetName2LsInfo.get(sheetName),style);
+			List<String[]> lsResult = mapSheetName2LsInfo.get(sheetName);
+			logger.info("write info " + ArrayOperate.cmbString(lsResult.get(0), "\t"));
+			excelResult.writeExcel(prefix + sheetName, 1, 1, lsResult, style);
 		}
 	}
 		

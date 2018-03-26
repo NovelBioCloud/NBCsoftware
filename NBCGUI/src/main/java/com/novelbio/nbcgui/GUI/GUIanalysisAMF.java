@@ -46,7 +46,6 @@ public class GUIanalysisAMF extends javax.swing.JFrame {
 	private GuiAffyCelNormJpanel guiCelNormJpanel;
 	private GuiSamToBed guiSamToBed;
 	private GuiSamToBam guiSamToBam;
-	private GuiSnpCallingFW guiSnpCalling;
 	private GuiTranscriptomeCufflinks guiTranscriptomeCufflinks;
 	private GuiRNAalterSplice guiRNAautoSplice;
 	private GuiDGEgetvalue guiDGEgetvalue;
@@ -55,8 +54,6 @@ public class GUIanalysisAMF extends javax.swing.JFrame {
 	private GuiPeakCalling guiPeakCalling;
 	private GuiSpeciesInfo guiSpeciesInfo;
 	private GuiSamStatistics guiSamStatistics;
-	private GuiSnpFiltering guiSnpFiltering;
-	private GuiSnpFilterSimpleFW guiSnpFilterSimple;
 	private GuiRNAalterSpliceSimple guiRNAautoSpliceSimple;
 	private GuiUpdateDB guiUpdateDB;
 	private GuiVolcanoPlot guiVolcanoPlot;
@@ -105,12 +102,6 @@ public class GUIanalysisAMF extends javax.swing.JFrame {
 				
 				guiSamToBam = new GuiSamToBam();
 				jTabbedPane1.addTab("Bam Convert", null, guiSamToBam, null);
-				
-				guiSnpCalling = new GuiSnpCallingFW();
-				jTabbedPane1.add("SNP InDel Detection and Annotation", guiSnpCalling);
-				
-				guiSnpFilterSimple = new GuiSnpFilterSimpleFW();
-				jTabbedPane1.addTab("Somatic Detection", guiSnpFilterSimple);
 				
 				guiAnnoPeak = new GuiAnnoPeak();
 				jTabbedPane1.addTab("Variant Location", null, guiAnnoPeak, null);

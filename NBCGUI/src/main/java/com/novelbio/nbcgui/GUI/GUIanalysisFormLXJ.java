@@ -47,7 +47,6 @@ public class GUIanalysisFormLXJ extends javax.swing.JFrame {
 	private GuiAffyCelNormJpanel guiCelNormJpanel;
 	private GuiSamToBed guiSamToBed;
 	private GuiSamToBam guiSamToBam;
-	private GuiSnpCalling guiSnpCalling;
 	private GuiTranscriptomeCufflinks guiTranscriptomeCufflinks;
 	private GuiRNAalterSplice guiRNAautoSplice;
 	private GuiDGEgetvalue guiDGEgetvalue;
@@ -56,8 +55,6 @@ public class GUIanalysisFormLXJ extends javax.swing.JFrame {
 	private GuiPeakCalling guiPeakCalling;
 	private GuiSpeciesInfo guiSpeciesInfo;
 	private GuiSamStatistics guiSamStatistics;
-	private GuiSnpFiltering guiSnpFiltering;
-	private GuiSnpFilterSimple guiSnpFilterSimple;
 	private GuiRNAalterSpliceSimple guiRNAautoSpliceSimple;
 	private GuiUpdateDB guiUpdateDB;
 	private GuiVolcanoPlot guiVolcanoPlot;

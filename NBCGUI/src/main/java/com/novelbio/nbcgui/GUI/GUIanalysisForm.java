@@ -55,7 +55,6 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 	//
 	private GuiSamToBed guiSamToBed;
 	private GuiSamToBam guiSamToBam;
-	private GuiSnpCalling guiSnpCalling;
 	//
 	private GuiTranscriptomeCufflinks guiTranscriptomeCufflinks;
 	//
@@ -71,10 +70,6 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 	//
 	private GuiSpeciesInfo guiSpeciesInfo;
 	private GuiSamStatistics guiSamStatistics;
-	//
-	private GuiSnpFiltering guiSnpFiltering;
-	//
-	private GuiSnpFilterSimple guiSnpFilterSimple;
 	//
 	private GuiRNAalterSpliceSimple guiRNAalterSpliceSimple;
 	//
@@ -238,9 +233,6 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 				guiSpeciesInfo = new GuiSpeciesInfo();
 				jTabbedPane1.addTab("SpeciesInfo", guiSpeciesInfo);
 				
-				guiSnpFiltering = new GuiSnpFiltering();
-				jTabbedPane1.addTab("snpFilter", guiSnpFiltering);
-				
 				guiRNAalterSpliceSimple = new GuiRNAalterSpliceSimple();
 				jTabbedPane1.addTab("CASH", guiRNAalterSpliceSimple);
 				
@@ -255,12 +247,6 @@ public class GUIanalysisForm extends javax.swing.JFrame {
 				
 				guiSamToBam = new GuiSamToBam();
 				jTabbedPane1.addTab("BamConvert", null, guiSamToBam, null);
-				
-				guiSnpCalling = new GuiSnpCalling();
-				jTabbedPane1.add("Snp/InDel_DetectionAndAnnotation", guiSnpCalling);
-				
-				guiSnpFilterSimple = new GuiSnpFilterSimple();
-				jTabbedPane1.addTab("SomaticDetection", guiSnpFilterSimple);
 				
 				guiAnnoPeak = new GuiAnnoPeak();
 				jTabbedPane1.addTab("VariantLocation", null, guiAnnoPeak, null);

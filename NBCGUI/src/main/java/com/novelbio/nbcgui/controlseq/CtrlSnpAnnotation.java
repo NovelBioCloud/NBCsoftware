@@ -7,7 +7,6 @@ import com.novelbio.analysis.seq.resequencing.SnpAnnotation;
 import com.novelbio.analysis.seq.resequencing.SnpFilterDetailInfo;
 import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.base.multithread.RunProcess;
-import com.novelbio.nbcgui.GUI.GuiSnpCalling;
 import com.novelbio.nbcgui.GUI.GuiSnpCallingInt;
 
 public class CtrlSnpAnnotation implements RunGetInfo<SnpFilterDetailInfo> {
