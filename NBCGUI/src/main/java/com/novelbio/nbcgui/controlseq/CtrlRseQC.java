@@ -22,7 +22,7 @@ import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.database.model.species.Species;
+import com.novelbio.database.domain.species.Species;
 
 public class CtrlRseQC implements IntCmdSoft {
 	private static final Logger logger = Logger.getLogger(CtrlRseQC.class);

@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
-import com.novelbio.database.domain.geneanno.GOtype;
-import com.novelbio.database.model.species.Species;
+import com.novelbio.database.domain.species.Species;
+import com.novelbio.database.model.geneanno.GOtype;
 
 /** 不是单例 */
 public interface CtrlTestGOInt {

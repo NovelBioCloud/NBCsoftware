@@ -23,10 +23,10 @@ import com.novelbio.base.ExceptionNbcParamError;
 import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.StringOperate;
 import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.database.domain.geneanno.SpeciesFile;
-import com.novelbio.database.domain.information.SoftWareInfo;
-import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
-import com.novelbio.database.model.species.Species;
+import com.novelbio.database.domain.species.Species;
+import com.novelbio.database.model.geneanno.SpeciesFile;
+import com.novelbio.database.model.information.SoftWareInfo;
+import com.novelbio.database.model.information.SoftWareInfo.SoftWare;
 
 @Component
 @Scope("prototype")

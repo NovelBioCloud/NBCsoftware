@@ -8,8 +8,8 @@ import com.novelbio.analysis.annotation.genAnno.AnnoQuery.AnnoQueryDisplayInfo;
 import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.base.multithread.RunProcess;
-import com.novelbio.database.domain.geneanno.GOtype;
-import com.novelbio.database.model.species.Species;
+import com.novelbio.database.domain.species.Species;
+import com.novelbio.database.model.geneanno.GOtype;
 import com.novelbio.nbcgui.GUI.GuiAnnoGene;
 
 public class CtrlBatchAnnoGene implements RunGetInfo<AnnoQuery.AnnoQueryDisplayInfo> {

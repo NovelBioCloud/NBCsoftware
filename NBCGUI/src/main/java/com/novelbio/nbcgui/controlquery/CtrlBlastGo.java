@@ -10,11 +10,11 @@ import java.util.concurrent.ExecutionException;
 import javax.swing.SwingWorker;
 
 import com.novelbio.base.dataStructure.ArrayOperate;
-import com.novelbio.database.domain.geneanno.AGene2Go;
-import com.novelbio.database.domain.geneanno.GOtype;
-import com.novelbio.database.domain.geneanno.Gene2Go;
-import com.novelbio.database.domain.geneanno.Go2Term;
-import com.novelbio.database.model.modgeneid.GeneID;
+import com.novelbio.database.domain.modgeneid.GeneID;
+import com.novelbio.database.model.geneanno.AGene2Go;
+import com.novelbio.database.model.geneanno.GOtype;
+import com.novelbio.database.model.geneanno.Gene2Go;
+import com.novelbio.database.model.geneanno.Go2Term;
 import com.novelbio.nbcgui.GUI.GuiBlastJpanel;
 
 

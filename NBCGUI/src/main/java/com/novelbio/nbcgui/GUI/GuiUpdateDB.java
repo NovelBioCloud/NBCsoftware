@@ -17,9 +17,9 @@ import com.novelbio.analysis.seq.genome.GffSpeciesInfo;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JScrollPaneData;
-import com.novelbio.database.domain.geneanno.DBInfo;
-import com.novelbio.database.domain.information.SoftWareInfo;
-import com.novelbio.database.model.species.Species;
+import com.novelbio.database.domain.species.Species;
+import com.novelbio.database.model.geneanno.DBInfo;
+import com.novelbio.database.model.information.SoftWareInfo;
 import com.novelbio.database.updatedb.database.UpdateGene2GO;
 import com.novelbio.database.updatedb.database.UpdateGeneInfoNorm;
 

@@ -22,7 +22,7 @@ import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
-import com.novelbio.database.model.species.Species;
+import com.novelbio.database.domain.species.Species;
 
 public class GuiSpeciesInfo extends JPanel {
 	private static final long serialVersionUID = -7042827927643252396L;

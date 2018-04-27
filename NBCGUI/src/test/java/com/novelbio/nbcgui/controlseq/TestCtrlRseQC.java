@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.novelbio.base.cmd.CmdOperate;
-import com.novelbio.database.model.species.Species;
+import com.novelbio.database.domain.species.Species;
 
 public class TestCtrlRseQC {
 	public static void main(String[] args) {

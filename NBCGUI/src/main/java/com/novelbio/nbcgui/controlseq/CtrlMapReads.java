@@ -16,7 +16,7 @@ import com.novelbio.base.dataStructure.Equations;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.base.multithread.RunProcess;
-import com.novelbio.database.model.species.Species;
+import com.novelbio.database.domain.species.Species;
 import com.novelbio.nbcgui.GUI.GuiRunningBarAbs;
 
 public class CtrlMapReads implements RunGetInfo<MapReadsAbs.MapReadsProcessInfo>{

@@ -1,8 +1,8 @@
 package com.novelbio.analysis.seq.lnc;
 
-import junit.framework.TestCase;
+import com.novelbio.database.domain.species.Species;
 
-import com.novelbio.database.model.species.Species;
+import junit.framework.TestCase;
 
 public class TestCPAT extends TestCase {
 	String cpatOutPath = "/media/winE/test/testCPAT/";

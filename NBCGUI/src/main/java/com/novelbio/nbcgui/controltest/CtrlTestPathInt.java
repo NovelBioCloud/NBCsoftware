@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.novelbio.analysis.annotation.functiontest.FunctionTest;
-import com.novelbio.database.model.species.Species;
+import com.novelbio.database.domain.species.Species;
 
 public interface CtrlTestPathInt {
 	public void setTaxID(int taxID);

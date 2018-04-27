@@ -7,7 +7,7 @@ import com.novelbio.analysis.seq.genome.GffChrStatistics.GffChrStatiscticsProces
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.base.multithread.RunProcess;
-import com.novelbio.database.model.species.Species;
+import com.novelbio.database.domain.species.Species;
 import com.novelbio.nbcgui.GUI.GuiPeakStatistics;
 
 public class CtrlPeakStatistics implements RunGetInfo<GffChrStatistics.GffChrStatiscticsProcessInfo>{

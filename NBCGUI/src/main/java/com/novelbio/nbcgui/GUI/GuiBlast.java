@@ -23,9 +23,9 @@ import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.base.gui.JTextFieldData;
-import com.novelbio.database.domain.geneanno.BlastFileInfo;
-import com.novelbio.database.model.species.Species;
-import com.novelbio.database.model.species.Species.EnumSpeciesType;
+import com.novelbio.database.domain.species.Species;
+import com.novelbio.database.domain.species.Species.EnumSpeciesType;
+import com.novelbio.database.model.geneanno.BlastFileInfo;
 import com.novelbio.database.updatedb.database.BlastUp2DB;
 import com.novelbio.nbcgui.controlquery.CtrlBlast;
 

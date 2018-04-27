@@ -9,7 +9,7 @@ import javax.swing.SwingWorker;
 
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.dataStructure.ArrayOperate;
-import com.novelbio.database.model.modgeneid.GeneID;
+import com.novelbio.database.domain.modgeneid.GeneID;
 import com.novelbio.nbcgui.GUI.GuiBlastJpanel;
 
 

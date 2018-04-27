@@ -19,7 +19,7 @@ import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.analysis.annotation.functiontest.FunctionTest.FunctionDrawResult;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.plot.ImageUtils;
-import com.novelbio.database.model.modgeneid.GeneID;
+import com.novelbio.database.domain.modgeneid.GeneID;
 @Service
 @Scope("prototype")
 public class CtrlCOG extends CtrlGOPath implements CtrlTestCOGInt {

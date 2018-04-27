@@ -3,7 +3,7 @@ package com.novelbio.nbcgui.controltest;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.novelbio.database.model.species.Species;
+import com.novelbio.database.domain.species.Species;
 
 public interface CtrlTestCOGInt {
 	public void setTaxID(int taxID);

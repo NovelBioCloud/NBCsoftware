@@ -15,8 +15,8 @@ import com.novelbio.analysis.seq.mapping.MapLibrary;
 import com.novelbio.base.dataStructure.ArrayOperate;
 import com.novelbio.base.fileOperate.FileHadoop;
 import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
-import com.novelbio.database.model.species.Species;
+import com.novelbio.database.domain.species.Species;
+import com.novelbio.database.model.information.SoftWareInfo.SoftWare;
 import com.novelbio.nbcgui.controlseq.CtrlDNAMapping;
 
 public class TestDNASeqMap {

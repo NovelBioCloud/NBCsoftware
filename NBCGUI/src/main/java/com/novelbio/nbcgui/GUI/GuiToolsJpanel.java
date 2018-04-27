@@ -21,7 +21,7 @@ import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.base.gui.JTextFieldData;
-import com.novelbio.database.domain.information.SoftWareInfo;
+import com.novelbio.database.model.information.SoftWareInfo;
 import com.novelbio.nbcgui.controltools.CtrlCombFile;
 import com.novelbio.nbcgui.controltools.CtrlMedian;
 

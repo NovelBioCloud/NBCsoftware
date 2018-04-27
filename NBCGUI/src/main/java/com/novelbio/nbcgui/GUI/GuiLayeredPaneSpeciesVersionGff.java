@@ -8,8 +8,8 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 
 import com.novelbio.base.gui.JComboBoxData;
-import com.novelbio.database.model.species.Species;
-import com.novelbio.database.model.species.Species.EnumSpeciesType;
+import com.novelbio.database.domain.species.Species;
+import com.novelbio.database.domain.species.Species.EnumSpeciesType;
 
 public class GuiLayeredPaneSpeciesVersionGff extends JLayeredPane {
 	Species species;

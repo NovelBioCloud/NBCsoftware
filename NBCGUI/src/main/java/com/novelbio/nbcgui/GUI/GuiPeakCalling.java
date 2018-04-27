@@ -24,7 +24,7 @@ import com.novelbio.analysis.seq.chipseq.peakcalling.SicerControl;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
-import com.novelbio.database.model.species.Species;
+import com.novelbio.database.domain.species.Species;
 
 public class GuiPeakCalling extends JPanel {
 	private static final long serialVersionUID = 1L;

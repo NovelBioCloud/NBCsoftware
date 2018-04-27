@@ -8,7 +8,7 @@ import com.novelbio.analysis.seq.bed.BedFile;
 import com.novelbio.analysis.seq.rnaseq.Align2DGEvalue;
 import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.database.model.species.Species;
+import com.novelbio.database.domain.species.Species;
 
 public class CtrlDGEgetvalue {
 	Align2DGEvalue align2dgEvalue = new Align2DGEvalue();

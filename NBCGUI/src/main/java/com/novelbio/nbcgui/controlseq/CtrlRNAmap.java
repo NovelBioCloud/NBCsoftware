@@ -26,9 +26,9 @@ import com.novelbio.base.StringOperate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.ExceptionNbcFileInputNotExist;
 import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
-import com.novelbio.database.model.species.ExceptionNbcSpeciesNotExist;
-import com.novelbio.database.model.species.Species;
+import com.novelbio.database.domain.species.ExceptionNbcSpeciesNotExist;
+import com.novelbio.database.domain.species.Species;
+import com.novelbio.database.model.information.SoftWareInfo.SoftWare;
 import com.novelbio.generalConf.TitleFormatNBC;
 
 public class CtrlRNAmap implements IntCmdSoft {

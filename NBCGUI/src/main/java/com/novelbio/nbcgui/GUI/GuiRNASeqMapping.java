@@ -23,9 +23,9 @@ import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
-import com.novelbio.database.domain.information.SoftWareInfo.SoftWare;
-import com.novelbio.database.model.species.Species;
-import com.novelbio.database.model.species.Species.EnumSpeciesType;
+import com.novelbio.database.domain.species.Species;
+import com.novelbio.database.domain.species.Species.EnumSpeciesType;
+import com.novelbio.database.model.information.SoftWareInfo.SoftWare;
 import com.novelbio.nbcgui.controlseq.CtrlRNAmap;
 
 public class GuiRNASeqMapping extends JPanel {

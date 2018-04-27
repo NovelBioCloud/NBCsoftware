@@ -43,6 +43,7 @@ public class GUIanalysisCASH extends javax.swing.JFrame {
 				if (args == null || args.length == 0) {
 					inst.setTitle("cash");
 				} else {
+					System.out.println(args[0]);
 					inst.setTitle(args[0]);
 				}
 				

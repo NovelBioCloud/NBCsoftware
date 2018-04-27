@@ -7,7 +7,7 @@ import com.novelbio.analysis.annotation.genAnno.AnnoQuery.AnnoQueryDisplayInfo;
 import com.novelbio.analysis.seq.genome.GffChrAnno;
 import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.base.multithread.RunProcess;
-import com.novelbio.database.model.species.Species;
+import com.novelbio.database.domain.species.Species;
 import com.novelbio.nbcgui.GUI.GuiAnnoPeak;
 
 public class CtrlBatchAnnoPeak implements RunGetInfo<AnnoQuery.AnnoQueryDisplayInfo> {

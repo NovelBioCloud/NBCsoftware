@@ -19,8 +19,8 @@ import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunProcess.RunThreadStat;
 import com.novelbio.base.plot.ImageUtils;
-import com.novelbio.database.domain.geneanno.GOtype;
-import com.novelbio.database.model.species.Species;
+import com.novelbio.database.domain.species.Species;
+import com.novelbio.database.model.geneanno.GOtype;
 
 /** 同时把BP、MF、CC三个类型都做了 */
 @Component
