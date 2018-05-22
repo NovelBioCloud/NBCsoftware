@@ -451,6 +451,12 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 		}
 	}
 	
+	/** 获取基因结构 */
+	public List<String[]> getGeneStructure(String prefix) {
+		GffChrStatistics gffChrStatistics = mapPrefix2LocStatistics.get(prefix);
+		return gffChrStatistics.getStatisticsResultWithBG();
+	}
+	
 	private void readAllExpInfo() {
 		String samFileName = lsReadFile.iterator().next()[0];
 		FormatSeq formatSeq = getFileFormat(samFileName);
