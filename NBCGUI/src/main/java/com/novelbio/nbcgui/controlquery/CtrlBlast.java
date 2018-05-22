@@ -7,7 +7,7 @@ import com.novelbio.analysis.annotation.blast.BlastNBC;
 import com.novelbio.analysis.annotation.blast.BlastStatistics;
 import com.novelbio.analysis.annotation.blast.BlastType;
 import com.novelbio.analysis.seq.fasta.StrandType;
-import com.novelbio.listOperate.HistList;
+import com.novelbio.listoperate.HistList;
 
 public class CtrlBlast implements IntCmdSoft {
 	BlastNBC blastNBC = new BlastNBC();

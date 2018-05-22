@@ -11,8 +11,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import com.novelbio.analysis.annotation.pathway.kegg.kGML2DB.KGML2DB;
-import com.novelbio.analysis.annotation.pathway.kegg.kGML2DB.KeggIDcvt;
+import com.novelbio.analysis.annotation.pathway.kegg.kgml2db.KGML2DB;
+import com.novelbio.analysis.annotation.pathway.kegg.kgml2db.KeggIDcvt;
 import com.novelbio.analysis.seq.genome.GffSpeciesInfo;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;

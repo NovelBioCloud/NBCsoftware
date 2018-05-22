@@ -5,8 +5,8 @@ import java.util.Map;
 
 import com.novelbio.GuiAnnoInfo;
 import com.novelbio.analysis.seq.FormatSeq;
-import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
-import com.novelbio.analysis.seq.genome.gffOperate.GffHashGeneAbs;
+import com.novelbio.analysis.seq.genome.gffoperate.GffHashGene;
+import com.novelbio.analysis.seq.genome.gffoperate.GffHashGeneAbs;
 import com.novelbio.analysis.seq.mapping.StrandSpecific;
 import com.novelbio.analysis.seq.sam.SamFileStatistics;
 import com.novelbio.base.multithread.RunGetInfo;

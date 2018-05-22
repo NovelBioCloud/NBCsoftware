@@ -8,7 +8,7 @@ import com.novelbio.analysis.diffexpress.DiffExpAbs;
 import com.novelbio.analysis.diffexpress.DiffExpDESeq;
 import com.novelbio.analysis.diffexpress.EnumDifGene;
 import com.novelbio.base.fileOperate.FileOperate;
-import com.novelbio.generalConf.TitleFormatNBC;
+import com.novelbio.generalconf.TitleFormatNBC;
 
 public class CtrlDifGene implements IntCmdSoft {
 	DiffExpAbs diffExpAbs;

@@ -2,8 +2,8 @@ package com.novelbio.nbcgui.controlquery;
 
 import java.util.List;
 
-import com.novelbio.analysis.annotation.genAnno.AnnoQuery;
-import com.novelbio.analysis.annotation.genAnno.AnnoQuery.AnnoQueryDisplayInfo;
+import com.novelbio.analysis.annotation.genanno.AnnoQuery;
+import com.novelbio.analysis.annotation.genanno.AnnoQuery.AnnoQueryDisplayInfo;
 import com.novelbio.analysis.seq.genome.GffChrAnno;
 import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.base.multithread.RunProcess;

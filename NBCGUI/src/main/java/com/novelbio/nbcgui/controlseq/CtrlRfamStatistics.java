@@ -21,8 +21,8 @@ import com.novelbio.analysis.seq.sam.SamMapRate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.species.Species;
-import com.novelbio.generalConf.PathDetailNBC;
-import com.novelbio.generalConf.TitleFormatNBC;
+import com.novelbio.generalconf.PathDetailNBC;
+import com.novelbio.generalconf.TitleFormatNBC;
 
 /** 检测RNAseq样本的rrna污染情况以及ncRNA的情况 */
 @Component

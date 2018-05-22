@@ -9,8 +9,8 @@ import java.util.Map.Entry;
 import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.analysis.seq.GeneExpTable;
 import com.novelbio.analysis.seq.fasta.CopeFastq;
-import com.novelbio.analysis.seq.genome.gffOperate.GffHashGene;
-import com.novelbio.analysis.seq.genome.gffOperate.GffType;
+import com.novelbio.analysis.seq.genome.gffoperate.GffHashGene;
+import com.novelbio.analysis.seq.genome.gffoperate.GffType;
 import com.novelbio.analysis.seq.mapping.MapBowtie2;
 import com.novelbio.analysis.seq.mapping.MapHisat;
 import com.novelbio.analysis.seq.mapping.MapLibrary;
@@ -29,7 +29,7 @@ import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.species.ExceptionNbcSpeciesNotExist;
 import com.novelbio.database.domain.species.Species;
 import com.novelbio.database.model.information.SoftWareInfo.SoftWare;
-import com.novelbio.generalConf.TitleFormatNBC;
+import com.novelbio.generalconf.TitleFormatNBC;
 
 public class CtrlRNAmap implements IntCmdSoft {
 	SoftWare softWare;

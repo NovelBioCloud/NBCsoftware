@@ -25,8 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
 import javax.swing.table.DefaultTableModel;
 
-
-import com.novelbio.analysis.annotation.pathway.kegg.kGpath.Scr2Target;
+import com.novelbio.analysis.annotation.pathway.kegg.kgpath.Scr2Target;
 import com.novelbio.base.dataOperate.ExcelOperate;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.fileOperate.FileOperate;

@@ -17,7 +17,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
 
-import com.novelbio.analysis.coexp.simpCoExp.DegreeAnnotation;
+import com.novelbio.analysis.coexp.simpcoexp.DegreeAnnotation;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
