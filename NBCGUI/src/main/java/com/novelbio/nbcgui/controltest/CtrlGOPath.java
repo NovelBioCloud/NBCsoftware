@@ -15,6 +15,7 @@ import com.novelbio.analysis.annotation.functiontest.FunctionTest;
 import com.novelbio.analysis.annotation.functiontest.FunctionTest.FunctionDrawResult;
 import com.novelbio.analysis.annotation.functiontest.StatisticTestResult;
 import com.novelbio.analysis.seq.genome.GffSpeciesInfo;
+import com.novelbio.base.ExceptionNbcParamError;
 import com.novelbio.base.StringOperate;
 import com.novelbio.base.dataOperate.ExcelOperate;
 import com.novelbio.base.dataOperate.ExcelStyle;
@@ -328,7 +329,12 @@ public abstract class CtrlGOPath extends RunProcess {
 		for (String[] accID2prefix : lsAccID2Value) {
 			mapCluster2SetAccID.put(accID2prefix[1], accID2prefix[0]);
 		}
+		if (mapCluster2SetAccID.keySet().size() > 300) {
+			throw new ExceptionNbcParamError("Cluster GOPathway error! cluster number cannot larger than 300, but is " + mapCluster2SetAccID.size()
+			+ ". Please check input param");
+		}
 		HashMultimap<String, GeneID> mapCluster2SetGeneID = addBG_And_Convert2GeneID(mapCluster2SetAccID);
+		
 		for (String prefix : mapCluster2SetGeneID.keySet()) {
 			FunctionTest functionTest = getResult(prefix, mapCluster2SetGeneID.get(prefix));
 			String excelPathOut = FileOperate.changeFilePrefix(saveExcelPrefix, prefix + ".", null);
