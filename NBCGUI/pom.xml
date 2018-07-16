@@ -1,64 +1,17 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.novelbio</groupId>
-  <artifactId>NBCGUI</artifactId>
-  <version>0.0.3-SNAPSHOT</version>
-  <distributionManagement>
-		<!-- use the following if you're not using a snapshot version. -->
-		<repository>
-			<id>my-nexus-releases</id>
-			<name>Internal Releases</name>
-			<url>http://192.168.0.104:8081/nexus/content/repositories/releases</url>
-		</repository>
-		<!-- use the following if you ARE using a snapshot version. -->
-		<snapshotRepository>
-			<id>my-nexus-releases</id>
-			<name>Internal Releases</name>
-			<url>http://192.168.0.104:8081/nexus/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
-	<build>
-		<finalName>NBCGUI</finalName>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
-            <plugin>  
-				<artifactId>maven-javadoc-plugin</artifactId>  
-				<version>2.9</version>  
-				<configuration>  
-					<charset>UTF-8</charset>  
-					<docencoding>UTF-8</docencoding>  
-				</configuration>  
-				<executions>  
-					<execution>  
-					<id>attach-javadocs</id>  
-					<goals>  
-						<goal>jar</goal>  
-					</goals>  
-					</execution>  
-				</executions>  
-			</plugin>  
-            <plugin>
-                <!-- explicitly define maven-deploy-plugin after other to force execorder -->
-                <artifactId>maven-deploy-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>deploy</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-		</plugins>
-	</build>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.novelbio</groupId>
+	<artifactId>NBCGUI</artifactId>
+	<version>0.0.3-SNAPSHOT</version>
+
+
+	<properties>
+		<jdk.version>1.8</jdk.version>
+		<spring.version>4.3.13.RELEASE</spring.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.novelbio</groupId>
@@ -88,13 +41,43 @@
 			<version>1.5.1</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
-			<version>4.0.5.RELEASE</version>
+			<version>${spring.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
 	</dependencies>
+
+
+	<build>
+		<finalName>NBCGUI</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<distributionManagement>
+		<!-- use the following if you're not using a snapshot version. -->
+		<repository>
+			<id>my-nexus-releases</id>
+			<name>Internal Releases</name>
+			<url>http://192.168.0.104:8081/nexus/content/repositories/releases</url>
+		</repository>
+		<!-- use the following if you ARE using a snapshot version. -->
+		<snapshotRepository>
+			<id>my-nexus-releases</id>
+			<name>Internal Releases</name>
+			<url>http://192.168.0.104:8081/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
