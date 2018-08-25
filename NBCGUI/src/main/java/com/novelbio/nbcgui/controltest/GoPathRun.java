@@ -17,14 +17,17 @@ import com.novelbio.base.dataStructure.ArrayOperate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.database.domain.species.Species;
 import com.novelbio.database.service.SpringFactoryBioinfo;
+import com.novelbio.nbcgui.controltest.CtrlCOG;
+import com.novelbio.nbcgui.controltest.CtrlGOall;
+import com.novelbio.nbcgui.controltest.CtrlPath;
 
 public class GoPathRun {
 	private static final Logger logger = Logger.getLogger(GoPathRun.class);
 	private static final String GO = "GO";
 	private static final String Pathway = "Pathway";
 	private static final String COG = "COG";
-	private static final String GO_PATH = "COG";
-	private static final String ALL = "COG";
+	private static final String GO_PATH = "GO_PATH";
+	private static final String ALL = "ALL";
 
 	
 	Species species;
@@ -39,13 +42,12 @@ public class GoPathRun {
 	String bgGene;
 	String outPath;
 	boolean isBlast;
-	String blastTaxIds;
 	GoAlgorithm goAlgorithm;
 	String cogType;
 	String cogQueryFa;
 	List<String> excelFiles;
 	List<String> excelPrefixs;
-	List<String> lsBlastTaxIds;
+	List<String> lsBlastTaxIds = new ArrayList<>();
 
 	int colAccID;
 	int colFC;
@@ -57,30 +59,127 @@ public class GoPathRun {
 	int upValue;
 	int downValue;
 	
+	private static List<String> getLsHelp() {
+		List<String> lsHelp = new ArrayList<>();
+		lsHelp.add("--taxId  like 9606");
+		lsHelp.add("--version like GRCh38");
+		lsHelp.add("--dbType like NCBI");
+		lsHelp.add("--isBlast true/false default is false");
+		lsHelp.add("--blastId 9606,10090   value sep with comma");
+		lsHelp.add("--analysisType GO/Pathway/COG/GO_PATH/ALL");
+		lsHelp.add("--cogType COG/KOG");
+		lsHelp.add("--goAlgorithm novelgo/parentchild/classic/weight/weight01/elim");
+		lsHelp.add("--geneCol 1");
+		lsHelp.add("--foldChangeCol 4");
+		lsHelp.add("--up 2");
+		lsHelp.add("--down -2");
+		lsHelp.add("--isGoLevel true/false defaule is false");
+		lsHelp.add("--goLevelNum 3 no default");
+		lsHelp.add("--isCluster true/false defaule is false");
+		lsHelp.add("--isCombine true/false defaule is false");
+		lsHelp.add("--prefix prefix1,prefix2  multi prefix sep with comma");
+		lsHelp.add("--infile file1,file2  multi files sep with comma");
+		lsHelp.add("--annoFile ");
+		lsHelp.add("--querySeqCOG cog file need input a fasta file");
+		lsHelp.add("--bg backgroud file");
+		lsHelp.add("--outpath");
+		return lsHelp;
+	}
+	
 	public static void main(String[] args) {
+		if (args.length ==0 || args[0].equals("-h") || args[0].equals("--help")) {
+			String helpInfo = "example: java -jar gopath.jar --taxId 7955 --version Zv10 --dbType NCBI_Zv10 --isBlast false --analysisType GO"
+					+ " --goAlgorithm novelgo --geneCol 2 --foldChangeCol 2  --up 2 --down -2 --isCluster false"
+					+ " --prefix test --infile /media/nbfs/nbCloud/public/AllProject/@2018-08/project_5b629d8860b2475e359b74c2/task_5b7fd9ed60b2a42e2e5e2752/miRNA-target-Final.txt "
+					+ "--outpath /home/novelbio/test/gopath";
+			System.out.println(helpInfo);
+			System.out.println();
+			System.out.println("Options:");
+			List<String> lsHelp = getLsHelp();
+			for (String content : lsHelp) {
+				System.out.println(content);
+			}
+			System.exit(1);
+		}
+		
 		Options opts = new Options();
-		opts.addOption("taxId", true, "0");
+		opts.addOption("taxId", true, "");
 		opts.addOption("version", true, "");
 		opts.addOption("dbType", true, "");
-		opts.addOption("appMainClass", true, "the main class of the app");
-		opts.addOption("taskId", true, "taskId");
-		opts.addOption("dockerImg", true, "dockerImg");
+		opts.addOption("isBlast", true, "");
+		opts.addOption("blastId", true, "");
+		opts.addOption("analysisType", true, "");
+		opts.addOption("cogType", true, "");
+		opts.addOption("goAlgorithm", true, "");
+		opts.addOption("geneCol", true, "");
+		opts.addOption("foldChangeCol", true, "");
+		opts.addOption("up", true, "");
+		opts.addOption("down", true, "");
+		opts.addOption("isGoLevel", true, "");
+		opts.addOption("goLevelNum", true, "");
+		opts.addOption("isCluster", true, "");
+		opts.addOption("isCombine", true, "");
+		opts.addOption("prefix", true, "");
+		opts.addOption("infile", true, "");
+		opts.addOption("annoFile", true, "");
+		opts.addOption("querySeqCOG", true, "");
+		opts.addOption("bg", true, "");
+		opts.addOption("outpath", true, "");
 		CommandLine cliParser = null;
 		try {
 			cliParser = new GnuParser().parse(opts, args);
 		} catch (Exception e) {
-			LOG.error("error params:" + ArrayOperate.cmbString(args, " "));
+			logger.error("error params:" + ArrayOperate.cmbString(args, " "), e);
 			System.exit(1);
 		}
 		int containerNum = Integer.parseInt(cliParser.getOptionValue("numContainers", 1 + ""));
 		if (containerNum <= 0)
 			containerNum = 4;
 
-		int priority = Integer.parseInt(cliParser.getOptionValue("priority", 0 + ""));
-		String appPackage = cliParser.getOptionValue("appPackage", "");
-		String appMainClass = cliParser.getOptionValue("appMainClass", "");
-		String taskId = cliParser.getOptionValue("taskId");
-		String dockerImg = cliParser.getOptionValue("dockerImg");
+		int taxId = Integer.parseInt(cliParser.getOptionValue("taxId",""));
+		String version = cliParser.getOptionValue("version", "");
+		String dbType = cliParser.getOptionValue("dbType", "");
+		String analysisType = cliParser.getOptionValue("analysisType", "");
+		String goAnnoFile = cliParser.getOptionValue("annoFile", "");
+		boolean isCombine = cliParser.getOptionValue("isCombine", "false").equalsIgnoreCase("true");
+		String bgGene = cliParser.getOptionValue("bg", "");
+		String outPath = cliParser.getOptionValue("outpath", "");
+		boolean isBlast = cliParser.getOptionValue("isBlast", "false").equalsIgnoreCase("true");
+		String blastTaxIds = cliParser.getOptionValue("blastId", "");
+		String prefixs = cliParser.getOptionValue("prefix", "");
+		String infiles = cliParser.getOptionValue("infile", "");
+		String cogType = cliParser.getOptionValue("cogType", "");
+		String goAlgorithmStr = cliParser.getOptionValue("goAlgorithm", "");
+		int colAccId = Integer.parseInt(cliParser.getOptionValue("geneCol", "1"));
+		int colFc = Integer.parseInt(cliParser.getOptionValue("foldChangeCol", "4"));
+		String cogQueryFa = cliParser.getOptionValue("querySeqCOG", "");
+		
+		int downValue = Integer.parseInt(cliParser.getOptionValue("down", "-1"));
+		int upValue = Integer.parseInt(cliParser.getOptionValue("up", "1"));	
+		boolean isGoLevel = cliParser.getOptionValue("isGoLevel", "false").equalsIgnoreCase("true");
+		int goLevelNum = Integer.parseInt(cliParser.getOptionValue("goLevelNum", "1"));	
+		boolean isClusterGoPath= cliParser.getOptionValue("isClusterGoPath", "false").equalsIgnoreCase("true");
+		
+		try {
+			cliParser = new GnuParser().parse(opts, args);
+		} catch (Exception e) {
+			logger.error("error params:" + ArrayOperate.cmbString(args, " "));
+			System.exit(1);
+		}
+
+		GoPathRun goPathRun = new GoPathRun();
+		goPathRun.initial(version, dbType, analysisType, taxId, goAnnoFile, isCombine, bgGene, outPath, isBlast, blastTaxIds);
+		goPathRun.setInFile(prefixs, infiles);
+		goPathRun.setUpDownValue(upValue, downValue);
+		goPathRun.setClusterGoPath(isClusterGoPath);
+		goPathRun.setGoLevel(isGoLevel);
+		goPathRun.setGoLevelNum(goLevelNum);
+		
+		goPathRun.setCogType(cogType);
+		goPathRun.setGoAlgorithm(goAlgorithmStr);
+		goPathRun.setCol(colAccId, colFc);
+		goPathRun.setCogQueryFa(cogQueryFa);
+		goPathRun.running();
 	}
 	
 	public void initial(String version, String DBtype, String analysisType, int taxId,
@@ -95,7 +194,11 @@ public class GoPathRun {
 		this.bgGene = bgGene;
 		this.outPath = outPath;
 		this.isBlast = isBlast;
-		this.blastTaxIds = blastTaxIds;
+		if (isBlast) {
+			for (String taxIdBlast : blastTaxIds.split(",")) {
+				lsBlastTaxIds.add(taxIdBlast);
+			}
+		}
 	}
 	public void setCogQueryFa(String cogQueryFa) {
 		this.cogQueryFa = cogQueryFa;
@@ -122,6 +225,19 @@ public class GoPathRun {
 		}
 	}
 	
+	public void setUpDownValue(int upValue, int downValue) {
+		this.upValue = upValue;
+		this.downValue = downValue;
+	}
+	public void setGoLevel(boolean isGoLevel) {
+		this.isGoLevel = isGoLevel;
+	}
+	public void setGoLevelNum(int goLevelNum) {
+		this.goLevelNum = goLevelNum;
+	}
+	public void setClusterGoPath(boolean isClusterGoPath) {
+		this.isClusterGoPath = isClusterGoPath;
+	}
 	protected void running() {
 		species = new Species(taxId);
 		if (taxId != 0) {
@@ -137,16 +253,16 @@ public class GoPathRun {
 		FileOperate.deleteFileFolder(FileOperate.getPathName(resultPathPath));
 		FileOperate.deleteFileFolder(FileOperate.getPathName(resultPathCOG));
 
-		if (analysisType == GO) {
+		if (StringOperate.isEqual(analysisType, GO)) {
 			runGOPath( AnalysisType.GO, 100);
-		} else if (analysisType == Pathway) {
+		} else if (StringOperate.isEqual(analysisType, Pathway)) {
 			runGOPath( AnalysisType.Path, 100);
-		} else if (analysisType == GO_PATH) {
+		} else if (StringOperate.isEqual(analysisType, GO_PATH)) {
 			runGOPath( AnalysisType.GO, 50);
 			runGOPath( AnalysisType.Path, 100);
-		} else if (analysisType == COG) {
+		} else if (StringOperate.isEqual(analysisType, COG)) {
 			runGOPath( AnalysisType.COG, 100);
-		} else if (analysisType == ALL) {
+		} else if (StringOperate.isEqual(analysisType, ALL)) {
 			runGOPath( AnalysisType.GO, 30);
 			runGOPath( AnalysisType.Path, 60);
 			runGOPath( AnalysisType.COG, 100);

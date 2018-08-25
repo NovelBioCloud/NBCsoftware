@@ -62,13 +62,14 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	String region;
 	
 	public static void main(String[] args) {
-//		String ss = "/home/novelbio/software/cash/cash_v2.2.0/cash_v2.2.0/cash.jar --MergePval A --ChrRegion chr1 --Case:Mutation /home/novelbio/NBCresource/www/grch38/Sample_7721SIPRPF3.sorted.bam --Control:WildType /home/novelbio/NBCresource/www/grch38/Sample_7721SINC.sorted.bam --GTF /home/novelbio/NBCresource/genome/species/9606/GRCh38/gff/ref_GRCh38_top_level.gtf --Output /home/novelbio/NBCresource/www/grch38/result-cash-chr1";
+//		String ss = "--Case:SS /media/winE/test/altersplice/S20.sorted.bam --Control:WT /media/winE/test/altersplice/WT1.sorted.bam"
+//				+ " --GTF /media/winE/test/altersplice/ref_GRCh38.p7_top_level_changechr.gff3 --MergePval A --Combine false"
+//				+ " --DisplayAllEvent true --StrandSpecific NONE --SpliceCons true --JuncAllSample 25 --JuncOneGroup 10"
+//				+ " --minAnchorLen 5 --minIntronLen 25 --minJuncReadsForNewIso 10 --runSepChr false --Output /media/winE/test/altersplice/result/ --ChrRegion chr9:5064061-6764061 --runSepChr true";
 //		args = ss.split(" ");
-		ExonJunction.isASD = true;
-		
-//		GUIanalysisCASH guIanalysisCASH = new GUIanalysisCASH();
-//		guIanalysisCASH.main(new String[]{getVersion()});
+//		mainCmd(args);
 
+		ExonJunction.isASD = true;
 		if (args != null && args.length == 1 && args[0] != null 
 				&& (args[0].trim().toLowerCase().equals("--gui") || args[0].trim().toLowerCase().equals("-gui"))) {
 			GUIanalysisCASH guIanalysisCASH = new GUIanalysisCASH();
