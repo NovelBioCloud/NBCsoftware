@@ -298,7 +298,7 @@ public class GoPathRun {
 	protected void rmResultFile(String savePath, String outPath, List<String> lsPrefix) {
 	}
 	private void runGO(String excelFile, String goAnnoFile, boolean isCombine, String excelPrefix) {
-		String resultPath = outPath + "/GOAnalysis_result/";
+		String resultPath = outPath + "/GOAnalysis_result/"+excelPrefix;
 		FileOperate.createFolders(resultPath);
 		
 		logger.info("Start run Go : " + excelPrefix);
@@ -329,7 +329,7 @@ public class GoPathRun {
 		} else {
 			ctrlGO.setGOlevel(-1);
 		}
-		if (isClusterGoPath || colAccID == colFC) {
+		if (!isClusterGoPath || colAccID == colFC) {
 			double up = 0; double down = 0;
 			if ( colAccID != colFC) {
 				up = upValue;
@@ -356,7 +356,7 @@ public class GoPathRun {
 	}
 	
 	private void runPath(String excelFile, String goAnnoFile, boolean isCombine, String excelPrefix) {
-		String resultPath = outPath + "/PathWayAnalysis_result/";
+		String resultPath = outPath + "/PathWayAnalysis_result/"+excelPrefix;
 		FileOperate.createFolders(resultPath);
 
 		logger.info("Start run Path : " + excelPrefix);
@@ -408,7 +408,7 @@ public class GoPathRun {
 	}
 	
 	private void runCog(String excelFile, String goAnnoFile, boolean isCombine, String excelPrefix) {
-		String resultPath = outPath + "/COGAnalysis_result/";
+		String resultPath = outPath + "/COGAnalysis_result/" + excelPrefix;
 		FileOperate.createFolders(resultPath);
 		
 		logger.info("Start run Cog : " + excelPrefix);
