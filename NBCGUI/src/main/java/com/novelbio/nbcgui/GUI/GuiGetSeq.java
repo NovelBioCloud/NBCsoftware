@@ -17,14 +17,14 @@ import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
-import com.novelbio.analysis.seq.genome.gffoperate.GffDetailGene;
-import com.novelbio.analysis.seq.genome.gffoperate.GffDetailGene.GeneStructure;
-import com.novelbio.analysis.seq.mapping.Align;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
+import com.novelbio.bioinfo.base.Align;
+import com.novelbio.bioinfo.gff.GffGene;
+import com.novelbio.bioinfo.gff.GffGene.GeneStructure;
 import com.novelbio.database.domain.species.ExtractSmallRNASeq;
 import com.novelbio.database.domain.species.Species;
 import com.novelbio.database.domain.species.Species.EnumSpeciesType;
@@ -44,7 +44,7 @@ public class GuiGetSeq extends JPanel {
 	JButton btnSave;
 	JCheckBox chckbxGenomwide;
 	JCheckBox chckbxGetalliso;
-	JComboBoxData<GffDetailGene.GeneStructure> cmbGeneStructure;
+	JComboBoxData<GffGene.GeneStructure> cmbGeneStructure;
 	JButton btnOpenfile;
 	JLabel lblTssTes;
 	JCheckBox chckbxGetaminoacid;
@@ -208,7 +208,7 @@ public class GuiGetSeq extends JPanel {
 		rdbtnGene.setBounds(713, 157, 81, 22);
 		add(rdbtnGene);
 		
-		cmbGeneStructure = new JComboBoxData<GffDetailGene.GeneStructure>();
+		cmbGeneStructure = new JComboBoxData<GffGene.GeneStructure>();
 		cmbGeneStructure.setBounds(721, 356, 131, 23);
 		add(cmbGeneStructure);
 		cmbGeneStructure.addActionListener(new ActionListener() {

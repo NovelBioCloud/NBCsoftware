@@ -2,15 +2,15 @@ package com.novelbio.nbcgui.controlseq;
 
 import java.util.ArrayList;
 
-import com.novelbio.analysis.seq.fasta.SeqFasta;
-import com.novelbio.analysis.seq.genome.GffChrAbs;
-import com.novelbio.analysis.seq.genome.GffChrSeq;
-import com.novelbio.analysis.seq.genome.GffChrSeq.GffChrSeqProcessInfo;
-import com.novelbio.analysis.seq.genome.gffoperate.GffDetailGene.GeneStructure;
-import com.novelbio.analysis.seq.genome.mappingoperate.SiteSeqInfo;
-import com.novelbio.analysis.seq.mapping.Align;
 import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.base.multithread.RunProcess;
+import com.novelbio.bioinfo.base.Align;
+import com.novelbio.bioinfo.fasta.SeqFasta;
+import com.novelbio.bioinfo.gff.GffGene.GeneStructure;
+import com.novelbio.bioinfo.gffchr.GffChrAbs;
+import com.novelbio.bioinfo.gffchr.GffChrSeq;
+import com.novelbio.bioinfo.gffchr.GffChrSeq.GffChrSeqProcessInfo;
+import com.novelbio.bioinfo.mappedreads.SiteSeqInfo;
 import com.novelbio.database.domain.species.Species;
 import com.novelbio.nbcgui.GUI.GuiGetSeq;
 

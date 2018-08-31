@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
-import com.novelbio.analysis.seq.sam.SamFile;
+import com.novelbio.bioinfo.sam.SamFile;
 
 public class TestWord {
 	private static final Logger logger = LoggerFactory.getLogger(TestWord.class);

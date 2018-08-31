@@ -15,12 +15,6 @@ import org.springframework.util.Log4jConfigurer;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.novelbio.GuiAnnoInfo;
-import com.novelbio.analysis.ExceptionNBCsoft;
-import com.novelbio.analysis.seq.genome.gffoperate.GffHashGene;
-import com.novelbio.analysis.seq.mapping.StrandSpecific;
-import com.novelbio.analysis.seq.rnaseq.ExonJunction;
-import com.novelbio.analysis.seq.sam.ExceptionSamIndexError;
-import com.novelbio.analysis.seq.sam.ExceptionSamNoIndexError;
 import com.novelbio.base.ExceptionNbcParamError;
 import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.StringOperate;
@@ -28,8 +22,14 @@ import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.base.multithread.RunProcess;
+import com.novelbio.bioinfo.gff.GffHashGene;
+import com.novelbio.bioinfo.sam.ExceptionSamIndexError;
+import com.novelbio.bioinfo.sam.ExceptionSamNoIndexError;
+import com.novelbio.bioinfo.sam.StrandSpecific;
 import com.novelbio.nbcgui.GUIinfo;
 import com.novelbio.nbcgui.GUI.GUIanalysisCASH;
+import com.novelbio.software.ExceptionNBCsoft;
+import com.novelbio.software.rnaaltersplice.ExonJunction;
 
 public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 	private static final Logger logger = LoggerFactory.getLogger(CtrlSplicing.class);

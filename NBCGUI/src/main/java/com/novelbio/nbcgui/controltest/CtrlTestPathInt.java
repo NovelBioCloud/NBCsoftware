@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.novelbio.analysis.annotation.functiontest.FunctionTest;
+import com.novelbio.bioinfo.annotation.functiontest.FunctionTest;
 import com.novelbio.database.domain.species.Species;
 
 public interface CtrlTestPathInt {

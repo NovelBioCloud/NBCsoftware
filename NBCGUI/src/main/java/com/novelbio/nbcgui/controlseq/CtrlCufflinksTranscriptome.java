@@ -4,22 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.HashMultimap;
-import com.novelbio.analysis.IntCmdSoft;
-import com.novelbio.analysis.seq.fasta.SeqHash;
-import com.novelbio.analysis.seq.genome.GffChrAbs;
-import com.novelbio.analysis.seq.genome.GffHashModifyNewGffORF;
-import com.novelbio.analysis.seq.genome.GffHashModifyOldGffUTR;
-import com.novelbio.analysis.seq.genome.gffoperate.GffHashGene;
-import com.novelbio.analysis.seq.genome.gffoperate.GffType;
-import com.novelbio.analysis.seq.mapping.StrandSpecific;
-import com.novelbio.analysis.seq.rnaseq.CuffMerge;
-import com.novelbio.analysis.seq.rnaseq.CufflinksGTF;
-import com.novelbio.analysis.seq.rnaseq.GffHashMerge;
-import com.novelbio.analysis.seq.rnaseq.TranscriptomStatistics;
 import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.FoldeCreate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.bioinfo.IntCmdSoft;
+import com.novelbio.bioinfo.fasta.SeqHash;
+import com.novelbio.bioinfo.gff.GffHashGene;
+import com.novelbio.bioinfo.gff.GffType;
+import com.novelbio.bioinfo.gffchr.GffChrAbs;
+import com.novelbio.bioinfo.rnaseq.CuffMerge;
+import com.novelbio.bioinfo.rnaseq.CufflinksGTF;
+import com.novelbio.bioinfo.rnaseq.GffHashMerge;
+import com.novelbio.bioinfo.rnaseq.GffHashModifyNewGffORF;
+import com.novelbio.bioinfo.rnaseq.GffHashModifyOldGffUTR;
+import com.novelbio.bioinfo.rnaseq.TranscriptomStatistics;
+import com.novelbio.bioinfo.sam.StrandSpecific;
 
 public class CtrlCufflinksTranscriptome implements IntCmdSoft {
 	boolean reconstructTranscriptome = false;

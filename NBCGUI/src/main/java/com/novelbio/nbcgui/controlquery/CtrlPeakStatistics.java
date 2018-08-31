@@ -2,11 +2,11 @@ package com.novelbio.nbcgui.controlquery;
 
 import java.util.ArrayList;
 
-import com.novelbio.analysis.seq.genome.GffChrStatistics;
-import com.novelbio.analysis.seq.genome.GffChrStatistics.GffChrStatiscticsProcessInfo;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.base.multithread.RunProcess;
+import com.novelbio.bioinfo.gffchr.GffChrStatistics;
+import com.novelbio.bioinfo.gffchr.GffChrStatistics.GffChrStatiscticsProcessInfo;
 import com.novelbio.database.domain.species.Species;
 import com.novelbio.nbcgui.GUI.GuiPeakStatistics;
 

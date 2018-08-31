@@ -13,12 +13,12 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 
-import com.novelbio.analysis.annotation.genanno.AnnoAbs;
-import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
+import com.novelbio.bioinfo.annotation.genanno.AnnoAbs;
+import com.novelbio.bioinfo.gffchr.GffChrAbs;
 import com.novelbio.database.domain.species.Species;
 import com.novelbio.database.domain.species.Species.EnumSpeciesType;
 import com.novelbio.database.model.geneanno.GOtype;

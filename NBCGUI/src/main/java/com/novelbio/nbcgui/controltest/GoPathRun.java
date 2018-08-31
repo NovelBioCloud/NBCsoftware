@@ -8,13 +8,13 @@ import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Options;
 import org.apache.log4j.Logger;
 
-import com.novelbio.analysis.annotation.cog.COGanno;
-import com.novelbio.analysis.annotation.cog.EnumCogType;
-import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.base.StringOperate;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.dataStructure.ArrayOperate;
 import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.bioinfo.annotation.cog.COGanno;
+import com.novelbio.bioinfo.annotation.cog.EnumCogType;
+import com.novelbio.bioinfo.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.database.domain.species.Species;
 import com.novelbio.database.service.SpringFactoryBioinfo;
 import com.novelbio.nbcgui.controltest.CtrlCOG;

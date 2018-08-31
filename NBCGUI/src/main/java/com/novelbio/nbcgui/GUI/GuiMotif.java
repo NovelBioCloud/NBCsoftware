@@ -11,16 +11,16 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import com.novelbio.analysis.emboss.motif.MotifEmboss;
-import com.novelbio.analysis.emboss.motif.MotifEmboss.MotifEmbossScanAlgorithm;
-import com.novelbio.analysis.seq.fasta.SeqFasta;
-import com.novelbio.analysis.seq.fasta.SeqFastaHash;
-import com.novelbio.analysis.seq.fasta.SeqFastaMotifSearch;
-import com.novelbio.analysis.seq.fasta.SeqHash;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JScrollPaneData;
+import com.novelbio.bioinfo.emboss.motif.MotifEmboss;
+import com.novelbio.bioinfo.emboss.motif.MotifEmboss.MotifEmbossScanAlgorithm;
+import com.novelbio.bioinfo.fasta.SeqFasta;
+import com.novelbio.bioinfo.fasta.SeqFastaHash;
+import com.novelbio.bioinfo.fasta.SeqFastaMotifSearch;
+import com.novelbio.bioinfo.fasta.SeqHash;
 
 public class GuiMotif extends JPanel {
 	private JTextField txtMatrix;

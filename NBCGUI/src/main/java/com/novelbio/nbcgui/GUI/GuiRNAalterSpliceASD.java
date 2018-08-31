@@ -18,13 +18,13 @@ import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 
 import com.novelbio.GuiAnnoInfo;
-import com.novelbio.analysis.seq.fasta.SeqHash;
-import com.novelbio.analysis.seq.genome.gffoperate.GffHashGene;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.base.multithread.RunProcess;
+import com.novelbio.bioinfo.fasta.SeqHash;
+import com.novelbio.bioinfo.gff.GffHashGene;
 import com.novelbio.nbcgui.GUIinfo;
 import com.novelbio.nbcgui.controlseq.CtrlSplicing;
 

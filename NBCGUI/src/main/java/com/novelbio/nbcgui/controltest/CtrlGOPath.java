@@ -11,10 +11,6 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import com.google.common.collect.HashMultimap;
-import com.novelbio.analysis.annotation.functiontest.FunctionTest;
-import com.novelbio.analysis.annotation.functiontest.FunctionTest.FunctionDrawResult;
-import com.novelbio.analysis.annotation.functiontest.StatisticTestResult;
-import com.novelbio.analysis.seq.genome.GffSpeciesInfo;
 import com.novelbio.base.ExceptionNbcParamError;
 import com.novelbio.base.StringOperate;
 import com.novelbio.base.dataOperate.ExcelOperate;
@@ -24,6 +20,12 @@ import com.novelbio.base.dataStructure.ArrayOperate;
 import com.novelbio.base.fileOperate.ExceptionNbcFile;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunProcess;
+import com.novelbio.bioinfo.annotation.functiontest.FunctionTest;
+import com.novelbio.bioinfo.annotation.functiontest.StatisticTestResult;
+import com.novelbio.bioinfo.annotation.functiontest.FunctionTest.FunctionDrawResult;
+import com.novelbio.bioinfo.gff.GffGene;
+import com.novelbio.bioinfo.gff.GffIso;
+import com.novelbio.bioinfo.gffchr.GffChrAbs;
 import com.novelbio.database.domain.modgeneid.GeneID;
 import com.novelbio.database.domain.species.Species;
 import com.novelbio.database.model.geneanno.EnumSpeciesFile;
@@ -130,11 +132,40 @@ public abstract class CtrlGOPath extends RunProcess {
 	public void setLsBG(Species species) {
 		String fileName = EnumSpeciesFile.bgGeneFile.getSavePath(species.getTaxID(), species.getSelectSpeciesFile());
 		if (!FileOperate.isFileExistAndBigThanSize(fileName, 0)) {
-			GffSpeciesInfo specieInformation = new GffSpeciesInfo();
-			specieInformation.setSpecies(species);
-			specieInformation.writeGeneBG(fileName);
+			writeGeneBG(species, fileName);
 		}
 		this.bgFile = fileName;
+	}
+
+	/**
+	 * 写所有的物种所有基因，如果输入的outpath以"/"或"\" 结尾，则添加 _geneBG.txt
+	 * 返回写入的文件名
+	 */
+	private String writeGeneBG(Species species, String outPath) {
+		HashSet<String> setGeneID = getSpeciesGene(species);
+		if (outPath.endsWith("/") || outPath.endsWith("\\")) {
+			outPath = outPath +  "_geneBG.txt";
+		}
+		FileOperate.createFolders(FileOperate.getParentPathNameWithSep(outPath));
+		TxtReadandWrite txtReadandWrite = new TxtReadandWrite(outPath, true);
+		txtReadandWrite.writefileln("#GeneSymbol");
+		for (String string : setGeneID) {
+			txtReadandWrite.writefileln(string);
+		}
+		txtReadandWrite.close();
+		return outPath;
+	}
+	/** 获取物种的所有的基因 */
+	private HashSet<String> getSpeciesGene(Species species) {
+		GffChrAbs gffChrAbs = new GffChrAbs(species);
+		HashSet<String> setGeneID = new HashSet<String>();
+		for (GffGene gene : gffChrAbs.getGffHashGene().getLsGffDetailGenes()) {
+			for (GffIso geneIsoInfo : gene.getLsCodSplit()) {
+				setGeneID.add(geneIsoInfo.getParentGeneName());
+			}
+		}
+		gffChrAbs.close();
+		return setGeneID;
 	}
 	
 	private void setBG() {

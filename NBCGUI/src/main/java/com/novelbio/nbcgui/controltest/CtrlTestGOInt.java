@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
+import com.novelbio.bioinfo.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.database.domain.species.Species;
 import com.novelbio.database.model.geneanno.GOtype;
 

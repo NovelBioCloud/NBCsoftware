@@ -4,18 +4,18 @@ import java.util.List;
 
 import javax.swing.JButton;
 
-import com.novelbio.analysis.seq.AlignSeq;
-import com.novelbio.analysis.seq.FormatSeq;
-import com.novelbio.analysis.seq.bed.BedFile;
-import com.novelbio.analysis.seq.genome.mappingoperate.EnumMapNormalizeType;
-import com.novelbio.analysis.seq.genome.mappingoperate.MapReads;
-import com.novelbio.analysis.seq.genome.mappingoperate.MapReadsAbs;
-import com.novelbio.analysis.seq.genome.mappingoperate.MapReadsAbs.MapReadsProcessInfo;
-import com.novelbio.analysis.seq.sam.SamFile;
 import com.novelbio.base.dataStructure.Equations;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.base.multithread.RunProcess;
+import com.novelbio.bioinfo.base.AlignSeq;
+import com.novelbio.bioinfo.base.FormatSeq;
+import com.novelbio.bioinfo.bed.BedFile;
+import com.novelbio.bioinfo.mappedreads.EnumMapNormalizeType;
+import com.novelbio.bioinfo.mappedreads.MapReads;
+import com.novelbio.bioinfo.mappedreads.MapReadsAbs;
+import com.novelbio.bioinfo.mappedreads.MapReadsAbs.MapReadsProcessInfo;
+import com.novelbio.bioinfo.sam.SamFile;
 import com.novelbio.database.domain.species.Species;
 import com.novelbio.nbcgui.GUI.GuiRunningBarAbs;
 

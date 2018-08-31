@@ -13,12 +13,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.novelbio.analysis.annotation.functiontest.FunctionTest.FunctionDrawResult;
-import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunProcess.RunThreadStat;
 import com.novelbio.base.plot.ImageUtils;
+import com.novelbio.bioinfo.annotation.functiontest.FunctionTest.FunctionDrawResult;
+import com.novelbio.bioinfo.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.database.domain.species.Species;
 import com.novelbio.database.model.geneanno.GOtype;
 

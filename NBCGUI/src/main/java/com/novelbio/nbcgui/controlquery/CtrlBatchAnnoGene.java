@@ -3,11 +3,11 @@ package com.novelbio.nbcgui.controlquery;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.novelbio.analysis.annotation.genanno.AnnoQuery;
-import com.novelbio.analysis.annotation.genanno.AnnoQuery.AnnoQueryDisplayInfo;
-import com.novelbio.analysis.seq.genome.GffChrAbs;
 import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.base.multithread.RunProcess;
+import com.novelbio.bioinfo.annotation.genanno.AnnoQuery;
+import com.novelbio.bioinfo.annotation.genanno.AnnoQuery.AnnoQueryDisplayInfo;
+import com.novelbio.bioinfo.gffchr.GffChrAbs;
 import com.novelbio.database.domain.species.Species;
 import com.novelbio.database.model.geneanno.GOtype;
 import com.novelbio.nbcgui.GUI.GuiAnnoGene;

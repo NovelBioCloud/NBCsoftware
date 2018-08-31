@@ -13,12 +13,12 @@ import org.springframework.stereotype.Component;
 import uk.ac.babraham.FastQC.Modules.BasicStats;
 
 import com.google.common.collect.HashMultimap;
-import com.novelbio.analysis.seq.fasta.CopeFastq;
-import com.novelbio.analysis.seq.fastq.FastQ;
-import com.novelbio.analysis.seq.fastq.FastQC;
-import com.novelbio.analysis.seq.fastq.FastQFilter;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.bioinfo.fastq.CopeFastq;
+import com.novelbio.bioinfo.fastq.FastQ;
+import com.novelbio.bioinfo.fastq.FastQC;
+import com.novelbio.bioinfo.fastq.FastQFilter;
 import com.novelbio.database.service.SpringFactoryBioinfo;
 
 @Component
