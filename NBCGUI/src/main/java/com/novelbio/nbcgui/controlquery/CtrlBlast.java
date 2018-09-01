@@ -6,8 +6,8 @@ import com.novelbio.bioinfo.IntCmdSoft;
 import com.novelbio.bioinfo.annotation.blast.BlastNBC;
 import com.novelbio.bioinfo.annotation.blast.BlastStatistics;
 import com.novelbio.bioinfo.annotation.blast.BlastType;
+import com.novelbio.bioinfo.base.freqcount.HistList;
 import com.novelbio.bioinfo.fasta.StrandType;
-import com.novelbio.listoperate.HistList;
 
 public class CtrlBlast implements IntCmdSoft {
 	BlastNBC blastNBC = new BlastNBC();
