@@ -12,13 +12,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.HashMultimap;
-import com.novelbio.analysis.annotation.cog.COGanno;
-import com.novelbio.analysis.annotation.cog.EnumCogType;
-import com.novelbio.analysis.annotation.functiontest.CogFunTest;
-import com.novelbio.analysis.annotation.functiontest.FunctionTest;
-import com.novelbio.analysis.annotation.functiontest.FunctionTest.FunctionDrawResult;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.plot.ImageUtils;
+import com.novelbio.bioinfo.annotation.cog.COGanno;
+import com.novelbio.bioinfo.annotation.cog.EnumCogType;
+import com.novelbio.bioinfo.annotation.functiontest.CogFunTest;
+import com.novelbio.bioinfo.annotation.functiontest.FunctionTest;
+import com.novelbio.bioinfo.annotation.functiontest.FunctionTest.FunctionDrawResult;
 import com.novelbio.database.domain.modgeneid.GeneID;
 @Service
 @Scope("prototype")

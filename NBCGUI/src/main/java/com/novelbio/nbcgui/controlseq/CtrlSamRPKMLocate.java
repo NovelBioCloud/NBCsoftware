@@ -14,30 +14,29 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.novelbio.GuiAnnoInfo;
-import com.novelbio.analysis.seq.AlignSeq;
-import com.novelbio.analysis.seq.FormatSeq;
-import com.novelbio.analysis.seq.bed.BedFile;
-import com.novelbio.analysis.seq.genome.GffChrAbs;
-import com.novelbio.analysis.seq.genome.GffChrStatistics;
-import com.novelbio.analysis.seq.genome.gffoperate.GffHashGene;
-import com.novelbio.analysis.seq.genome.gffoperate.GffHashGeneAbs;
-import com.novelbio.analysis.seq.mapping.MapTophat;
-import com.novelbio.analysis.seq.mapping.StrandSpecific;
-import com.novelbio.analysis.seq.rnaseq.RPKMcomput;
-import com.novelbio.analysis.seq.sam.AlignSamReading;
-import com.novelbio.analysis.seq.sam.AlignSeqReading;
-import com.novelbio.analysis.seq.sam.AlignmentRecorder;
-import com.novelbio.analysis.seq.sam.BamReadsInfo;
-import com.novelbio.analysis.seq.sam.ExceptionSamError;
-import com.novelbio.analysis.seq.sam.SamFile;
-import com.novelbio.analysis.seq.sam.SamFileStatistics;
 import com.novelbio.base.ExceptionNullParam;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.dataStructure.ArrayOperate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.multithread.RunProcess;
+import com.novelbio.bioinfo.base.AlignSeq;
+import com.novelbio.bioinfo.base.FormatSeq;
+import com.novelbio.bioinfo.bed.BedFile;
+import com.novelbio.bioinfo.gff.GffHashGene;
+import com.novelbio.bioinfo.gff.GffHashGeneAbs;
+import com.novelbio.bioinfo.gffchr.GffChrAbs;
+import com.novelbio.bioinfo.gffchr.GffChrStatistics;
+import com.novelbio.bioinfo.sam.AlignSamReading;
+import com.novelbio.bioinfo.sam.AlignSeqReading;
+import com.novelbio.bioinfo.sam.AlignmentRecorder;
+import com.novelbio.bioinfo.sam.BamReadsInfo;
+import com.novelbio.bioinfo.sam.ExceptionSamError;
+import com.novelbio.bioinfo.sam.SamFile;
+import com.novelbio.bioinfo.sam.SamFileStatistics;
+import com.novelbio.bioinfo.sam.StrandSpecific;
 import com.novelbio.database.domain.species.Species;
 import com.novelbio.nbcgui.GUI.GuiSamStatistics;
+import com.novelbio.software.expression.RPKMcomput;
 
 @Component
 @Scope("prototype")
@@ -397,8 +396,10 @@ public class CtrlSamRPKMLocate implements CtrlSamPPKMint {
 			} else {
 				continue;
 			}
-			if (alignSeq.getFileName().endsWith(MapTophat.TophatSuffix)) {
-				String unmapFileName = alignSeq.getFileName().replace(MapTophat.TophatSuffix, MapTophat.UnmapSuffix);
+			String tophatSuffix = ".tophat.sorted.bam";
+			String unmapSuffix = ".tophat.unmapped.bam";
+			if (alignSeq.getFileName().endsWith(tophatSuffix)) {
+				String unmapFileName = alignSeq.getFileName().replace(tophatSuffix, unmapSuffix);
 				if (FileOperate.isFileExistAndBigThanSize(unmapFileName, 0)) {
 					alignSeqReading.addSeq(new SamFile(unmapFileName));
 				}

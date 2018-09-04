@@ -25,7 +25,6 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
 import javax.swing.table.DefaultTableModel;
 
-import com.novelbio.analysis.annotation.pathway.kegg.kgpath.Scr2Target;
 import com.novelbio.base.dataOperate.ExcelOperate;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.fileOperate.FileOperate;
@@ -33,6 +32,7 @@ import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
 import com.novelbio.base.gui.JTextFieldData;
+import com.novelbio.bioinfo.annotation.pathway.kegg.kgpath.Scr2Target;
 import com.novelbio.database.domain.modgeneid.GeneID;
 import com.novelbio.database.domain.species.Species;
 import com.novelbio.database.domain.species.Species.EnumSpeciesType;

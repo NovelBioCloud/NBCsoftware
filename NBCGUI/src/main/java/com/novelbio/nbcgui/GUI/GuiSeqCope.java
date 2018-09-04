@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 
-import com.novelbio.analysis.seq.fasta.SeqFasta;
+import com.novelbio.bioinfo.fasta.SeqFasta;
 
 public class GuiSeqCope extends JPanel {
 	JTextPane txtIn;

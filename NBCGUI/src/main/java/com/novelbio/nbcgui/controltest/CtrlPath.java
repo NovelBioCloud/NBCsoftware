@@ -10,12 +10,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import com.novelbio.analysis.annotation.functiontest.FunctionTest;
-import com.novelbio.analysis.annotation.functiontest.FunctionTest.FunctionDrawResult;
-import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.base.StringOperate;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.plot.ImageUtils;
+import com.novelbio.bioinfo.annotation.functiontest.FunctionTest;
+import com.novelbio.bioinfo.annotation.functiontest.FunctionTest.FunctionDrawResult;
+import com.novelbio.bioinfo.annotation.functiontest.TopGO.GoAlgorithm;
 @Service
 @Scope("prototype")
 public class CtrlPath extends CtrlGOPath implements CtrlTestPathInt {

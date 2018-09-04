@@ -2,12 +2,12 @@ package com.novelbio.nbcgui.controlquery;
 
 import java.util.List;
 
-import com.novelbio.analysis.IntCmdSoft;
-import com.novelbio.analysis.annotation.blast.BlastNBC;
-import com.novelbio.analysis.annotation.blast.BlastStatistics;
-import com.novelbio.analysis.annotation.blast.BlastType;
-import com.novelbio.analysis.seq.fasta.StrandType;
-import com.novelbio.listoperate.HistList;
+import com.novelbio.bioinfo.IntCmdSoft;
+import com.novelbio.bioinfo.annotation.blast.BlastNBC;
+import com.novelbio.bioinfo.annotation.blast.BlastStatistics;
+import com.novelbio.bioinfo.annotation.blast.BlastType;
+import com.novelbio.bioinfo.base.freqcount.HistList;
+import com.novelbio.bioinfo.fasta.StrandType;
 
 public class CtrlBlast implements IntCmdSoft {
 	BlastNBC blastNBC = new BlastNBC();

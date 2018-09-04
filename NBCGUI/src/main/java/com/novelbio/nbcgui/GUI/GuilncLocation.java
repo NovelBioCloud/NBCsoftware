@@ -13,13 +13,13 @@ import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 
-import com.novelbio.analysis.seq.rnaseq.lnc.LncInfo;
-import com.novelbio.analysis.seq.rnaseq.lnc.LncSiteInfo;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JScrollPaneData;
+import com.novelbio.bioinfo.rnaseq.lnc.LncInfo;
+import com.novelbio.bioinfo.rnaseq.lnc.LncSiteInfo;
 
 public class GuilncLocation extends JPanel {
 	JScrollPaneData scrollPane;

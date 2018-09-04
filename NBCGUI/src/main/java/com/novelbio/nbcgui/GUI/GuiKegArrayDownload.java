@@ -6,11 +6,11 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-import com.novelbio.analysis.tools.kegarray.DownKeggPng;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.multithread.RunGetInfo;
 import com.novelbio.base.multithread.RunProcess;
+import com.novelbio.bioinfo.tools.kegarray.DownKeggPng;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;

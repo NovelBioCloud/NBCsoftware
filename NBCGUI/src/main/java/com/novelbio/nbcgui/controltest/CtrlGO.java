@@ -6,13 +6,13 @@ import java.util.prefs.PreferenceChangeEvent;
 
 import org.apache.log4j.Logger;
 
-import com.novelbio.analysis.annotation.functiontest.ElimGOFunTest;
-import com.novelbio.analysis.annotation.functiontest.FunctionTest;
-import com.novelbio.analysis.annotation.functiontest.NovelGOFunTest;
-import com.novelbio.analysis.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.base.PathDetail;
 import com.novelbio.base.StringOperate;
 import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.bioinfo.annotation.functiontest.ElimGOFunTest;
+import com.novelbio.bioinfo.annotation.functiontest.FunctionTest;
+import com.novelbio.bioinfo.annotation.functiontest.NovelGOFunTest;
+import com.novelbio.bioinfo.annotation.functiontest.TopGO.GoAlgorithm;
 import com.novelbio.database.model.geneanno.GOtype;
 
 public class CtrlGO extends CtrlGOPath {

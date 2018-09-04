@@ -17,12 +17,12 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
 
-import com.novelbio.analysis.coexp.simpcoexp.DegreeAnnotation;
 import com.novelbio.base.dataOperate.ExcelTxtRead;
 import com.novelbio.base.fileOperate.FileOperate;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JScrollPaneData;
+import com.novelbio.bioinfo.coexp.simpcoexp.DegreeAnnotation;
 import com.novelbio.database.domain.species.Species;
 import com.novelbio.database.domain.species.Species.EnumSpeciesType;
 

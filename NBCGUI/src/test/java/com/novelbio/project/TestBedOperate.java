@@ -7,7 +7,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.novelbio.analysis.seq.bed.BedFile;
+import com.novelbio.bioinfo.bed.BedFile;
 
 public class TestBedOperate {
 	Map<String, String[]> mapParams;

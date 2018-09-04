@@ -7,11 +7,11 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Lists;
-import com.novelbio.analysis.tools.compare.CombineTab;
 import com.novelbio.base.StringOperate;
 import com.novelbio.base.dataOperate.TxtReadandWrite;
 import com.novelbio.base.dataStructure.PatternOperate;
 import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.bioinfo.tools.compare.CombineTab;
 
 public class CtrlCombFile {
 	CombineTab combineTab = new CombineTab();

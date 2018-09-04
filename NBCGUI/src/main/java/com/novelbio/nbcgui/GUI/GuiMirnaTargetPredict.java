@@ -8,12 +8,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.novelbio.analysis.seq.genome.GffChrAbs;
-import com.novelbio.analysis.seq.rnahybrid.RNAhybrid;
-import com.novelbio.analysis.seq.rnahybrid.RNAhybrid.RNAhybridClass;
 import com.novelbio.base.gui.GUIFileOpen;
 import com.novelbio.base.gui.JComboBoxData;
 import com.novelbio.base.gui.JTextFieldData;
+import com.novelbio.bioinfo.gffchr.GffChrAbs;
+import com.novelbio.bioinfo.mirna.rnahybrid.RNAhybrid;
+import com.novelbio.bioinfo.mirna.rnahybrid.RNAhybrid.RNAhybridClass;
 import com.novelbio.database.domain.species.Species;
 import com.novelbio.database.domain.species.Species.EnumSpeciesType;
 import com.novelbio.nbcgui.controlseq.CtrlMiRNAtargetPredict;

@@ -3,10 +3,10 @@ package com.novelbio.nbcgui.controlseq;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.novelbio.analysis.IntCmdSoft;
 import com.novelbio.base.cmd.CmdOperate;
 import com.novelbio.base.dataStructure.ArrayOperate;
 import com.novelbio.base.fileOperate.FileOperate;
+import com.novelbio.bioinfo.IntCmdSoft;
 import com.novelbio.database.model.information.SoftWareInfo;
 import com.novelbio.database.model.information.SoftWareInfo.SoftWare;
 
