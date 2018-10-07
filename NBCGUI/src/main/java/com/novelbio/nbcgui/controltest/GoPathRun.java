@@ -158,7 +158,7 @@ public class GoPathRun {
 		int upValue = Integer.parseInt(cliParser.getOptionValue("up", "1"));	
 		boolean isGoLevel = cliParser.getOptionValue("isGoLevel", "false").equalsIgnoreCase("true");
 		int goLevelNum = Integer.parseInt(cliParser.getOptionValue("goLevelNum", "1"));	
-		boolean isClusterGoPath= cliParser.getOptionValue("isClusterGoPath", "false").equalsIgnoreCase("true");
+		boolean isClusterGoPath= cliParser.getOptionValue("isCluster", "false").equalsIgnoreCase("true");
 		
 		try {
 			cliParser = new GnuParser().parse(opts, args);
@@ -298,9 +298,10 @@ public class GoPathRun {
 	protected void rmResultFile(String savePath, String outPath, List<String> lsPrefix) {
 	}
 	private void runGO(String excelFile, String goAnnoFile, boolean isCombine, String excelPrefix) {
-		String resultPath = outPath + "/GOAnalysis_result/"+excelPrefix;
+		String resultPath = outPath + "/GOAnalysis_result/";
 		FileOperate.createFolders(resultPath);
-		
+		resultPath = resultPath +excelPrefix;
+
 		logger.info("Start run Go : " + excelPrefix);
 		CtrlGOall ctrlGO = (CtrlGOall) SpringFactoryBioinfo.getFactory().getBean("ctrlGOall");
 		ctrlGO.clearParam();
@@ -356,9 +357,10 @@ public class GoPathRun {
 	}
 	
 	private void runPath(String excelFile, String goAnnoFile, boolean isCombine, String excelPrefix) {
-		String resultPath = outPath + "/PathWayAnalysis_result/"+excelPrefix;
+		String resultPath = outPath + "/PathWayAnalysis_result/";
 		FileOperate.createFolders(resultPath);
-
+		resultPath = resultPath +excelPrefix;
+		
 		logger.info("Start run Path : " + excelPrefix);
 		List<String[]> lsAccID = null;
 		if (colAccID != colFC) {
@@ -408,8 +410,9 @@ public class GoPathRun {
 	}
 	
 	private void runCog(String excelFile, String goAnnoFile, boolean isCombine, String excelPrefix) {
-		String resultPath = outPath + "/COGAnalysis_result/" + excelPrefix;
+		String resultPath = outPath + "/COGAnalysis_result/";
 		FileOperate.createFolders(resultPath);
+		resultPath = resultPath +excelPrefix;
 		
 		logger.info("Start run Cog : " + excelPrefix);
 		EnumCogType enumCogType = EnumCogType.valueOf(cogType);
