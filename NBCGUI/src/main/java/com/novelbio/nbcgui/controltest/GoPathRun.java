@@ -468,7 +468,7 @@ public class GoPathRun {
 	private boolean isGeneId(String title) {
 		if (title == null) title = "";
 		title = title.replace("#", "");
-		return StringOperate.isEqualIgnoreCase(title, "geneId");
+		return StringOperate.isEqual(title, "NCBI-GeneId");
 	}
 	
 	enum AnalysisType {
