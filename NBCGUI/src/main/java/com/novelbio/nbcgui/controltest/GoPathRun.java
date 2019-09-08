@@ -341,7 +341,7 @@ public class GoPathRun {
 		} else {
 			ctrlGO.setIsCluster(isClusterGoPath);
 		}
-		if (!StringOperate.isRealNull(goAnnoFile)) {
+		if (!StringOperate.isRealNull(goAnnoFile) && FileOperate.getFileName(goAnnoFile).toLowerCase().contains("go")) {
 			ctrlGO.setGOanno(goAnnoFile, isCombine);
 		}
 		if (!StringOperate.isRealNull(bgGene)) {
@@ -383,7 +383,7 @@ public class GoPathRun {
 		ctrlPath.clearParam();
 		ctrlPath.setTaxID(species.getTaxID());
 		ctrlPath.setBlastInfo(evalue, lsStaxID);
-		if (!StringOperate.isRealNull(goAnnoFile)) {
+		if (!StringOperate.isRealNull(goAnnoFile) && FileOperate.getFileName(goAnnoFile).toLowerCase().contains("path")) {
 			ctrlPath.setGene2itemAnnoFile(goAnnoFile, isCombine);
 		}
 		if (!StringOperate.isRealNull(bgGene)) {

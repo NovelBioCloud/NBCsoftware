@@ -569,7 +569,14 @@ public class CtrlSplicing implements RunGetInfo<GuiAnnoInfo> , Runnable {
 		
 		for (String[] comparePrefix : lsCompareGroup) {
 			String treat = comparePrefix[0], ctrl = comparePrefix[1];
-			String outprefix = comparePrefix.length > 2 ?comparePrefix[2] : treat + "vs" + ctrl;
+			String outprefix = null;
+			
+			if (lsCompareGroup.size() == 1) {
+				outprefix = "";
+			} else {
+				outprefix = comparePrefix.length > 2 ?comparePrefix[2] : treat + "vs" + ctrl;
+			}
+			
 			if (!mapPrefix2LsBam.containsKey(treat)) {
 				throw new ExceptionNullParam("No Group Name: " + treat);
 			}

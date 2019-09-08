@@ -1,5 +1,5 @@
 -----------------------------
-cash version 2.2.2
+cash version 2.2.3
 -----------------------------
 Usage: java -jar -Xmx10g cash.jar <options> --Case:prefix1 case.bam --Control:prefix2 Control.bam --GTF genes.gtf --Output outFilePrefix
 
