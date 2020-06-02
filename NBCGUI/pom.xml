@@ -19,9 +19,9 @@
 			<version>0.0.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.novelbio</groupId>
+			<groupId>com.hynnet</groupId>
 			<artifactId>jacob</artifactId>
-			<version>1.17</version>
+			<version>1.18</version>
 		</dependency>
 		<dependency>
 			<groupId>org.powermock</groupId>
